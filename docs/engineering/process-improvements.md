@@ -10,7 +10,7 @@ Record concrete workflow friction here when it is discovered. Each entry names t
 - **Evidence:** Two plausible AWS access-key fixtures produced zero findings: the documented example was suppressed, and a random synthetic AWS-shaped ID did not match the detector. Both CI runs failed before establishing that `--fail` blocks a finding.
 - **Impact:** A test can pass without demonstrating that a real detector finding blocks the workflow.
 - **Proposed improvement:** Run the fixture with a temporary, test-only custom detector and synthetic value. Keep that detector and value outside the repository scan; require the documented blocking exit code.
-- **Status:** Addressed in issue #5 by using an ephemeral custom detector config; rerun the CI fixture to verify the counterfactual.
+- **Status:** Verified by Security run [38938814597](https://github.com/juangcarmona/arcshape/actions/runs/38938814597): the ephemeral custom-detector fixture blocked as expected.
 
 ### PI-003: Verify repository-side merge controls independently of workflow checks
 
