@@ -2,7 +2,7 @@
 id: BC-ARCHITECTURE-KNOWLEDGE
 type: bounded-context
 title: Architecture Knowledge
-status: draft
+status: active
 ---
 
 ## Responsibility

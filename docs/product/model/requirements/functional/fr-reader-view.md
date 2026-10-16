@@ -2,7 +2,7 @@
 id: FR-READER-VIEW
 type: functional-requirement
 title: Present Architecture Documentation as a Reader-Friendly Web View
-status: draft
+status: active
 derived-from:
   - UC-PUBLISH-ARCHITECTURE-VIEW
   - UC-READ-ARCHITECTURE

@@ -2,7 +2,7 @@
 id: ACT-ARCHITECTURE-READER
 type: actor
 title: Architecture Reader
-status: draft
+status: active
 actor-kind: human
 ---
 

@@ -2,7 +2,7 @@
 id: ACT-AI-ASSISTANT
 type: actor
 title: AI Assistant
-status: draft
+status: active
 actor-kind: external-system
 ---
 

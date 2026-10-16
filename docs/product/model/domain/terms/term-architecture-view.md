@@ -2,7 +2,7 @@
 id: TERM-ARCHITECTURE-VIEW
 type: domain-term
 title: Architecture View
-status: draft
+status: active
 defined-in: BC-ARCHITECTURE-KNOWLEDGE
 synonyms: []
 uses-terms:

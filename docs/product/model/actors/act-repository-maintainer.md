@@ -2,7 +2,7 @@
 id: ACT-REPOSITORY-MAINTAINER
 type: actor
 title: Repository Maintainer
-status: draft
+status: active
 actor-kind: human
 ---
 

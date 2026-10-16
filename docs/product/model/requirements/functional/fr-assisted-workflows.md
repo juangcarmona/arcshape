@@ -2,7 +2,7 @@
 id: FR-ASSISTED-WORKFLOWS
 type: functional-requirement
 title: Provide AI-Assisted Architecture Workflows
-status: draft
+status: active
 derived-from:
   - UC-CREATE-ARCHITECTURE-DOCS
   - UC-MAINTAIN-ARCHITECTURE-DOCS

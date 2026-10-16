@@ -2,7 +2,7 @@
 id: UC-CREATE-ARCHITECTURE-DOCS
 type: use-case
 title: Create Architecture Documentation
-status: draft
+status: active
 primary-actor: ACT-REPOSITORY-MAINTAINER
 supporting-actors:
   - ACT-AI-ASSISTANT

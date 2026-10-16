@@ -2,7 +2,7 @@
 id: BR-PRODUCT-DEFINITION-AUTHORITY
 type: business-rule
 title: Preserve Approved Product Definition as the Product-Intent Authority
-status: draft
+status: active
 applies-to:
   - UC-CREATE-ARCHITECTURE-DOCS
   - UC-MAINTAIN-ARCHITECTURE-DOCS

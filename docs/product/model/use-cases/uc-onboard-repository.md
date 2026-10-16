@@ -2,7 +2,7 @@
 id: UC-ONBOARD-REPOSITORY
 type: use-case
 title: Onboard a Repository
-status: draft
+status: active
 primary-actor: ACT-REPOSITORY-MAINTAINER
 supporting-actors: []
 governed-by: []

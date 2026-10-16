@@ -2,7 +2,7 @@
 id: FR-ARC42-DOCUMENTATION
 type: functional-requirement
 title: Create and Maintain arc42 Architecture Documentation
-status: draft
+status: active
 derived-from:
   - UC-CREATE-ARCHITECTURE-DOCS
   - UC-MAINTAIN-ARCHITECTURE-DOCS

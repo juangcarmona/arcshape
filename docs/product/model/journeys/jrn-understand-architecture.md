@@ -2,7 +2,7 @@
 id: JRN-UNDERSTAND-ARCHITECTURE
 type: journey
 title: Understand a System's Architecture
-status: draft
+status: active
 primary-actor: ACT-ARCHITECTURE-READER
 steps:
   - use-case: UC-READ-ARCHITECTURE

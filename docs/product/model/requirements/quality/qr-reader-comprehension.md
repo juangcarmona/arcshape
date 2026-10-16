@@ -2,7 +2,7 @@
 id: QR-READER-COMPREHENSION
 type: quality-requirement
 title: Make Architecture Views Understandable to Non-Technical Readers
-status: draft
+status: active
 quality-attribute: comprehensibility
 applies-to:
   - JRN-UNDERSTAND-ARCHITECTURE

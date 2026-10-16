@@ -4,6 +4,14 @@ Record concrete workflow friction here when it is discovered. Each entry names t
 
 ## Open
 
+### PI-002: Verify approved ProductShape artifact statuses before accepting a baseline
+
+- **Date:** 2026-10-16
+- **Evidence:** PR #2 merged the approved `CHG-INITIAL` baseline with all 24 canonical artifacts still marked `status: draft`. ProductShape's greenfield-definition guidance requires approved artifacts to be active before apply.
+- **Impact:** The accepted model appeared unapproved, weakening its role as product source of truth and preventing confident PDAC citation.
+- **Proposed improvement:** Record `active` artifact status as a required product-approval step; require the Done review and CI model gate (issue #4) to verify no unapproved draft artifacts remain in `docs/product/model`.
+- **Status:** Open; issue #3 corrects the baseline and issue #4 establishes the automated guard.
+
 ### PI-001: Make greenfield ProductShape definition work without a pre-existing authority rule
 
 - **Date:** 2026-10-16

@@ -2,7 +2,7 @@
 id: CON-ARC42-FRAMEWORK
 type: constraint
 title: Use the arc42 Framework for Architecture Documentation
-status: draft
+status: active
 applies-to:
   - UC-CREATE-ARCHITECTURE-DOCS
   - UC-MAINTAIN-ARCHITECTURE-DOCS

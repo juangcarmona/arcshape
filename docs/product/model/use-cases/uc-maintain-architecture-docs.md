@@ -2,7 +2,7 @@
 id: UC-MAINTAIN-ARCHITECTURE-DOCS
 type: use-case
 title: Maintain Architecture Documentation
-status: draft
+status: active
 primary-actor: ACT-REPOSITORY-MAINTAINER
 supporting-actors:
   - ACT-AI-ASSISTANT
