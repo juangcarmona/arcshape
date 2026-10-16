@@ -2,7 +2,7 @@
 id: CON-NO-ARCSHAPE-DATA-COLLECTION
 type: constraint
 title: Do Not Collect User or Repository Data for an ArcShape Service
-status: draft
+status: active
 applies-to:
   - UC-ONBOARD-REPOSITORY
   - UC-CREATE-ARCHITECTURE-DOCS

@@ -2,7 +2,7 @@
 id: UC-READ-ARCHITECTURE
 type: use-case
 title: Read Architecture Documentation
-status: draft
+status: active
 primary-actor: ACT-ARCHITECTURE-READER
 supporting-actors: []
 bounded-context: BC-ARCHITECTURE-KNOWLEDGE

@@ -2,7 +2,7 @@
 id: FR-ONBOARD-REPOSITORY
 type: functional-requirement
 title: Onboard a Repository for Architecture Documentation
-status: draft
+status: active
 derived-from:
   - UC-ONBOARD-REPOSITORY
 verification:

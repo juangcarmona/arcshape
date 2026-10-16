@@ -2,7 +2,7 @@
 id: TERM-ARCHITECTURE-DOCUMENTATION
 type: domain-term
 title: Architecture Documentation
-status: draft
+status: active
 defined-in: BC-ARCHITECTURE-KNOWLEDGE
 synonyms: []
 uses-terms: []

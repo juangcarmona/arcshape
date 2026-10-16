@@ -2,7 +2,7 @@
 id: UC-PUBLISH-ARCHITECTURE-VIEW
 type: use-case
 title: Generate an Architecture View
-status: draft
+status: active
 primary-actor: ACT-REPOSITORY-MAINTAINER
 supporting-actors: []
 bounded-context: BC-ARCHITECTURE-KNOWLEDGE

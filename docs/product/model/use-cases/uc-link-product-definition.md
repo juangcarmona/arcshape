@@ -2,7 +2,7 @@
 id: UC-LINK-PRODUCT-DEFINITION
 type: use-case
 title: Connect Architecture Documentation to Product Intent
-status: draft
+status: active
 primary-actor: ACT-REPOSITORY-MAINTAINER
 supporting-actors: []
 bounded-context: BC-ARCHITECTURE-KNOWLEDGE

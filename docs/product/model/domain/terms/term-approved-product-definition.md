@@ -2,7 +2,7 @@
 id: TERM-APPROVED-PRODUCT-DEFINITION
 type: domain-term
 title: Approved Product Definition
-status: draft
+status: active
 defined-in: BC-ARCHITECTURE-KNOWLEDGE
 synonyms: []
 uses-terms: []

@@ -2,7 +2,7 @@
 id: JRN-ESTABLISH-ARCHITECTURE-DOCS
 type: journey
 title: Establish and Maintain Architecture Documentation
-status: draft
+status: active
 primary-actor: ACT-REPOSITORY-MAINTAINER
 steps:
   - use-case: UC-ONBOARD-REPOSITORY

@@ -2,7 +2,7 @@
 id: FR-PRODUCT-DEFINITION-LINKS
 type: functional-requirement
 title: Link Architecture Documentation to Approved Product Artifacts
-status: draft
+status: active
 derived-from:
   - UC-LINK-PRODUCT-DEFINITION
   - BR-PRODUCT-DEFINITION-AUTHORITY
