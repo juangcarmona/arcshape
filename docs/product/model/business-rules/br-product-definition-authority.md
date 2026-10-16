@@ -7,6 +7,9 @@ applies-to:
   - UC-CREATE-ARCHITECTURE-DOCS
   - UC-MAINTAIN-ARCHITECTURE-DOCS
   - UC-LINK-PRODUCT-DEFINITION
+  - UC-CREATE-ADRS
+  - UC-CREATE-C4-DIAGRAMS
+  - UC-REVERSE-ENGINEER-ARCHITECTURE
 uses-terms:
   - TERM-APPROVED-PRODUCT-DEFINITION
 ---
@@ -21,7 +24,7 @@ Product intent and architecture documentation answer related but distinct questi
 
 ## Examples
 
-Architecture documentation can cite an approved product requirement to explain why an architectural capability exists.
+Architecture documentation, ADRs, and C4 diagrams can cite approved product artifacts when they explain product goals or constraints that shape the system.
 
 ## Exceptions
 

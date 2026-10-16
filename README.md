@@ -1,8 +1,28 @@
 # ArcShape
 
-ArcShape aims to help teams create and maintain useful architecture documentation with [arc42](https://arc42.org/), AI-assisted workflows, and an approachable web view for technical and non-technical readers.
+ArcShape is an npm-installable CLI and a set of AI workflows for creating and maintaining Markdown architecture documentation with [arc42](https://arc42.org/). Its generated reader site is designed for technical and non-technical readers.
 
-This repository is in its foundation stage. The product definition and engineering process are being established before the CLI and publishing experience are implemented.
+## Get started
+
+After the first npm release, install ArcShape in a project repository with Node.js 22 or newer and run:
+
+```sh
+npm install --save-dev arcshape
+npx arcshape init
+```
+
+This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills and slash commands for Codex and Claude under `.agents/` and `.claude/`. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
+
+The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), and a self-contained reader site (`site build`). Codex and Claude workflows cover reverse engineering, arc42 authoring, ADRs, and C4 diagrams. Full documentation validation and Confluence/Obsidian connections remain tracked in the [v1 feature epic](https://github.com/juangcarmona/arcshape/issues/25).
+
+Start a local analysis session and ask for its next bounded evidence round:
+
+```sh
+npx arcshape session start
+npx arcshape session next
+```
+
+The session tool inventories files without selecting by programming language. It records the human or AI workflow's classifications and notes; it does not read findings into architecture claims by itself.
 
 ## Project foundations
 
@@ -21,14 +41,14 @@ npm ci
 
 The pinned [ProductShape](https://github.com/juangcarmona/productshape) and [OpenSpec](https://github.com/Fission-AI/OpenSpec) CLIs are installed as local development dependencies. Use `npx prodshape <command>` or the package scripts to run them; global installation is not required.
 
-The tracked Codex, Claude, [ProductShape](https://github.com/juangcarmona/productshape), and [OpenSpec](https://github.com/Fission-AI/OpenSpec) integrations are already present in a fresh checkout. Run these only when intentionally regenerating or refreshing the corresponding integration files:
+The tracked Codex, Claude, [ProductShape](https://github.com/juangcarmona/productshape), and [OpenSpec](https://github.com/Fission-AI/OpenSpec) integrations are already present in this development repository. Run these only when intentionally regenerating or refreshing the corresponding integration files:
 
 ```sh
 npm run product:init
 npm run openspec:init
 ```
 
-There is no application test, lint, build, or CI command configured yet. The initial quality baseline is defined in the [engineering lifecycle](docs/engineering-lifecycle.md) and will be implemented as follow-up work.
+The initial quality baseline is defined in the [engineering lifecycle](docs/engineering-lifecycle.md). `npm run build` compiles repository helper scripts; it is not the ArcShape CLI build.
 
 ## Contributing
 
