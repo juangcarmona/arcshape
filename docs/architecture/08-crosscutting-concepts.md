@@ -14,10 +14,10 @@ Product intent, system behavior, quality constraints, and architecture records h
 
 ## Security and privacy
 
-The CLI operates on the selected local repository and does not upload its contents. Session state remains in `.arcshape/sessions/`. Initialization refuses to overwrite differing authored files and refuses to write through symlinked paths. Assistant skills are local Markdown instructions; external AI providers have their own data handling policies.
+Repository setup, validation, site generation, session state, and Obsidian sync operate locally. Confluence sync sends only the selected architecture Markdown to the explicitly configured page when run without `--dry-run`; credentials are read from environment variables and are not persisted. Initialization refuses to overwrite differing authored files and refuses to write through symlinked paths. Assistant skills are local Markdown instructions; external AI providers have their own data handling policies.
 
 <!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:2893462d429a0188eeb937215ceb47a55809d26825d2646d0897cc851d33ce13" -->
 
 ## Observability and operations
 
-The CLI reports each created file, unchanged file, and conflict. Initialization is repeatable and has no persistent service state. Analysis-session progress is stored locally in `.arcshape/sessions/`.
+The CLI reports created, unchanged, updated, orphaned, and conflicting files for local sync. Initialization is repeatable and has no persistent service state. Analysis sessions and Confluence sync baselines are stored locally under `.arcshape/`.

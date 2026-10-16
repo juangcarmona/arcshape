@@ -8,7 +8,7 @@ description: System purpose, stakeholders, and architecture goals.
 
 ## Requirements overview
 
-ArcShape is an npm package with a CLI and Codex and Claude workflows for creating and maintaining Markdown architecture documentation. The CLI provides `arcshape init` to scaffold the arc42 structure and install assistant workflows, `arcshape session` to track resumable evidence rounds, and `arcshape site build` to render a self-contained reader site. The assistant workflows support repository reverse engineering, arc42 maintenance, ADRs, and C4 diagrams. Full document validation and external documentation connections remain planned.
+ArcShape is an npm package with a CLI and Codex and Claude workflows for creating and maintaining Markdown architecture documentation. The CLI provides `arcshape init` to scaffold the arc42 structure and install assistant workflows, `arcshape session` to track resumable evidence rounds, `arcshape validate` to validate arc42 Markdown structure, `arcshape sync obsidian` and `arcshape sync confluence` to synchronize architecture documentation, and `arcshape site build` to render a self-contained reader site. The assistant workflows support repository reverse engineering, arc42 maintenance, ADRs, C4 diagrams, and documentation connections. Cross-document link validation remains planned.
 
 <!-- pdac:cite id="FR-ONBOARD-REPOSITORY" digest="sha256:bb1a262b20b924f2bea45e81078452163f836c466ae379e934933b5c06fa4f36" -->
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:c640cc080f41323f458ac4e1a6124b802277bca2baa73c80fd720df48b286623" -->

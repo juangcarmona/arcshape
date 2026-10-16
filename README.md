@@ -13,7 +13,7 @@ npx arcshape init
 
 This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills and slash commands for Codex and Claude under `.agents/` and `.claude/`. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
 
-The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), and a self-contained reader site (`site build`). Codex and Claude workflows cover reverse engineering, arc42 authoring, ADRs, and C4 diagrams. Full documentation validation and Confluence/Obsidian connections remain tracked in the [v1 feature epic](https://github.com/juangcarmona/arcshape/issues/25).
+The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude workflows cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections. Cross-document link validation remains tracked in the [v1 feature epic](https://github.com/juangcarmona/arcshape/issues/25).
 
 Start a local analysis session and ask for its next bounded evidence round:
 
@@ -21,6 +21,25 @@ Start a local analysis session and ask for its next bounded evidence round:
 npx arcshape session start
 npx arcshape session next
 ```
+
+Copy the canonical Markdown into an Obsidian vault:
+
+```sh
+npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --dry-run
+npx arcshape sync obsidian --vault ~/Documents/ObsidianVault
+```
+
+The sync stores a local manifest beside the exported notes, updates copies only while they still match the last ArcShape version, and reports local edits as conflicts.
+
+To sync to an existing, blank Confluence page, set credentials in environment variables and preview the Markdown conversion first:
+
+```sh
+CONFLUENCE_EMAIL=you@example.com CONFLUENCE_API_TOKEN=... \
+  npx arcshape sync confluence \
+  --base-url https://example.atlassian.net/wiki --page-id 123456 --dry-run
+```
+
+Remove `--dry-run` to publish. On the first sync the page must be blank. Later runs stop if someone edited the page since ArcShape last synchronized it.
 
 The session tool inventories files without selecting by programming language. It records the human or AI workflow's classifications and notes; it does not read findings into architecture claims by itself.
 

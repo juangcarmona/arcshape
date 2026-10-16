@@ -6,6 +6,8 @@ import { dirname, join } from "node:path";
 import { runInit } from "./init.mjs";
 import { runSite } from "./site.mjs";
 import { runSession } from "./session.mjs";
+import { runValidate } from "./validate.mjs";
+import { runSync } from "./sync.mjs";
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const packageJson = JSON.parse(
@@ -41,6 +43,22 @@ if (command === "--version" || command === "-v") {
     process.stderr.write(`arcshape session: ${error.message}\n`);
     process.exitCode = 2;
   }
+} else if (command === "validate") {
+  try {
+    const result = await runValidate(args);
+    process.exitCode = result.exitCode;
+  } catch (error) {
+    process.stderr.write(`arcshape validate: ${error.message}\n`);
+    process.exitCode = 2;
+  }
+} else if (command === "sync") {
+  try {
+    const result = await runSync(args);
+    process.exitCode = result.exitCode;
+  } catch (error) {
+    process.stderr.write(`arcshape sync: ${error.message}\n`);
+    process.exitCode = 2;
+  }
 } else {
   process.stderr.write(`Unknown command: ${command}\n\n`);
   printHelp(process.stderr);
@@ -56,6 +74,12 @@ function printHelp(stream = process.stdout) {
   );
   stream.write(
     `  site build [--docs <directory>] [--out <file>]  Render the Markdown reader site\n`,
+  );
+  stream.write(
+    `  validate [--docs <directory>]              Validate Markdown arc42 structure\n`,
+  );
+  stream.write(
+    `  sync obsidian --vault <directory>          Copy Markdown into an Obsidian vault\n`,
   );
   stream.write(
     `  session <command>                         Track evidence rounds and resume analysis\n`,

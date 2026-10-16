@@ -18,7 +18,7 @@ sequenceDiagram
     participant FS as Target repository
     participant Templates as Package templates
     Maintainer->>CLI: init [--target path]
-    CLI->>Templates: Read README and arc42 Markdown files
+    CLI->>Templates: Read arc42 and assistant workflow Markdown files
     loop Each template file
         CLI->>FS: Check target path and existing content
         alt File is absent
@@ -34,7 +34,17 @@ sequenceDiagram
     CLI-->>Maintainer: Summarize created files and conflicts
 ```
 
-Initialization does not inspect source code, make architecture claims, or contact an ArcShape service. It works in a non-Git directory as well as a Git repository.
+Initialization does not inspect source code, make architecture claims, or contact an ArcShape service. It installs the README and twelve arc42 sections plus Codex and Claude commands and skills. It works in a non-Git directory as well as a Git repository.
+
+### Validate architecture Markdown
+
+`arcshape validate` loads the architecture README and twelve numbered sections and checks the arc42 frontmatter contract. It can print a human-readable summary or machine-readable JSON. Site generation runs the same structural validation before writing HTML.
+
+### Synchronize with an Obsidian vault
+
+`arcshape sync obsidian --vault <path>` copies Markdown files from the architecture directory to a selected vault folder. A local manifest records content hashes. On later runs, ArcShape updates a note only when its current content still matches the last synced version; local edits are reported as conflicts. Source files removed from the repository are reported as orphaned vault notes and are not deleted.
+
+`arcshape sync confluence --base-url <url> --page-id <id>` reads one selected Confluence Cloud page and prepares sanitized HTML from the Markdown sections. The first sync requires a blank page; subsequent writes require the remote page to match ArcShape's last recorded content hash. `--dry-run` performs a read and reports the intended update without writing. Credentials are read from configured environment variable names and are not stored in the repository.
 
 ### Build the reader site
 

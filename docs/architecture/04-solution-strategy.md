@@ -17,6 +17,8 @@ ArcShape is distributed as an npm package and runs locally in the adopting repos
 - `bin/arcshape.mjs` dispatches human-invoked CLI commands.
 - `bin/init.mjs` creates the local arc42 workspace and protects existing content.
 - `bin/session.mjs` inventories repository files in bounded rounds and persists source classifications, findings, leads, questions, and answers locally.
+- `bin/validate.mjs` checks the README and twelve Markdown sections against the renderer's arc42 contract.
+- `bin/sync.mjs` routes documentation sync operations; `bin/confluence.mjs` updates a selected Confluence page with local hash tracking and remote-change detection.
 - `bin/site.mjs` invokes the static reader-site generator.
 - `templates/architecture/` contains the Markdown scaffold shipped in the package.
 - `docs/product/model/` records product intent; it is not generated from implementation.
