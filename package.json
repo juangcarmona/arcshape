@@ -1,0 +1,19 @@
+{
+  "name": "arcshape",
+  "description": "ArcShape tooling for creating and maintaining arc42 architecture documentation.",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "openspec:init": "openspec init --tools codex,claude",
+    "product:init": "prodshape init --sdd openspec --ai codex,claude --full",
+    "product:openspec:add": "prodshape integration add openspec"
+  },
+  "devDependencies": {
+    "@fission-ai/openspec": "1.14.1",
+    "@prodshape/cli": "0.22.0"
+  }
+}

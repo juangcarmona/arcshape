@@ -1,0 +1,48 @@
+name: Bug report
+description: Report incorrect behavior or a defect.
+title: "Bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Blank issues are also welcome. If the details are incomplete, we can clarify the impact and help shape the report together.
+  - type: textarea
+    id: observed
+    attributes:
+      label: What happened?
+      description: Describe the incorrect behavior and its impact.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: Describe the correct behavior or desired outcome.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest reliable reproduction, if known.
+      placeholder: "1. ...\n2. ...\n3. ..."
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include relevant OS, runtime, tool versions, and configuration.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Verification criteria
+      description: What observable result would show this defect is fixed?
+  - type: textarea
+    id: product_sources
+    attributes:
+      label: Product definition references
+      description: Link/cite relevant approved artifacts under docs/product/model using PDAC citations, if any.
+  - type: textarea
+    id: risks
+    attributes:
+      label: Related behavior, quality expectations, and risks
+      description: Identify affected flows, security/accessibility/reliability concerns, test scenarios, and material unknowns.
