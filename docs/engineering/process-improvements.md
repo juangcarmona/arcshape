@@ -4,13 +4,13 @@ Record concrete workflow friction here when it is discovered. Each entry names t
 
 ## Open
 
-### PI-004: Ensure synthetic secret fixtures are not scanner allowlisted examples
+### PI-004: Make synthetic scanner-gate fixtures detector-controlled
 
 - **Date:** 2026-10-16
-- **Evidence:** The TruffleHog fixture used the commonly documented AWS example key `AKIAIOSFODNN7EXAMPLE`; the scanner correctly suppressed it, so the fixture gate failed to prove detection.
+- **Evidence:** Two plausible AWS access-key fixtures produced zero findings: the documented example was suppressed, and a random synthetic AWS-shaped ID did not match the detector. Both CI runs failed before establishing that `--fail` blocks a finding.
 - **Impact:** A test can pass without demonstrating that a real detector finding blocks the workflow.
-- **Proposed improvement:** Use a clearly synthetic, non-example credential-shaped value and require the scanner fixture step to observe the documented blocking exit code before the scan job can pass.
-- **Status:** Addressed in issue #5 by replacing the suppressed example suffix; rerun the CI fixture to verify the counterfactual.
+- **Proposed improvement:** Run the fixture with a temporary, test-only custom detector and synthetic value. Keep that detector and value outside the repository scan; require the documented blocking exit code.
+- **Status:** Addressed in issue #5 by using an ephemeral custom detector config; rerun the CI fixture to verify the counterfactual.
 
 ### PI-003: Verify repository-side merge controls independently of workflow checks
 

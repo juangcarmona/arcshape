@@ -2,11 +2,19 @@ set -euo pipefail
 
 fixture_directory="$(mktemp -d)"
 trap 'rm -rf "$fixture_directory"' EXIT
-printf 'AWS_ACCESS_KEY_ID=%s%s\n' 'AKIAIOSFODNN7' 'Q7M4P2L' > "$fixture_directory/synthetic.txt"
+cat > "$fixture_directory/detectors.yml" <<'EOF'
+detectors:
+  - name: arcshape-synthetic-secret
+    keywords:
+      - ARCSHAPE_SYNTHETIC_SECRET
+    regex:
+      arcshape-synthetic-secret: '(?i)ARCSHAPE_SYNTHETIC_SECRET[ \t]*=[ \t]*([a-z0-9]{16,})'
+EOF
+printf 'ARCSHAPE_SYNTHETIC_SECRET=ArcShapeFixtureValue1234567890\n' > "$fixture_directory/synthetic.txt"
 
 set +e
 docker run --rm -v "$fixture_directory:/tmp" -w /tmp ghcr.io/trufflesecurity/trufflehog:3.99.2 \
-  filesystem /tmp/synthetic.txt --fail --no-update --no-verification --github-actions \
+  filesystem /tmp/synthetic.txt --config /tmp/detectors.yml --fail --no-update --no-verification --github-actions \
   > "$RUNNER_TEMP/trufflehog-synthetic-fixture.log" 2>&1
 scanner_status=$?
 set -e
