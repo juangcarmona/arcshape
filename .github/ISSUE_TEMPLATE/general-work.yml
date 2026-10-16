@@ -1,0 +1,52 @@
+name: General work
+description: Propose a feature, improvement, or other product/engineering work.
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Blank issues are also welcome. If you are unsure how to structure this, explain the intent and we can refine it together before it is ready to plan.
+  - type: textarea
+    id: intent
+    attributes:
+      label: Intent and problem
+      description: What outcome do you need, what problem does it solve, and what context matters?
+      placeholder: Describe the outcome, not just the activity.
+    validations:
+      required: true
+  - type: textarea
+    id: stakeholders
+    attributes:
+      label: Who is affected?
+      description: Identify users, maintainers, or other stakeholders when applicable.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: List observable, verifiable conditions for success.
+      placeholder: "- [ ] ..."
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and exclusions
+      description: What is in scope and out of scope? Include this when the boundary is ambiguous.
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: List known dependencies or write "None known."
+  - type: textarea
+    id: product_sources
+    attributes:
+      label: Product definition references
+      description: Link/cite relevant approved artifacts under docs/product/model using [ProductShape](https://github.com/juangcarmona/productshape) citations, if any.
+  - type: textarea
+    id: affected_behavior
+    attributes:
+      label: Affected behavior and quality expectations
+      description: Identify existing flows that may change and relevant security, accessibility, performance, or reliability expectations.
+  - type: textarea
+    id: test_impact
+    attributes:
+      label: Test impact and risks
+      description: Identify affected/new scenarios and material unknowns. Resolve blockers; record remaining risks.
