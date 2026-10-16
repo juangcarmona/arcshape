@@ -2,7 +2,7 @@ set -euo pipefail
 
 fixture_directory="$(mktemp -d)"
 trap 'rm -rf "$fixture_directory"' EXIT
-printf 'AWS_ACCESS_KEY_ID=%s%s\n' 'AKIAIOSFODNN7' 'EXAMPLE' > "$fixture_directory/synthetic.txt"
+printf 'AWS_ACCESS_KEY_ID=%s%s\n' 'AKIAIOSFODNN7' 'Q7M4P2L' > "$fixture_directory/synthetic.txt"
 
 set +e
 docker run --rm -v "$fixture_directory:/tmp" -w /tmp ghcr.io/trufflesecurity/trufflehog:3.99.2 \
