@@ -1,7 +1,7 @@
 # Product definition
 
 This directory is the canonical product definition of this repository, managed with
-Product Definition as Code.
+[Product Definition as Code](https://github.com/juangcarmona/productshape).
 
 - `model/` holds the accepted Product Definition (the baseline).
 - `changes/active/` holds live Product Changes, each with its complete proposed future state.

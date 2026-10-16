@@ -17,11 +17,11 @@ An item is Ready when each applicable dimension is explicit. Mark inapplicable d
 | 5 | Dependencies | Lists known dependencies or explicitly states “none.” |
 | 6 | Acceptance criteria | Gives observable, verifiable conditions for success. |
 | 7 | Scope | States in-scope and out-of-scope when ambiguity exists. |
-| 8 | Product rules | Cites relevant approved product requirements and constraints in `docs/product/model` using ProductShape/PDAC citations when they exist. |
+| 8 | Product rules | Cites relevant approved product requirements and constraints in `docs/product/model` using [ProductShape](https://github.com/juangcarmona/productshape)/PDAC citations when they exist. |
 | 9 | Affected behaviour | Identifies existing workflows or behavior that may change, when applicable. |
 | 10 | Quality expectations | States relevant expectations such as security, accessibility, performance, or reliability. |
 | 11 | Test impact | Identifies affected or new test scenarios, including E2E scenarios where relevant; detailed test planning belongs to the proposal. |
-| 12 | Existing decisions | Links relevant approved product definition in `docs/product/model`, arc42 architecture documentation in `docs/architecture` when established, and ADRs when relevant. OpenSpec changes are delivery slices, not sources of trust or durable decisions. |
+| 12 | Existing decisions | Links relevant approved product definition in `docs/product/model`, [arc42](https://arc42.org/) architecture documentation in `docs/architecture` when established, and ADRs when relevant. [OpenSpec](https://github.com/Fission-AI/OpenSpec) changes are delivery slices, not sources of trust or durable decisions. |
 | 13 | Unknowns / risks | Resolves uncertainty that could invalidate planning; records the rest with its impact and owner where known. |
 
 ### Additional to this project
@@ -41,9 +41,9 @@ The Done gate means the change is finished and sufficiently proven for integrati
 | 3 | Tests | Tests fit the change and its risk; unit/integration coverage is expected as tooling is established, E2E is risk-based, and a reviewer judges adequacy. | both | Human reviewer |
 | 4 | Quality checks | Once CI exists, the initial baseline is format/lint, typecheck, unit tests, and build. No such checks are configured or passing today. | deterministic | none |
 | 5 | Security | Human risk judgement applies now. Secret and dependency scanning are the next security task; SAST, SBOM/license, mutation, and DAST controls are phased later. | both | Human reviewer |
-| 6 | Architecture / design conformance | Review against arc42 architecture documentation in `docs/architecture` as it is established; record deviations. Until then, do not claim documented conformance. | judgement | Human reviewer |
+| 6 | Architecture / design conformance | Review against [arc42](https://arc42.org/) architecture documentation in `docs/architecture` as it is established; record deviations. Until then, do not claim documented conformance. | judgement | Human reviewer |
 | 7 | Documentation | Update user, operational, developer, product, or architecture documentation when behavior or decisions change. | both | Human reviewer |
-| 8 | Product / spec consistency | Keep the change consistent with the approved ProductShape model in `docs/product/model`, using PDAC citations. OpenSpec is a temporary delivery slice; archive only the minimum useful delivery context and do not duplicate canonical product or architecture sources. | both | Human reviewer |
+| 8 | Product / spec consistency | Keep the change consistent with the approved [ProductShape](https://github.com/juangcarmona/productshape) model in `docs/product/model`, using PDAC citations. [OpenSpec](https://github.com/Fission-AI/OpenSpec) is a temporary delivery slice; archive only the minimum useful delivery context and do not duplicate canonical product or architecture sources. | both | Human reviewer |
 | 9 | Evidence | Preserve current-head check results and relevant test/runtime evidence; reviewer confirms the evidence supports the claim. | both | Human reviewer |
 | 10 | Human review | The human reviewer reviews and approves the change before merge. | judgement | Human reviewer |
 | 11 | Known limitations | State known limitations and residual risks; the reviewer decides whether they are acceptable before merge. | both | Human reviewer |
@@ -60,7 +60,7 @@ No deterministic CI checks are configured today. The first CI baseline is expect
 
 Main-branch protection is unverified: no repository rulesets were visible, and the GitHub integration could not read branch-protection settings. Do not claim that required checks or review rules are enforced until a maintainer verifies them.
 
-OpenSpec's generated archive workflow retains its change artifacts and does not enforce the project's minimal-retention policy. Keep OpenSpec archives to the minimum useful delivery context where the workflow permits; automated pruning remains follow-up work.
+[OpenSpec](https://github.com/Fission-AI/OpenSpec)'s generated archive workflow retains its change artifacts and does not enforce the project's minimal-retention policy. Keep [OpenSpec](https://github.com/Fission-AI/OpenSpec) archives to the minimum useful delivery context where the workflow permits; automated pruning remains follow-up work.
 
 | Check | How it runs | Evidence it produces |
 | --- | --- | --- |
@@ -130,14 +130,14 @@ Role capabilities installed into `.agents/skills/` are the project-owned source.
 
 ## Provided roles
 
-OpenSpec's generated Codex and Claude roles satisfy the proposal/application/spec-sync/archive plan-artifact contracts. Invoke the generated skills/commands from the active harness; these are generated by `npm run openspec:init`, not vendored Agentic SDLC templates.
+[OpenSpec](https://github.com/Fission-AI/OpenSpec)'s generated Codex and Claude roles satisfy the proposal/application/spec-sync/archive plan-artifact contracts. Invoke the generated skills/commands from the active harness; these are generated by `npm run openspec:init`, not vendored Agentic SDLC templates.
 
 | Contract | Provided by | Skill to invoke |
 | --- | --- | --- |
-| `propose-change` | OpenSpec for Codex | `$openspec-propose` |
-| `apply-change` | OpenSpec for Codex | `$openspec-apply-change` |
-| `sync-specs` | OpenSpec for Codex | `$openspec-sync-specs` |
-| `archive-change` | OpenSpec for Codex | `$openspec-archive-change` |
+| `propose-change` | [OpenSpec](https://github.com/Fission-AI/OpenSpec) for Codex | `$openspec-propose` |
+| `apply-change` | [OpenSpec](https://github.com/Fission-AI/OpenSpec) for Codex | `$openspec-apply-change` |
+| `sync-specs` | [OpenSpec](https://github.com/Fission-AI/OpenSpec) for Codex | `$openspec-sync-specs` |
+| `archive-change` | [OpenSpec](https://github.com/Fission-AI/OpenSpec) for Codex | `$openspec-archive-change` |
 
 Claude Code equivalents are `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, and `/opsx:archive`.
 

@@ -40,7 +40,7 @@ body:
     id: product_sources
     attributes:
       label: Product definition references
-      description: Link/cite relevant approved artifacts under docs/product/model using PDAC citations, if any.
+      description: Link/cite relevant approved artifacts under docs/product/model using [ProductShape](https://github.com/juangcarmona/productshape) citations, if any.
   - type: textarea
     id: risks
     attributes:
