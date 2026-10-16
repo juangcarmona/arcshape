@@ -39,7 +39,7 @@ The Done gate means the change is finished and sufficiently proven for integrati
 | 1 | Acceptance criteria | Every criterion has demonstrable evidence; reviewer judges subjective criteria. | both | Human reviewer |
 | 2 | Implementation completeness | Planned scope is complete; dropped work is explained; no placeholders, dead code, or silent scope loss remain. | both | Human reviewer |
 | 3 | Tests | Tests fit the change and its risk; unit/integration coverage is expected as tooling is established, E2E is risk-based, and a reviewer judges adequacy. | both | Human reviewer |
-| 4 | Quality checks | Once CI exists, the initial baseline is format/lint, typecheck, unit tests, and build. No such checks are configured or passing today. | deterministic | none |
+| 4 | Quality checks | Format, lint, typecheck, unit tests, and the helper-script build run in CI on supported Node and operating-system combinations. The ArcShape product CLI build remains future work until the CLI exists. | deterministic | none |
 | 5 | Security | Human risk judgement applies now. Secret and dependency scanning are the next security task; SAST, SBOM/license, mutation, and DAST controls are phased later. | both | Human reviewer |
 | 6 | Architecture / design conformance | Review against [arc42](https://arc42.org/) architecture documentation in `docs/architecture` as it is established; record deviations. Until then, do not claim documented conformance. | judgement | Human reviewer |
 | 7 | Documentation | Update user, operational, developer, product, or architecture documentation when behavior or decisions change. | both | Human reviewer |
@@ -56,7 +56,7 @@ The Done gate means the change is finished and sufficiently proven for integrati
 
 ### Deterministic checks
 
-No deterministic CI checks are configured today. The first CI baseline is expected to cover format/lint, typecheck, unit tests, and build. The follow-up work must select and configure actual commands and required checks; until then these checks have no result and cannot pass.
+The initial deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, unit tests, and compilation of repository helper scripts. The ArcShape product CLI does not exist yet, so this build is not evidence of a CLI build; that gate must expand with the CLI implementation.
 
 Main-branch protection is unverified: no repository rulesets were visible, and the GitHub integration could not read branch-protection settings. Do not claim that required checks or review rules are enforced until a maintainer verifies them.
 
@@ -64,10 +64,15 @@ Main-branch protection is unverified: no repository rulesets were visible, and t
 
 | Check | How it runs | Evidence it produces |
 | --- | --- | --- |
-| Format/lint | Not configured; establish in the initial CI work. | No result until configured and run for the current revision. |
-| Typecheck | Not configured; establish in the initial CI work. | No result until configured and run for the current revision. |
-| Unit tests | Not configured; establish a suitable test framework and command in the initial CI work. | No result until configured and run for the current revision. |
-| Build | Not configured; establish in the initial CI work. | No result until configured and run for the current revision. |
+| Format | `npm run format:check` in the quality matrix. | Prettier reports maintained code and CI configuration are formatted. |
+| Lint | `npm run lint` in the quality matrix. | ESLint reports no configured JavaScript/TypeScript lint violations. |
+| Typecheck | `npm run typecheck` in the quality matrix. | TypeScript compiles all maintained helper and test sources without emitting. |
+| Unit tests | `npm test` in the quality matrix. | Vitest executes the model-status guard tests. |
+| Build | `npm run build` in the quality matrix. | TypeScript emits the repository helper scripts; this is not yet an ArcShape CLI build. |
+| Product model | `npm run product:model:check` and `npm exec -- prodshape validate --format json`. | Canonical artifacts have accepted statuses and ProductShape reports no model diagnostics. |
+| OpenSpec | `npm exec -- openspec validate --all --no-interactive`. | OpenSpec validates any active changes/specs; currently reports no items when none exist. |
+
+CI definition: `.github/workflows/ci.yml`. GitHub branch protection remains a separate repository setting and is not verified by the workflow file; require the `Product model` and all six `Quality / <OS> / Node <version>` checks plus one human review after they have appeared on GitHub.
 
 ## Lifecycle stages and states
 
