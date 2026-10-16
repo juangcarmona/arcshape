@@ -1,0 +1,44 @@
+name: Security
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secrets scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify the secret scanner blocks a synthetic fixture
+        run: bash scripts/test-secret-scan.sh
+      - uses: trufflesecurity/trufflehog@e76dff8a7e57d6df0c60ad8cbf5d5cba505a8fc9
+        with:
+          version: 3.99.2
+          extra_args: --no-verification
+
+  dependencies:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.3
+          cache: npm
+      - run: npm ci
+      - name: Verify pinned npm runtime
+        run: test "$(npm --version)" = "10.9.9"
+      - name: Verify the audit gate blocks a synthetic high-severity finding
+        run: node scripts/test-npm-audit-gate.mjs
+      - run: npm run security:audit
