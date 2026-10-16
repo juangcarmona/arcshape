@@ -58,7 +58,7 @@ The Done gate means the change is finished and sufficiently proven for integrati
 
 The initial deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, unit tests, and compilation of repository helper scripts. The ArcShape product CLI does not exist yet, so this build is not evidence of a CLI build; that gate must expand with the CLI implementation.
 
-An active `main` ruleset is confirmed. It requires pull requests and blocks deletion and non-fast-forward updates, but currently requires zero approvals and no status checks. The required CI and security jobs are therefore configured but are not yet enforced as merge gates.
+An active `main` ruleset is confirmed. It requires pull requests and blocks deletion and non-fast-forward updates. Zero required GitHub approvals is intentional for this single-maintainer project; the human reviewer still owns the Done judgement. The ruleset does not yet require status checks, so CI and security jobs are configured but not enforced as merge gates.
 
 [OpenSpec](https://github.com/Fission-AI/OpenSpec)'s generated archive workflow retains its change artifacts and does not enforce the project's minimal-retention policy. Keep [OpenSpec](https://github.com/Fission-AI/OpenSpec) archives to the minimum useful delivery context where the workflow permits; automated pruning remains follow-up work.
 
@@ -74,7 +74,7 @@ An active `main` ruleset is confirmed. It requires pull requests and blocks dele
 | Secret scan | TruffleHog OSS v3.99.2 scans PR commits, main pushes, and full history on the daily schedule with credential verification disabled. | A detected credential blocks the scan; see `SECURITY.md` for false-positive handling. |
 | Dependency audit | `npm run security:audit` runs npm audit against the committed lockfile, with Node 22.23.3/npm 10.9.9. | Unexcepted High or Critical vulnerabilities and audit/reporting failures block the check; temporary exceptions require an owner, reason, exact advisory, and expiry. |
 
-CI definitions: `.github/workflows/ci.yml` and `.github/workflows/security.yml`. Require the `Product model`, all six `Quality / <OS> / Node <version>` checks, `Secrets scan`, and `Dependency audit` plus one human approval in the `main` ruleset before considering these gates enforced.
+CI definitions: `.github/workflows/ci.yml` and `.github/workflows/security.yml`. Require the `Product model`, all six `Quality / <OS> / Node <version>` checks, `Secrets scan`, and `Dependency audit` in the `main` ruleset before considering these gates enforced. A separate GitHub approval count is not required; human review remains part of the Done gate.
 
 ## Lifecycle stages and states
 

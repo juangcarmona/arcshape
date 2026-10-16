@@ -16,9 +16,9 @@ Record concrete workflow friction here when it is discovered. Each entry names t
 
 - **Date:** 2026-10-16
 - **Evidence:** PR #17 merged the CI workflow and auto-closed issue #4, but the active `main` ruleset still requires zero approvals and no status checks. The gap surfaced when the ruleset was queried directly during issue #5.
-- **Impact:** A merged workflow can be mistaken for an enforced merge gate even when repository settings do not require its checks or a human review.
-- **Proposed improvement:** Keep repository settings as explicit, externally verified acceptance criteria. Do not report branch protection complete from workflow files or issue closure; inspect the active ruleset and required-check list after configuring it.
-- **Status:** Open; issue #4 remains open until the ruleset's review and CI requirements are confirmed.
+- **Impact:** A merged workflow can be mistaken for an enforced merge gate even when repository settings do not require its checks.
+- **Proposed improvement:** Keep repository settings as explicit, externally verified acceptance criteria. Do not report branch protection complete from workflow files or issue closure; inspect the active ruleset and required-check list after configuring it. GitHub approval count is intentionally zero for the single maintainer; human review remains the Done gate.
+- **Status:** Open; issue #4 remains open until the required CI checks are confirmed in the ruleset.
 
 ### PI-002: Verify approved ProductShape artifact statuses before accepting a baseline
 
