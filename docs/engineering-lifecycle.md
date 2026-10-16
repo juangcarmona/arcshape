@@ -40,7 +40,7 @@ The Done gate means the change is finished and sufficiently proven for integrati
 | 2 | Implementation completeness | Planned scope is complete; dropped work is explained; no placeholders, dead code, or silent scope loss remain. | both | Human reviewer |
 | 3 | Tests | Tests fit the change and its risk; unit/integration coverage is expected as tooling is established, E2E is risk-based, and a reviewer judges adequacy. | both | Human reviewer |
 | 4 | Quality checks | Format, lint, typecheck, unit tests, and the helper-script build run in CI on supported Node and operating-system combinations. The ArcShape product CLI build remains future work until the CLI exists. | deterministic | none |
-| 5 | Security | Human risk judgement applies now. Secret and dependency scanning are the next security task; SAST, SBOM/license, mutation, and DAST controls are phased later. | both | Human reviewer |
+| 5 | Security | TruffleHog secret scanning and High/Critical npm dependency auditing run on pull requests, main pushes, and scheduled scans. Review documented exceptions; SAST, SBOM/license, mutation, and DAST controls are phased later. | both | Human reviewer |
 | 6 | Architecture / design conformance | Review against [arc42](https://arc42.org/) architecture documentation in `docs/architecture` as it is established; record deviations. Until then, do not claim documented conformance. | judgement | Human reviewer |
 | 7 | Documentation | Update user, operational, developer, product, or architecture documentation when behavior or decisions change. | both | Human reviewer |
 | 8 | Product / spec consistency | Keep the change consistent with the approved [ProductShape](https://github.com/juangcarmona/productshape) model in `docs/product/model`, using PDAC citations. Canonical model artifacts must be active unless explicitly deprecated or retired; draft artifacts belong in proposed Product Changes. [OpenSpec](https://github.com/Fission-AI/OpenSpec) is a temporary delivery slice; archive only the minimum useful delivery context and do not duplicate canonical product or architecture sources. | both | Human reviewer |
@@ -58,7 +58,7 @@ The Done gate means the change is finished and sufficiently proven for integrati
 
 The initial deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, unit tests, and compilation of repository helper scripts. The ArcShape product CLI does not exist yet, so this build is not evidence of a CLI build; that gate must expand with the CLI implementation.
 
-Main-branch protection is unverified: no repository rulesets were visible, and the GitHub integration could not read branch-protection settings. Do not claim that required checks or review rules are enforced until a maintainer verifies them.
+An active `main` ruleset is confirmed. It requires pull requests and blocks deletion and non-fast-forward updates. Zero required GitHub approvals is intentional for this single-maintainer project; the human reviewer still owns the Done judgement. The ruleset does not yet require status checks, so CI and security jobs are configured but not enforced as merge gates.
 
 [OpenSpec](https://github.com/Fission-AI/OpenSpec)'s generated archive workflow retains its change artifacts and does not enforce the project's minimal-retention policy. Keep [OpenSpec](https://github.com/Fission-AI/OpenSpec) archives to the minimum useful delivery context where the workflow permits; automated pruning remains follow-up work.
 
@@ -71,8 +71,10 @@ Main-branch protection is unverified: no repository rulesets were visible, and t
 | Build | `npm run build` in the quality matrix. | TypeScript emits the repository helper scripts; this is not yet an ArcShape CLI build. |
 | Product model | `npm run product:model:check` and `npm exec -- prodshape validate --format json`. | Canonical artifacts have accepted statuses and ProductShape reports no model diagnostics. |
 | OpenSpec | `npm exec -- openspec validate --all --no-interactive`. | OpenSpec validates any active changes/specs; currently reports no items when none exist. |
+| Secret scan | TruffleHog OSS v3.99.2 scans PR commits, main pushes, and full history on the daily schedule with credential verification disabled. | A detected credential blocks the scan; see `SECURITY.md` for false-positive handling. |
+| Dependency audit | `npm run security:audit` runs npm audit against the committed lockfile, with Node 22.23.3/npm 10.9.9. | Unexcepted High or Critical vulnerabilities and audit/reporting failures block the check; temporary exceptions require an owner, reason, exact advisory, and expiry. |
 
-CI definition: `.github/workflows/ci.yml`. GitHub branch protection remains a separate repository setting and is not verified by the workflow file; require the `Product model` and all six `Quality / <OS> / Node <version>` checks plus one human review after they have appeared on GitHub.
+CI definitions: `.github/workflows/ci.yml` and `.github/workflows/security.yml`. Require the `Product model`, all six `Quality / <OS> / Node <version>` checks, `Secrets scan`, and `Dependency audit` in the `main` ruleset before considering these gates enforced. A separate GitHub approval count is not required; human review remains part of the Done gate.
 
 ## Lifecycle stages and states
 

@@ -8,12 +8,13 @@
     "node": ">=22.0.0"
   },
   "scripts": {
-    "format:check": "prettier --check \"scripts/**/*.ts\" \"tests/**/*.ts\" \"*.js\" \"*.json\" \".github/workflows/*.yml\"",
+    "format:check": "prettier --check \"scripts/**/*.{ts,js,mjs}\" \"tests/**/*.{ts,js,mjs}\" \"security/**/*.json\" \"*.js\" \"*.json\" \".github/workflows/*.yml\"",
     "lint": "eslint scripts tests eslint.config.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "build": "tsc",
     "product:model:check": "node dist/scripts/check-product-model-status.js docs/product/model",
+    "security:audit": "node scripts/check-npm-audit.mjs",
     "openspec:init": "openspec init --tools codex,claude",
     "product:init": "prodshape init --sdd openspec --ai codex,claude --full",
     "product:openspec:add": "prodshape integration add openspec"

@@ -4,6 +4,22 @@ Record concrete workflow friction here when it is discovered. Each entry names t
 
 ## Open
 
+### PI-004: Make synthetic scanner-gate fixtures detector-controlled
+
+- **Date:** 2026-10-16
+- **Evidence:** Two plausible AWS access-key fixtures produced zero findings: the documented example was suppressed, and a random synthetic AWS-shaped ID did not match the detector. Both CI runs failed before establishing that `--fail` blocks a finding.
+- **Impact:** A test can pass without demonstrating that a real detector finding blocks the workflow.
+- **Proposed improvement:** Run the fixture with a temporary, test-only custom detector and synthetic value. Keep that detector and value outside the repository scan; require the documented blocking exit code.
+- **Status:** Verified by Security run [38938814597](https://github.com/juangcarmona/arcshape/actions/runs/38938814597): the ephemeral custom-detector fixture blocked as expected.
+
+### PI-003: Verify repository-side merge controls independently of workflow checks
+
+- **Date:** 2026-10-16
+- **Evidence:** PR #17 merged the CI workflow and auto-closed issue #4, but the active `main` ruleset still requires zero approvals and no status checks. The gap surfaced when the ruleset was queried directly during issue #5.
+- **Impact:** A merged workflow can be mistaken for an enforced merge gate even when repository settings do not require its checks.
+- **Proposed improvement:** Keep repository settings as explicit, externally verified acceptance criteria. Do not report branch protection complete from workflow files or issue closure; inspect the active ruleset and required-check list after configuring it. GitHub approval count is intentionally zero for the single maintainer; human review remains the Done gate.
+- **Status:** Open; issue #4 remains open until the required CI checks are confirmed in the ruleset.
+
 ### PI-002: Verify approved ProductShape artifact statuses before accepting a baseline
 
 - **Date:** 2026-10-16
