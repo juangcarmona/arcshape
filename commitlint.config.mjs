@@ -1,6 +1,6 @@
 export default {
-  extends: ['@commitlint/config-conventional'],
+  extends: ["@commitlint/config-conventional"],
   rules: {
-    'references-empty': [2, 'never'],
+    "references-empty": [2, "never"],
   },
 };
