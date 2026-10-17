@@ -2,3 +2,5 @@ node_modules/
 dist/
 .product/cache/
 .product/generated/
+.arcshape/sessions/
+.arcshape/confluence-sync/
