@@ -136,8 +136,7 @@ export async function runInit(
     (action) => action.action === "conflict",
   ))
     output.write(`  conflict ${item.path}: ${item.reason}\n`);
-  for (const failure of agentFailures)
-    output.write(`  preserved ${failure}\n`);
+  for (const failure of agentFailures) output.write(`  preserved ${failure}\n`);
   return {
     exitCode:
       architectureActions.some((item) => item.action === "conflict") ||
