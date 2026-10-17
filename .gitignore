@@ -4,3 +4,7 @@ dist/
 .product/generated/
 .arcshape/sessions/
 .arcshape/confluence-sync/
+playwright-report/
+test-results/
+reports/mutation/
+.stryker-tmp/

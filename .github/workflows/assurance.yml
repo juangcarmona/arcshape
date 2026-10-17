@@ -1,0 +1,122 @@
+name: Assurance
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "41 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  end-to-end:
+    name: End-to-end journeys
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install the pinned Playwright Chromium browser
+        run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Retain Playwright reports and traces
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: arcshape-e2e-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 30
+
+  passive-dast:
+    name: Passive DAST / ZAP Baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build an isolated reader preview
+        env:
+          PREVIEW_DIR: ${{ runner.temp }}/arcshape-preview
+        run: |
+          mkdir -p "$PREVIEW_DIR"
+          node bin/arcshape.mjs site build --out "$PREVIEW_DIR/index.html" --source-ref "$GITHUB_SHA"
+      - name: Verify the severity policy rejects a synthetic High finding
+        run: node scripts/check-zap-report.mjs --self-test
+      - name: Serve the same-run preview on loopback
+        env:
+          PREVIEW_DIR: ${{ runner.temp }}/arcshape-preview
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory "$PREVIEW_DIR" > "$RUNNER_TEMP/arcshape-preview.log" 2>&1 &
+          echo "$!" > "$RUNNER_TEMP/arcshape-preview.pid"
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8765/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/arcshape-preview.log"
+          exit 1
+      - name: Run the pinned passive ZAP Baseline scan
+        run: |
+          mkdir -p "$RUNNER_TEMP/arcshape-zap"
+          chmod 777 "$RUNNER_TEMP/arcshape-zap"
+          docker run --rm --network host \
+            --volume "$RUNNER_TEMP/arcshape-zap:/zap/wrk/:rw" \
+            ghcr.io/zaproxy/zaproxy:2.17.0@sha256:5ccfff9a411743ab2615136a2edd7416bec9ce41572fa94e935df38c14adb2b6 \
+            zap-baseline.py -t http://127.0.0.1:8765 -I -m 1 \
+              -J zap-report.json -r zap-report.html -w zap-report.md
+          node scripts/check-zap-report.mjs "$RUNNER_TEMP/arcshape-zap/zap-report.json"
+          printf '%s\n' "$GITHUB_SHA" > "$RUNNER_TEMP/arcshape-zap/source-commit.txt"
+      - name: Stop the preview server
+        if: always()
+        run: |
+          if test -f "$RUNNER_TEMP/arcshape-preview.pid"; then
+            kill "$(cat "$RUNNER_TEMP/arcshape-preview.pid")" || true
+          fi
+      - name: Retain ZAP reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: arcshape-zap-${{ github.sha }}
+          path: ${{ runner.temp }}/arcshape-zap/
+          if-no-files-found: warn
+          retention-days: 90
+
+  mutation-baseline:
+    name: Mutation baseline / Stryker
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Verify mutation-report gate rejects a covered mutant with zero tests
+        run: node scripts/check-mutation-report.mjs --self-test
+      - run: npm run test:mutation
+      - name: Reject mutation reports with invalid test execution evidence
+        run: node scripts/check-mutation-report.mjs reports/mutation/mutation.json
+      - name: Retain mutation report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: arcshape-mutation-${{ github.sha }}
+          path: reports/mutation/
+          if-no-files-found: warn
+          retention-days: 90
