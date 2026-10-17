@@ -515,7 +515,10 @@ const script = String.raw`
     runSearch('');
     input.focus();
   }
-  function closeFind() { doc.getElementById('find').hidden = true; }
+  function closeFind() {
+    doc.getElementById('find').hidden = true;
+    doc.getElementById('ov-find').focus();
+  }
   function runSearch(query) {
     var list = doc.getElementById('find-results');
     clear(list);

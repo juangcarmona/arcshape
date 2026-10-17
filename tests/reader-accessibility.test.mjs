@@ -32,6 +32,9 @@ describe("generated architecture reader", () => {
         document.querySelector(".doc-title")?.textContent ===
           "System scope and context",
     );
+    expect(await page.evaluate(() => document.activeElement?.id)).toBe(
+      "ov-find",
+    );
     await page.keyboard.press("ArrowRight");
     await page.waitForFunction(
       () =>
