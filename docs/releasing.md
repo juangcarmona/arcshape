@@ -19,9 +19,15 @@ After the first package exists on npm:
 3. Prepare and merge a reviewed version change. Create a matching `v<package.json version>` tag and GitHub Release.
 4. Publish the GitHub Release. The workflow verifies the package, waits for approval at `npm-publish`, publishes with GitHub OIDC and provenance, and checks the registry version afterward.
 
-The environment currently names the repository owner as its only required reviewer, so self-review prevention is disabled to keep releases possible. To enforce separation of duties, add a second trusted reviewer before enabling self-review prevention. npm Trusted Publisher configuration must complete its first successful publish within two days; configure it only when the next tagged release is ready to run.
+The environment currently names the repository owner as its only required reviewer, so self-review prevention is disabled to keep releases possible. To enforce separation of duties, add a second trusted reviewer before enabling self-review prevention. A newly created npm Trusted Publisher configuration must complete its first successful publish within two days. ArcShape validated its configuration with the `v0.1.1` release on 2026-10-17; if the configuration is ever recreated, schedule that setup with the next tagged release ready to run.
 
 The workflow has read-only repository access during verification. Only the publish job receives `id-token: write`; it uses Node.js 24 and npm 11.5.1 or newer for npm Trusted Publishing. It does not use an npm token.
+
+## Verified publication history
+
+- `@arcshape/cli@0.1.0` was the one-time manual publication on 2026-10-17.
+- GitHub Release [`v0.1.1`](https://github.com/juangcarmona/arcshape/releases/tag/v0.1.1) triggered [the publish workflow](https://github.com/juangcarmona/arcshape/actions/runs/39019682163). Its package-verification job passed, and its publish job successfully published `@arcshape/cli@0.1.1` through GitHub OIDC. npm reports an SLSA provenance attestation for that version.
+- The first workflow run failed afterward because the registry-verification script queried the retired, unscoped package name. [PR #51](https://github.com/juangcarmona/arcshape/pull/51) changed the script to read the package name from `package.json` and verified the corrected script against the published `0.1.1` version. The package version was not republished; npm versions are immutable.
 
 ## Recovery
 
