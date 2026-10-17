@@ -70,16 +70,16 @@ function printHelp(stream = process.stdout) {
   stream.write(`Usage: arcshape <command> [options]\n\n`);
   stream.write(`Commands:\n`);
   stream.write(
-    `  init [--target <directory>] [--dry-run]  Create ArcShape's Markdown workspace\n`,
+    `  init [--target <directory>] [--dry-run]  Set up Markdown docs and AI workflows\n`,
   );
   stream.write(
     `  site build [--docs <directory>] [--out <file>]  Render the Markdown reader site\n`,
   );
   stream.write(
-    `  validate [--docs <directory>] [--links]     Validate arc42 structure and local links\n`,
+    `  validate [--docs <directory>] [--links] [--citations]  Validate docs, links, and citations\n`,
   );
   stream.write(
-    `  sync obsidian --vault <directory>          Copy Markdown into an Obsidian vault\n`,
+    `  sync obsidian|confluence [options]         Sync Markdown to Obsidian or Confluence\n`,
   );
   stream.write(
     `  session <command>                         Track evidence rounds and resume analysis\n`,
