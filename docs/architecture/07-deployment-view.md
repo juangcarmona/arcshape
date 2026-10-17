@@ -16,13 +16,14 @@ Obsidian sync writes Markdown into the selected local vault and stores its manif
 
 ## Deployment mapping
 
-| Environment               | Artifact                              | Current state                                                              |
-| ------------------------- | ------------------------------------- | -------------------------------------------------------------------------- |
-| Developer checkout        | Node.js source and Markdown templates | Available                                                                  |
-| Local tarball install     | `arcshape@0.1.0` package              | Packed-package initialization smoke check passed                           |
-| Generated reader site     | `docs/architecture-site/index.html`   | Built locally from canonical Markdown                                      |
-| Obsidian vault            | Markdown notes and sync manifest      | Local filesystem path selected by the maintainer                           |
-| Confluence Cloud          | Selected parent and child pages       | Updated only by explicit sync; remote edits stop subsequent updates        |
-| GitHub Actions            | npm release workflow                  | Verifies version and package, then waits for the `npm-publish` environment |
-| npm registry              | Published ArcShape package            | Pending issue [#12](https://github.com/juangcarmona/arcshape/issues/12)    |
-| ArcShape-operated service | None                                  | Not part of the architecture                                               |
+| Environment               | Artifact                              | Current state                                                               |
+| ------------------------- | ------------------------------------- | --------------------------------------------------------------------------- |
+| Developer checkout        | Node.js source and Markdown templates | Available                                                                   |
+| Local tarball install     | `arcshape@0.1.0` package              | Packed-package initialization smoke check passed                            |
+| Generated reader site     | `docs/architecture-site/index.html`   | Self-contained snapshot built from canonical Markdown                       |
+| GitHub Pages              | Public ArcShape architecture reader   | Deployed from `main` after a workflow build; adopters choose their own host |
+| Obsidian vault            | Markdown notes and sync manifest      | Local filesystem path selected by the maintainer                            |
+| Confluence Cloud          | Selected parent and child pages       | Updated only by explicit sync; remote edits stop subsequent updates         |
+| GitHub Actions            | npm release workflow                  | Verifies version and package, then waits for the `npm-publish` environment  |
+| npm registry              | Published ArcShape package            | Pending issue [#12](https://github.com/juangcarmona/arcshape/issues/12)     |
+| ArcShape-operated service | None                                  | Not part of the architecture                                                |
