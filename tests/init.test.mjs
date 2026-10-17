@@ -1,4 +1,5 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -40,8 +41,9 @@ describe("arcshape init assistant integration", () => {
     ).toEqual(
       await listFiles(join(packageRoot, ".claude", "commands", "arcshape")),
     );
+    const codexCommands = join(assistantTemplates, ".agents", "commands");
     expect(
-      await listFiles(join(assistantTemplates, ".agents", "commands")),
+      existsSync(codexCommands) ? await listFiles(codexCommands) : [],
     ).toEqual([]);
   });
 
