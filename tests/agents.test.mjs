@@ -209,6 +209,75 @@ describe("agent CLI dry run", () => {
     expect(result.plan.actions).toHaveLength(4);
     expect(await readdir(target)).toEqual([]);
   });
+
+  it("adds a provider without removing previously managed capabilities", async () => {
+    const target = await makeTarget();
+    const output = new Writable({
+      write(_chunk, _encoding, callback) {
+        callback();
+      },
+    });
+    const first = await runAgents(
+      [
+        "install",
+        "--target",
+        target,
+        "--providers",
+        "codex",
+        "--capabilities",
+        "arc-adr",
+        "--yes",
+      ],
+      { packageRoot, output },
+    );
+    expect(first.exitCode).toBe(0);
+    const second = await runAgents(
+      [
+        "install",
+        "--target",
+        target,
+        "--providers",
+        "claude",
+        "--capabilities",
+        "arc-c4",
+        "--yes",
+      ],
+      { packageRoot, output },
+    );
+    expect(second.exitCode).toBe(0);
+    expect(second.plan.providers).toEqual(["codex", "claude"]);
+    expect(second.plan.capabilities).toEqual(["arc-adr", "arc-c4"]);
+    expect(
+      await readFile(
+        join(target, ".agents", "skills", "arc-adr", "SKILL.md"),
+        "utf8",
+      ),
+    ).toContain("name: arc-adr");
+  });
+
+  it("returns a failure status when an untracked destination conflicts", async () => {
+    const target = await makeTarget();
+    const destination = join(
+      target,
+      ".agents",
+      "skills",
+      "arc-adr",
+      "SKILL.md",
+    );
+    await mkdir(dirname(destination), { recursive: true });
+    await writeFile(destination, "maintainer-owned\n");
+    const output = new Writable({
+      write(_chunk, _encoding, callback) {
+        callback();
+      },
+    });
+    const result = await runAgents(
+      ["install", "--target", target, "--providers", "codex", "--yes"],
+      { packageRoot, output },
+    );
+    expect(result.exitCode).toBe(1);
+    expect(await readFile(destination, "utf8")).toBe("maintainer-owned\n");
+  });
 });
 
 describe("managed capability lifecycle", () => {

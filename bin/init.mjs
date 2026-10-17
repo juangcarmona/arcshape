@@ -2,11 +2,16 @@ import { lstat, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep, join } from "node:path";
 import { confirmPlan, promptInitSelection } from "./agents/commands.mjs";
 import { loadRegistry } from "./agents/registry.mjs";
-import { applyPlan, makePlan } from "./agents/lifecycle.mjs";
+import { applyPlan, makePlan, readManagedState } from "./agents/lifecycle.mjs";
 
 export async function runInit(
   args,
-  { packageRoot, input = process.stdin, output = process.stdout },
+  {
+    packageRoot,
+    input = process.stdin,
+    output = process.stdout,
+    errorOutput = process.stderr,
+  },
 ) {
   const options = parseOptions(args);
   if (options.help) {
@@ -75,11 +80,19 @@ export async function runInit(
 
   let agentPlan;
   if (selection.providers.length) {
+    const { manifest: prior } = await readManagedState({
+      targetRoot,
+      scope: selection.scope,
+    });
     agentPlan = await makePlan({
       packageRoot,
       targetRoot,
-      providers: selection.providers,
-      capabilities: selection.capabilities,
+      providers: [
+        ...new Set([...(prior?.providers ?? []), ...selection.providers]),
+      ],
+      capabilities: [
+        ...new Set([...(prior?.capabilities ?? []), ...selection.capabilities]),
+      ],
       scope: selection.scope,
       registry,
     });
@@ -135,8 +148,9 @@ export async function runInit(
   for (const item of architectureActions.filter(
     (action) => action.action === "conflict",
   ))
-    output.write(`  conflict ${item.path}: ${item.reason}\n`);
-  for (const failure of agentFailures) output.write(`  preserved ${failure}\n`);
+    errorOutput.write(`  conflict ${item.path}: ${item.reason}\n`);
+  for (const failure of agentFailures)
+    errorOutput.write(`  preserved ${failure}\n`);
   return {
     exitCode:
       architectureActions.some((item) => item.action === "conflict") ||

@@ -235,7 +235,11 @@ export async function makePlan({
 export async function applyPlan(plan) {
   const failures = [];
   for (const item of plan.actions) {
-    if (["conflict", "preserve", "unchanged"].includes(item.action)) continue;
+    if (item.action === "conflict") {
+      failures.push(`${item.path}: ${item.reason}`);
+      continue;
+    }
+    if (["preserve", "unchanged"].includes(item.action)) continue;
     const state = await inspectDestination(
       plan.installRoot,
       item.destination,

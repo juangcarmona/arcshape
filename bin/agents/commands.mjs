@@ -60,14 +60,24 @@ export async function runAgents(
     operation === "uninstall"
       ? (prior.manifest?.providers ?? [])
       : options.providers
-        ? validProviderIds(registry, options.providers)
+        ? [
+            ...new Set([
+              ...(prior.manifest?.providers ?? []),
+              ...validProviderIds(registry, options.providers),
+            ]),
+          ]
         : (prior.manifest?.providers ?? []);
   let chosenProviders = selectedProviders;
   let chosenCapabilities =
     operation === "uninstall"
       ? (prior.manifest?.capabilities ?? [])
       : options.capabilities
-        ? validCapabilityIds(options.capabilities)
+        ? [
+            ...new Set([
+              ...(prior.manifest?.capabilities ?? []),
+              ...validCapabilityIds(options.capabilities),
+            ]),
+          ]
         : (prior.manifest?.capabilities ?? knownCapabilities);
   let selectedScope = scope;
   if (!chosenProviders.length && operation !== "uninstall") {

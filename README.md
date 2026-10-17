@@ -25,7 +25,7 @@ The default install scope is the current repository. Use `--scope user` to insta
 
 Each canonical `SKILL.md` follows the portable Agent Skills format. The provider-neutral skills live in `.agents/skills/` for Codex, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, and GitHub Copilot. Claude Code uses `.claude/skills/`. `arcshape agents detect` reports strong executable signals from `PATH` and weak provider-specific repository markers; the shared `.agents/skills/` directory is ambiguous and does not identify an agent. Some providers discover both shared and Claude roots, so selecting Claude and a shared-path provider may expose the same skill twice. The Windsurf documentation currently redirects to Devin Desktop documentation; ArcShape uses the documented shared skills path and treats that provider's compatibility as provisional.
 
-Manage capabilities after setup with `arcshape agents detect`, `arcshape agents list`, `arcshape agents install`, `arcshape agents update`, and `arcshape agents uninstall`. For example:
+Manage capabilities after setup with `arcshape agents detect`, `arcshape agents list`, `arcshape agents install`, `arcshape agents update`, and `arcshape agents uninstall`. `install` adds the selected providers and capabilities to the current managed set; it does not remove earlier selections. `update` refreshes the managed set, and `uninstall` removes all unchanged managed files. For example:
 
 ```sh
 npx arcshape agents install --providers codex,claude --capabilities arc-adr,arc-c4 --dry-run
@@ -34,7 +34,7 @@ npx arcshape agents update --yes
 npx arcshape agents uninstall --yes
 ```
 
-ArcShape records owned file hashes in `.arcshape/agent-capabilities.json` (or `~/.arcshape/agent-capabilities.json` for user scope). Updates replace only unchanged files ArcShape manages; uninstall removes only unchanged managed files. Edited and untracked files are preserved and reported. The exact unchanged assistant files from package version 0.1.1 are offered for removal during a confirmed agent capability operation; edited legacy files remain untouched. Agent capabilities ship with the npm package and install offline. ArcShape does not install marketplace plugins, contact an agent service, or execute capability scripts.
+ArcShape records owned file hashes in `.arcshape/agent-capabilities.json` (or `~/.arcshape/agent-capabilities.json` for user scope). Updates replace only unchanged files ArcShape manages; uninstall removes only unchanged managed files. Edited and untracked files are preserved and reported, and conflicts produce a non-zero exit status. The exact unchanged assistant files from package version 0.1.1 are offered for removal during a confirmed agent capability operation; edited legacy files remain untouched. Agent capabilities ship with the npm package and install offline. ArcShape does not install marketplace plugins, contact an agent service, or execute capability scripts.
 
 The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure, local-link and optional ProductShape citation validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). The separately installed skills cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections.
 

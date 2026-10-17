@@ -79,7 +79,7 @@ function printHelp(stream = process.stdout) {
   stream.write(`Usage: arcshape <command> [options]\n\n`);
   stream.write(`Commands:\n`);
   stream.write(
-    `  init [--target <directory>] [--no-agents | --providers <ids>] [--dry-run] [--yes]\n`,
+    `  init [--target <directory>] [--no-agents | --providers <ids>] [--capabilities <ids>] [--scope project|user] [--dry-run] [--yes]\n`,
   );
   stream.write(
     `  agents detect|list|install|update|uninstall  Manage packaged agent capabilities\n`,

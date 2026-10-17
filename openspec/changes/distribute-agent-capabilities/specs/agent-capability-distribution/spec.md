@@ -94,6 +94,11 @@ The CLI SHALL track the package version and hashes of files it creates. Updates 
 - **WHEN** a destination already exists without ArcShape ownership metadata
 - **THEN** ArcShape does not overwrite or claim ownership of that file, even if its contents match a packaged skill
 
+#### Scenario: Add another provider to an existing installation
+
+- **WHEN** a maintainer installs an additional provider or capability for the same scope
+- **THEN** ArcShape retains previously managed providers and capabilities unless the maintainer explicitly uninstalls them
+
 ### Requirement: Install from the package without external services
 
 Agent capabilities SHALL ship in the npm package at the CLI version. Their lifecycle SHALL work offline, without marketplaces, and SHALL NOT execute packaged scripts.

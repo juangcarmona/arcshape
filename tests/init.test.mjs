@@ -103,6 +103,27 @@ describe("arcshape init", () => {
     expect(await readdir(target)).toEqual([]);
   });
 
+  it("adds providers selected during init without dropping earlier providers", async () => {
+    const target = await makeTarget();
+    const first = await runInit(
+      ["--target", target, "--providers", "codex", "--yes"],
+      { packageRoot },
+    );
+    expect(first.exitCode).toBe(0);
+    const second = await runInit(
+      ["--target", target, "--providers", "claude", "--yes"],
+      { packageRoot },
+    );
+    expect(second.exitCode).toBe(0);
+    const manifest = JSON.parse(
+      await readFile(
+        join(target, ".arcshape", "agent-capabilities.json"),
+        "utf8",
+      ),
+    );
+    expect(manifest.providers).toEqual(["codex", "claude"]);
+  });
+
   it("shows dry-run plans without writing and preserves targets when declined", async () => {
     const dryRunTarget = await makeTarget();
     const dryRun = await runInit(
