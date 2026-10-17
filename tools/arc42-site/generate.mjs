@@ -3,7 +3,7 @@
  * generate.mjs — arc42 snapshot generator (portable, bundled with the architecture-docs skill).
  *
  * Usage:
- *   node generate.mjs <docsDir> [--out <file>] [--title <name>]
+ *   node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>]
  *
  * Reads an arc42 documentation folder (README.md + NN-*.md sections with the
  * architecture-docs skill's frontmatter contract) and writes exactly one
@@ -32,11 +32,12 @@ const generatedMarker =
 function usage(code = 1) {
   process.stdout.write(
     [
-      "Usage: node generate.mjs <docsDir> [--out <file>] [--title <name>]",
+      "Usage: node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>]",
       "",
       "  docsDir   folder containing README.md and NN-*.md arc42 sections",
       "  --out     output HTML path (default: <docsDir>/../arc42-snapshot.html)",
       "  --title   page title override (default: derived from docsDir parent folder)",
+      "  --source-ref  Git branch, tag, or ref for repository source links (default: current branch)",
       "",
     ].join("\n"),
   );
@@ -48,7 +49,7 @@ function parseArgs(argv) {
   const flags = {};
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
-    if (arg === "--out" || arg === "--title") {
+    if (arg === "--out" || arg === "--title" || arg === "--source-ref") {
       if (!argv[i + 1] || argv[i + 1].startsWith("--")) usage(1);
       flags[arg.slice(2)] = argv[i + 1];
       i += 1;
@@ -75,7 +76,7 @@ async function gitRevision(docsDir) {
   }
 }
 
-async function gitSourceContext(docsDir) {
+async function gitSourceContext(docsDir, sourceRefOverride) {
   try {
     const [root, remote, ref] = await Promise.all([
       run("git", ["rev-parse", "--show-toplevel"], { cwd: docsDir }),
@@ -87,7 +88,7 @@ async function gitSourceContext(docsDir) {
       ? {
           root: root.stdout.trim(),
           repositoryUrl,
-          ref: ref.stdout.trim() || "HEAD",
+          ref: sourceRefOverride || ref.stdout.trim() || "HEAD",
         }
       : undefined;
   } catch {
@@ -154,7 +155,7 @@ async function main() {
     return slice;
   };
 
-  const sourceContext = await gitSourceContext(docsDir);
+  const sourceContext = await gitSourceContext(docsDir, flags["source-ref"]);
   const toSourcePath = (file) =>
     sourceContext
       ? relative(sourceContext.root, join(docsDir, file)).split(sep).join("/")
