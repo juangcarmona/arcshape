@@ -143,6 +143,35 @@ describe("multi-page Confluence sync", () => {
     expect(result.outcomes[0].action).toBe("conflict");
   });
 
+  it("previews and publishes a repository update to a managed page", async () => {
+    const options = {
+      baseUrl: "https://example.atlassian.net/wiki",
+      spaceId: "space",
+      parentId: "parent",
+      titlePrefix: "ArcShape",
+    };
+    await syncConfluencePages(options);
+    const source = join(root, "docs/architecture/01-introduction-and-goals.md");
+    const original = await readFile(source, "utf8");
+    await writeFile(source, `${original}\nReviewed update.\n`);
+
+    const preview = await syncConfluencePages({ ...options, dryRun: true });
+    expect(preview.exitCode).toBe(0);
+    expect(
+      preview.outcomes.find(
+        (outcome) =>
+          outcome.source === "docs/architecture/01-introduction-and-goals.md",
+      ).action,
+    ).toBe("update");
+
+    const updated = await syncConfluencePages(options);
+    expect(updated.exitCode).toBe(0);
+    expect(updated.outcomes[0].action).toBe("updated");
+    expect(pages.get("1").version.number).toBe(2);
+    const repeated = await syncConfluencePages({ ...options, dryRun: true });
+    expect(repeated.outcomes[0].action).toBe("unchanged");
+  });
+
   it("fails truthfully when credentials or destination permissions are missing", async () => {
     const options = {
       baseUrl: "https://example.atlassian.net/wiki",
