@@ -302,6 +302,140 @@ describe("repository analysis sessions", () => {
     ]);
   });
 
+  it("excludes root and nested gitignored paths while honoring negation rules", async () => {
+    const root = await makeRepository({ minimal: true });
+    await mkdir(join(root, "services/web/dist"), { recursive: true });
+    await mkdir(join(root, "services/web/logs"), { recursive: true });
+    await mkdir(join(root, "services/api/dist"), { recursive: true });
+    await writeFile(join(root, ".gitignore"), "*.log\n!keep.log\n");
+    await writeFile(join(root, "drop.log"), "generated\n");
+    await writeFile(join(root, "keep.log"), "review this\n");
+    await writeFile(
+      join(root, "services/web/.gitignore"),
+      "dist/\nlogs/*.log\n!logs/keep.log\n",
+    );
+    await writeFile(join(root, "services/web/dist/bundle.js"), "built\n");
+    await writeFile(join(root, "services/web/logs/drop.log"), "generated\n");
+    await writeFile(join(root, "services/web/logs/keep.log"), "review this\n");
+    await writeFile(
+      join(root, "services/api/dist/bundle.js"),
+      "source evidence\n",
+    );
+
+    await command(root, "start", "--id", "ignored");
+    const state = JSON.parse(
+      await readFile(
+        join(root, ".arcshape/sessions/ignored/session.json"),
+        "utf8",
+      ),
+    );
+    const paths = state.evidence.map((item) => item.path);
+    expect(paths).toContain("keep.log");
+    expect(paths).toContain("services/web/logs/keep.log");
+    expect(paths).toContain("services/api/dist/bundle.js");
+    expect(paths).not.toContain("drop.log");
+    expect(paths).not.toContain("services/web/dist/bundle.js");
+    expect(paths).not.toContain("services/web/logs/drop.log");
+  });
+
+  it("keeps protected secret exclusions ahead of gitignore negation rules", async () => {
+    const root = await makeRepository({ minimal: true });
+    await writeFile(join(root, ".gitignore"), "*\n!.env\n");
+    await writeFile(join(root, ".env"), "TOKEN=secret\n");
+    await writeFile(join(root, "README.md"), "Architecture overview\n");
+
+    await command(root, "start", "--id", "secrets");
+    const state = JSON.parse(
+      await readFile(
+        join(root, ".arcshape/sessions/secrets/session.json"),
+        "utf8",
+      ),
+    );
+    expect(state.evidence.map((item) => item.path)).toEqual([]);
+  });
+
+  it("tracks files becoming ignored and later unignored as changed evidence", async () => {
+    const root = await makeRepository({ minimal: true });
+    const evidencePath = join(root, "src/worker.md");
+    await mkdir(join(root, "src"), { recursive: true });
+    await writeFile(evidencePath, "Worker architecture\n");
+    await command(root, "start", "--id", "ignore-drift");
+    const initial = await command(root, "next", "--session", "ignore-drift");
+    const evidence = initial.data.evidence[0];
+    await command(
+      root,
+      "mark",
+      evidence.id,
+      "--as",
+      "represented",
+      "--session",
+      "ignore-drift",
+    );
+
+    await writeFile(join(root, ".gitignore"), "src/worker.md\n");
+    const ignored = await command(root, "status", "--session", "ignore-drift");
+    expect(ignored.data.coverage).toMatchObject({ pending: 1, excluded: 1 });
+    let state = JSON.parse(
+      await readFile(
+        join(root, ".arcshape/sessions/ignore-drift/session.json"),
+        "utf8",
+      ),
+    );
+    expect(
+      state.evidence.find((item) => item.path === "src/worker.md"),
+    ).toMatchObject({
+      status: "excluded",
+      exclusionReason: "ignored by repository .gitignore rules",
+      previousStatus: "reviewed",
+    });
+    expect(
+      (await command(root, "report", "--session", "ignore-drift")).data,
+    ).toMatchObject({
+      coverage: { excluded: 1 },
+      changedEvidence: [],
+    });
+
+    await writeFile(join(root, ".gitignore"), "");
+    const unignored = await command(
+      root,
+      "status",
+      "--session",
+      "ignore-drift",
+    );
+    expect(unignored.data.coverage.changed).toBe(2);
+    state = JSON.parse(
+      await readFile(
+        join(root, ".arcshape/sessions/ignore-drift/session.json"),
+        "utf8",
+      ),
+    );
+    expect(
+      state.evidence.find((item) => item.path === "src/worker.md"),
+    ).toMatchObject({
+      status: "changed",
+      previousStatus: "excluded",
+      change: "unignored",
+    });
+    expect(
+      (await command(root, "report", "--session", "ignore-drift")).data,
+    ).toMatchObject({
+      changedEvidence: expect.arrayContaining([
+        expect.objectContaining({ path: "src/worker.md", change: "unignored" }),
+      ]),
+    });
+    await expect(
+      command(
+        root,
+        "mark",
+        evidence.id,
+        "--as",
+        "represented",
+        "--session",
+        "ignore-drift",
+      ),
+    ).rejects.toThrow("changed since it was inventoried; re-read it");
+  });
+
   it("rejects duplicate sessions, unknown evidence, invalid classifications, and corrupt state without deleting it", async () => {
     const root = await makeRepository({ minimal: true });
     await writeFile(join(root, "README.md"), "Architecture overview\n");

@@ -53,7 +53,7 @@ CONFLUENCE_EMAIL=you@example.com CONFLUENCE_API_TOKEN=... \
 
 Remove `--dry-run` to create or update the pages. ArcShape records a local baseline in `.arcshape/confluence-sync/`; later runs stop on remote edits to managed pages. For a single-page destination, use `--page-id <id>` instead of `--space-id` and `--parent-id`.
 
-The session tool inventories files without selecting by programming language. It records the human or AI workflow's classifications and notes; it does not read findings into architecture claims by itself.
+The session tool inventories files without selecting by programming language and honors root and nested `.gitignore` rules, including negations. It records the human or AI workflow's classifications and notes; it does not read findings into architecture claims by itself.
 
 ## Project foundations
 

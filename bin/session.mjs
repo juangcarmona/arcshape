@@ -11,6 +11,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
+import ignore from "ignore";
 
 const SESSION_SCHEMA = "arcshape/repository-analysis-session/v1";
 const DEFAULT_BATCH_SIZE = 10;
@@ -207,6 +208,19 @@ async function refreshInventory(root, state) {
       changed = true;
       continue;
     }
+    if (
+      previous.status === "excluded" &&
+      previous.exclusionReason === "ignored by repository .gitignore rules"
+    ) {
+      previous.previousStatus = "excluded";
+      previous.status = "changed";
+      previous.currentDigest = item.digest;
+      previous.currentSize = item.size;
+      previous.change = "unignored";
+      delete previous.exclusionReason;
+      changed = true;
+      continue;
+    }
     if (previous.digest !== item.digest || previous.size !== item.size) {
       if (previous.status !== "changed")
         previous.previousStatus = previous.status;
@@ -217,7 +231,23 @@ async function refreshInventory(root, state) {
     }
   }
   for (const item of state.evidence) {
-    if (!currentPaths.has(item.path) && item.status !== "changed") {
+    if (currentPaths.has(item.path)) continue;
+    if (await isIgnoredFile(root, item.path)) {
+      if (
+        item.status !== "excluded" ||
+        item.exclusionReason !== "ignored by repository .gitignore rules"
+      ) {
+        item.previousStatus = item.status;
+        item.status = "excluded";
+        item.exclusionReason = "ignored by repository .gitignore rules";
+        delete item.currentDigest;
+        delete item.currentSize;
+        delete item.change;
+        changed = true;
+      }
+      continue;
+    }
+    if (item.status !== "changed") {
       item.previousStatus = item.status;
       item.status = "changed";
       item.currentDigest = null;
@@ -260,7 +290,8 @@ async function inventory(root) {
   return evidence.sort((left, right) => left.path.localeCompare(right.path));
 }
 
-async function walk(root, parent = "") {
+async function walk(root, parent = "", inheritedIgnoreRules = []) {
+  const ignoreRules = await loadIgnoreRules(root, parent, inheritedIgnoreRules);
   const entries = await readdir(join(root, parent), { withFileTypes: true });
   const paths = [];
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
@@ -271,12 +302,66 @@ async function walk(root, parent = "") {
       continue;
     if (relativePath.split("/").some(isProtectedFileName)) continue;
     if (entry.isSymbolicLink()) continue;
+    if (isIgnoredByRules(relativePath, entry.isDirectory(), ignoreRules))
+      continue;
     if (entry.isDirectory()) {
       if (parent === "" && IGNORED_BUILD_DIRS.has(entry.name)) continue;
-      paths.push(...(await walk(root, relativePath)));
+      paths.push(...(await walk(root, relativePath, ignoreRules)));
     } else if (entry.isFile()) paths.push(relativePath);
   }
   return paths;
+}
+
+async function loadIgnoreRules(root, parent, inheritedRules) {
+  const ignorePath = parent ? `${parent}/.gitignore` : ".gitignore";
+  if (parent && isIgnoredByRules(ignorePath, false, inheritedRules))
+    return inheritedRules;
+
+  const absolutePath = join(root, ...ignorePath.split("/"));
+  try {
+    const metadata = await lstat(absolutePath);
+    if (!metadata.isFile()) return inheritedRules;
+    const patterns = await readFile(absolutePath, "utf8");
+    if (!patterns.trim()) return inheritedRules;
+    return [
+      ...inheritedRules,
+      { base: parent, matcher: ignore().add(patterns) },
+    ];
+  } catch (error) {
+    if (error.code === "ENOENT") return inheritedRules;
+    throw error;
+  }
+}
+
+function isIgnoredByRules(path, isDirectory, rules) {
+  let ignored = false;
+  for (const rule of rules) {
+    const relativePath = rule.base ? path.slice(rule.base.length + 1) : path;
+    const candidate = isDirectory ? `${relativePath}/` : relativePath;
+    const result = rule.matcher.test(candidate);
+    if (result.ignored) ignored = true;
+    else if (result.unignored) ignored = false;
+  }
+  return ignored;
+}
+
+async function isIgnoredFile(root, path) {
+  try {
+    if (!(await lstat(join(root, ...path.split("/")))).isFile()) return false;
+  } catch (error) {
+    if (error.code === "ENOENT") return false;
+    throw error;
+  }
+  const parts = path.split("/");
+  let parent = "";
+  let rules = [];
+  for (const directory of parts.slice(0, -1)) {
+    rules = await loadIgnoreRules(root, parent, rules);
+    parent = parent ? `${parent}/${directory}` : directory;
+    if (isIgnoredByRules(parent, true, rules)) return true;
+  }
+  rules = await loadIgnoreRules(root, parent, rules);
+  return isIgnoredByRules(path, false, rules);
 }
 
 function isProtectedFileName(name) {
