@@ -28,4 +28,6 @@ for (let attempt = 1; attempt <= 12; attempt += 1) {
   }
   await wait(5_000);
 }
-throw new Error(`npm did not report ${packageName}@${version} after publication`);
+throw new Error(
+  `npm did not report ${packageName}@${version} after publication`,
+);
