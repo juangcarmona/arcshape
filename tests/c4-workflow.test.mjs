@@ -14,8 +14,11 @@ describe("C4 workflow examples", () => {
   it("renders context and container views grounded in their evidence", async () => {
     const contextMarkdown = await readExample("context.md");
     const containersMarkdown = await readExample("containers.md");
+    const changedEvidence = await readExample("update-evidence.md");
+    const updatedContext = await readExample("updated-context.md");
     const [context] = extractMermaidSources(contextMarkdown);
     const [containers] = extractMermaidSources(containersMarkdown);
+    const [updated] = extractMermaidSources(updatedContext);
 
     expect(contextMarkdown).toContain("package.json");
     expect(contextMarkdown).toContain("README.md");
@@ -29,12 +32,22 @@ describe("C4 workflow examples", () => {
     expect(containers).toContain('Container(cli, "ArcShape CLI"');
     expect(containers).toContain('Container(skills, "ArcShape skills"');
 
-    const [contextSvg, containerSvg] = await renderMermaid([
+    expect(changedEvidence).toContain("bin/confluence.mjs");
+    expect(changedEvidence).toContain("Preserve the unrelated");
+    expect(updatedContext).toContain(
+      "Publication is always explicit and uses a maintainer-selected destination.",
+    );
+    expect(updated).toContain("System_Ext(confluence");
+    expect(updated).toContain("explicit request");
+
+    const [contextSvg, containerSvg, updatedSvg] = await renderMermaid([
       context,
       containers,
+      updated,
     ]);
     expect(contextSvg).toContain("<svg");
     expect(containerSvg).toContain("<svg");
+    expect(updatedSvg).toContain("<svg");
   }, 60_000);
 
   it("asks for missing boundaries instead of inventing a context", async () => {
@@ -63,6 +76,7 @@ describe("C4 workflow examples", () => {
     for (const rule of [
       "Ask the maintainer about external actors or intended boundaries that evidence cannot establish.",
       "Ground nodes and relationships in evidence.",
+      "leave unrelated authored content unchanged",
       "Run `arcshape site build` and inspect the rendered diagram.",
     ])
       expect(codex).toContain(rule);
