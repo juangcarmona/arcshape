@@ -14,10 +14,12 @@ The first publication is a one-time maintainer action after the implementation i
 
 After the first package exists on npm:
 
-1. Configure an [npm Trusted Publisher](https://docs.npmjs.com/trusted-publishers) for repository `juangcarmona/arcshape`, workflow `.github/workflows/publish.yml`, and GitHub environment `npm-publish`.
-2. Configure the GitHub `npm-publish` environment with required human reviewers and prevent self-review. Allow release tags matching `v*`; the workflow also verifies each tagged commit is already an ancestor of `origin/main`.
+1. Configure an [npm Trusted Publisher](https://docs.npmjs.com/trusted-publishers) with GitHub Actions, user or organization `juangcarmona`, repository `arcshape`, workflow filename `publish.yml` (enter the filename only), and environment `npm-publish`. Allow direct `npm publish`, which is the command used by this workflow.
+2. Configure the GitHub `npm-publish` environment with a required human reviewer. Allow release tags matching `v*`; the workflow also verifies each tagged commit is already an ancestor of `origin/main`.
 3. Prepare and merge a reviewed version change. Create a matching `v<package.json version>` tag and GitHub Release.
 4. Publish the GitHub Release. The workflow verifies the package, waits for approval at `npm-publish`, publishes with GitHub OIDC and provenance, and checks the registry version afterward.
+
+The environment currently names the repository owner as its only required reviewer, so self-review prevention is disabled to keep releases possible. To enforce separation of duties, add a second trusted reviewer before enabling self-review prevention. npm Trusted Publisher configuration must complete its first successful publish within two days; configure it only when the next tagged release is ready to run.
 
 The workflow has read-only repository access during verification. Only the publish job receives `id-token: write`; it uses Node.js 24 and npm 11.5.1 or newer for npm Trusted Publishing. It does not use an npm token.
 
