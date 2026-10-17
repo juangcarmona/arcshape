@@ -295,6 +295,10 @@ kbd {
 .section-card[data-category="concepts"] { --category:var(--cat-concepts); }
 .section-card[data-category="other"] { --category:var(--cat-other); }
 .section-card .card-number { display:grid; place-items:center; width:2rem; height:2rem; flex:none; border-radius:50%; background:var(--category); color:#fff; font-weight:700; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-appearance='light']) .section-card .card-number { color:#16181b; }
+}
+:root[data-appearance='dark'] .section-card .card-number { color:#16181b; }
 .section-card strong { display:block; color:var(--ink); font-size:1rem; }
 .section-card small { display:block; margin-top:.2rem; color:var(--muted); font-size:.83rem; }
 @media(max-width:650px) { .section-cards { grid-auto-flow:row; grid-template-columns:1fr; grid-template-rows:none; } }

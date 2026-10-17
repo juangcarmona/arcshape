@@ -75,8 +75,6 @@ describe("generated architecture reader", () => {
     for (const appearance of ["light", "dark"]) {
       const contrast = await page.evaluate((choice) => {
         document.documentElement.setAttribute("data-appearance", choice);
-        const foreground = getComputedStyle(document.body).color;
-        const background = getComputedStyle(document.body).backgroundColor;
         const channels = (color) =>
           color
             .match(/[\d.]+/g)
@@ -91,14 +89,33 @@ describe("generated architecture reader", () => {
           });
           return 0.2126 * r + 0.7152 * g + 0.0722 * b;
         };
-        const values = [luminance(foreground), luminance(background)].sort(
-          (a, b) => b - a,
+        const ratio = (foreground, background) => {
+          const values = [luminance(foreground), luminance(background)].sort(
+            (a, b) => b - a,
+          );
+          return (values[0] + 0.05) / (values[1] + 0.05);
+        };
+        const body = ratio(
+          getComputedStyle(document.body).color,
+          getComputedStyle(document.body).backgroundColor,
         );
-        return (values[0] + 0.05) / (values[1] + 0.05);
+        const badges = [
+          ...document.querySelectorAll(".section-card .card-number"),
+        ].map((badge) =>
+          ratio(
+            getComputedStyle(badge).color,
+            getComputedStyle(badge).backgroundColor,
+          ),
+        );
+        return { body, badges };
       }, appearance);
       expect(
-        contrast,
+        contrast.body,
         `${appearance} body-text contrast`,
+      ).toBeGreaterThanOrEqual(4.5);
+      expect(
+        Math.min(...contrast.badges),
+        `${appearance} section-badge contrast`,
       ).toBeGreaterThanOrEqual(4.5);
     }
 
