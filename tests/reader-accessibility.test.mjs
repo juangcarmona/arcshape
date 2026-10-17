@@ -37,7 +37,7 @@ beforeAll(async () => {
     headless: true,
     ...getPuppeteerLaunchOptions(),
   });
-});
+}, 60_000);
 
 afterAll(async () => {
   await browser?.close();
