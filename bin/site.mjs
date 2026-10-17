@@ -5,7 +5,7 @@ export async function runSite(args, { packageRoot }) {
   const options = parseOptions(args);
   if (options.help) {
     process.stdout.write(
-      "Usage: arcshape site build [--docs <directory>] [--out <html-file>] [--title <name>]\n\n",
+      "Usage: arcshape site build [--docs <directory>] [--out <html-file>] [--title <name>] [--source-ref <ref>]\n\n",
     );
     process.stdout.write(
       "Build a self-contained reader site from the canonical architecture Markdown.\n",
@@ -24,6 +24,7 @@ export async function runSite(args, { packageRoot }) {
   const generator = join(packageRoot, "tools", "arc42-site", "generate.mjs");
   const argv = [generator, docsDir, "--out", outFile];
   if (options.title) argv.push("--title", options.title);
+  if (options.sourceRef) argv.push("--source-ref", options.sourceRef);
   const result = spawnSync(process.execPath, argv, { stdio: "inherit" });
   if (result.error) throw result.error;
   return { exitCode: result.status ?? 1 };
@@ -43,13 +44,14 @@ function parseOptions(args) {
   for (; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === "--help" || arg === "-h") options.help = true;
-    else if (["--docs", "--out", "--title"].includes(arg)) {
+    else if (["--docs", "--out", "--title", "--source-ref"].includes(arg)) {
       const value = args[index + 1];
       if (!value || value.startsWith("--"))
         throw new Error(`${arg} requires a value`);
       if (arg === "--docs") options.docs = value;
       if (arg === "--out") options.out = value;
       if (arg === "--title") options.title = value;
+      if (arg === "--source-ref") options.sourceRef = value;
       index += 1;
     } else throw new Error(`unknown site option: ${arg}`);
   }
