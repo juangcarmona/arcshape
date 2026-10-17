@@ -22,7 +22,7 @@ describe("arcshape init", () => {
     const capabilities = await listPaths(
       join(packageRoot, "capabilities", "skills"),
     );
-    expect(capabilities.sort()).toEqual([
+    expect(capabilities.map(normalizePath).sort()).toEqual([
       "arc-adr/SKILL.md",
       "arc-architecture/SKILL.md",
       "arc-c4/SKILL.md",

@@ -137,12 +137,16 @@ describe("local provider detection", () => {
   it("detects a provider executable by PATH presence without executing it", async () => {
     const target = await makeTarget();
     const executableDirectory = await makeTarget();
-    const executable = join(executableDirectory, "codex");
+    const executable = join(
+      executableDirectory,
+      process.platform === "win32" ? "codex.CMD" : "codex",
+    );
     await writeFile(executable, "this file must never be executed\n");
     await chmod(executable, 0o755);
     const registry = await loadRegistry(packageRoot);
     const result = await detectProviders(registry, target, {
       PATH: executableDirectory,
+      PATHEXT: ".EXE;.CMD",
     });
     expect(result.detected.map(({ id }) => id)).toContain("codex");
     expect(result.detected[0].evidence[0]).toEqual({
