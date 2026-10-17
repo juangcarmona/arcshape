@@ -39,9 +39,9 @@ Every external write is shown first and confirmed. The merge most of all.
 7. **Push** the branch, so the pull request carries the complete final state.
 8. **Re-audit the Done gate on the final head.** Steps 4 through 7 rebased, folded, archived and pushed new commits, so the diff the step-2 audit covered is no longer the diff that will merge. Delegate to the `done-gate-auditor` agent again, in a fresh context, and require its verdict on the final head before proceeding. An audit of an earlier commit is not evidence for this one.
 9. **Re-check the review immediately before merging.** Reviewer approval can be reset by a push, and steps 4 through 7 pushed. Read the pull request's state again: a vote read ten minutes ago is not evidence now.
-10. **Merge** via `merge-pull-request`. Set the commit message **explicitly**: the subject describes the implemented change, not the proposal the pull request opened with, and no auto-generated body is allowed to carry anything unintended onto the target branch.
+10. **Merge** via `merge-pull-request`. Set the Conventional Commit subject and `Refs #<number>` body **explicitly**: the subject describes the implemented change, not the proposal the pull request opened with, and no auto-generated body is allowed to carry anything unintended onto the target branch.
 11. **Verify traceability.** The branch, the commits, the pull request and the artifacts all carry the work item identifier, and the item links to the merge.
-12. **Close the loop in the tracker.** `transition-work-item` to the state the mapping names, and `comment-work-item` with the merge link.
+12. **Close the loop in the tracker.** GitHub closes the issue through `Closes #<number>`. Once the merge is confirmed, set `stage:review` via `transition-work-item` and `comment-work-item` with the merge link.
 13. **Publish documentation** where a pair is repository-ahead, via `sync-doc-to-kb`. A pair reported diverged is refused: both sides changed, and either write destroys work.
 14. **Offer the review now.** Draft the entry from what just happened, taking effort figures from `collect-usage`, and offer it while the human is still here. Declining is one word. This is the moment attention exists, and it never blocks the merge, which has already happened. Offering is not running: `review` runs when a human accepts.
 
@@ -52,7 +52,7 @@ Every external write is shown first and confirmed. The merge most of all.
 - The pull request was approved, not a draft, with no unresolved blocking threads, and its state was read again immediately before the merge.
 - The branch was brought up to date before the specifications were folded.
 - The plan was archived after the fold, never before.
-- The merge commit message was set explicitly.
+- The merge commit message uses Conventional Commits and includes `Refs #<number>`.
 - The work item identifier appears on the branch, the commits, the pull request and the artifacts, and the item links to the merge.
 - No diverged documentation pair was written to.
 - The review was offered and not run.
