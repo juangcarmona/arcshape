@@ -27,7 +27,7 @@ describe("C4 workflow examples", () => {
     expect(context).toContain("System_Ext(repository");
 
     expect(containersMarkdown).toContain("bin/arcshape.mjs");
-    expect(containersMarkdown).toContain("templates/assistants/");
+    expect(containersMarkdown).toContain("`capabilities/skills/`");
     expect(containers).toContain("System_Boundary(repository");
     expect(containers).toContain('Container(cli, "ArcShape CLI"');
     expect(containers).toContain('Container(skills, "ArcShape skills"');
@@ -57,29 +57,18 @@ describe("C4 workflow examples", () => {
     expect(unknown).not.toContain("```mermaid");
   });
 
-  it("ships the same evidence and rendering rules to Codex and Claude", async () => {
-    const codex = await readFile(
-      join(
-        packageRoot,
-        "templates/assistants/.agents/skills/arcshape-c4/SKILL.md",
-      ),
+  it("ships the portable C4 capability with evidence and rendering rules", async () => {
+    const skill = await readFile(
+      join(packageRoot, "capabilities/skills/arc-c4/SKILL.md"),
       "utf8",
     );
-    const claude = await readFile(
-      join(
-        packageRoot,
-        "templates/assistants/.claude/skills/arcshape-c4/SKILL.md",
-      ),
-      "utf8",
-    );
-    expect(codex).toBe(claude);
     for (const rule of [
       "Ask the maintainer about external actors or intended boundaries that evidence cannot establish.",
       "Ground nodes and relationships in evidence.",
       "leave unrelated authored content unchanged",
       "Run `arcshape site build` and inspect the rendered diagram.",
     ])
-      expect(codex).toContain(rule);
+      expect(skill).toContain(rule);
   });
 });
 

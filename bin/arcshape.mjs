@@ -8,6 +8,7 @@ import { runSite } from "./site.mjs";
 import { runSession } from "./session.mjs";
 import { runValidate } from "./validate.mjs";
 import { runSync } from "./sync.mjs";
+import { runAgents } from "./agents/commands.mjs";
 
 const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const packageJson = JSON.parse(
@@ -25,6 +26,14 @@ if (command === "--version" || command === "-v") {
     process.exitCode = result.exitCode;
   } catch (error) {
     process.stderr.write(`arcshape init: ${error.message}\n`);
+    process.exitCode = 2;
+  }
+} else if (command === "agents") {
+  try {
+    const result = await runAgents(args, { packageRoot });
+    process.exitCode = result.exitCode;
+  } catch (error) {
+    process.stderr.write(`arcshape agents: ${error.message}\n`);
     process.exitCode = 2;
   }
 } else if (command === "site") {
@@ -70,7 +79,10 @@ function printHelp(stream = process.stdout) {
   stream.write(`Usage: arcshape <command> [options]\n\n`);
   stream.write(`Commands:\n`);
   stream.write(
-    `  init [--target <directory>] [--dry-run]  Set up Markdown docs and AI workflows\n`,
+    `  init [--target <directory>] [--no-agents | --providers <ids>] [--capabilities <ids>] [--scope project|user] [--dry-run] [--yes]\n`,
+  );
+  stream.write(
+    `  agents detect|list|install|update|uninstall  Manage packaged agent capabilities\n`,
   );
   stream.write(
     `  site build [--docs <directory>] [--out <file>]  Render the Markdown reader site\n`,
@@ -88,6 +100,6 @@ function printHelp(stream = process.stdout) {
     `  --help, --version                        Show help or the installed version\n\n`,
   );
   stream.write(
-    `Run arcshape init from any repository directory. Existing files are preserved.\n`,
+    `Run arcshape init from any repository directory. Agent providers and capabilities are selectable.\n`,
   );
 }

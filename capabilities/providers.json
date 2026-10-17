@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "providers": [
+    {
+      "id": "codex",
+      "name": "Codex",
+      "projectSkillsRoot": ".agents/skills",
+      "userSkillsRoot": ".agents/skills",
+      "executables": ["codex"],
+      "markers": [".codex/config.toml"],
+      "documentation": "https://developers.openai.com/codex/skills"
+    },
+    {
+      "id": "claude",
+      "name": "Claude Code",
+      "projectSkillsRoot": ".claude/skills",
+      "userSkillsRoot": ".claude/skills",
+      "executables": ["claude"],
+      "markers": [".claude/settings.json"],
+      "documentation": "https://code.claude.com/docs/en/skills"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "projectSkillsRoot": ".agents/skills",
+      "userSkillsRoot": ".agents/skills",
+      "executables": ["cursor"],
+      "markers": [".cursor/rules"],
+      "documentation": "https://cursor.com/docs/skills"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf / Cascade",
+      "projectSkillsRoot": ".agents/skills",
+      "userSkillsRoot": ".agents/skills",
+      "executables": ["windsurf"],
+      "markers": [".windsurf/rules"],
+      "documentation": "https://docs.windsurf.com/windsurf/cascade/skills",
+      "note": "Current documentation redirects to Devin Desktop; re-verify Cascade discovery before making a stronger compatibility claim."
+    },
+    {
+      "id": "gemini",
+      "name": "Gemini CLI",
+      "projectSkillsRoot": ".agents/skills",
+      "userSkillsRoot": ".agents/skills",
+      "executables": ["gemini"],
+      "markers": [".gemini/settings.json"],
+      "documentation": "https://geminicli.com/docs/cli/using-agent-skills/"
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "projectSkillsRoot": ".agents/skills",
+      "userSkillsRoot": ".agents/skills",
+      "executables": ["opencode"],
+      "markers": ["opencode.json", "opencode.jsonc"],
+      "documentation": "https://docs.opencode.ai/docs/skills/"
+    },
+    {
+      "id": "copilot",
+      "name": "GitHub Copilot",
+      "projectSkillsRoot": ".agents/skills",
+      "userSkillsRoot": ".agents/skills",
+      "executables": ["copilot"],
+      "markers": [".github/copilot-instructions.md"],
+      "documentation": "https://docs.github.com/en/copilot/concepts/agents/about-agent-skills"
+    }
+  ]
+}

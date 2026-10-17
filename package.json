@@ -21,7 +21,8 @@
   "files": [
     "bin/",
     "tools/arc42-site/",
-    "templates/",
+    "templates/architecture/",
+    "capabilities/",
     "README.md",
     "LICENSE"
   ],

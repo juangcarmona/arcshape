@@ -1,21 +1,42 @@
 # ArcShape
 
-ArcShape is an npm-installable CLI and a set of AI workflows for creating and maintaining Markdown architecture documentation with [arc42](https://arc42.org/). Its generated reader site is designed for technical and non-technical readers.
+ArcShape is an npm-installable deterministic CLI and a separately managed package of agent skills for creating and maintaining Markdown architecture documentation with [arc42](https://arc42.org/). Its generated reader site is designed for technical and non-technical readers.
 
 Browse the [ArcShape architecture site](https://juangcarmona.github.io/arcshape/).
 
 ## Get started
 
-After the first npm release, install ArcShape in a project repository with Node.js 22 or newer and run:
+Install ArcShape in a project repository with Node.js 22 or newer and run:
 
 ```sh
 npm install --save-dev @arcshape/cli
 npx arcshape init
 ```
 
-This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills for Codex and Claude under `.agents/skills/` and `.claude/skills/`, plus Claude slash commands under `.claude/commands/arcshape/`. In Codex, invoke a skill with its `$arcshape-*` name. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
+`arcshape init` creates `docs/architecture/` with a README and the twelve arc42 sections, then offers detected agent providers and capabilities. Choose `--no-agents` for CLI-only setup. On non-interactive shells, state the choice and confirmation explicitly:
 
-The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure, local-link and optional ProductShape citation validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude skills cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections; Claude also receives matching slash commands.
+```sh
+npx arcshape init --providers codex,claude --dry-run
+npx arcshape init --providers codex,claude --yes
+npx arcshape init --no-agents --yes
+```
+
+The default install scope is the current repository. Use `--scope user` to install under your home directory. `--providers` accepts `codex`, `claude`, `cursor`, `windsurf`, `gemini`, `opencode`, and `copilot`; `--capabilities` accepts comma-separated names such as `arc-adr,arc-c4`. Without `--capabilities`, all four skills are selected. Detected providers are suggestions and are never selected silently.
+
+Each canonical `SKILL.md` follows the portable Agent Skills format. The provider-neutral skills live in `.agents/skills/` for Codex, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, and GitHub Copilot. Claude Code uses `.claude/skills/`. `arcshape agents detect` reports strong executable signals from `PATH` and weak provider-specific repository markers; the shared `.agents/skills/` directory is ambiguous and does not identify an agent. Some providers discover both shared and Claude roots, so selecting Claude and a shared-path provider may expose the same skill twice. The Windsurf documentation currently redirects to Devin Desktop documentation; ArcShape uses the documented shared skills path and treats that provider's compatibility as provisional.
+
+Manage capabilities after setup with `arcshape agents detect`, `arcshape agents list`, `arcshape agents install`, `arcshape agents update`, and `arcshape agents uninstall`. `install` adds the selected providers and capabilities to the current managed set; it does not remove earlier selections. `update` refreshes the managed set, and `uninstall` removes all unchanged managed files. For example:
+
+```sh
+npx arcshape agents install --providers codex,claude --capabilities arc-adr,arc-c4 --dry-run
+npx arcshape agents install --providers codex,claude --capabilities arc-adr,arc-c4 --yes
+npx arcshape agents update --yes
+npx arcshape agents uninstall --yes
+```
+
+ArcShape records owned file hashes in `.arcshape/agent-capabilities.json` (or `~/.arcshape/agent-capabilities.json` for user scope). Updates replace only unchanged files ArcShape manages; uninstall removes only unchanged managed files. Edited and untracked files are preserved and reported, and conflicts produce a non-zero exit status. The exact unchanged assistant files from package version 0.1.1 are offered for removal during a confirmed agent capability operation; edited legacy files remain untouched. Agent capabilities ship with the npm package and install offline. ArcShape does not install marketplace plugins, contact an agent service, or execute capability scripts.
+
+The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure, local-link and optional ProductShape citation validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). The separately installed skills cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections.
 
 Validate arc42 structure and local links. Add `--citations` to verify ProductShape citations when the repository has a model at `docs/product/model`:
 

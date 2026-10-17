@@ -1,5 +1,5 @@
 ---
-name: arcshape-docs-sync
+name: arc-docs-sync
 description: Connect repository architecture Markdown to Obsidian or Confluence while keeping the repository copy reviewable and canonical. Use when a maintainer asks to link, export, or publish architecture documentation.
 ---
 

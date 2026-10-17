@@ -13,7 +13,8 @@ describe("ArcShape CLI help", () => {
       { encoding: "utf8" },
     );
 
-    expect(help).toContain("Set up Markdown docs and AI workflows");
+    expect(help).toContain("Manage packaged agent capabilities");
+    expect(help).toContain("--no-agents");
     expect(help).toContain("[--citations]");
     expect(help).toContain("sync obsidian|confluence");
   });

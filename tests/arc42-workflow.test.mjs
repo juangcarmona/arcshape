@@ -72,7 +72,7 @@ describe("arc42 authoring examples", () => {
 
   it("keeps the architecture workflow aligned with the examples", async () => {
     const skill = await read(
-      "../../templates/assistants/.agents/skills/arcshape-architecture/SKILL.md",
+      "../../capabilities/skills/arc-architecture/SKILL.md",
     );
     const guide = await read("README.md");
     expect(guide).toContain("different implementation languages");

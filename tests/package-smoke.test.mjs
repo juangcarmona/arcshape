@@ -20,7 +20,7 @@ afterEach(async () => {
 
 describe("packed ArcShape package", () => {
   it.skipIf(process.platform === "win32")(
-    "installs from an npm tarball and initializes without overwriting authored files",
+    "installs a packed npm tarball and initializes without overwriting authored files",
     async () => {
       const sandbox = await mkdtemp(join(tmpdir(), "arcshape-package-smoke-"));
       temporaryDirectories.push(sandbox);
@@ -37,13 +37,32 @@ describe("packed ArcShape package", () => {
       await writeFile(join(repository, "README.md"), "# Smoke repository\n");
 
       const packed = await runNpm(
-        ["pack", "--ignore-scripts", "--pack-destination", tarballDirectory],
+        [
+          "pack",
+          "--json",
+          "--silent",
+          "--ignore-scripts",
+          "--pack-destination",
+          tarballDirectory,
+        ],
         {
           cwd: packageRoot,
           timeout: 120_000,
         },
       );
       expect(packed.exitCode, `${packed.stderr}\n${packed.stdout}`).toBe(0);
+      const jsonStart = packed.stdout.indexOf("[\n");
+      expect(jsonStart, packed.stdout).toBeGreaterThanOrEqual(0);
+      const packageFileList = JSON.parse(
+        packed.stdout.slice(jsonStart),
+      )[0].files.map(({ path }) => path);
+      expect(packageFileList).toContain("capabilities/providers.json");
+      expect(packageFileList).toContain("capabilities/skills/arc-adr/SKILL.md");
+      expect(
+        packageFileList.some((path) =>
+          path.startsWith("templates/assistants/"),
+        ),
+      ).toBe(false);
       const packageJson = JSON.parse(
         await readFile(join(packageRoot, "package.json"), "utf8"),
       );
@@ -53,14 +72,7 @@ describe("packed ArcShape package", () => {
       const tarballName = `${packageFileName}-${packageJson.version}.tgz`;
       const tarball = join(tarballDirectory, tarballName);
       const installed = await runNpm(
-        [
-          "install",
-          "--ignore-scripts",
-          "--no-audit",
-          "--no-fund",
-          "--prefer-offline",
-          tarball,
-        ],
+        ["install", "--ignore-scripts", "--no-audit", "--no-fund", tarball],
         { cwd: repository, timeout: 180_000 },
       );
       expect(
@@ -69,27 +81,65 @@ describe("packed ArcShape package", () => {
       ).toBe(0);
 
       const initialized = await runNpm(
-        ["exec", "--", "arcshape", "init", "--target", repository],
+        [
+          "exec",
+          "--offline",
+          "--",
+          "arcshape",
+          "init",
+          "--target",
+          repository,
+          "--no-agents",
+          "--yes",
+        ],
         { cwd: repository, timeout: 30_000 },
       );
       expect(initialized.exitCode).toBe(0);
-      expect(initialized.stdout).toContain("Created 26 file(s)");
+      expect(initialized.stdout).toContain("CLI-only setup");
+
+      const installedCapabilities = await runNpm(
+        [
+          "exec",
+          "--offline",
+          "--",
+          "arcshape",
+          "agents",
+          "install",
+          "--target",
+          repository,
+          "--providers",
+          "codex,claude",
+          "--yes",
+        ],
+        { cwd: repository, timeout: 30_000 },
+      );
+      expect(installedCapabilities.exitCode).toBe(0);
       await expect(
         readFile(
-          join(repository, ".agents/skills/arcshape-architecture/SKILL.md"),
+          join(repository, ".agents/skills/arc-architecture/SKILL.md"),
           "utf8",
         ),
       ).resolves.toContain("ArcShape architecture documentation");
       await expect(
-        readFile(join(repository, ".claude/commands/arcshape/c4.md"), "utf8"),
-      ).resolves.toContain("arcshape-c4");
+        readFile(join(repository, ".claude/skills/arc-c4/SKILL.md"), "utf8"),
+      ).resolves.toContain("name: arc-c4");
 
       const repeated = await runNpm(
-        ["exec", "--", "arcshape", "init", "--target", repository],
+        [
+          "exec",
+          "--offline",
+          "--",
+          "arcshape",
+          "init",
+          "--target",
+          repository,
+          "--no-agents",
+          "--yes",
+        ],
         { cwd: repository, timeout: 30_000 },
       );
       expect(repeated.exitCode).toBe(0);
-      expect(repeated.stdout).toContain("Created 0 file(s)");
+      expect(repeated.stdout).toContain("unchanged");
 
       const authored = "Maintainer-authored architecture index\n";
       const architectureReadme = join(
@@ -98,7 +148,17 @@ describe("packed ArcShape package", () => {
       );
       await writeFile(architectureReadme, authored);
       const conflict = await runNpm(
-        ["exec", "--", "arcshape", "init", "--target", repository],
+        [
+          "exec",
+          "--offline",
+          "--",
+          "arcshape",
+          "init",
+          "--target",
+          repository,
+          "--no-agents",
+          "--yes",
+        ],
         { cwd: repository, timeout: 30_000 },
       );
       expect(conflict.exitCode).toBe(1);
@@ -116,6 +176,7 @@ describe("packed ArcShape package", () => {
       const session = await runNpm(
         [
           "exec",
+          "--offline",
           "--",
           "arcshape",
           "session",
