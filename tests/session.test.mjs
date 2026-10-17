@@ -1,10 +1,12 @@
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { runSession } from "../bin/session.mjs";
 
 const temporaryDirectories = [];
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 afterEach(async () => {
   await Promise.all(
@@ -15,6 +17,53 @@ afterEach(async () => {
 });
 
 describe("repository analysis sessions", () => {
+  it("inventories repositories with different languages and documentation maturity without a language allowlist", async () => {
+    const examples = join(packageRoot, "examples/repository-analysis");
+    const mature = await copyFixture(join(examples, "mature-python"));
+    const sparse = await copyFixture(join(examples, "sparse-rust"));
+
+    const matureStart = await command(mature, "start", "--id", "mature-python");
+    const sparseStart = await command(sparse, "start", "--id", "sparse-rust");
+    expect(matureStart.data.evidenceCount).toBe(4);
+    expect(sparseStart.data.evidenceCount).toBe(2);
+
+    const matureState = JSON.parse(
+      await readFile(
+        join(mature, ".arcshape/sessions/mature-python/session.json"),
+        "utf8",
+      ),
+    );
+    const sparseState = JSON.parse(
+      await readFile(
+        join(sparse, ".arcshape/sessions/sparse-rust/session.json"),
+        "utf8",
+      ),
+    );
+    expect(matureState.evidence.map((item) => item.path)).toEqual(
+      expect.arrayContaining([
+        "README.md",
+        "docs/architecture.md",
+        "config/runtime.yaml",
+        "src/worker.py",
+      ]),
+    );
+    expect(sparseState.evidence.map((item) => item.path)).toEqual(
+      expect.arrayContaining(["Cargo.toml", "src/main.rs"]),
+    );
+    expect(
+      matureState.evidence.every((item) => item.status === "pending"),
+    ).toBe(true);
+    expect(
+      sparseState.evidence.every((item) => item.status === "pending"),
+    ).toBe(true);
+    expect(
+      (await command(mature, "next", "--session", "mature-python")).data.round,
+    ).toBe("documentation");
+    expect(
+      (await command(sparse, "next", "--session", "sparse-rust")).data.round,
+    ).toBe("repository-configuration");
+  });
+
   it("persists bounded rounds and resumes coverage, leads, and questions", async () => {
     const root = await makeRepository();
     const statePath = join(root, ".arcshape/sessions/dogfood/session.json");
@@ -339,6 +388,13 @@ async function makeRepository({ minimal = false } = {}) {
   await writeFile(join(root, "node_modules/private/index.js"), "secret\n");
   await writeFile(join(root, "dist/app.js"), "built\n");
   await writeFile(join(root, "secrets/credentials.json"), "secret\n");
+  return root;
+}
+
+async function copyFixture(source) {
+  const root = await mkdtemp(join(tmpdir(), "arcshape-language-fixture-"));
+  temporaryDirectories.push(root);
+  await cp(source, root, { recursive: true });
   return root;
 }
 

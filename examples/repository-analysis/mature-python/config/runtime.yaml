@@ -1,0 +1,4 @@
+worker:
+  queue: orders
+database:
+  engine: postgresql
