@@ -10,8 +10,8 @@ derived-from:
   - UC-CREATE-ADRS
   - UC-CREATE-C4-DIAGRAMS
 verification:
-  - scenario: A maintainer can invoke Codex or Claude skills to create and maintain Markdown architecture documentation, ADRs, and C4 diagrams.
-  - scenario: Codex and Claude workflow commands dispatch to skills that reason over repository evidence and invoke CLI tools for deterministic operations.
+  - scenario: A maintainer can invoke ArcShape skills through Codex, Claude Code, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, or GitHub Copilot to create and maintain Markdown architecture documentation, ADRs, and C4 diagrams.
+  - scenario: Provider-specific commands or rules dispatch to the shared skill workflow where the provider requires an adapter.
   - scenario: The maintainer can inspect proposed changes before deciding what to accept.
 uses-terms:
   - TERM-ARCHITECTURE-DOCUMENTATION
@@ -19,7 +19,7 @@ uses-terms:
 
 ## Requirement
 
-ArcShape must provide Codex and Claude commands and skills that help repository maintainers analyze repository evidence, create and maintain arc42 architecture documentation, ADRs, and C4 diagrams as Markdown, and connect or publish those documents. AI commands dispatch to skills; skills own the AI reasoning, questioning, and authoring workflow and may use the CLI for deterministic operations such as session bookkeeping, validation, generation, and synchronization. AI workflow commands and skills are a distinct interface from the CLI tools. Proposed documentation changes remain reviewable by the maintainer.
+ArcShape must provide provider-neutral Agent Skills for repository maintainers to analyze repository evidence, create and maintain arc42 architecture documentation, ADRs, and C4 diagrams as Markdown, and connect or publish those documents. The initial supported providers are Codex, Claude Code, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, and GitHub Copilot. Provider-specific commands, rules, or other adapters may expose the shared workflows according to each provider's verified conventions. Skills own the AI reasoning, questioning, and authoring workflow and may use the CLI for deterministic operations such as session bookkeeping, validation, generation, and synchronization. Agent capabilities are distinct from the CLI tools, and proposed documentation changes remain reviewable by the maintainer.
 
 ## Rationale
 
