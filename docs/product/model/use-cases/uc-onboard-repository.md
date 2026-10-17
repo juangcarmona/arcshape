@@ -26,15 +26,17 @@ The maintainer can access the repository and the ArcShape distribution method su
 
 1. The maintainer selects ArcShape for the repository.
 2. ArcShape establishes the repository context needed for its documented workflows.
-3. The maintainer can begin architecture-documentation work.
+3. ArcShape detects available agent providers and shows the evidence for each detection.
+4. The maintainer selects the providers and capabilities to install, reviews the plan, and confirms it.
+5. The maintainer can begin architecture-documentation work through the selected interfaces.
 
 ## Alternative Flows
 
-The CLI is distributed as an npm package and is intended to be installable in any repository. The depth of architecture analysis supported for different repository stacks remains open.
+If no provider is detected, interactive onboarding asks the maintainer to choose; non-interactive use requires explicit provider selection. If agent integration is not desired, the maintainer can continue with the deterministic CLI only. The depth of architecture analysis supported for different repository stacks remains open.
 
 ## Failure Conditions
 
-The target repository environment is unsupported, or onboarding cannot establish the required context.
+The target repository environment is unsupported, onboarding cannot establish the required context, or a selected provider has no supported adapter for the requested capability.
 
 ## Postconditions
 

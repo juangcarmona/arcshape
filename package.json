@@ -40,25 +40,35 @@
     "yauzl": "3.4.0"
   },
   "scripts": {
-    "format:check": "prettier --check \"bin/**/*.{js,mjs}\" \"tools/arc42-site/**/*.mjs\" \"scripts/**/*.{ts,js,mjs}\" \"tests/**/*.{ts,js,mjs}\" \"security/**/*.json\" \"*.js\" \"*.json\" \".github/workflows/*.yml\"",
+    "prepare": "husky",
+    "format:check": "prettier --check \"bin/**/*.{js,mjs}\" \"tools/arc42-site/**/*.mjs\" \"scripts/**/*.{ts,js,mjs}\" \"tests/**/*.{ts,js,mjs}\" \"security/**/*.json\" \"*.{js,mjs,json}\" \".github/workflows/*.yml\"",
     "lint": "eslint bin scripts tests eslint.config.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "build": "tsc",
     "product:model:check": "node dist/scripts/check-product-model-status.js docs/product/model",
     "security:audit": "node scripts/check-npm-audit.mjs",
+    "check:branch": "node scripts/check-branch-name.mjs",
     "openspec:init": "openspec init --tools codex,claude",
     "product:init": "prodshape init --sdd openspec --ai codex,claude --full",
     "product:openspec:add": "prodshape integration add openspec"
   },
   "devDependencies": {
-    "@fission-ai/openspec": "1.14.2",
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "@fission-ai/openspec": "1.14.3",
     "@prodshape/cli": "0.22.0",
     "@types/node": "24.13.3",
     "eslint": "10.13.0",
+    "husky": "9.1.7",
     "prettier": "3.9.6",
     "typescript": "5.9.3",
     "typescript-eslint": "8.65.0",
     "vitest": "5.0.5"
+  },
+  "overrides": {
+    "@mermaid-js/mermaid-cli": {
+      "katex": "0.18.10"
+    }
   }
 }

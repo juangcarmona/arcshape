@@ -6,7 +6,7 @@ description: Create one GitHub issue from confirmed structured input. Use for a 
 Create only one issue per invocation. Show the proposed title and complete body and obtain human confirmation before writing.
 
 ```bash
-gh issue create --title "<outcome-oriented title>" --body-file <confirmed-body-file>
+gh issue create --title "<outcome-oriented title>" --body-file <confirmed-body-file> --label "stage:refine"
 ```
 
-Use the general-work or bug issue-form structure when applicable. Blank issues are allowed and are intake, not Ready work. Do not invent required information, add unrequested labels, or transition the new issue. Return the issue number and URL.
+Use the general-work or bug issue-form structure when applicable. Blank issues are allowed and are intake, not Ready work. Add `stage:refine` as part of the confirmed issue creation; do not add other unrequested labels or transition the issue. Return the issue number and URL.

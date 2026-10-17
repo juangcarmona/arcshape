@@ -1,6 +1,6 @@
 # Process improvements
 
-Record concrete workflow friction here when it is discovered. Each entry names the evidence, impact, and a proposed improvement; link a work item when one exists. Move completed lessons into the post-merge review log rather than silently deleting them.
+Record concrete workflow friction here when it is discovered. Each entry names the evidence, impact, and a proposed improvement; link a work item when one exists. Move completed lessons into the work item's per-issue post-merge review record rather than silently deleting them.
 
 ## Open
 

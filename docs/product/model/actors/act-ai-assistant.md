@@ -13,13 +13,15 @@ Provides an AI-assisted interaction through which a repository maintainer can cr
 ## Goals
 
 - Help interpret repository evidence in support of architecture-documentation work.
-- Make proposed documentation available to the maintainer for evaluation.
+- Make proposed information available to the maintainer for evaluation.
+- Discover and use ArcShape capabilities through the supported provider interface.
 
 ## Responsibilities
 
 - Participates in documentation workflows when invoked through a supported assistant environment.
 - Returns proposed information to the maintainer for review.
+- Loads ArcShape skills and provider adapters according to the selected agent's documented discovery behavior.
 
 ## Boundaries
 
-The assistant is not the authority for product intent or architecture decisions. The first supported assistant environments and the handling of repository content remain to be decided.
+The assistant is not the authority for product intent or architecture decisions. ArcShape provides capabilities for Codex, Claude Code, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, and GitHub Copilot, while each assistant retains its own command, rule, permission, and runtime behavior.

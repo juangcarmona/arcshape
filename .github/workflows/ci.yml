@@ -10,7 +10,33 @@ on:
 permissions:
   contents: read
 
+env:
+  HUSKY: 0
+
 jobs:
+  repository-conventions:
+    name: Repository conventions
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check branch name
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: npm run check:branch -- "$BRANCH_NAME"
+      - name: Check commit messages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: npx --no -- commitlint --from "$BASE_SHA" --to "$HEAD_SHA" --verbose
+
   quality:
     name: Quality / ${{ matrix.os }} / Node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}

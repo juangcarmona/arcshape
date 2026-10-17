@@ -12,7 +12,7 @@ One responsibility: turn captured telemetry into a compact effort summary for on
 
 Input is a work item identifier. Output is the summary plus every gap behind it.
 
-**Read-only.** This skill never writes a file, never starts a collector, and never touches the review log. The caller passes the figures on.
+**Read-only.** This skill never writes a file, never starts a collector, and never touches a per-issue review record. The caller passes the figures on.
 
 ## When to use
 
@@ -22,7 +22,7 @@ Input is a work item identifier. Output is the summary plus every gap behind it.
 
 ## When not to use
 
-- Writing the review entry. That is `review-entry`, which takes these figures as input.
+- Writing the per-issue review record. That is `review-entry`, which takes these figures as input.
 - Setting up or configuring telemetry capture. That belongs to the project's own metrics setup, established by `adopt`.
 - Deciding what the figures mean for how the team works. That is `review`.
 
@@ -36,7 +36,7 @@ Input is a work item identifier. Output is the summary plus every gap behind it.
 
 ## Validation
 
-- Nothing was written: no file, no collector started, no review log touched.
+- Nothing was written: no file, no collector started, no review record touched.
 - Every figure carries a source, or is marked `unavailable`.
 - The join used the session identifier alone.
 - A mapped session with no usage records is reported as lost, not as zero.
@@ -55,5 +55,5 @@ Input is a work item identifier. Output is the summary plus every gap behind it.
 | Attributing effort by process-level or resource-level attributes | Join on the session identifier only. The wrong key yields confident, wrong numbers |
 | Reading an in-memory dashboard as the source of truth | It loses data on restart. Read the captured files |
 | Re-deriving a join the project already implements in a script | Report that script's output, so a shared summary and a local run can never disagree |
-| Writing the review entry from here | Separate responsibility. `review-entry` takes these figures as input |
+| Writing the review record from here | Separate responsibility. `review-entry` takes these figures as input |
 | Letting a malformed record abort the run | Repair or skip it, and report it as skipped |
