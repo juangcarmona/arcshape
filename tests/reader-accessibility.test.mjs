@@ -1,11 +1,38 @@
+import { spawnSync } from "node:child_process";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import puppeteer from "puppeteer";
 import { getPuppeteerLaunchOptions } from "../tools/arc42-site/browser-options.mjs";
 import { buildSnapshotHtml } from "../tools/arc42-site/shell.mjs";
 
 let browser;
+let readerHtml;
+let outputDirectory;
 
 beforeAll(async () => {
+  outputDirectory = await mkdtemp(join(tmpdir(), "arcshape-reader-tasks-"));
+  const output = join(outputDirectory, "index.html");
+  const generated = spawnSync(
+    process.execPath,
+    [
+      "bin/arcshape.mjs",
+      "site",
+      "build",
+      "--out",
+      output,
+      "--title",
+      "ArcShape",
+      "--source-ref",
+      "main",
+    ],
+    { cwd: process.cwd(), encoding: "utf8" },
+  );
+  if (generated.status !== 0) {
+    throw new Error(generated.stderr || generated.stdout);
+  }
+  readerHtml = await readFile(output, "utf8");
   browser = await puppeteer.launch({
     headless: true,
     ...getPuppeteerLaunchOptions(),
@@ -14,9 +41,69 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await browser?.close();
+  if (outputDirectory) {
+    await rm(outputDirectory, { recursive: true, force: true });
+  }
 });
 
 describe("generated architecture reader", () => {
+  it("lets readers find answers to the ArcShape dogfood tasks", async () => {
+    const tasks = [
+      {
+        query: "npm CLI workflows",
+        section: "01",
+        title: "Introduction and goals",
+        answer: "Repository maintainer",
+      },
+      {
+        query: "external AI providers",
+        section: "08",
+        title: "Cross-cutting concepts",
+        answer: "external AI providers",
+      },
+      {
+        query: "building blocks Responsibility",
+        section: "05",
+        title: "Building block view",
+        answer: "Responsibility",
+      },
+      {
+        query: "changed evidence removals",
+        section: "06",
+        title: "Runtime view",
+        answer: "changed evidence",
+      },
+    ];
+
+    for (const task of tasks) {
+      const page = await browser.newPage();
+      await page.setContent(readerHtml);
+      await page.keyboard.press("/");
+      await page.locator("#find-input").fill(task.query);
+      await expect
+        .poll(() => page.$$eval("#find-results a", (links) => links.length))
+        .toBeGreaterThan(0);
+      const resultRoutes = await page.$$eval("#find-results a", (links) =>
+        links.map((link) => link.getAttribute("href")),
+      );
+      expect(resultRoutes, task.query).toContain(`#/section/${task.section}`);
+      await page
+        .locator(`#find-results a[href="#/section/${task.section}"]`)
+        .click();
+      await page.waitForFunction(
+        ({ section, title }) =>
+          location.hash === `#/section/${section}` &&
+          document.querySelector(".doc-title")?.textContent === title,
+        {},
+        task,
+      );
+      expect(
+        await page.$eval(".doc-body", (body) => body.textContent),
+      ).toContain(task.answer);
+      await page.close();
+    }
+  }, 60_000);
+
   it("supports reader search and keyboard section navigation", async () => {
     const page = await browser.newPage();
     await page.setContent(createReader());
