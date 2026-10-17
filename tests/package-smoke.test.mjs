@@ -37,20 +37,20 @@ describe("packed ArcShape package", () => {
       await writeFile(join(repository, "README.md"), "# Smoke repository\n");
 
       const packed = await runNpm(
-        [
-          "pack",
-          "--ignore-scripts",
-          "--json",
-          "--pack-destination",
-          tarballDirectory,
-        ],
+        ["pack", "--ignore-scripts", "--pack-destination", tarballDirectory],
         {
           cwd: packageRoot,
           timeout: 120_000,
         },
       );
-      const [packResult] = JSON.parse(packed.stdout);
-      const tarballName = packResult.filename;
+      expect(packed.exitCode, `${packed.stderr}\n${packed.stdout}`).toBe(0);
+      const packageJson = JSON.parse(
+        await readFile(join(packageRoot, "package.json"), "utf8"),
+      );
+      const packageFileName = packageJson.name
+        .replace(/^@/, "")
+        .replace("/", "-");
+      const tarballName = `${packageFileName}-${packageJson.version}.tgz`;
       const tarball = join(tarballDirectory, tarballName);
       const installed = await runNpm(
         [
