@@ -2,4 +2,4 @@
 
 Connect this repository's architecture Markdown to the documentation system used by the project.
 
-Use the `arcshape-docs-sync` skill. For Obsidian, preview and use `arcshape sync obsidian`; preserve local vault edits and report conflicts. For Confluence, use only an explicitly connected integration, prepare a reviewable page preview, and publish only after the maintainer asks.
+Use the `arcshape-docs-sync` skill. It documents ArcShape's native Obsidian and Confluence CLI commands, preview options, credential handling, and conflict behavior. Prepare a reviewable preview and publish only after the maintainer asks.
