@@ -11,9 +11,9 @@ npm install --save-dev arcshape
 npx arcshape init
 ```
 
-This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills and slash commands for Codex and Claude under `.agents/` and `.claude/`. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
+This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills for Codex and Claude under `.agents/skills/` and `.claude/skills/`, plus Claude slash commands under `.claude/commands/arcshape/`. In Codex, invoke a skill with its `$arcshape-*` name. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
 
-The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure and optional local-link validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude workflows cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections.
+The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure and optional local-link validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude skills cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections; Claude also receives matching slash commands.
 
 Start a local analysis session and ask for its next bounded evidence round:
 

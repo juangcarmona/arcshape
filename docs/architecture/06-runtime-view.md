@@ -34,7 +34,7 @@ sequenceDiagram
     CLI-->>Maintainer: Summarize created files and conflicts
 ```
 
-Initialization does not inspect source code, make architecture claims, or contact an ArcShape service. It installs the README and twelve arc42 sections plus Codex and Claude commands and skills. It works in a non-Git directory as well as a Git repository.
+Initialization does not inspect source code, make architecture claims, or contact an ArcShape service. It installs the README and twelve arc42 sections, Codex and Claude skills, and matching Claude slash commands. It works in a non-Git directory as well as a Git repository.
 
 ### Validate architecture Markdown
 
