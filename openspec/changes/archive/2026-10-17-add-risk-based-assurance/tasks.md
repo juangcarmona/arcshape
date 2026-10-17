@@ -38,5 +38,5 @@ The onboarding and reader journey scenarios exercise these accepted product beha
 
 ## Workflow follow-up
 
-- Archive the OpenSpec change after integration and verify the archived result.
+- Archive result verified on the integration branch before merge.
 - Keep any proposed new status checks advisory until the maintainer reviews and accepts thresholds and severity policy; promotion requires a separate explicit ruleset update.
