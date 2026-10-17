@@ -56,9 +56,9 @@ The Done gate means the change is finished and sufficiently proven for integrati
 
 ### Deterministic checks
 
-The initial deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, unit tests, and compilation of repository helper scripts. The ArcShape product CLI does not exist yet, so this build is not evidence of a CLI build; that gate must expand with the CLI implementation.
+The initial deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, unit tests, and compilation of repository helper scripts. A separate `Repository conventions` job checks pull request branch names and commit messages. The ArcShape product CLI does not exist yet, so this build is not evidence of a CLI build; that gate must expand with the CLI implementation.
 
-An active `main` ruleset is confirmed. It requires pull requests and blocks deletion and non-fast-forward updates. Zero required GitHub approvals is intentional for this single-maintainer project; the human reviewer still owns the Done judgement. The ruleset does not yet require status checks, so CI and security jobs are configured but not enforced as merge gates.
+An active `main` ruleset is confirmed. It requires pull requests, blocks deletion and non-fast-forward updates, and currently requires the six quality-matrix checks, `Product model`, `Secrets scan`, and `Dependency audit`. Zero required GitHub approvals is intentional for this single-maintainer project; the human reviewer still owns the Done judgement. `Repository conventions` must be added to the ruleset's required checks after the new job produces a successful result; until then, that policy is checked locally and reported as advisory in CI.
 
 [OpenSpec](https://github.com/Fission-AI/OpenSpec)'s generated archive workflow retains its change artifacts and does not enforce the project's minimal-retention policy. Keep [OpenSpec](https://github.com/Fission-AI/OpenSpec) archives to the minimum useful delivery context where the workflow permits; automated pruning remains follow-up work.
 
@@ -73,20 +73,21 @@ An active `main` ruleset is confirmed. It requires pull requests and blocks dele
 | OpenSpec | `npm exec -- openspec validate --all --no-interactive`. | OpenSpec validates any active changes/specs; currently reports no items when none exist. |
 | Secret scan | TruffleHog OSS v3.99.2 scans PR commits, main pushes, and full history on the daily schedule with credential verification disabled. | A detected credential blocks the scan; see `SECURITY.md` for false-positive handling. |
 | Dependency audit | `npm run security:audit` runs npm audit against the committed lockfile, with Node 22.23.3/npm 10.9.9. | Unexcepted High or Critical vulnerabilities and audit/reporting failures block the check; temporary exceptions require an owner, reason, exact advisory, and expiry. |
+| Repository conventions | The `Repository conventions` CI job checks pull request branch names and commit messages; Husky runs commitlint on commit and checks branch names before push. | The job reports invalid branch names or commit messages. It is not an enforced merge gate until added to the active ruleset's required checks. |
 
-CI definitions: `.github/workflows/ci.yml` and `.github/workflows/security.yml`. Require the `Product model`, all six `Quality / <OS> / Node <version>` checks, `Secrets scan`, and `Dependency audit` in the `main` ruleset before considering these gates enforced. A separate GitHub approval count is not required; human review remains part of the Done gate.
+CI definitions: `.github/workflows/ci.yml` and `.github/workflows/security.yml`. The active `main` ruleset requires `Product model`, all six `Quality / <OS> / Node <version>` checks, `Secrets scan`, and `Dependency audit`. Add `Repository conventions` to that list after its first successful run. A separate GitHub approval count is not required; human review remains part of the Done gate.
 
 ## Lifecycle stages and states
 
-GitHub Issues is the tracker. Issues remain `OPEN` through refinement, proposal, and implementation. A pull request body uses `Closes #<number>` so GitHub closes the issue when the pull request merges to the default branch. There are no project status labels or board fields configured for intermediate lifecycle states.
+GitHub Issues is the tracker. GitHub issue state remains `OPEN` or `CLOSED`; one mutually exclusive `stage:*` label records the lifecycle stage. Preserve type and other non-stage labels. New issues receive `stage:refine`. Change the stage label at each confirmed lifecycle transition. A pull request body uses `Closes #<number>` so GitHub closes the issue when the pull request merges to the default branch. The merged issue receives `stage:review` while its retrospective is pending; remove that label when review is complete. Do not infer a stage when no `stage:*` label exists or when multiple stage labels exist.
 
 | Stage | State on entry | State on exit | Transition | Fired by |
 | --- | --- | --- | --- | --- |
-| `refine` | `OPEN` | `OPEN` | - | - |
-| `propose` | `OPEN` | `OPEN` | - | - |
-| `implement` | `OPEN` | `OPEN` | - | - |
-| `integrate` | `OPEN` | `CLOSED` | `Closes #<number>` | GitHub when the linked pull request merges |
-| `review` | `CLOSED` | `CLOSED` | - | - |
+| `refine` | `OPEN` | `OPEN` | `stage:refine` | `create-work-item` when creating the issue |
+| `propose` | `OPEN` | `OPEN` | `stage:propose` | `transition-work-item` when refinement exits and proposal begins |
+| `implement` | `OPEN` | `OPEN` | `stage:implement` | `transition-work-item` after proposal approval |
+| `integrate` | `OPEN` | `CLOSED` | `stage:integrate` and `Closes #<number>` | `transition-work-item` before merge; GitHub closes the issue when the linked pull request merges |
+| `review` | `CLOSED` | `CLOSED` | Apply `stage:review` after merge, then remove it at review completion | `integrate` applies it after merge; `review` removes it via `transition-work-item` |
 
 ### Transitions no capability ever fires
 
@@ -99,12 +100,20 @@ Reopening, rejecting, or otherwise closing an issue outside the linked-PR merge 
 
 ## Work item fields
 
-GitHub issue creation requires a title and body. No additional tracker fields, status labels, or project fields are configured.
+GitHub issue creation requires a title and body. Lifecycle stage is represented by exactly one `stage:*` issue label when a stage is active, not by a GitHub issue state, field, or Project field.
+
+Post-merge retrospective records are stored as `docs/reviews/issue-<number>.md`, with one record per issue and no shared index.
 
 | Field | Identifier | Required by | Notes |
 | --- | --- | --- | --- |
 | Title | GitHub issue `title` | Issue creation | Outcome-oriented. |
 | Description | GitHub issue `body` | Issue creation | Markdown shaped by the general-work or bug issue form when available. |
+
+## Branch and commit conventions
+
+Create issue-linked branches as `<type>/<issue-number>-<kebab-case-slug>`, for example `feat/47-agent-capability-distribution` or `fix/183-session-resume`. Allowed branch types are `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `build`, `ci`, `perf`, and `revert`. Do not use a tool or agent name as a branch prefix.
+
+Use Conventional Commit messages in the form `<type>(<optional-scope>): <description>`, for example `docs(process): define lifecycle labels`, and include a `Refs #<number>` footer on every commit. The pull request body carries `Closes #<number>` to close the linked issue. Husky and commitlint check commits locally; CI checks pull request branch names and commit messages. Local hooks can be bypassed, so the CI convention check must be included in the active `main` ruleset's required checks before the policy is reported as enforced.
 
 ## Work in progress
 
@@ -153,3 +162,4 @@ Claude Code equivalents are `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, and `/
 | Date | Section | Change | Why |
 | --- | --- | --- | --- |
 | 2026-10-16 | All | Adopted initial lifecycle, issue intake, delivery, and assurance policy. | Establish ArcShape's engineering process for Codex and Claude workflows. |
+| 2026-10-17 | Lifecycle stages, branch and commit conventions | Added mutually exclusive lifecycle labels, per-issue retrospective records, and issue-linked branch and commit conventions. | Reduce shared-file conflicts and make work traceable across issues, branches, commits, and pull requests. |
