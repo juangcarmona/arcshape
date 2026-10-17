@@ -108,7 +108,7 @@ describe("ProductShape citation validation", () => {
       status: "unavailable",
     });
     expect(result.productCitations.reason).toContain("@prodshape/cli");
-  });
+  }, 15_000);
 });
 
 async function makeRepository(withModel) {

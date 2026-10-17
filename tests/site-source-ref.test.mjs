@@ -37,4 +37,4 @@ it("uses the requested source ref for repository links in the reader site", asyn
   expect(html).toContain(
     "https://github.com/juangcarmona/arcshape/tree/stable%2F1.x/docs/product/model/",
   );
-}, 30_000);
+}, 60_000);

@@ -21,6 +21,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Install npm runtime for reproducible SBOM generation
+        run: npm install --global npm@10.9.9
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
@@ -30,7 +32,19 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: node scripts/verify-release-version.mjs
-      - run: npm pack --dry-run
+      - name: Generate SBOM from the release package
+        run: bash scripts/generate-release-sbom.sh "$RUNNER_TEMP/arcshape-sbom"
+      - name: Enforce runtime transitive license policy
+        run: |
+          sbom_file=$(find "$RUNNER_TEMP/arcshape-sbom" -maxdepth 1 -type f -name '*.cdx.json' -print -quit)
+          test -n "$sbom_file"
+          node scripts/check-license-policy.mjs "$sbom_file"
+      - name: Retain verified release SBOM
+        uses: actions/upload-artifact@v7
+        with:
+          name: arcshape-release-sbom-${{ github.event.release.tag_name }}
+          path: ${{ runner.temp }}/arcshape-sbom/*.cdx.json
+          retention-days: 90
 
   publish:
     name: Publish reviewed release
@@ -39,7 +53,7 @@ jobs:
     environment:
       name: npm-publish
     permissions:
-      contents: read
+      contents: write
       id-token: write
     steps:
       - uses: actions/checkout@v4
@@ -56,6 +70,16 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: node scripts/verify-release-version.mjs
+      - name: Download verified release SBOM
+        uses: actions/download-artifact@v7
+        with:
+          name: arcshape-release-sbom-${{ github.event.release.tag_name }}
+          path: ${{ runner.temp }}/arcshape-sbom
+      - name: Attach SBOM to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: node scripts/upload-release-sbom.mjs "$RUNNER_TEMP/arcshape-sbom" "$RELEASE_TAG"
       - run: npm publish --provenance --access public
       - name: Verify published registry version
         env:

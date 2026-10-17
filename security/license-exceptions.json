@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "exceptions": [
+    {
+      "purl": "pkg:npm/khroma@2.1.0",
+      "licenseOverride": "MIT",
+      "owner": "ArcShape maintainers",
+      "reason": "The npm manifest and SBOM omit SPDX metadata; the exact package tarball contains package/license declaring MIT.",
+      "evidence": "https://registry.npmjs.org/khroma/-/khroma-2.1.0.tgz (package/license)",
+      "expires": "2027-10-17"
+    },
+    {
+      "purl": "pkg:npm/elkjs@0.9.3",
+      "allowedLicenses": ["EPL-2.0"],
+      "owner": "ArcShape maintainers",
+      "reason": "The current pinned Mermaid rendering dependency graph includes elkjs under EPL-2.0; this exact package/version is accepted pending the next dependency or release review.",
+      "evidence": "https://registry.npmjs.org/elkjs/-/elkjs-0.9.3.tgz",
+      "expires": "2027-10-17"
+    },
+    {
+      "purl": "pkg:npm/%40fontsource-variable/recursive@5.3.0",
+      "allowedLicenses": ["OFL-1.1"],
+      "owner": "ArcShape maintainers",
+      "reason": "The exact runtime font package declares the Open Font License; acceptance is scoped to this package version.",
+      "evidence": "https://registry.npmjs.org/@fontsource-variable/recursive/-/recursive-5.3.0.tgz",
+      "expires": "2027-10-17"
+    },
+    {
+      "purl": "pkg:npm/%40fontsource/open-sans@5.3.0",
+      "allowedLicenses": ["OFL-1.1"],
+      "owner": "ArcShape maintainers",
+      "reason": "The exact runtime font package declares the Open Font License; acceptance is scoped to this package version.",
+      "evidence": "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-5.3.0.tgz",
+      "expires": "2027-10-17"
+    },
+    {
+      "purl": "pkg:npm/%40fortawesome/fontawesome-free@7.3.1",
+      "allowedLicenses": ["CC-BY-4.0", "OFL-1.1", "MIT"],
+      "owner": "ArcShape maintainers",
+      "reason": "The exact runtime package declares the CC-BY-4.0, OFL-1.1, and MIT composite; acceptance is scoped to this package version and its embedded assets.",
+      "evidence": "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-7.3.1.tgz",
+      "expires": "2027-10-17"
+    }
+  ]
+}

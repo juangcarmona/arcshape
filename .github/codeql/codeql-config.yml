@@ -1,0 +1,3 @@
+name: ArcShape security analysis
+queries:
+  - uses: security-extended
