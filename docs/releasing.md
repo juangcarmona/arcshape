@@ -14,7 +14,7 @@ The first publication is a one-time maintainer action after the implementation i
 
 After the first package exists on npm:
 
-1. Configure an npm Trusted Publisher for repository `juangcarmona/arcshape`, workflow `.github/workflows/publish.yml`, and GitHub environment `npm-publish`.
+1. Configure an [npm Trusted Publisher](https://docs.npmjs.com/trusted-publishers) for repository `juangcarmona/arcshape`, workflow `.github/workflows/publish.yml`, and GitHub environment `npm-publish`.
 2. Configure the GitHub `npm-publish` environment with required human reviewers and prevent self-review. Allow release tags matching `v*`; the workflow also verifies each tagged commit is already an ancestor of `origin/main`.
 3. Prepare and merge a reviewed version change. Create a matching `v<package.json version>` tag and GitHub Release.
 4. Publish the GitHub Release. The workflow verifies the package, waits for approval at `npm-publish`, publishes with GitHub OIDC and provenance, and checks the registry version afterward.
