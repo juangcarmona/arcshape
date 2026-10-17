@@ -51,9 +51,11 @@ describe("packed ArcShape package", () => {
         },
       );
       expect(packed.exitCode, `${packed.stderr}\n${packed.stdout}`).toBe(0);
-      const packageFileList = JSON.parse(packed.stdout)[0].files.map(
-        ({ path }) => path,
-      );
+      const jsonStart = packed.stdout.indexOf("[\n");
+      expect(jsonStart, packed.stdout).toBeGreaterThanOrEqual(0);
+      const packageFileList = JSON.parse(
+        packed.stdout.slice(jsonStart),
+      )[0].files.map(({ path }) => path);
       expect(packageFileList).toContain("capabilities/providers.json");
       expect(packageFileList).toContain("capabilities/skills/arc-adr/SKILL.md");
       expect(
