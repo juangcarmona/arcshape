@@ -37,7 +37,13 @@ describe("packed ArcShape package", () => {
       await writeFile(join(repository, "README.md"), "# Smoke repository\n");
 
       const packed = await runNpm(
-        ["pack", "--json", "--pack-destination", tarballDirectory],
+        [
+          "pack",
+          "--ignore-scripts",
+          "--json",
+          "--pack-destination",
+          tarballDirectory,
+        ],
         {
           cwd: packageRoot,
           timeout: 120_000,
