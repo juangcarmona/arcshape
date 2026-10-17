@@ -13,7 +13,15 @@ npx arcshape init
 
 This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills for Codex and Claude under `.agents/skills/` and `.claude/skills/`, plus Claude slash commands under `.claude/commands/arcshape/`. In Codex, invoke a skill with its `$arcshape-*` name. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
 
-The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure and optional local-link validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude skills cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections; Claude also receives matching slash commands.
+The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure, local-link and optional ProductShape citation validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude skills cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections; Claude also receives matching slash commands.
+
+Validate arc42 structure and local links. Add `--citations` to verify ProductShape citations when the repository has a model at `docs/product/model`:
+
+```sh
+npx arcshape validate --links --citations
+```
+
+Citation validation uses the repository's installed `@prodshape/cli`; install it when a ProductShape model is present. Without a model, citation validation is reported as skipped. Stale citations appear as warnings, while unresolved citations or a missing local CLI fail validation.
 
 Start a local analysis session and ask for its next bounded evidence round:
 
