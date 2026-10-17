@@ -2,13 +2,13 @@
 
 ## First npm publication
 
-The first publication is a one-time maintainer action after the implementation is merged and the package name is confirmed available. This repository is configured to publish the unscoped `arcshape` package publicly.
+The first publication is a one-time maintainer action after the implementation is merged and the package name is confirmed available. This repository publishes the public organization-scoped package `@arcshape/cli`; its executable remains `arcshape`. The npm organization owns the scope, while this GitHub repository remains `juangcarmona/arcshape`.
 
-1. Confirm `arcshape` is still unclaimed with `npm view arcshape version` and verify the publishing account has access.
+1. Confirm `@arcshape/cli` is still unclaimed with `npm view @arcshape/cli version` and verify the publishing account has access to the npm `arcshape` organization.
 2. Review the package metadata and file list with `npm pack --dry-run`.
 3. From a clean checkout of the reviewed commit, install the tarball in a temporary project and run `arcshape --version`, `arcshape init`, `arcshape validate --links`, and `arcshape site build`.
-4. Confirm Node.js 24 and npm access, then publish once with `npm publish --access public`. Do not commit credentials or add a long-lived npm token to GitHub.
-5. Verify the registry reports the expected version and inspect the package page.
+4. From the merged commit, confirm Node.js 24 and npm access, then publish once with `npm publish --access public`. Do not create a GitHub Release for this manual first publication; later releases trigger the automated publish workflow. Do not commit credentials or add a long-lived npm token to GitHub.
+5. Verify `npm view @arcshape/cli version` reports the expected version and inspect the package page.
 
 ## Trusted publishing for later releases
 

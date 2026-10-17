@@ -9,7 +9,7 @@ Browse the [ArcShape architecture site](https://juangcarmona.github.io/arcshape/
 After the first npm release, install ArcShape in a project repository with Node.js 22 or newer and run:
 
 ```sh
-npm install --save-dev arcshape
+npm install --save-dev @arcshape/cli
 npx arcshape init
 ```
 

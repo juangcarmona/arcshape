@@ -1,5 +1,5 @@
 {
-  "name": "arcshape",
+  "name": "@arcshape/cli",
   "version": "0.1.0",
   "description": "ArcShape tooling for creating and maintaining arc42 architecture documentation.",
   "license": "Apache-2.0",
