@@ -50,23 +50,16 @@ describe("ADR workflow examples", () => {
     expect(unknownResponse).toContain("No ADR file or index change");
   });
 
-  it("ships matching safety rules in the Codex and Claude templates", async () => {
-    const codex = await read(
-      "../../templates/assistants/.agents/skills/arcshape-adr/SKILL.md",
+  it("ships the portable ADR capability with its safety rules", async () => {
+    const skill = await read("../../capabilities/skills/arc-adr/SKILL.md");
+    expect(skill).toContain("name: arc-adr");
+    expect(skill).toContain("If the decision itself is unknown, ask");
+    expect(skill).toContain(
+      "Keep the existing ADR's status until the new decision is accepted; then mark the old record superseded",
     );
-    const claude = await read(
-      "../../templates/assistants/.claude/skills/arcshape-adr/SKILL.md",
+    expect(skill).toContain(
+      "Do not put proposed decisions in the current architecture index",
     );
-    expect(codex).toBe(claude);
-    for (const text of [codex, claude]) {
-      expect(text).toContain("If the decision itself is unknown, ask");
-      expect(text).toContain(
-        "Keep the existing ADR's status until the new decision is accepted; then mark the old record superseded",
-      );
-      expect(text).toContain(
-        "Do not put proposed decisions in the current architecture index",
-      );
-    }
   });
 
   it("keeps example paths stable", async () => {

@@ -1,5 +1,5 @@
 ---
-name: arcshape-architecture
+name: arc-architecture
 description: Reverse engineer, create, and maintain evidence-grounded arc42 architecture documentation in Markdown for any repository. Use when documenting a system, improving architecture docs, or reconciling docs with implementation evidence.
 ---
 

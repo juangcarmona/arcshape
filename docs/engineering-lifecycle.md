@@ -56,7 +56,7 @@ The Done gate means the change is finished and sufficiently proven for integrati
 
 ### Deterministic checks
 
-The initial deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, unit tests, and compilation of repository helper scripts. A separate `Repository conventions` job checks pull request branch names and commit messages. The ArcShape product CLI does not exist yet, so this build is not evidence of a CLI build; that gate must expand with the CLI implementation.
+The deterministic CI baseline runs on Node 22 and 24 across Ubuntu, Windows, and macOS. It covers maintained TypeScript/JavaScript/config formatting, linting, typechecking, the Vitest suite, and compilation of repository helper scripts. CLI behavior is exercised by unit/integration tests, including a packed npm installation smoke test; `npm run build` compiles repository helper scripts and does not bundle the JavaScript CLI. A separate `Repository conventions` job checks pull request branch names and commit messages.
 
 An active `main` ruleset is confirmed. It requires pull requests, blocks deletion and non-fast-forward updates, and currently requires the six quality-matrix checks, `Product model`, `Secrets scan`, and `Dependency audit`. Zero required GitHub approvals is intentional for this single-maintainer project; the human reviewer still owns the Done judgement. `Repository conventions` must be added to the ruleset's required checks after the new job produces a successful result; until then, that policy is checked locally and reported as advisory in CI.
 
@@ -67,8 +67,8 @@ An active `main` ruleset is confirmed. It requires pull requests, blocks deletio
 | Format | `npm run format:check` in the quality matrix. | Prettier reports maintained code and CI configuration are formatted. |
 | Lint | `npm run lint` in the quality matrix. | ESLint reports no configured JavaScript/TypeScript lint violations. |
 | Typecheck | `npm run typecheck` in the quality matrix. | TypeScript compiles all maintained helper and test sources without emitting. |
-| Unit tests | `npm test` in the quality matrix. | Vitest executes the model-status guard tests. |
-| Build | `npm run build` in the quality matrix. | TypeScript emits the repository helper scripts; this is not yet an ArcShape CLI build. |
+| Unit and integration tests | `npm test` in the quality matrix. | Vitest checks ProductShape model status, CLI behavior, provider and manifest lifecycle, and packed npm package installation. |
+| Helper-script build | `npm run build` in the quality matrix. | TypeScript emits repository helper scripts; the JavaScript CLI is covered by tests rather than this build. |
 | Product model | `npm run product:model:check` and `npm exec -- prodshape validate --format json`. | Canonical artifacts have accepted statuses and ProductShape reports no model diagnostics. |
 | OpenSpec | `npm exec -- openspec validate --all --no-interactive`. | OpenSpec validates any active changes/specs; currently reports no items when none exist. |
 | Secret scan | TruffleHog OSS v3.99.2 scans PR commits, main pushes, and full history on the daily schedule with credential verification disabled. | A detected credential blocks the scan; see `SECURITY.md` for false-positive handling. |

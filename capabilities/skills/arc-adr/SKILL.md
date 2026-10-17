@@ -1,5 +1,5 @@
 ---
-name: arcshape-adr
+name: arc-adr
 description: Draft, review, and maintain Markdown Architecture Decision Records from a decision supplied by a maintainer and supporting repository evidence. Use when a durable architecture trade-off needs a record.
 ---
 

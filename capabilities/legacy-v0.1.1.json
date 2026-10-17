@@ -1,0 +1,18 @@
+{
+  "packageVersion": "0.1.1",
+  "files": {
+    ".agents/skills/arcshape-adr/SKILL.md": "b5d91a22c9219706046a443c1444d239f20d96a0c160e1b7ee8c30a7c90a0870",
+    ".agents/skills/arcshape-architecture/SKILL.md": "ef14fb49209319a26bc4e6a3d6476b64d5e62280f27d81f7d0a95bbd7b0a9527",
+    ".agents/skills/arcshape-c4/SKILL.md": "afd67cf0b1355b34792ec357495ed858ec97b1f3a37327678b4253c11eb7259a",
+    ".agents/skills/arcshape-docs-sync/SKILL.md": "e0e5e1a8d798b35f75f942554cbd44d630d1f14d14a176976a2558d7fce11cf6",
+    ".claude/skills/arcshape-adr/SKILL.md": "b5d91a22c9219706046a443c1444d239f20d96a0c160e1b7ee8c30a7c90a0870",
+    ".claude/skills/arcshape-architecture/SKILL.md": "ef14fb49209319a26bc4e6a3d6476b64d5e62280f27d81f7d0a95bbd7b0a9527",
+    ".claude/skills/arcshape-c4/SKILL.md": "afd67cf0b1355b34792ec357495ed858ec97b1f3a37327678b4253c11eb7259a",
+    ".claude/skills/arcshape-docs-sync/SKILL.md": "e0e5e1a8d798b35f75f942554cbd44d630d1f14d14a176976a2558d7fce11cf6",
+    ".claude/commands/arcshape/adr.md": "43f967aef3d4c94ee39d49a82b11f9e3ff720ed427d696da982ac53ef219565e",
+    ".claude/commands/arcshape/c4.md": "260ab7bdb0d817dd4f5be22005bcbc30e0bc35bf5d1443453f8a06b8c10b6d61",
+    ".claude/commands/arcshape/document.md": "1a7b4cb2ec78fd913221eb7af69b80e0b92ba132af1071493372daee8fb66767",
+    ".claude/commands/arcshape/reverse-engineer.md": "61f966437e74c854c89f30001410646d5f114dc07eadb9fad99afb26ec381d62",
+    ".claude/commands/arcshape/sync.md": "5e344db31f97cc4cb0ab7fc45f93bee1abfc11e864eacf85f8f926dee885619b"
+  }
+}

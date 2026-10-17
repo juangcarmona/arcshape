@@ -1,8 +1,8 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { Readable, Writable } from "node:stream";
 import { afterEach, describe, expect, it } from "vitest";
 import { runInit } from "../bin/init.mjs";
 
@@ -17,77 +17,118 @@ afterEach(async () => {
   );
 });
 
-describe("arcshape init assistant integration", () => {
-  it("keeps installed Codex and Claude assets aligned with their templates", async () => {
-    const assistantTemplates = join(packageRoot, "templates", "assistants");
-    expect(
-      await listFiles(join(assistantTemplates, ".agents", "skills")),
-    ).toEqual(
-      (await listFiles(join(packageRoot, ".agents", "skills"))).filter((file) =>
-        file.path.startsWith("arcshape-"),
-      ),
+describe("arcshape init", () => {
+  it("keeps provider-neutral capabilities in a separate package directory", async () => {
+    const capabilities = await listPaths(
+      join(packageRoot, "capabilities", "skills"),
     );
-    expect(
-      await listFiles(join(assistantTemplates, ".claude", "skills")),
-    ).toEqual(
-      (await listFiles(join(packageRoot, ".claude", "skills"))).filter((file) =>
-        file.path.startsWith("arcshape-"),
-      ),
-    );
-    expect(
-      await listFiles(
-        join(assistantTemplates, ".claude", "commands", "arcshape"),
-      ),
-    ).toEqual(
-      await listFiles(join(packageRoot, ".claude", "commands", "arcshape")),
-    );
-    const codexCommands = join(assistantTemplates, ".agents", "commands");
-    expect(
-      existsSync(codexCommands) ? await listFiles(codexCommands) : [],
-    ).toEqual([]);
+    expect(capabilities.sort()).toEqual([
+      "arc-adr/SKILL.md",
+      "arc-architecture/SKILL.md",
+      "arc-c4/SKILL.md",
+      "arc-docs-sync/SKILL.md",
+    ]);
+    expect(await readdir(join(packageRoot, "templates"))).toEqual([
+      "architecture",
+    ]);
   });
 
-  it("installs every architecture and assistant template and is repeatable", async () => {
+  it("installs architecture files in explicit CLI-only mode and is repeatable", async () => {
     const target = await makeTarget();
-    const expected = [
-      ...(await listPaths(join(packageRoot, "templates", "architecture"))).map(
-        (path) => `docs/architecture/${path}`.replaceAll(sep, "/"),
-      ),
-      ...(await listPaths(join(packageRoot, "templates", "assistants"))).map(
-        (path) => path.replaceAll(sep, "/"),
-      ),
-    ].sort();
+    const expected = (
+      await listPaths(join(packageRoot, "templates", "architecture"))
+    )
+      .map((path) => `docs/architecture/${path}`.replaceAll(sep, "/"))
+      .sort();
 
-    const first = await runInit(["--target", target], { packageRoot });
+    const first = await runInit(["--target", target, "--no-agents", "--yes"], {
+      packageRoot,
+    });
     expect(first.exitCode).toBe(0);
     expect(first.written.map(normalizePath).sort()).toEqual(expected);
 
-    const second = await runInit(["--target", target], { packageRoot });
+    const second = await runInit(["--target", target, "--no-agents", "--yes"], {
+      packageRoot,
+    });
     expect(second.exitCode).toBe(0);
     expect(second.written).toEqual([]);
-    expect(second.unchanged).toHaveLength(expected.length);
-    expect(second.conflicts).toEqual([]);
+    expect(
+      second.architectureActions.filter((item) => item.action === "unchanged"),
+    ).toHaveLength(expected.length);
   });
 
   it("preserves customized files and reports them as conflicts", async () => {
     const target = await makeTarget();
     const customPath = join(target, "docs", "architecture", "README.md");
-    await runInit(["--target", target], { packageRoot });
+    await runInit(["--target", target, "--no-agents", "--yes"], {
+      packageRoot,
+    });
     await writeFile(customPath, "Maintainer-authored architecture notes\n");
 
-    const result = await runInit(["--target", target], { packageRoot });
+    const result = await runInit(["--target", target, "--no-agents", "--yes"], {
+      packageRoot,
+    });
 
     expect(result.exitCode).toBe(1);
-    expect(result.conflicts).toHaveLength(1);
-    expect(normalizePath(result.conflicts[0].path)).toBe(
+    const conflicts = result.architectureActions.filter(
+      (item) => item.action === "conflict",
+    );
+    expect(conflicts).toHaveLength(1);
+    expect(normalizePath(conflicts[0].path)).toBe(
       "docs/architecture/README.md",
     );
-    expect(result.conflicts[0].reason).toBe(
+    expect(conflicts[0].reason).toBe(
       "file already exists with different content",
     );
     expect(await readFile(customPath, "utf8")).toBe(
       "Maintainer-authored architecture notes\n",
     );
+  });
+
+  it("requires an explicit provider or CLI-only choice when non-interactive", async () => {
+    const target = await makeTarget();
+    await expect(
+      runInit(["--target", target], { packageRoot }),
+    ).rejects.toThrow(
+      "Non-interactive init requires --providers <ids> or --no-agents",
+    );
+    expect(await readdir(target)).toEqual([]);
+  });
+
+  it("requires confirmation before non-interactive writes", async () => {
+    const target = await makeTarget();
+    await expect(
+      runInit(["--target", target, "--providers", "codex"], { packageRoot }),
+    ).rejects.toThrow("Non-interactive installation requires --yes");
+    expect(await readdir(target)).toEqual([]);
+  });
+
+  it("shows dry-run plans without writing and preserves targets when declined", async () => {
+    const dryRunTarget = await makeTarget();
+    const dryRun = await runInit(
+      ["--target", dryRunTarget, "--no-agents", "--dry-run"],
+      { packageRoot },
+    );
+    expect(
+      dryRun.architectureActions.some(({ action }) => action === "create"),
+    ).toBe(true);
+    expect(await readdir(dryRunTarget)).toEqual([]);
+
+    const declinedTarget = await makeTarget();
+    const input = Readable.from(["n\n"]);
+    const output = new Writable({
+      write(_chunk, _encoding, callback) {
+        callback();
+      },
+    });
+    input.isTTY = true;
+    output.isTTY = true;
+    const declined = await runInit(
+      ["--target", declinedTarget, "--providers", "codex"],
+      { packageRoot, input, output },
+    );
+    expect(declined.cancelled).toBe(true);
+    expect(await readdir(declinedTarget)).toEqual([]);
   });
 });
 
@@ -113,14 +154,4 @@ async function listPaths(root, prefix = "") {
     } else if (entry.isFile()) files.push(relativePath);
   }
   return files;
-}
-
-async function listFiles(root, prefix = "") {
-  const paths = await listPaths(root);
-  return Promise.all(
-    paths.map(async (path) => ({
-      path: prefix ? `${prefix}/${path}` : path,
-      content: await readFile(join(root, path), "utf8"),
-    })),
-  );
 }

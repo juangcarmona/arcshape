@@ -1,6 +1,6 @@
 # Container view example
 
-Evidence: `package.json` maps the `arcshape` command to `bin/arcshape.mjs`. `bin/arcshape.mjs` dispatches deterministic commands to the CLI modules under `bin/`. `templates/assistants/` contains the skills installed into the target repository for Codex and Claude. `README.md` describes the maintainer invoking an assistant skill separately from a deterministic CLI command.
+Evidence: `package.json` maps the `arcshape` command to `bin/arcshape.mjs`. `bin/arcshape.mjs` dispatches deterministic commands to the CLI modules under `bin/`. `capabilities/skills/` contains provider-neutral skills installed into supported agent discovery locations. `README.md` describes the maintainer invoking an assistant skill separately from a deterministic CLI command.
 
 The assistant runtime is external; ArcShape does not host an AI service.
 

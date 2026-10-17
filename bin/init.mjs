@@ -1,127 +1,193 @@
-import { lstat, readdir, readFile, mkdir, writeFile } from "node:fs/promises";
+import { lstat, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep, join } from "node:path";
+import { confirmPlan, promptInitSelection } from "./agents/commands.mjs";
+import { loadRegistry } from "./agents/registry.mjs";
+import { applyPlan, makePlan } from "./agents/lifecycle.mjs";
 
-export async function runInit(args, { packageRoot }) {
+export async function runInit(
+  args,
+  { packageRoot, input = process.stdin, output = process.stdout },
+) {
   const options = parseOptions(args);
   if (options.help) {
-    process.stdout.write(
-      `Usage: arcshape init [--target <directory>] [--dry-run]\n\n`,
+    output.write(
+      `Usage: arcshape init [--target <directory>] [--no-agents | --providers <ids>] [--capabilities <ids>] [--scope project|user] [--dry-run] [--yes]\n\n`,
     );
-    process.stdout.write(
-      `Create the Markdown arc42 structure and install Codex and Claude workflows.\n`,
-    );
-    process.stdout.write(
-      `Files with different existing content are left untouched and reported.\n`,
+    output.write(
+      `Set up arc42 documentation and optionally install ArcShape agent skills.\nExisting files are preserved and reported.\n`,
     );
     return { exitCode: 0 };
   }
-
   const targetRoot = resolve(process.cwd(), options.target ?? ".");
-  const templatesRoot = join(packageRoot, "templates", "architecture");
-  const architectureFiles = await collectFiles(templatesRoot);
-  const assistantFiles = await collectFiles(
-    join(packageRoot, "templates", "assistants"),
+  const registry = await loadRegistry(packageRoot);
+  const selection = await promptInitSelection({
+    options,
+    registry,
+    targetRoot,
+    input,
+    output,
+  });
+  const architectureFiles = await collectFiles(
+    join(packageRoot, "templates", "architecture"),
   );
-  const files = [
-    ...architectureFiles.map((file) => ({
-      ...file,
-      destinationPath: join("docs", "architecture", file.relativePath),
-    })),
-    ...assistantFiles.map((file) => ({
-      ...file,
-      destinationPath: file.relativePath,
-    })),
-  ];
-  const written = [];
-  const unchanged = [];
-  const conflicts = [];
-
-  for (const template of files) {
-    const destination = resolve(targetRoot, template.destinationPath);
+  const architectureActions = [];
+  for (const file of architectureFiles) {
+    const destinationPath = join("docs", "architecture", file.relativePath);
+    const destination = resolve(targetRoot, destinationPath);
     if (!isInside(targetRoot, destination)) {
-      conflicts.push({
-        path: destination,
+      architectureActions.push({
+        action: "conflict",
+        path: destinationPath,
         reason: "resolved outside the selected target directory",
       });
       continue;
     }
     if (await hasSymlinkInPath(targetRoot, destination)) {
-      conflicts.push({
-        path: relative(targetRoot, destination),
+      architectureActions.push({
+        action: "conflict",
+        path: destinationPath,
         reason: "a path component is a symbolic link",
       });
       continue;
     }
-
-    const content = await readFile(template.source, "utf8");
-    if (options.dryRun) {
-      unchanged.push({
-        path: relative(targetRoot, destination),
-        reason: "would be created",
-      });
-      continue;
-    }
-
+    const content = await readFile(file.source);
     try {
-      const existing = await readFile(destination, "utf8");
-      if (existing === content)
-        unchanged.push({
-          path: relative(targetRoot, destination),
-          reason: "already up to date",
-        });
-      else
-        conflicts.push({
-          path: relative(targetRoot, destination),
-          reason: "file already exists with different content",
-        });
+      const existing = await readFile(destination);
+      architectureActions.push(
+        existing.equals(content)
+          ? { action: "unchanged", path: destinationPath }
+          : {
+              action: "conflict",
+              path: destinationPath,
+              reason: "file already exists with different content",
+            },
+      );
     } catch (error) {
       if (error.code !== "ENOENT") throw error;
-      await mkdir(dirname(destination), { recursive: true });
-      try {
-        await writeFile(destination, content, { encoding: "utf8", flag: "wx" });
-        written.push(relative(targetRoot, destination));
-      } catch (writeError) {
-        if (writeError.code !== "EEXIST") throw writeError;
-        conflicts.push({
-          path: relative(targetRoot, destination),
-          reason: "file appeared during initialization",
-        });
-      }
+      architectureActions.push({
+        action: "create",
+        path: destinationPath,
+        destination,
+        source: file.source,
+      });
     }
   }
 
-  process.stdout.write(
-    `${options.dryRun ? "Planned" : "Created"} ${written.length || (options.dryRun ? unchanged.length : 0)} file(s).\n`,
-  );
-  for (const path of written) process.stdout.write(`  created  ${path}\n`);
-  for (const item of unchanged)
-    process.stdout.write(`  unchanged ${item.path} (${item.reason})\n`);
-  for (const item of conflicts)
-    process.stderr.write(
-      `  conflict ${item.path}: ${item.reason}; review or move the file, then run arcshape init again.\n`,
+  let agentPlan;
+  if (selection.providers.length) {
+    agentPlan = await makePlan({
+      packageRoot,
+      targetRoot,
+      providers: selection.providers,
+      capabilities: selection.capabilities,
+      scope: selection.scope,
+      registry,
+    });
+  }
+  output.write(`ArcShape init plan (${selection.scope} scope)\n`);
+  for (const item of architectureActions)
+    output.write(
+      `  ${item.action.padEnd(12)} ${item.path}${item.reason ? ` — ${item.reason}` : ""}\n`,
     );
-  if (conflicts.length)
-    process.stderr.write(`No conflicting file was overwritten.\n`);
-  return { exitCode: conflicts.length ? 1 : 0, written, unchanged, conflicts };
+  if (agentPlan) {
+    output.write(
+      `Agent capabilities: ${agentPlan.providers.join(", ")} / ${agentPlan.capabilities.join(", ")}\n`,
+    );
+    for (const item of agentPlan.actions)
+      output.write(
+        `  ${item.action.padEnd(12)} ${item.path}${item.reason ? ` — ${item.reason}` : ""}\n`,
+      );
+    for (const warning of agentPlan.warnings ?? [])
+      output.write(`  note         ${warning}\n`);
+  } else output.write("Agent capabilities: skipped (CLI-only setup)\n");
+  if (options.dryRun) return { exitCode: 0, architectureActions, agentPlan };
+  if (
+    !(await confirmPlan(options, "Apply this complete initialization plan?", {
+      input,
+      output,
+    }))
+  ) {
+    output.write("Cancelled; no files were changed.\n");
+    return { exitCode: 0, cancelled: true };
+  }
+
+  const written = [];
+  for (const item of architectureActions) {
+    if (item.action !== "create") continue;
+    const destination = resolve(targetRoot, item.path);
+    if (await hasSymlinkInPath(targetRoot, destination)) {
+      item.action = "conflict";
+      item.reason = "a path component became a symbolic link after preview";
+      continue;
+    }
+    await mkdir(dirname(destination), { recursive: true });
+    try {
+      await writeFile(destination, await readFile(item.source), { flag: "wx" });
+      written.push(item.path);
+    } catch (error) {
+      if (error.code !== "EEXIST") throw error;
+      item.action = "conflict";
+      item.reason = "file appeared during initialization";
+    }
+  }
+  const agentFailures = agentPlan ? await applyPlan(agentPlan) : [];
+  for (const path of written) output.write(`  created ${path}\n`);
+  for (const item of architectureActions.filter(
+    (action) => action.action === "conflict",
+  ))
+    output.write(`  conflict ${item.path}: ${item.reason}\n`);
+  for (const failure of agentFailures)
+    output.write(`  preserved ${failure}\n`);
+  return {
+    exitCode:
+      architectureActions.some((item) => item.action === "conflict") ||
+      agentFailures.length
+        ? 1
+        : 0,
+    written,
+    architectureActions,
+    agentFailures,
+  };
 }
 
 function parseOptions(args) {
-  const options = { dryRun: false, help: false };
+  const options = { dryRun: false, help: false, yes: false, noAgents: false };
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === "--help" || arg === "-h") options.help = true;
     else if (arg === "--dry-run") options.dryRun = true;
-    else if (arg === "--target" || arg === "-C") {
-      const value = args[index + 1];
-      if (!value || value.startsWith("-"))
-        throw new Error(`${arg} requires a directory path`);
-      options.target = value;
-      index += 1;
-    } else throw new Error(`Unknown init option: ${arg}`);
+    else if (arg === "--yes" || arg === "-y") options.yes = true;
+    else if (arg === "--no-agents") options.noAgents = true;
+    else if (arg === "--target" || arg === "-C")
+      options.target = takeValue(args, ++index, arg);
+    else if (arg === "--providers")
+      options.providers = splitCsv(takeValue(args, ++index, arg));
+    else if (arg === "--capabilities")
+      options.capabilities = splitCsv(takeValue(args, ++index, arg));
+    else if (arg === "--scope") options.scope = takeValue(args, ++index, arg);
+    else throw new Error(`Unknown init option: ${arg}`);
   }
+  if (options.noAgents && options.providers?.length)
+    throw new Error("--no-agents and --providers cannot be used together");
+  if (options.scope && !["project", "user"].includes(options.scope))
+    throw new Error("Scope must be project or user");
+  if (options.dryRun && options.yes)
+    throw new Error("--dry-run and --yes cannot be used together");
   return options;
 }
 
+function takeValue(args, index, option) {
+  const value = args[index];
+  if (!value || value.startsWith("-"))
+    throw new Error(`${option} requires a value`);
+  return value;
+}
+function splitCsv(value) {
+  return value
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+}
 async function collectFiles(root, parent = "") {
   const entries = await readdir(join(root, parent), { withFileTypes: true });
   const files = [];
@@ -135,7 +201,6 @@ async function collectFiles(root, parent = "") {
   }
   return files;
 }
-
 function isInside(root, path) {
   const rel = relative(root, path);
   return (
@@ -143,7 +208,6 @@ function isInside(root, path) {
     (!isAbsolute(rel) && rel !== ".." && !rel.startsWith(`..${sep}`))
   );
 }
-
 async function hasSymlinkInPath(root, destination) {
   const parts = relative(root, destination).split(sep);
   let current = root;

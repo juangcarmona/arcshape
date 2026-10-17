@@ -10,9 +10,11 @@ description: Technical, organizational, and convention constraints that shape th
 
 - The package targets Node.js 22 or newer and uses npm packaging.
 - Architecture documentation, ADRs, and diagram sources use Markdown as their canonical form.
-- The first assistant integrations are Codex and Claude.
+- Agent workflows use portable Agent Skills with provider adapters. Codex, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, and GitHub Copilot share `.agents/skills/`; Claude Code uses `.claude/skills/`.
+- Provider compatibility follows each provider's documented discovery paths; ArcShape does not claim runtime testing inside provider applications.
 
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:f4289478d4678ba40962a5599539b7db614bbaa9f68f2ece81d2d0a226a4f030" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:6de872f89c5b3753b22a10f604648315d5993dfda359afdc07e161a6ba0cf228" -->
+<!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 
 ## Organizational constraints
 

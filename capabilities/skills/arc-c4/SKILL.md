@@ -1,5 +1,5 @@
 ---
-name: arcshape-c4
+name: arc-c4
 description: Create and maintain evidence-grounded C4 architecture diagrams as Mermaid in Markdown. Use when a maintainer asks for context, container, component, or code views.
 ---
 

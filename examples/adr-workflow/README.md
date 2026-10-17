@@ -1,6 +1,6 @@
 # ADR workflow examples
 
-These fixtures exercise the `arcshape-adr` workflow's main decisions. Run `npm test -- --run tests/adr-workflow.test.mjs` to check the examples and the packaged Codex/Claude skills.
+These fixtures exercise the `arc-adr` capability's main decisions. Run `npm test -- --run tests/adr-workflow.test.mjs` to check the examples and the provider-neutral packaged skill.
 
 ## Create a record from a supplied decision
 

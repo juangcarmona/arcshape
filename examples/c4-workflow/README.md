@@ -1,6 +1,6 @@
 # C4 workflow examples
 
-These fixtures test the Codex and Claude C4 workflow against repository evidence. `npm test -- --run tests/c4-workflow.test.mjs` renders each view through the same Mermaid renderer used by the ArcShape site.
+These fixtures test the portable `arc-c4` skill against repository evidence. `npm test -- --run tests/c4-workflow.test.mjs` renders each view through the same Mermaid renderer used by the ArcShape site.
 
 ## System context
 

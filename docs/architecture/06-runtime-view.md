@@ -16,10 +16,12 @@ sequenceDiagram
     actor Maintainer
     participant CLI as arcshape init
     participant FS as Target repository
-    participant Templates as Package templates
-    Maintainer->>CLI: init [--target path]
-    CLI->>Templates: Read arc42 and assistant workflow Markdown files
-    loop Each template file
+    participant Package as npm package
+    Maintainer->>CLI: init [--target path] [--providers ids | --no-agents]
+    CLI->>Package: Read arc42 templates and selected canonical skills
+    CLI-->>Maintainer: Preview providers, scope, file actions, and conflicts
+    Maintainer->>CLI: Confirm plan
+    loop Each planned file action
         CLI->>FS: Check target path and existing content
         alt File is absent
             CLI->>FS: Create file exclusively
@@ -34,7 +36,7 @@ sequenceDiagram
     CLI-->>Maintainer: Summarize created files and conflicts
 ```
 
-Initialization does not inspect source code, make architecture claims, or contact an ArcShape service. It installs the README and twelve arc42 sections, Codex and Claude skills, and matching Claude slash commands. It works in a non-Git directory as well as a Git repository.
+Initialization does not inspect source code, make architecture claims, contact an ArcShape service, or launch an agent. It installs the README and twelve arc42 sections and optionally selected `arc-` skills. In non-interactive use, maintainers must specify `--providers <ids>` or `--no-agents`, and `--yes` to confirm writes. Agent lifecycle commands share provider detection, planning, confirmation, and a scoped ownership manifest; edits and untracked files are preserved. The npm package contains all capability files, so installation does not need a marketplace or network access.
 
 ### Validate architecture Markdown
 
