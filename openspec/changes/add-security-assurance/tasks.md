@@ -22,7 +22,8 @@
 ## 3. Integration
 
 - [x] 3.1 Update `docs/engineering-lifecycle.md` with the SAST, SBOM/license checks, versions, triggers, and expected ruleset evidence; verify the descriptions against workflow configuration. GitHub ruleset activation remains tracked in 1.3.
-- [ ] 3.2 Run format, lint, typecheck, all tests, build, product model validation, OpenSpec validation, current-head security workflows, and the packed-package license check; record exact successful evidence in the pull request.
+- [ ] 3.2 Stabilize two existing Windows/Node 24 integration-test timeouts found on the implementation head; verify the ProductShape setup case and Chromium reader case pass with finite 15-second and 60-second limits.
+- [ ] 3.3 Run format, lint, typecheck, all tests, build, product model validation, OpenSpec validation, current-head security workflows, and the packed-package license check; record exact successful evidence in the pull request.
 
 ## Workflow follow-up
 
