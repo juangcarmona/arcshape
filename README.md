@@ -2,6 +2,8 @@
 
 ArcShape is an npm-installable CLI and a set of AI workflows for creating and maintaining Markdown architecture documentation with [arc42](https://arc42.org/). Its generated reader site is designed for technical and non-technical readers.
 
+Browse the [ArcShape architecture site](https://juangcarmona.github.io/arcshape/).
+
 ## Get started
 
 After the first npm release, install ArcShape in a project repository with Node.js 22 or newer and run:
