@@ -33,7 +33,13 @@ describe("generated architecture reader", () => {
           "System scope and context",
     );
     await page.keyboard.press("ArrowRight");
-    await page.waitForFunction(() => location.hash === "#/section/04");
+    await page.waitForFunction(
+      () =>
+        location.hash === "#/section/04" &&
+        document
+          .querySelector('aside.nav a[aria-current="page"]')
+          ?.getAttribute("href") === "#/section/04",
+    );
     expect(
       await page.$eval('aside.nav a[aria-current="page"]', (link) =>
         link.getAttribute("href"),
