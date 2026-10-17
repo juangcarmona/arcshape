@@ -8,9 +8,9 @@ description: The system boundary, its users, and its external interfaces.
 
 ## Business context
 
-The maintainer owns the repository and decides which proposed documentation changes to accept. Codex or Claude can inspect repository evidence and draft changes. Readers consume Markdown directly or, once implemented, the generated static site. Documentation can later be connected to maintainer-selected Obsidian and Confluence destinations.
+The maintainer owns the repository and decides which proposed documentation changes to accept. Codex or Claude can inspect repository evidence and draft changes. Readers consume Markdown directly or use the generated static site. Documentation can be connected to maintainer-selected Obsidian vaults and Confluence Cloud spaces.
 
-The AI workflows and external connections are part of accepted product scope but are not implemented in the current CLI revision.
+ArcShape installs the Codex and Claude workflow commands and skills. The CLI supports local Obsidian synchronization and directed Confluence Cloud publication; each external write requires an explicit command and maintainer-selected destination.
 
 <!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:7dcae213a0ff556824ec2da92ee977447f007034d8f5b308ebcdd5851c9a5035" -->
 <!-- pdac:cite id="FR-EXTERNAL-DOCS-INTEGRATIONS" digest="sha256:f929081da500e66834eb9a2e1dd6c4ef16dd6a066168d275b49cee6989c37616" -->
@@ -30,6 +30,6 @@ C4Context
     Rel(arcshape, docs, "Optional publish")
 ```
 
-The current `arcshape init` path is local and creates Markdown files only. Other relationships show intended v1 system context, not existing network behavior.
+The `arcshape init` path is local and creates Markdown files only. The optional destinations are used by explicit sync commands; neither assistant workflow execution nor external publication is implicit in initialization.
 
 <!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->

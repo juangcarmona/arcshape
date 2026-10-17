@@ -1,30 +1,46 @@
-import { resolve } from "node:path";
+import { isAbsolute, relative, resolve, sep } from "node:path";
 import { loadDocs } from "../tools/arc42-site/loadDocs.mjs";
+import { validateMarkdownLinks } from "./validate-links.mjs";
 
 export async function runValidate(args) {
   const options = parseOptions(args);
   if (options.help) {
     process.stdout.write(
-      "Usage: arcshape validate [--docs <directory>] [--format text|json]\n\n",
+      "Usage: arcshape validate [--docs <directory>] [--links] [--format text|json]\n\n",
     );
     process.stdout.write(
-      "Validate the README and all twelve Markdown arc42 sections.\n",
+      "Validate the README and all twelve Markdown arc42 sections. Use --links to check local Markdown and image destinations.\n",
     );
     return { exitCode: 0 };
   }
 
   const docsDir = resolve(process.cwd(), options.docs ?? "docs/architecture");
+  const workingDirectory = process.cwd();
+  const docsRelativeToWorkingDirectory = relative(workingDirectory, docsDir);
+  const repositoryRoot =
+    isAbsolute(docsRelativeToWorkingDirectory) ||
+    docsRelativeToWorkingDirectory === ".." ||
+    docsRelativeToWorkingDirectory.startsWith(`..${sep}`)
+      ? docsDir
+      : workingDirectory;
   try {
     const docs = await loadDocs(docsDir);
+    const diagnostics = options.links
+      ? await validateMarkdownLinks(
+          [docs.readme, ...docs.sections],
+          repositoryRoot,
+          docsDir,
+        )
+      : [];
     const result = {
-      valid: true,
+      valid: diagnostics.length === 0,
       docs: docsDir,
       sections: docs.sections.length,
       title: docs.readme.title,
-      diagnostics: [],
+      diagnostics,
     };
     printResult(result, options.format);
-    return { exitCode: 0, result };
+    return { exitCode: result.valid ? 0 : 1, result };
   } catch (error) {
     const problems = error.problems ?? [error.message];
     const result = {
@@ -59,6 +75,7 @@ function parseOptions(args) {
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === "--help" || arg === "-h") options.help = true;
+    else if (arg === "--links") options.links = true;
     else if (arg === "--docs" || arg === "--format") {
       const value = args[index + 1];
       if (!value || value.startsWith("--"))

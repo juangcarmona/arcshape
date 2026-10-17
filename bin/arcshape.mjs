@@ -76,7 +76,7 @@ function printHelp(stream = process.stdout) {
     `  site build [--docs <directory>] [--out <file>]  Render the Markdown reader site\n`,
   );
   stream.write(
-    `  validate [--docs <directory>]              Validate Markdown arc42 structure\n`,
+    `  validate [--docs <directory>] [--links]     Validate arc42 structure and local links\n`,
   );
   stream.write(
     `  sync obsidian --vault <directory>          Copy Markdown into an Obsidian vault\n`,

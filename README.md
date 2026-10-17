@@ -13,7 +13,7 @@ npx arcshape init
 
 This creates `docs/architecture/` with a README and the twelve arc42 sections, and installs ArcShape skills and slash commands for Codex and Claude under `.agents/` and `.claude/`. Initialization is repeatable and never overwrites different existing files. Use `npx arcshape init --dry-run` to preview the files, or `npx arcshape init --target ../my-project` to select a repository directory.
 
-The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude workflows cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections. Cross-document link validation remains tracked in the [v1 feature epic](https://github.com/juangcarmona/arcshape/issues/25).
+The CLI provides repository setup (`init`), resumable evidence-round bookkeeping (`session`), arc42 Markdown structure and optional local-link validation (`validate`), Obsidian and Confluence sync (`sync`), and a self-contained reader site (`site build`). Codex and Claude workflows cover reverse engineering, arc42 authoring, ADRs, C4 diagrams, and documentation connections.
 
 Start a local analysis session and ask for its next bounded evidence round:
 
@@ -25,21 +25,23 @@ npx arcshape session next
 Copy the canonical Markdown into an Obsidian vault:
 
 ```sh
-npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --dry-run
-npx arcshape sync obsidian --vault ~/Documents/ObsidianVault
+npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --include docs/adr --dry-run
+npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --include docs/adr
 ```
 
 The sync stores a local manifest beside the exported notes, updates copies only while they still match the last ArcShape version, and reports local edits as conflicts.
 
-To sync to an existing, blank Confluence page, set credentials in environment variables and preview the Markdown conversion first:
+To publish architecture as an index with one child page per arc42 section, choose a Confluence parent page and set credentials in environment variables. Preview the page plan first:
 
 ```sh
 CONFLUENCE_EMAIL=you@example.com CONFLUENCE_API_TOKEN=... \
   npx arcshape sync confluence \
-  --base-url https://example.atlassian.net/wiki --page-id 123456 --dry-run
+  --base-url https://example.atlassian.net/wiki \
+  --space-id 12345 --parent-id 123456 --title-prefix MyProject \
+  --include docs/adr --dry-run
 ```
 
-Remove `--dry-run` to publish. On the first sync the page must be blank. Later runs stop if someone edited the page since ArcShape last synchronized it.
+Remove `--dry-run` to create or update the pages. ArcShape records a local baseline in `.arcshape/confluence-sync/`; later runs stop on remote edits to managed pages. For a single-page destination, use `--page-id <id>` instead of `--space-id` and `--parent-id`.
 
 The session tool inventories files without selecting by programming language. It records the human or AI workflow's classifications and notes; it does not read findings into architecture claims by itself.
 
@@ -72,6 +74,8 @@ The initial quality baseline is defined in the [engineering lifecycle](docs/engi
 ## Contributing
 
 Start with the [contribution guide](CONTRIBUTING.md). For non-trivial work, open or refine a GitHub issue before planning implementation.
+
+Release preparation, the first npm publication, and later trusted publishing are documented in [Releasing ArcShape](docs/releasing.md).
 
 ## License
 

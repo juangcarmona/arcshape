@@ -42,9 +42,9 @@ Initialization does not inspect source code, make architecture claims, or contac
 
 ### Synchronize with an Obsidian vault
 
-`arcshape sync obsidian --vault <path>` copies Markdown files from the architecture directory to a selected vault folder. A local manifest records content hashes. On later runs, ArcShape updates a note only when its current content still matches the last synced version; local edits are reported as conflicts. Source files removed from the repository are reported as orphaned vault notes and are not deleted.
+`arcshape sync obsidian --vault <path>` copies Markdown files from the architecture directory to a selected vault folder. Repeatable `--include` options add selected Markdown directories such as `docs/adr`; ArcShape preserves a shared relative directory structure so links between the selected documents continue to work. A local manifest records content hashes. On later runs, ArcShape updates a note only when its current content still matches the last synced version; local edits are reported as conflicts. Source files removed from the repository are reported as orphaned vault notes and are not deleted.
 
-`arcshape sync confluence --base-url <url> --page-id <id>` reads one selected Confluence Cloud page and prepares sanitized HTML from the Markdown sections. The first sync requires a blank page; subsequent writes require the remote page to match ArcShape's last recorded content hash. `--dry-run` performs a read and reports the intended update without writing. Credentials are read from configured environment variable names and are not stored in the repository.
+`arcshape sync confluence --base-url <url> --space-id <id> --parent-id <id>` reads the selected parent page and publishes an index plus one child page per arc42 section. Repeatable `--include` options add selected Markdown files or directories such as ADRs. `--dry-run` reports create, update, unchanged, and conflict actions without writing. A local manifest tracks each managed page and protects remote edits from being overwritten. The single-page `--page-id` mode remains available. Credentials are read from configured environment variable names and are not stored in the repository.
 
 ### Build the reader site
 

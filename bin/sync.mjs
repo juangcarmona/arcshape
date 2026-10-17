@@ -1,7 +1,16 @@
 import { createHash } from "node:crypto";
 import { lstat, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
-import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import {
+  dirname,
+  isAbsolute,
+  join,
+  parse,
+  relative,
+  resolve,
+  sep,
+} from "node:path";
 import { runConfluenceSync } from "./confluence.mjs";
+import { syncConfluencePages } from "./confluence-pages.mjs";
 
 const MANIFEST_NAME = ".arcshape-sync.json";
 
@@ -16,6 +25,13 @@ export async function runSync(args) {
     if (options.help) {
       printHelp();
       return { exitCode: 0 };
+    }
+    if (options.spaceId || options.parentId || options.titlePrefix) {
+      if (options.pageId)
+        throw new Error(
+          "use either --page-id or the multi-page --space-id/--parent-id destination",
+        );
+      return syncConfluencePages(options);
     }
     return runConfluenceSync(options);
   }
@@ -41,7 +57,36 @@ export async function runSync(args) {
   if (await hasSymlink(vaultRoot, targetRoot))
     throw new Error("Obsidian target path contains a symbolic link");
 
-  const sourceFiles = await collectMarkdown(docsRoot);
+  const includeRoots = await Promise.all(
+    (options.include ?? []).map(async (include) => {
+      const path = resolve(repository, include);
+      if (!isInside(repository, path))
+        throw new Error(
+          `--include must stay inside the repository: ${include}`,
+        );
+      if (await isSymlink(path))
+        throw new Error(`--include path cannot be a symbolic link: ${include}`);
+      if (!(await isDirectory(path)))
+        throw new Error(
+          `--include must select a Markdown directory: ${include}`,
+        );
+      return path;
+    }),
+  );
+  const sourceRoots = [docsRoot, ...includeRoots];
+  const contentByPath = new Map();
+  const commonRoot = commonAncestor(sourceRoots);
+  for (const sourceRoot of sourceRoots) {
+    for (const file of await collectMarkdown(sourceRoot)) {
+      const absolutePath = join(sourceRoot, file.path);
+      const path = relative(commonRoot, absolutePath).split(sep).join("/");
+      contentByPath.set(path, file.content);
+    }
+  }
+  const sourceFiles = [...contentByPath].map(([path, content]) => ({
+    path,
+    content,
+  }));
   if (sourceFiles.length === 0)
     throw new Error(`no Markdown files found under ${docsRoot}`);
   const manifestPath = join(targetRoot, MANIFEST_NAME);
@@ -143,13 +188,16 @@ export async function runSync(args) {
 
 function printHelp() {
   process.stdout.write(
-    "Usage: arcshape sync obsidian --vault <directory> [--docs <directory>] [--path <vault-subdirectory>] [--dry-run]\n\n",
+    "Usage: arcshape sync obsidian --vault <directory> [--docs <directory>] [--include <Markdown-directory>] [--path <vault-subdirectory>] [--dry-run]\n\n",
   );
   process.stdout.write(
     "       arcshape sync confluence --base-url <url> --page-id <id> [--docs <directory>] [--dry-run]\n",
   );
   process.stdout.write(
-    "Sync canonical Markdown to Obsidian or a selected Confluence page.\n",
+    "       arcshape sync confluence --base-url <url> --space-id <id> --parent-id <id> [--docs <directory>] [--include <file-or-directory>] [--title-prefix <name>] [--dry-run]\n",
+  );
+  process.stdout.write(
+    "Sync canonical Markdown to Obsidian or Confluence. Multi-page sync creates one page per arc42 section under a parent page.\n",
   );
   process.stdout.write(
     "Vault and page edits are preserved and reported as conflicts. Confluence credentials use CONFLUENCE_EMAIL and CONFLUENCE_API_TOKEN by default.\n",
@@ -166,6 +214,10 @@ function parseConfluenceOptions(args) {
       [
         "--base-url",
         "--page-id",
+        "--space-id",
+        "--parent-id",
+        "--title-prefix",
+        "--include",
         "--docs",
         "--email-env",
         "--token-env",
@@ -176,6 +228,10 @@ function parseConfluenceOptions(args) {
         throw new Error(`${arg} requires a value`);
       if (arg === "--base-url") options.baseUrl = value;
       else if (arg === "--page-id") options.pageId = value;
+      else if (arg === "--space-id") options.spaceId = value;
+      else if (arg === "--parent-id") options.parentId = value;
+      else if (arg === "--title-prefix") options.titlePrefix = value;
+      else if (arg === "--include") (options.include ??= []).push(value);
       else if (arg === "--docs") options.docs = value;
       else if (arg === "--email-env") options.emailEnv = value;
       else options.tokenEnv = value;
@@ -191,12 +247,13 @@ function parseOptions(args) {
     const arg = args[index];
     if (arg === "--help" || arg === "-h") options.help = true;
     else if (arg === "--dry-run") options.dryRun = true;
-    else if (["--vault", "--docs", "--path"].includes(arg)) {
+    else if (["--vault", "--docs", "--include", "--path"].includes(arg)) {
       const value = args[index + 1];
       if (!value || value.startsWith("--"))
         throw new Error(`${arg} requires a value`);
       if (arg === "--vault") options.vault = value;
       else if (arg === "--docs") options.docs = value;
+      else if (arg === "--include") (options.include ??= []).push(value);
       else options.path = value;
       index += 1;
     } else throw new Error(`Unknown sync option: ${arg}`);
@@ -281,4 +338,15 @@ async function hasSymlink(root, path) {
 
 function basename(path) {
   return path.split(/[\\/]/).filter(Boolean).at(-1) ?? "architecture";
+}
+
+function commonAncestor(paths) {
+  const [first, ...rest] = paths.map((path) => resolve(path));
+  let candidate = first;
+  while (rest.some((path) => !isInside(candidate, path))) {
+    const parent = dirname(candidate);
+    if (parent === candidate) return parse(candidate).root;
+    candidate = parent;
+  }
+  return candidate;
 }

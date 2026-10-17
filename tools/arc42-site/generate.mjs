@@ -16,7 +16,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { resolve, join, dirname } from "node:path";
+import { resolve, join, dirname, relative, sep } from "node:path";
 import { loadDocs, Diagnostic } from "./loadDocs.mjs";
 import {
   renderMarkdown,
@@ -75,6 +75,34 @@ async function gitRevision(docsDir) {
   }
 }
 
+async function gitSourceContext(docsDir) {
+  try {
+    const [root, remote, ref] = await Promise.all([
+      run("git", ["rev-parse", "--show-toplevel"], { cwd: docsDir }),
+      run("git", ["remote", "get-url", "origin"], { cwd: docsDir }),
+      run("git", ["branch", "--show-current"], { cwd: docsDir }),
+    ]);
+    const repositoryUrl = githubRepositoryUrl(remote.stdout.trim());
+    return repositoryUrl
+      ? {
+          root: root.stdout.trim(),
+          repositoryUrl,
+          ref: ref.stdout.trim() || "HEAD",
+        }
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function githubRepositoryUrl(remote) {
+  const match =
+    /^(?:https:\/\/github\.com\/|git@github\.com:)([^/]+\/[^/]+?)(?:\.git)?$/.exec(
+      remote,
+    );
+  return match ? `https://github.com/${match[1]}` : undefined;
+}
+
 async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2));
   if (positional.length !== 1) usage(1);
@@ -126,10 +154,18 @@ async function main() {
     return slice;
   };
 
+  const sourceContext = await gitSourceContext(docsDir);
+  const toSourcePath = (file) =>
+    sourceContext
+      ? relative(sourceContext.root, join(docsDir, file)).split(sep).join("/")
+      : undefined;
+
   const readmeRendered = await renderMarkdown(docs.readme.body, {
     fileToRoute,
     svgs: take(readmeMermaid.length),
     title: docs.readme.title,
+    sourceContext,
+    sourceFile: toSourcePath(docs.readme.file),
   });
   const sectionsRendered = [];
   for (let i = 0; i < docs.sections.length; i += 1) {
@@ -139,6 +175,8 @@ async function main() {
       svgs: take(sectionMermaid[i].length),
       currentRoute: `#/section/${section.number}`,
       title: section.title,
+      sourceContext,
+      sourceFile: toSourcePath(section.file),
     });
     sectionsRendered.push({
       number: section.number,

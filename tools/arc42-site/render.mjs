@@ -1,6 +1,8 @@
 import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, posix } from "node:path";
+import { dirname, join, posix } from "node:path";
+import { relative, resolve, sep } from "node:path";
+import { existsSync, statSync } from "node:fs";
 import { Marked } from "marked";
 import GithubSlugger from "github-slugger";
 import createDOMPurify from "dompurify";
@@ -228,7 +230,14 @@ export function stripDuplicateTitle(body, title) {
   return body;
 }
 
-function createMarked(fileToRoute, svgs, diagramTitles, currentRoute) {
+function createMarked(
+  fileToRoute,
+  svgs,
+  diagramTitles,
+  currentRoute,
+  sourceContext,
+  sourceFile,
+) {
   const marked = new Marked({ gfm: true });
   const slugger = new GithubSlugger();
   let mermaidCount = 0;
@@ -292,6 +301,14 @@ function createMarked(fileToRoute, svgs, diagramTitles, currentRoute) {
             : route;
           return `<a href="${escapeHtml(hash)}"${titleAttribute}>${text}</a>`;
         }
+        const sourceLink = githubSourceLink(
+          sourceContext,
+          sourceFile,
+          path,
+          anchor,
+        );
+        if (sourceLink)
+          return `<a href="${escapeHtml(sourceLink)}"${titleAttribute} rel="noopener noreferrer">${text}</a>`;
         return `<span class="xref-dead">${text} <code>${escapeHtml(target)}</code></span>`;
       },
       image({ href, title, text }) {
@@ -302,6 +319,35 @@ function createMarked(fileToRoute, svgs, diagramTitles, currentRoute) {
   });
 
   return { marked, count: () => mermaidCount };
+}
+
+function githubSourceLink(sourceContext, sourceFile, path, anchor) {
+  if (!sourceContext || !sourceFile || !path) return undefined;
+  const sourcePath = posix.normalize(
+    posix.join(posix.dirname(sourceFile), path),
+  );
+  if (
+    sourcePath === ".." ||
+    sourcePath.startsWith("../") ||
+    posix.isAbsolute(sourcePath)
+  )
+    return undefined;
+  const absolutePath = resolve(sourceContext.root, ...sourcePath.split("/"));
+  const relativePath = relative(sourceContext.root, absolutePath);
+  if (
+    relativePath === ".." ||
+    relativePath.startsWith(`..${sep}`) ||
+    !existsSync(absolutePath)
+  )
+    return undefined;
+  const kind = statSync(absolutePath).isDirectory() ? "tree" : "blob";
+  const encodedRef = encodeURIComponent(sourceContext.ref);
+  const encodedPath = sourcePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  const fragment = anchor ? `#${encodeURIComponent(anchor)}` : "";
+  return `${sourceContext.repositoryUrl}/${kind}/${encodedRef}/${encodedPath}${fragment}`;
 }
 
 /**
@@ -316,7 +362,14 @@ function createMarked(fileToRoute, svgs, diagramTitles, currentRoute) {
  */
 export async function renderMarkdown(
   body,
-  { fileToRoute, svgs = [], currentRoute = "#/", title = "" },
+  {
+    fileToRoute,
+    svgs = [],
+    currentRoute = "#/",
+    title = "",
+    sourceContext,
+    sourceFile,
+  },
 ) {
   const diagramSources = extractMermaidSources(body);
   const titleIssues = validateDiagramTitles(diagramSources);
@@ -326,7 +379,14 @@ export async function renderMarkdown(
     );
   }
   const diagramTitles = diagramSources.map(getDiagramAccessibleTitle);
-  const renderer = createMarked(fileToRoute, svgs, diagramTitles, currentRoute);
+  const renderer = createMarked(
+    fileToRoute,
+    svgs,
+    diagramTitles,
+    currentRoute,
+    sourceContext,
+    sourceFile,
+  );
   const html = await renderer.marked.parse(stripDuplicateTitle(body, title));
   if (renderer.count() !== svgs.length)
     throw new Error(

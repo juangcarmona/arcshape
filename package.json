@@ -3,8 +3,18 @@
   "version": "0.1.0",
   "description": "ArcShape tooling for creating and maintaining arc42 architecture documentation.",
   "license": "Apache-2.0",
-  "private": true,
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juangcarmona/arcshape.git"
+  },
+  "homepage": "https://github.com/juangcarmona/arcshape#readme",
+  "bugs": {
+    "url": "https://github.com/juangcarmona/arcshape/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "arcshape": "bin/arcshape.mjs"
   },
