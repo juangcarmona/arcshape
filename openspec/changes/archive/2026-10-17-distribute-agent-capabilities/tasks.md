@@ -35,7 +35,8 @@
 
 - [x] 4.1 Update README, engineering lifecycle, and CLI help with provider coverage, discovery limits, flags, project default, user scope, conflict behavior, offline operation, migration, and uninstall; verify every documented command and option against CLI help.
 - [x] 4.2 Refresh ProductShape citations in all changed OpenSpec documents and verify `npm exec -- prodshape citations verify --provider openspec` reports every current document classified with current citations.
-- [ ] 4.3 Run the complete repository CI-equivalent checks, strict OpenSpec validation, ProductShape validation, npm package smoke tests, and security audit; record exact results and address every failure before review.
+- [x] 4.3 Run the complete repository CI-equivalent checks, strict OpenSpec validation, ProductShape validation, npm package smoke tests, and security audit; record exact results and address every failure before review.
+  - Evidence: [PR #52](https://github.com/juangcarmona/arcshape/pull/52), head `4bc459b18dcf0ea9d365cf2dadc2534b567aec6b`; all six Node 22/24 × Ubuntu/Windows/macOS jobs, Product model, Repository conventions, Secrets scan, Dependency audit, and reader site build passed. Local checks also passed: 77 tests, format, lint, typecheck, build, strict OpenSpec validation, 35 ProductShape artifacts with zero diagnostics, and 45 current citations across four OpenSpec documents.
 
 <!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:0c2a1bb402fcf272e5ecfe15282e8d15dccd7fb57992a344071757f82cf457a7" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
