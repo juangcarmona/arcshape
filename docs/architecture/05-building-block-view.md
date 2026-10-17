@@ -24,3 +24,27 @@ ArcShape is currently one npm package with a command dispatcher, repository setu
 | Site renderer          | Validates Markdown metadata, sanitizes rendered HTML, and embeds Mermaid diagrams in one reader page.             | [`tools/arc42-site/`](../../tools/arc42-site/)                                                                                                       |
 | Product model          | Owns user-facing product intent and constraints.                                                                  | [`docs/product/model/`](../product/model/)                                                                                                           |
 | Delivery configuration | Defines CI and temporary OpenSpec change workflows.                                                               | [`.github/workflows/`](../../.github/workflows/) and [`openspec/`](../../openspec/)                                                                  |
+
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:7dcae213a0ff556824ec2da92ee977447f007034d8f5b308ebcdd5851c9a5035" -->
+
+## C4 container view
+
+The CLI and assistant instructions are installed into the target repository alongside the canonical Markdown. Codex and Claude remain external assistant hosts; ArcShape does not host an AI runtime. The diagram shows the container boundaries and the maintainer's separate deterministic and AI-assisted interactions.
+
+```mermaid
+accTitle: ArcShape containers in a project repository
+C4Container
+    title ArcShape Container View
+    Person(maintainer, "Repository maintainer", "Uses CLI and an assistant")
+    System_Ext(assistant, "Codex / Claude", "Runs installed skills with repository context")
+    System_Boundary(project, "Project repository") {
+        Container(cli, "ArcShape CLI", "Node.js package", "Initializes, validates, and synchronizes Markdown docs")
+        Container(skills, "ArcShape skills", "Markdown files", "Guide AI-assisted analysis and documentation")
+        Container(docs, "Architecture documentation", "Markdown files", "Stores canonical arc42 docs and ADRs")
+    }
+    Rel(maintainer, cli, "Runs deterministic commands")
+    Rel(maintainer, assistant, "Requests documentation work")
+    Rel(assistant, skills, "Follows installed workflow")
+    Rel(assistant, docs, "Proposes reviewed Markdown changes")
+    Rel(cli, docs, "Reads and writes")
+```

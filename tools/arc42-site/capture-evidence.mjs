@@ -53,6 +53,32 @@ try {
     }
   });
   await page.screenshot({ path: join(output, "arcshape-system-context.png") });
+
+  await page.goto(`${siteUrl}#/section/05`, { waitUntil: "load" });
+  await page.waitForFunction(
+    () =>
+      location.hash === "#/section/05" &&
+      document.querySelector(".doc figure.diagram svg"),
+  );
+  await page.evaluate(() => {
+    const main = document.querySelector("main#main");
+    const diagram = document.querySelector(".doc figure.diagram");
+    if (main && diagram) {
+      main.style.scrollBehavior = "auto";
+      const mainBounds = main.getBoundingClientRect();
+      const diagramBounds = diagram.getBoundingClientRect();
+      main.scrollTop = Math.max(
+        0,
+        main.scrollTop +
+          diagramBounds.top -
+          mainBounds.top -
+          (main.clientHeight - diagramBounds.height) / 2,
+      );
+    }
+  });
+  await page.screenshot({
+    path: join(output, "arcshape-building-blocks.png"),
+  });
 } finally {
   await browser.close();
 }
