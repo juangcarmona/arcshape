@@ -3,28 +3,21 @@
     {
       "package": "braces",
       "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
-      "reason": "Dev-only dependency reached through the repository's OpenSpec and ProductShape authoring CLIs. The registry has no patched braces release or non-breaking update path; these packages are excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
+      "reason": "Dev-only dependency reached through the repository's ProductShape authoring CLI. The registry has no patched braces release or non-breaking update path; this package is excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
       "owner": "ArcShape maintainers",
       "expiresOn": "2026-11-17"
     },
     {
       "package": "micromatch",
       "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
-      "reason": "Dev-only dependency path through fast-glob in OpenSpec and ProductShape authoring CLIs. No patched compatible dependency path is published; these packages are excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
+      "reason": "Dev-only dependency path through fast-glob in the ProductShape authoring CLI. No patched compatible dependency path is published; this package is excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
       "owner": "ArcShape maintainers",
       "expiresOn": "2026-11-17"
     },
     {
       "package": "fast-glob",
       "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
-      "reason": "Dev-only dependency path through the repository's OpenSpec and ProductShape authoring CLIs. No patched compatible fast-glob release is published; these packages are excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
-      "owner": "ArcShape maintainers",
-      "expiresOn": "2026-11-17"
-    },
-    {
-      "package": "@fission-ai/openspec",
-      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
-      "reason": "Repository authoring CLI only; the vulnerable path is its dev-only fast-glob dependency. The package is excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
+      "reason": "Dev-only dependency path through fast-glob in the ProductShape authoring CLI. No patched compatible fast-glob release is published; this package is excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
       "owner": "ArcShape maintainers",
       "expiresOn": "2026-11-17"
     },
