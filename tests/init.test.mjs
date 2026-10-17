@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { runInit } from "../bin/init.mjs";
@@ -51,14 +51,16 @@ describe("arcshape init assistant integration", () => {
     const target = await makeTarget();
     const expected = [
       ...(await listPaths(join(packageRoot, "templates", "architecture"))).map(
-        (path) => `docs/architecture/${path}`,
+        (path) => `docs/architecture/${path}`.replaceAll(sep, "/"),
       ),
-      ...(await listPaths(join(packageRoot, "templates", "assistants"))),
+      ...(await listPaths(join(packageRoot, "templates", "assistants"))).map(
+        (path) => path.replaceAll(sep, "/"),
+      ),
     ].sort();
 
     const first = await runInit(["--target", target], { packageRoot });
     expect(first.exitCode).toBe(0);
-    expect(first.written.sort()).toEqual(expected);
+    expect(first.written.map(normalizePath).sort()).toEqual(expected);
 
     const second = await runInit(["--target", target], { packageRoot });
     expect(second.exitCode).toBe(0);
@@ -76,12 +78,13 @@ describe("arcshape init assistant integration", () => {
     const result = await runInit(["--target", target], { packageRoot });
 
     expect(result.exitCode).toBe(1);
-    expect(result.conflicts).toEqual([
-      expect.objectContaining({
-        path: "docs/architecture/README.md",
-        reason: "file already exists with different content",
-      }),
-    ]);
+    expect(result.conflicts).toHaveLength(1);
+    expect(normalizePath(result.conflicts[0].path)).toBe(
+      "docs/architecture/README.md",
+    );
+    expect(result.conflicts[0].reason).toBe(
+      "file already exists with different content",
+    );
     expect(await readFile(customPath, "utf8")).toBe(
       "Maintainer-authored architecture notes\n",
     );
@@ -92,6 +95,10 @@ async function makeTarget() {
   const directory = await mkdtemp(join(tmpdir(), "arcshape-init-test-"));
   temporaryDirectories.push(directory);
   return directory;
+}
+
+function normalizePath(path) {
+  return path.split(sep).join("/");
 }
 
 async function listPaths(root, prefix = "") {
