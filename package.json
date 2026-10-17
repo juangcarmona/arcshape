@@ -42,7 +42,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "format:check": "prettier --check \"bin/**/*.{js,mjs}\" \"tools/arc42-site/**/*.mjs\" \"scripts/**/*.{ts,js,mjs}\" \"tests/**/*.{ts,js,mjs}\" \"security/**/*.json\" \"*.{js,mjs,json}\" \".github/workflows/*.yml\"",
+    "format:check": "prettier --check \"bin/**/*.{js,mjs}\" \"tools/arc42-site/**/*.mjs\" \"scripts/**/*.{ts,js,mjs}\" \"tests/**/*.{ts,js,mjs}\" \"security/**/*.json\" \"*.{js,mjs,json}\" \".github/workflows/*.yml\" \".github/codeql/*.yml\"",
     "lint": "eslint bin scripts tests eslint.config.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

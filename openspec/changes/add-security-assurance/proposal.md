@@ -8,7 +8,7 @@ The repository currently blocks exposed secrets and High/Critical dependency vul
 
 ## What Changes
 
-- Add CodeQL JavaScript/TypeScript analysis on pull requests, `main`, and a weekly schedule, using the security-extended suite and a High-or-Critical blocking threshold through GitHub code scanning merge protection. Keep narrow, expiring exceptions documented.
+- Add CodeQL JavaScript/TypeScript analysis on pull requests, `main`, and a weekly schedule, using the security-extended suite and a High-or-Critical blocking threshold enforced by the required CodeQL CI check. Keep narrow, expiring exceptions documented.
 - Build a CycloneDX SBOM from a clean installation of the packed npm tarball, run an SPDX license policy against all runtime transitive components, and retain the SBOM with workflow evidence and as an asset on the corresponding GitHub Release.
 - Add safe fixtures demonstrating that a representative SAST alert and a disallowed license fail their gates.
 - Document tool versions, the threshold, policy ownership, exception evidence and expiration, and the limits of each check.
@@ -36,7 +36,7 @@ Product impact review: the complete Product Definition was read. The only applic
 
 ## Decisions
 
-- Use CodeQL advanced setup with its supported major-version action, JavaScript/TypeScript analysis, and the security-extended query suite. Configure the GitHub ruleset to block High/Critical security alerts and errors. This provides an explicit blocking merge threshold while preserving lower-severity findings for review.
+- Use CodeQL advanced setup with its supported major-version action, JavaScript/TypeScript analysis, and the security-extended query suite. The SARIF threshold script fails the CodeQL job on High/Critical findings; configure the GitHub ruleset to require that job. This provides an explicit blocking merge threshold while preserving lower-severity findings for review.
 - Generate CycloneDX with npm 10.9.9 from a clean install of the exact `npm pack` tarball and `--omit=dev`; do not generate from `package-lock-only`, which omits installed package license metadata.
 - Enforce an SPDX allowlist over every runtime transitive component. Exact package/version exceptions require an owner, rationale, evidence, and expiry. An absent or expired exception fails closed.
 - Retain a CI SBOM artifact and upload the release SBOM as a GitHub Release asset, beside the npm package publication.
