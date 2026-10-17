@@ -1,21 +1,25 @@
 import { isAbsolute, relative, resolve, sep } from "node:path";
 import { loadDocs } from "../tools/arc42-site/loadDocs.mjs";
+import { verifyProductCitations } from "./product-citations.mjs";
 import { validateMarkdownLinks } from "./validate-links.mjs";
 
-export async function runValidate(args) {
+export async function runValidate(args, runtime = {}) {
   const options = parseOptions(args);
   if (options.help) {
     process.stdout.write(
-      "Usage: arcshape validate [--docs <directory>] [--links] [--format text|json]\n\n",
+      "Usage: arcshape validate [--docs <directory>] [--links] [--citations] [--format text|json]\n\n",
     );
     process.stdout.write(
-      "Validate the README and all twelve Markdown arc42 sections. Use --links to check local Markdown and image destinations.\n",
+      "Validate the README and all twelve Markdown arc42 sections. Use --links to check local links and --citations to verify ProductShape citations when a model is present.\n",
     );
     return { exitCode: 0 };
   }
 
-  const docsDir = resolve(process.cwd(), options.docs ?? "docs/architecture");
-  const workingDirectory = process.cwd();
+  const workingDirectory = resolve(runtime.cwd ?? process.cwd());
+  const docsDir = resolve(
+    workingDirectory,
+    options.docs ?? "docs/architecture",
+  );
   const docsRelativeToWorkingDirectory = relative(workingDirectory, docsDir);
   const repositoryRoot =
     isAbsolute(docsRelativeToWorkingDirectory) ||
@@ -32,12 +36,23 @@ export async function runValidate(args) {
           docsDir,
         )
       : [];
+    const productCitations = options.citations
+      ? await verifyProductCitations({
+          repositoryRoot: workingDirectory,
+          docsDir,
+          productShapeCliPath: runtime.productShapeCliPath,
+        })
+      : undefined;
     const result = {
-      valid: diagnostics.length === 0,
+      valid:
+        diagnostics.length === 0 &&
+        productCitations?.status !== "invalid" &&
+        productCitations?.status !== "unavailable",
       docs: docsDir,
       sections: docs.sections.length,
       title: docs.readme.title,
       diagnostics,
+      ...(productCitations ? { productCitations } : {}),
     };
     printResult(result, options.format);
     return { exitCode: result.valid ? 0 : 1, result };
@@ -68,6 +83,26 @@ function printResult(result, format) {
     for (const diagnostic of result.diagnostics)
       process.stderr.write(`  - ${diagnostic}\n`);
   }
+  if (result.productCitations?.status === "skipped")
+    process.stdout.write(
+      `ProductShape citations skipped: ${result.productCitations.reason}\n`,
+    );
+  else if (result.productCitations?.status === "verified")
+    process.stdout.write(
+      `ProductShape citations verified: ${result.productCitations.summary.total} citation(s)\n`,
+    );
+  else if (result.productCitations) {
+    process.stderr.write(
+      `ProductShape citation verification ${result.productCitations.status}: ${result.productCitations.reason ?? "see diagnostics"}\n`,
+    );
+  }
+  for (const diagnostic of result.productCitations?.diagnostics ?? []) {
+    const write =
+      diagnostic.severity === "warning" ? process.stdout : process.stderr;
+    write.write(
+      `  - ${diagnostic.severity ?? "error"} ${diagnostic.code ?? ""} ${diagnostic.file ?? ""}: ${diagnostic.message ?? JSON.stringify(diagnostic)}\n`,
+    );
+  }
 }
 
 function parseOptions(args) {
@@ -76,6 +111,7 @@ function parseOptions(args) {
     const arg = args[index];
     if (arg === "--help" || arg === "-h") options.help = true;
     else if (arg === "--links") options.links = true;
+    else if (arg === "--citations") options.citations = true;
     else if (arg === "--docs" || arg === "--format") {
       const value = args[index + 1];
       if (!value || value.startsWith("--"))

@@ -32,4 +32,4 @@ When docs already exist, compare each claim against current evidence. Preserve a
 
 ## CLI tools
 
-The CLI owns repeatable operations only: `arcshape init`, `arcshape session ...`, and `arcshape site build`. This skill owns repository interpretation, questions, and proposed documentation. Report when a requested deterministic CLI subcommand is unavailable; do not invent one.
+Use the CLI for repeatable operations: `arcshape init`, `arcshape session ...`, `arcshape validate`, `arcshape sync ...`, and `arcshape site build`. Run `arcshape validate --links --citations` when the repository has a ProductShape model. Citation validation uses the repository's installed `@prodshape/cli`; it reports stale citations as warnings and unresolved citations as errors. Do not rewrite citations automatically. This skill owns repository interpretation, questions, and proposed documentation. Report when a requested deterministic CLI subcommand is unavailable; do not invent one.
