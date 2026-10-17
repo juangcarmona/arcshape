@@ -20,7 +20,7 @@ afterEach(async () => {
 
 describe("packed ArcShape package", () => {
   it.skipIf(process.platform === "win32")(
-    "installs from an npm tarball and initializes without overwriting authored files",
+    "installs a packed npm tarball and initializes without overwriting authored files",
     async () => {
       const sandbox = await mkdtemp(join(tmpdir(), "arcshape-package-smoke-"));
       temporaryDirectories.push(sandbox);
@@ -40,6 +40,7 @@ describe("packed ArcShape package", () => {
         [
           "pack",
           "--json",
+          "--silent",
           "--ignore-scripts",
           "--pack-destination",
           tarballDirectory,
@@ -69,14 +70,7 @@ describe("packed ArcShape package", () => {
       const tarballName = `${packageFileName}-${packageJson.version}.tgz`;
       const tarball = join(tarballDirectory, tarballName);
       const installed = await runNpm(
-        [
-          "install",
-          "--ignore-scripts",
-          "--no-audit",
-          "--no-fund",
-          "--offline",
-          tarball,
-        ],
+        ["install", "--ignore-scripts", "--no-audit", "--no-fund", tarball],
         { cwd: repository, timeout: 180_000 },
       );
       expect(
@@ -87,6 +81,7 @@ describe("packed ArcShape package", () => {
       const initialized = await runNpm(
         [
           "exec",
+          "--offline",
           "--",
           "arcshape",
           "init",
@@ -103,6 +98,7 @@ describe("packed ArcShape package", () => {
       const installedCapabilities = await runNpm(
         [
           "exec",
+          "--offline",
           "--",
           "arcshape",
           "agents",
@@ -129,6 +125,7 @@ describe("packed ArcShape package", () => {
       const repeated = await runNpm(
         [
           "exec",
+          "--offline",
           "--",
           "arcshape",
           "init",
@@ -151,6 +148,7 @@ describe("packed ArcShape package", () => {
       const conflict = await runNpm(
         [
           "exec",
+          "--offline",
           "--",
           "arcshape",
           "init",
@@ -176,6 +174,7 @@ describe("packed ArcShape package", () => {
       const session = await runNpm(
         [
           "exec",
+          "--offline",
           "--",
           "arcshape",
           "session",

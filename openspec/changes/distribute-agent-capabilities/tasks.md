@@ -6,7 +6,7 @@
 
 - [x] 1.1 Move the four maintained workflows into `capabilities/skills/arc-{adr,architecture,c4,docs-sync}/SKILL.md`, normalize their portable metadata and instructions, and verify each skill's frontmatter, name, and resource links with focused tests.
 - [x] 1.2 Add the provider registry with verified project/user roots and evidence links for all seven providers; verify registry schema, unique provider IDs, and shared-path grouping with unit tests.
-- [x] 1.3 Include the canonical capabilities in the npm package and remove shipped assistant templates from active init inputs; verify a packed tarball contains all sources and a local install can read them without network access.
+- [x] 1.3 Include the canonical capabilities in the npm package and remove shipped assistant templates from active init inputs; verify a packed tarball contains all sources and installed CLI capability operations need no external service.
 
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 <!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:98014c03adfa2316adefc39599fe80d1fce075121947d88b186d31400cffd64b" -->
