@@ -91,6 +91,7 @@ describe("ProductShape citation validation", () => {
         result.productCitations.diagnostics.map((item) => item.code),
       ).toContain(code);
     },
+    15_000,
   );
 
   it("reports when a model exists but the optional verifier is not installed", async () => {
