@@ -55,3 +55,7 @@ Initialization does not inspect source code, make architecture claims, contact a
 ### Resume an evidence-analysis session
 
 `arcshape session start` inventories safe regular files and assigns stable evidence IDs. `session next` returns one bounded round at a time, starting with documentation, then repository configuration, then implementation and tests. `status`, `next`, and `report` refresh file hashes to identify additions, modifications, and removals. A `mark` operation records a classification and an optional note; changed evidence requires re-reading and explicit acceptance before it can be classified. Leads and questions are stored as supplied by the human or AI workflow.
+
+### Run risk-based CI assurance
+
+The dedicated assurance workflow runs a Playwright Chromium journey against a temporary initialized repository and generated reader. A separate job builds the reader from the checked-out commit, serves it only on the ephemeral runner, and runs OWASP ZAP Baseline in passive mode. The severity adapter reports all findings and fails for High risk. The weekly and manually dispatched mutation job runs Stryker's Vitest runner against the bounded onboarding and provider-lifecycle modules and retains its report. New assurance check contexts are not required by the `main` ruleset pending maintainer review of measured thresholds and findings.

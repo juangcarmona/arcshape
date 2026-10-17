@@ -44,6 +44,10 @@ Use pinned `@playwright/test` and its supported browser installation. Exercise t
 
 Use pinned StrykerJS with its Vitest runner against a deliberately bounded set of high-risk modules. First run a baseline, retain the report, and record surviving mutants and exclusions. Set per-target thresholds only after reviewing whether surviving mutants expose real test gaps or equivalent/unreachable transformations. Keep mutation execution scheduled/manual until its measured duration supports a safe PR budget; if a targeted PR run is added, explicitly report the selected files and never silently skip an over-budget run.
 
+Pin Vitest to the latest compatible 4.x line while Stryker's released Vitest runner does not correctly select covered tests under Vitest 5. The upstream [Stryker issue #6210](https://github.com/stryker-mutator/stryker-js/issues/6210) documents the zero-tests-per-mutant failure and the 4.x workaround; verify the report's tests-per-mutant metric before accepting any score.
+
+The initial observed baseline on the selected modules is 52.35% total (61.68% of covered mutants), with 787 mutants and a 2m 9s runtime. Set a provisional 45% break floor, a 7.35 percentage-point allowance under baseline; this applies to the scheduled/manual mutation job only and is not a required merge check.
+
 **Alternative considered:** enforce one global score immediately. Rejected because it would make the gate arbitrary, encourage low-value score optimization, and obscure differences between module risk and mutation applicability.
 
 ### Scan only an ephemeral preview with ZAP Baseline
@@ -86,8 +90,6 @@ Update engineering lifecycle, security, and architecture quality/deployment docu
 
 ## Open Questions
 
-- Which mutation targets provide useful signal at an acceptable measured runtime? Resolve from the baseline before setting the final target list.
-- What artifact retention period best balances reviewability and storage? Start with the repository's existing 90-day security-report precedent and adjust from observed use.
-- Is High-only the right ZAP blocking threshold for the synthetic generated site? It remains provisional pending human review of actual baseline findings.
+- Is High-only the right ZAP blocking threshold for the synthetic generated site? It remains provisional pending maintainer review of observed findings and must remain outside required merge checks until accepted.
 
 <!-- pdac:cite id="FR-ONBOARD-REPOSITORY" digest="sha256:ad28a7a6a80b8c334af9daa92a36c929b812c654611bebe10aac9b487072ef98" -->

@@ -8,13 +8,14 @@ description: Known risks, technical debt, and their planned responses.
 
 ## Risks
 
-| Risk                                                                        | Impact                                                          | Response                                                                                    |
-| --------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| A consumer assumes `init` generated architecture facts                      | The empty scaffold could be mistaken for analyzed documentation | Keep setup and AI analysis as separate commands; state that the scaffold is structure only. |
-| Repository evidence varies by language and quality                          | Analysis depth varies across repositories                       | Report coverage and uncertainty without an allowlist or equal-depth promise.                |
-| Documentation sync overwrites authored content                              | Loss of user data                                               | Obsidian and Confluence sync track prior hashes and stop when target content changed.       |
-| Assistant providers handle data under their own policies                    | Maintainer expectations may be wrong                            | Explain provider responsibility before enabling AI workflows.                               |
-| The public reader site can lag canonical Markdown after a failed deployment | Readers may see an older architecture snapshot                  | Monitor the Pages workflow and rerun it from `main` after fixing the failure.               |
+| Risk                                                                        | Impact                                                          | Response                                                                                                                                                              |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A consumer assumes `init` generated architecture facts                      | The empty scaffold could be mistaken for analyzed documentation | Keep setup and AI analysis as separate commands; state that the scaffold is structure only.                                                                           |
+| Repository evidence varies by language and quality                          | Analysis depth varies across repositories                       | Report coverage and uncertainty without an allowlist or equal-depth promise.                                                                                          |
+| Documentation sync overwrites authored content                              | Loss of user data                                               | Obsidian and Confluence sync track prior hashes and stop when target content changed.                                                                                 |
+| Assistant providers handle data under their own policies                    | Maintainer expectations may be wrong                            | Explain provider responsibility before enabling AI workflows.                                                                                                         |
+| The public reader site can lag canonical Markdown after a failed deployment | Readers may see an older architecture snapshot                  | Monitor the Pages workflow and rerun it from `main` after fixing the failure.                                                                                         |
+| Browser, mutation, or passive DAST signals may be slow or noisy             | Maintainers may lose confidence or spend excess CI time         | Keep jobs isolated and bounded, retain reports, document reruns, and keep the new contexts outside required branch protection until evidence and policy are reviewed. |
 
 ## Technical debt
 
