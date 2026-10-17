@@ -34,6 +34,7 @@ describe("packed ArcShape package", () => {
         join(repository, "package.json"),
         JSON.stringify({ name: "consumer-repository", private: true }),
       );
+      await writeFile(join(repository, "README.md"), "# Smoke repository\n");
 
       const packed = await runNpm(
         ["pack", "--pack-destination", tarballDirectory],
@@ -55,7 +56,10 @@ describe("packed ArcShape package", () => {
         ],
         { cwd: repository, timeout: 180_000 },
       );
-      expect(installed.exitCode).toBe(0);
+      expect(
+        installed.exitCode,
+        `${installed.stderr}\n${installed.stdout}`,
+      ).toBe(0);
 
       const initialized = await runNpm(
         ["exec", "--", "arcshape", "init", "--target", repository],
@@ -95,6 +99,38 @@ describe("packed ArcShape package", () => {
         "file already exists with different content",
       );
       expect(await readFile(architectureReadme, "utf8")).toBe(authored);
+
+      await writeFile(join(repository, ".gitignore"), "services/web/dist/\n");
+      await mkdir(join(repository, "services/web/dist"), { recursive: true });
+      await writeFile(
+        join(repository, "services/web/dist/bundle.js"),
+        "generated bundle\n",
+      );
+      const session = await runNpm(
+        [
+          "exec",
+          "--",
+          "arcshape",
+          "session",
+          "start",
+          "--id",
+          "packed-ignore",
+          "--target",
+          repository,
+        ],
+        { cwd: repository, timeout: 30_000 },
+      );
+      expect(session.exitCode).toBe(0);
+      const sessionState = JSON.parse(
+        await readFile(
+          join(repository, ".arcshape/sessions/packed-ignore/session.json"),
+          "utf8",
+        ),
+      );
+      const inventoriedPaths = sessionState.evidence.map((item) => item.path);
+      expect(inventoriedPaths).toContain(".gitignore");
+      expect(inventoriedPaths).toContain("README.md");
+      expect(inventoriedPaths).not.toContain("services/web/dist/bundle.js");
     },
     240_000,
   );
