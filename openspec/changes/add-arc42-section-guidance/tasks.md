@@ -44,7 +44,7 @@
 
 ## 6. Verify product and delivery consistency
 
-- [ ] 6.1 Run the complete product-model, OpenSpec, citation, format, lint, typecheck, unit, build, packed-package, and security checks on the final implementation head; record results and resolve diagnostics.
+- [x] 6.1 Run the complete product-model, OpenSpec, citation, format, lint, typecheck, unit, build, packed-package, and security checks on the final implementation head; record results and resolve diagnostics.
 - [x] 6.2 Sync the updated guidance requirements to the main OpenSpec spec and verify current ProductShape citations with no stale, tampered, unresolved, or unclassified documents.
 - [x] 6.3 Capture current runtime evidence for installing and using the expanded library without bundled image binaries, confirm upstream image links and the ADR template install for Codex and Claude, and verify the ADR workflow examples; retain the evidence in a reviewer-accessible repository path.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
