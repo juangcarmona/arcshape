@@ -286,7 +286,16 @@ describe("agent CLI dry run", () => {
       },
     });
     const result = await runAgents(
-      ["install", "--target", target, "--providers", "codex", "--yes"],
+      [
+        "install",
+        "--target",
+        target,
+        "--providers",
+        "codex",
+        "--capabilities",
+        "arc-adr",
+        "--yes",
+      ],
       { packageRoot, output },
     );
     expect(result.exitCode).toBe(1);
