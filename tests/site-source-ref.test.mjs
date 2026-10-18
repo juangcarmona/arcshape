@@ -19,7 +19,7 @@ it("uses the requested source ref for repository links in the reader site", asyn
   const result = spawnSync(
     process.execPath,
     [
-      "bin/arcshape.mjs",
+      "packages/cli/src/bin/arcshape.mjs",
       "site",
       "build",
       "--out",

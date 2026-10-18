@@ -12,20 +12,24 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import { detectProviders } from "../bin/agents/detect.mjs";
+import { detectProviders } from "../packages/cli/src/bin/agents/detect.mjs";
 import {
   applyPlan,
   makePlan,
   knownCapabilities,
-} from "../bin/agents/lifecycle.mjs";
-import { loadRegistry } from "../bin/agents/registry.mjs";
+} from "../packages/cli/src/bin/agents/lifecycle.mjs";
+import { loadRegistry } from "../packages/cli/src/bin/agents/registry.mjs";
 import {
   confirmPlan,
   promptInitSelection,
   runAgents,
-} from "../bin/agents/commands.mjs";
+} from "../packages/cli/src/bin/agents/commands.mjs";
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const packageRoot = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../packages/cli",
+);
+const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const targets = [];
 
 afterEach(async () => {
@@ -41,7 +45,7 @@ describe("portable agent capability package", () => {
     const names = [];
     for (const capability of knownCapabilities) {
       const skill = await readFile(
-        join(packageRoot, "capabilities", "skills", capability, "SKILL.md"),
+        join(packageRoot, "assets/capabilities/skills", capability, "SKILL.md"),
         "utf8",
       );
       const [, name] = skill.match(/^name: ([a-z0-9-]+)$/m) ?? [];
@@ -399,7 +403,7 @@ describe("managed capability lifecycle", () => {
     const target = await makeTarget();
     const fakePackage = await makeTarget();
     const registry = await loadRegistry(packageRoot);
-    await mkdir(join(fakePackage, "capabilities", "skills"), {
+    await mkdir(join(fakePackage, "assets/capabilities/skills"), {
       recursive: true,
     });
     await writeFile(
@@ -408,8 +412,8 @@ describe("managed capability lifecycle", () => {
     );
     const { symlink } = await import("node:fs/promises");
     await symlink(
-      join(packageRoot, "capabilities", "skills", "arc-architecture"),
-      join(fakePackage, "capabilities", "skills", "arc-architecture"),
+      join(packageRoot, "assets/capabilities/skills/arc-architecture"),
+      join(fakePackage, "assets/capabilities/skills/arc-architecture"),
       "dir",
     );
 
@@ -432,6 +436,7 @@ describe("managed capability lifecycle", () => {
     const registry = await loadRegistry(packageRoot);
     const skillRoot = join(
       fakePackage,
+      "assets",
       "capabilities",
       "skills",
       "arc-architecture",
@@ -607,7 +612,7 @@ describe("managed capability lifecycle", () => {
     );
     await mkdir(dirname(legacyPath), { recursive: true });
     const legacyContent = await readFile(
-      join(packageRoot, "tests/fixtures/legacy-v0.1.1/arcshape-adr.md"),
+      join(repositoryRoot, "tests/fixtures/legacy-v0.1.1/arcshape-adr.md"),
     );
     await writeFile(legacyPath, legacyContent);
     const editedLegacyPath = join(

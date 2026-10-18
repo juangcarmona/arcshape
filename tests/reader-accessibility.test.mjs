@@ -4,8 +4,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import puppeteer from "puppeteer";
-import { getPuppeteerLaunchOptions } from "../tools/arc42-site/browser-options.mjs";
-import { buildSnapshotHtml } from "../tools/arc42-site/shell.mjs";
+import { getPuppeteerLaunchOptions } from "../packages/cli/src/arc42-site/browser-options.mjs";
+import { buildSnapshotHtml } from "../packages/cli/src/arc42-site/shell.mjs";
 
 let browser;
 let readerHtml;
@@ -17,7 +17,7 @@ beforeAll(async () => {
   const generated = spawnSync(
     process.execPath,
     [
-      "bin/arcshape.mjs",
+      "packages/cli/src/bin/arcshape.mjs",
       "site",
       "build",
       "--out",

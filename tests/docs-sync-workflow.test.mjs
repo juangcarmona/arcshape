@@ -8,7 +8,10 @@ const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 describe("documentation sync capability", () => {
   it("keeps the workflow provider-neutral and documents native CLI commands", async () => {
     const skill = await readFile(
-      join(packageRoot, "capabilities/skills/arc-docs-sync/SKILL.md"),
+      join(
+        packageRoot,
+        "packages/cli/assets/capabilities/skills/arc-docs-sync/SKILL.md",
+      ),
       "utf8",
     );
 

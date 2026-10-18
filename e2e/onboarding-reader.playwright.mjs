@@ -96,7 +96,10 @@ test("detects a broken generated reader route", async ({ page }) => {
 async function runCli(args) {
   await execFile(
     process.execPath,
-    [join(repositoryRoot, "bin", "arcshape.mjs"), ...args],
+    [
+      join(repositoryRoot, "packages", "cli", "src", "bin", "arcshape.mjs"),
+      ...args,
+    ],
     {
       cwd: target,
       timeout: 60_000,

@@ -21,7 +21,7 @@ export async function runSite(args, { packageRoot }) {
     process.cwd(),
     options.out ?? "docs/architecture-site/index.html",
   );
-  const generator = join(packageRoot, "tools", "arc42-site", "generate.mjs");
+  const generator = join(packageRoot, "src", "arc42-site", "generate.mjs");
   const argv = [generator, docsDir, "--out", outFile];
   if (options.title) argv.push("--title", options.title);
   if (options.sourceRef) argv.push("--source-ref", options.sourceRef);

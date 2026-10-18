@@ -1,6 +1,6 @@
 # System context example
 
-Evidence: `package.json` exposes the `arcshape` executable as `bin/arcshape.mjs`. `README.md` documents installing the package in a project repository and invoking `npx arcshape init`. The CLI reads and writes files in the selected repository, including `docs/architecture/` and `.arcshape/sessions/`. `bin/confluence.mjs` implements explicit publication of selected Markdown to Confluence Cloud.
+Evidence: `packages/cli/package.json` exposes the `arcshape` executable as `src/bin/arcshape.mjs`. `README.md` documents installing the package in a project repository and invoking `npx arcshape init`. The CLI reads and writes files in the selected repository, including `docs/architecture/` and `.arcshape/sessions/`. `packages/cli/src/bin/confluence.mjs` implements explicit publication of selected Markdown to Confluence Cloud.
 
 Publication is always explicit and uses a maintainer-selected destination.
 

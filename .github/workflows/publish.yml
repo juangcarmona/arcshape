@@ -81,6 +81,7 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: node scripts/upload-release-sbom.mjs "$RUNNER_TEMP/arcshape-sbom" "$RELEASE_TAG"
       - run: npm publish --provenance --access public
+        working-directory: packages/cli
       - name: Verify published registry version
         env:
           PACKAGE_VERSION: ${{ github.event.release.tag_name }}

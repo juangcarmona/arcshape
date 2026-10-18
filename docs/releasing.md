@@ -5,9 +5,9 @@
 The first publication is a one-time maintainer action after the implementation is merged and the package name is confirmed available. This repository publishes the public organization-scoped package `@arcshape/cli`; its executable remains `arcshape`. The npm organization owns the scope, while this GitHub repository remains `juangcarmona/arcshape`.
 
 1. Confirm `@arcshape/cli` is still unclaimed with `npm view @arcshape/cli version` and verify the publishing account has access to the npm `arcshape` organization.
-2. Review the package metadata and file list with `npm pack --dry-run`.
+2. Review the package metadata and file list with `npm pack --dry-run ./packages/cli`.
 3. From a clean checkout of the reviewed commit, install the tarball in a temporary project and run `arcshape --version`, `arcshape init`, `arcshape validate --links`, and `arcshape site build`.
-4. From the merged commit, confirm Node.js 24 and npm access, then publish once with `npm publish --access public`. Do not create a GitHub Release for this manual first publication; later releases trigger the automated publish workflow. Do not commit credentials or add a long-lived npm token to GitHub.
+4. From the merged commit, confirm Node.js 24 and npm access, then publish once from `packages/cli/` with `npm publish --access public`. Do not create a GitHub Release for this manual first publication; later releases trigger the automated publish workflow. Do not commit credentials or add a long-lived npm token to GitHub.
 5. Verify `npm view @arcshape/cli version` reports the expected version and inspect the package page.
 
 ## Trusted publishing for later releases
@@ -16,7 +16,7 @@ After the first package exists on npm:
 
 1. Configure an [npm Trusted Publisher](https://docs.npmjs.com/trusted-publishers) with GitHub Actions, user or organization `juangcarmona`, repository `arcshape`, workflow filename `publish.yml` (enter the filename only), and environment `npm-publish`. Allow direct `npm publish`, which is the command used by this workflow.
 2. Configure the GitHub `npm-publish` environment with a required human reviewer. Allow release tags matching `v*`; the workflow also verifies each tagged commit is already an ancestor of `origin/main`.
-3. Prepare and merge a reviewed version change. Create a matching `v<package.json version>` tag and GitHub Release.
+3. Prepare and merge a reviewed version change in `packages/cli/package.json`. Create a matching `v<package version>` tag and GitHub Release.
 4. Publish the GitHub Release. The workflow verifies the package, waits for approval at `npm-publish`, publishes with GitHub OIDC and provenance, and checks the registry version afterward.
 
 The environment currently names the repository owner as its only required reviewer, so self-review prevention is disabled to keep releases possible. To enforce separation of duties, add a second trusted reviewer before enabling self-review prevention. A newly created npm Trusted Publisher configuration must complete its first successful publish within two days. ArcShape validated its configuration with the `v0.1.1` release on 2026-10-17; if the configuration is ever recreated, schedule that setup with the next tagged release ready to run.

@@ -8,7 +8,7 @@ const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = join(packageRoot, "examples", "arc42-workflow");
 const guidanceRoot = join(
   packageRoot,
-  "capabilities",
+  "packages/cli/assets/capabilities",
   "skills",
   "arc-architecture",
   "references",
@@ -96,7 +96,7 @@ describe("arc42 authoring examples", () => {
 
   it("keeps the architecture workflow aligned with the examples", async () => {
     const skill = await read(
-      "../../capabilities/skills/arc-architecture/SKILL.md",
+      "../../packages/cli/assets/capabilities/skills/arc-architecture/SKILL.md",
     );
     const guide = await read("README.md");
     expect(guide).toContain("different implementation languages");
@@ -113,7 +113,7 @@ describe("arc42 authoring examples", () => {
     const index = await readGuidance("README.md");
     const sourceRegister = await readGuidance("SOURCES.md");
     const skill = await read(
-      "../../capabilities/skills/arc-architecture/SKILL.md",
+      "../../packages/cli/assets/capabilities/skills/arc-architecture/SKILL.md",
     );
     const localSkill = await read(
       "../../.agents/skills/arcshape-architecture/SKILL.md",
@@ -124,12 +124,12 @@ describe("arc42 authoring examples", () => {
     expect(sourceRegister).toContain("CC BY-SA 4.0");
     await expectGuidanceLink("README.md", "SOURCES.md");
     await expectSourceLink(
-      "../../capabilities/skills/arc-architecture/SKILL.md",
+      "../../packages/cli/assets/capabilities/skills/arc-architecture/SKILL.md",
       "references/arc42/README.md",
     );
     await expectSourceLink(
       "../../.agents/skills/arcshape-architecture/SKILL.md",
-      "../../../capabilities/skills/arc-architecture/references/arc42/README.md",
+      "../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/README.md",
     );
 
     for (const [number, slug] of sectionGuidance) {
@@ -148,7 +148,7 @@ describe("arc42 authoring examples", () => {
     }
     expect(skill).toContain("references/arc42/README.md");
     expect(localSkill).toContain(
-      "../../../capabilities/skills/arc-architecture/references/arc42/README.md",
+      "../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/README.md",
     );
   });
 
@@ -230,7 +230,7 @@ describe("arc42 authoring examples", () => {
     );
     await expectSourceLink(
       "guidance-selection/single-section.md",
-      "../../../capabilities/skills/arc-architecture/references/arc42/02-constraints/README.md",
+      "../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/02-constraints/README.md",
     );
     for (const reference of [
       "02-constraints/tips/tip-2-2-clarify-the-consequences-of-constraints.md",
@@ -239,7 +239,7 @@ describe("arc42 authoring examples", () => {
       expect(single).toContain(reference.split("/").at(-1));
       await expectSourceLink(
         "guidance-selection/single-section.md",
-        `../../../capabilities/skills/arc-architecture/references/arc42/${reference}`,
+        `../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/${reference}`,
       );
     }
 
@@ -252,7 +252,7 @@ describe("arc42 authoring examples", () => {
       expect(crossSection).toContain(`${section}/README.md`);
       await expectSourceLink(
         "guidance-selection/cross-section.md",
-        `../../../capabilities/skills/arc-architecture/references/arc42/${section}/README.md`,
+        `../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/${section}/README.md`,
       );
     }
     expect(crossSection).toContain("the other nine section references");
@@ -265,7 +265,7 @@ describe("arc42 authoring examples", () => {
       expect(crossSection).toContain(reference.split("/").at(-1));
       await expectSourceLink(
         "guidance-selection/cross-section.md",
-        `../../../capabilities/skills/arc-architecture/references/arc42/${reference}`,
+        `../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/${reference}`,
       );
     }
     expect(crossSection).toContain("ask the maintainer");

@@ -1,6 +1,6 @@
 import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { dirname, join, posix } from "node:path";
+import { join, posix } from "node:path";
 import { relative, resolve, sep } from "node:path";
 import { existsSync, statSync } from "node:fs";
 import { Marked } from "marked";
@@ -311,7 +311,7 @@ function createMarked(
           return `<a href="${escapeHtml(sourceLink)}"${titleAttribute} rel="noopener noreferrer">${text}</a>`;
         return `<span class="xref-dead">${text} <code>${escapeHtml(target)}</code></span>`;
       },
-      image({ href, title, text }) {
+      image({ href, text }) {
         // No images are carried in the single file; name them honestly.
         return `<span class="xref-dead">[image: ${escapeHtml(String(text ?? ""))}] <code>${escapeHtml(String(href ?? ""))}</code></span>`;
       },

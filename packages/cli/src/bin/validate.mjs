@@ -1,5 +1,5 @@
 import { isAbsolute, relative, resolve, sep } from "node:path";
-import { loadDocs } from "../tools/arc42-site/loadDocs.mjs";
+import { loadDocs } from "../arc42-site/loadDocs.mjs";
 import { verifyProductCitations } from "./product-citations.mjs";
 import { validateMarkdownLinks } from "./validate-links.mjs";
 

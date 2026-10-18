@@ -54,7 +54,7 @@ jobs:
           PREVIEW_DIR: ${{ runner.temp }}/arcshape-preview
         run: |
           mkdir -p "$PREVIEW_DIR"
-          node bin/arcshape.mjs site build --out "$PREVIEW_DIR/index.html" --source-ref "$GITHUB_SHA"
+          node packages/cli/src/bin/arcshape.mjs site build --out "$PREVIEW_DIR/index.html" --source-ref "$GITHUB_SHA"
       - name: Verify the severity policy rejects a synthetic High finding
         run: node scripts/check-zap-report.mjs --self-test
       - name: Serve the same-run preview on loopback

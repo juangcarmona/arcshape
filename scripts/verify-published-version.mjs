@@ -5,7 +5,10 @@ import { promisify } from "node:util";
 
 const run = promisify(execFile);
 const { name: packageName } = JSON.parse(
-  await readFile(new URL("../package.json", import.meta.url), "utf8"),
+  await readFile(
+    new URL("../packages/cli/package.json", import.meta.url),
+    "utf8",
+  ),
 );
 if (!packageName) throw new Error("package.json must define a package name");
 

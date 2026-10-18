@@ -13,7 +13,7 @@ import { lstat, readdir } from "node:fs/promises";
 import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
 import { marked, Renderer } from "marked";
-import { loadDocs } from "../tools/arc42-site/loadDocs.mjs";
+import { loadDocs } from "../arc42-site/loadDocs.mjs";
 
 const DOMPurify = createDOMPurify(new JSDOM("").window);
 

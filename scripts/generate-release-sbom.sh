@@ -7,8 +7,8 @@ temporary_dir=$(mktemp -d "${TMPDIR:-/tmp}/arcshape-release-sbom.XXXXXX")
 trap 'rm -rf "$temporary_dir"' EXIT
 
 test "$(npm --version)" = "10.9.9"
-version=$(node -p "JSON.parse(require('node:fs').readFileSync('package.json', 'utf8')).version")
-metadata=$(npm pack --json --pack-destination "$temporary_dir")
+version=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version")
+metadata=$(npm pack ./packages/cli --json --pack-destination "$temporary_dir")
 tarball_name=$(node -e 'const fs=require("node:fs");const input=fs.readFileSync(0,"utf8");process.stdout.write(JSON.parse(input)[0].filename)' <<<"$metadata")
 tarball="$temporary_dir/$tarball_name"
 consumer_dir="$temporary_dir/consumer"
