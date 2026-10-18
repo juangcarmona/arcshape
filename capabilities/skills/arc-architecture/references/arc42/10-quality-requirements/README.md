@@ -1,3 +1,13 @@
+---
+kind: section
+title: "quality requirements"
+section: "10"
+source_url: https://docs.arc42.org/section-10/
+source_author: "Dr. Gernot Starke"
+license: "CC BY-SA 4.0"
+source_revision: 3cb35782b62d0cd4103aedcc75fc4ba748f043ad
+---
+
 # 10. Quality Requirements
 
 **Purpose.** Describe architecture-influencing quality requirements using concrete, assessable scenarios or measures, linking to canonical requirements where available.
@@ -41,3 +51,20 @@ Use these as investigation leads, not automatic proof. Prefer current implementa
   - [Tip 10-8](https://docs.arc42.org/tips/10-8/)
 
 Creator and license: Gernot Starke, CC BY-SA 4.0. See [SOURCES.md](../SOURCES.md) for attribution and licensing scope.
+## Practical tips
+
+- [Tip 10-1: Keep the quality goals in arc42-section 1.2 short!](./tips/tip-10-1-keep-the-quality-goals-in-arc42-section-1-2-short.md)
+- [Tip 10-2: Document and explain the specific quality tree! (deprecated!)](./tips/tip-10-2-document-and-explain-the-specific-quality-tree-deprecated.md)
+- [Tip 10-3: Use a mind-map as quality tree!](./tips/tip-10-3-use-a-mind-map-as-quality-tree.md)
+- [Tip 10-4: Use the quality tree as checklist!](./tips/tip-10-4-use-the-quality-tree-as-checklist.md)
+- [Tip 10-5: Consider usage or application (quality) scenarios!](./tips/tip-10-5-consider-usage-or-application-quality-scenarios.md)
+- [Tip 10-6: Consider change (quality) scenarios!!](./tips/tip-10-6-consider-change-quality-scenarios.md)
+- [Tip 10-7: Consider fault/error/failure (quality) scenarios!!](./tips/tip-10-7-consider-fault-error-failure-quality-scenarios.md)
+- [Tip 10-8: Use (quality) scenarios for architecture analysis or evaluation!](./tips/tip-10-8-use-quality-scenarios-for-architecture-analysis-or-evaluation.md)
+
+## Worked examples
+
+- [Example Quality Scenarios: HTML Sanity Checker](./examples/example-quality-htmlsc-2.md)
+- [Example Quality Scenarios: TrafficPursuitUnit](./examples/example-quality-tpu-1.md)
+
+See the [source register](../SOURCES.md) for attribution and licensing.

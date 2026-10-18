@@ -1,3 +1,13 @@
+---
+kind: section
+title: "glossary"
+section: "12"
+source_url: https://docs.arc42.org/section-12/
+source_author: "Dr. Gernot Starke"
+license: "CC BY-SA 4.0"
+source_revision: 3cb35782b62d0cd4103aedcc75fc4ba748f043ad
+---
+
 # 12. Glossary
 
 **Purpose.** Define domain and technical terms stakeholders use so architecture discussions have consistent meanings and avoid ambiguous synonyms or homonyms.
@@ -37,3 +47,17 @@ Use these as investigation leads, not automatic proof. Prefer current implementa
   - [Tip 12-5](https://docs.arc42.org/tips/12-5/)
 
 Creator and license: Gernot Starke, CC BY-SA 4.0. See [SOURCES.md](../SOURCES.md) for attribution and licensing scope.
+## Practical tips
+
+- [Tip 12-1: Take the glossary seriously!](./tips/tip-12-1-take-the-glossary-seriously.md)
+- [Tip 12-2: Document the glossary as a table!](./tips/tip-12-2-document-the-glossary-as-a-table.md)
+- [Tip 12-3: Amend the glossary by a (graphical) model!](./tips/tip-12-3-amend-the-glossary-by-a-graphical-model.md)
+- [Tip 12-4: Include translations in the glossary!](./tips/tip-12-4-include-translations-in-the-glossary.md)
+- [Tip 12-5: Keep the glossary compact! Avoid trivia.](./tips/tip-12-5-keep-the-glossary-compact-avoid-trivia.md)
+- [Tip 12-6: Make your 'product owner' or 'project manager' responsible for the glossary](./tips/tip-12-6-make-your-product-owner-or-project-manager-responsible-for-the-glossary.md)
+
+## Worked examples
+
+- [Example Glossary: HTML Sanity Checker (Tabular)](./examples/example-glossary-1.md)
+
+See the [source register](../SOURCES.md) for attribution and licensing.

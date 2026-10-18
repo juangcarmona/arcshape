@@ -1,3 +1,13 @@
+---
+kind: section
+title: "constraints"
+section: "02"
+source_url: https://docs.arc42.org/section-2/
+source_author: "Dr. Gernot Starke"
+license: "CC BY-SA 4.0"
+source_revision: 3cb35782b62d0cd4103aedcc75fc4ba748f043ad
+---
+
 # 2. Constraints
 
 **Purpose.** Make constraints on architecture, implementation, and development visible, including rules that may be negotiable but still need explicit resolution.
@@ -36,3 +46,16 @@ Use these as investigation leads, not automatic proof. Prefer current implementa
   - [Tip 2-5](https://docs.arc42.org/tips/2-5/)
 
 Creator and license: Gernot Starke, CC BY-SA 4.0. See [SOURCES.md](../SOURCES.md) for attribution and licensing scope.
+## Practical tips
+
+- [Tip 2-1: Consider the constraints of other systems within the organization!](./tips/tip-2-1-consider-the-constraints-of-other-systems-within-the-organization.md)
+- [Tip 2-2: Clarify the consequences of constraints!](./tips/tip-2-2-clarify-the-consequences-of-constraints.md)
+- [Tip 2-3: Document organizational constraints!](./tips/tip-2-3-document-organizational-constraints.md)
+- [Tip 2-4: Document design and development constraints!](./tips/tip-2-4-document-design-and-development-constraints.md)
+- [Tip 2-5: Differentiate different categories of constraints!](./tips/tip-2-5-differentiate-different-categories-of-constraints.md)
+
+## Worked examples
+
+- [Example Constraints: HTML Sanity Checker](./examples/example-constraints-1.md)
+
+See the [source register](../SOURCES.md) for attribution and licensing.

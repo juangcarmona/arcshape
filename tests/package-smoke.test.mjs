@@ -69,6 +69,25 @@ describe("packed ArcShape package", () => {
           path.startsWith("templates/assistants/"),
         ),
       ).toBe(false);
+      expect(
+        packageFileList.filter((path) =>
+          /references\/arc42\/\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path),
+        ),
+      ).toHaveLength(145);
+      expect(
+        packageFileList.filter((path) =>
+          /references\/arc42\/\d{2}-[^/]+\/examples\/example-[^/]+\.md$/.test(
+            path,
+          ),
+        ),
+      ).toHaveLength(35);
+      expect(
+        packageFileList.filter((path) =>
+          path.startsWith(
+            "capabilities/skills/arc-architecture/references/arc42/assets/images/",
+          ),
+        ),
+      ).toHaveLength(98);
       const packageJson = JSON.parse(
         await readFile(join(packageRoot, "package.json"), "utf8"),
       );
@@ -144,6 +163,32 @@ describe("packed ArcShape package", () => {
           "utf8",
         ),
       ).resolves.toContain("# 12. Glossary");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".agents/skills/arc-architecture/references/arc42/01-introduction-and-goals/tips/tip-1-1-give-a-compact-summary-of-requirements-and-driving-forces.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("source_revision:");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".claude/skills/arc-architecture/references/arc42/01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("Illustrative example");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".agents/skills/arc-architecture/references/arc42/assets/images/examples/htmlsc/1-1-overview.png",
+          ),
+        ),
+      ).resolves.toBeInstanceOf(Buffer);
       await expect(
         readFile(join(repository, ".claude/skills/arc-c4/SKILL.md"), "utf8"),
       ).resolves.toContain("name: arc-c4");

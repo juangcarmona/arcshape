@@ -1,3 +1,13 @@
+---
+kind: section
+title: "risks and technical debt"
+section: "11"
+source_url: https://docs.arc42.org/section-11/
+source_author: "Dr. Gernot Starke"
+license: "CC BY-SA 4.0"
+source_revision: 3cb35782b62d0cd4103aedcc75fc4ba748f043ad
+---
+
 # 11. Risks and Technical Debt
 
 **Purpose.** Make known architecture risks and technical debt visible, prioritized, and actionable without presenting speculative concerns as confirmed defects.
@@ -38,3 +48,18 @@ Use these as investigation leads, not automatic proof. Prefer current implementa
   - [Tip 11-6](https://docs.arc42.org/tips/11-6/)
 
 Creator and license: Gernot Starke, CC BY-SA 4.0. See [SOURCES.md](../SOURCES.md) for attribution and licensing scope.
+## Practical tips
+
+- [Tip 11-1: Search for problems and risks with different stakeholders!](./tips/tip-11-1-search-for-problems-and-risks-with-different-stakeholders.md)
+- [Tip 11-2: Analyze (external) interfaces for problems and risks!](./tips/tip-11-2-analyze-external-interfaces-for-problems-and-risks.md)
+- [Tip 11-3: Identify problems or risks by qualitative evaluation!](./tips/tip-11-3-identify-problems-or-risks-by-qualitative-evaluation.md)
+- [Tip 11-4: Analyze _processes_ for problems and risks!](./tips/tip-11-4-analyze-processes-for-problems-and-risks.md)
+- [Tip 11-5: Analyze data or data structures for problems and risks!](./tips/tip-11-5-analyze-data-or-data-structures-for-problems-and-risks.md)
+- [Tip 11-6: Analyze source-code for problems and risks!](./tips/tip-11-6-analyze-source-code-for-problems-and-risks.md)
+
+## Worked examples
+
+- [Example Risk: HTML Sanity Checker](./examples/example-risk-htmlsc-1.md)
+- [Example Risk: TrafficPursuitUnit](./examples/example-risk-tpu-1.md)
+
+See the [source register](../SOURCES.md) for attribution and licensing.

@@ -18,7 +18,7 @@ Use this skill to understand a repository and propose accurate architecture docu
 
 ## Section-specific arc42 guidance
 
-Use the [arc42 guidance index](references/arc42/README.md) to select detailed references for the current task. Read only the relevant section `README.md` files and any linked topic documents that answer a concrete question. A task affecting several sections may read several references; do not load every section by default. Projects may omit, combine, or adapt sections, so preserve the project's existing structure.
+Use the [arc42 guidance index](references/arc42/README.md) to select detailed references for the current task. Read only the relevant section `README.md` files, then use their titles and frontmatter tags to choose only the tip/example documents that answer a concrete question. Tip and example files preserve complete licensed source pages; do not load every file or every section by default. A task affecting several sections may read several references. Projects may omit, combine, or adapt sections, so preserve the project's existing structure.
 
 Each section reference provides its purpose, relevant subsections, evidence to inspect, handling for gaps and conflicts, practical guidance, and source links. Treat arc42 guidance as a framework for analysis, not evidence about the target system. Keep observations separate from maintainer intent, inference, and proposals. The [source register](references/arc42/SOURCES.md) records creator attribution and the CC BY-SA 4.0 scope for arc42-derived reference content.
 
