@@ -4,9 +4,12 @@ import { dirname, join, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Readable, Writable } from "node:stream";
 import { afterEach, describe, expect, it } from "vitest";
-import { runInit } from "../bin/init.mjs";
+import { runInit } from "../packages/cli/src/bin/init.mjs";
 
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const packageRoot = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../packages/cli",
+);
 const temporaryDirectories = [];
 
 afterEach(async () => {
@@ -20,7 +23,7 @@ afterEach(async () => {
 describe("arcshape init", () => {
   it("keeps provider-neutral capabilities in a separate package directory", async () => {
     const capabilities = await listPaths(
-      join(packageRoot, "capabilities", "skills"),
+      join(packageRoot, "assets/capabilities/skills"),
     );
     const paths = capabilities.map(normalizePath).sort();
     expect(paths.filter((path) => path.endsWith("/SKILL.md"))).toEqual([
@@ -46,15 +49,16 @@ describe("arcshape init", () => {
         path.startsWith("arc-architecture/references/arc42/assets/images/"),
       ),
     ).toHaveLength(0);
-    expect(await readdir(join(packageRoot, "templates"))).toEqual([
+    expect(await readdir(join(packageRoot, "assets"))).toEqual([
       "architecture",
+      "capabilities",
     ]);
   });
 
   it("installs architecture files in explicit CLI-only mode and is repeatable", async () => {
     const target = await makeTarget();
     const expected = (
-      await listPaths(join(packageRoot, "templates", "architecture"))
+      await listPaths(join(packageRoot, "assets", "architecture"))
     )
       .map((path) => `docs/architecture/${path}`.replaceAll(sep, "/"))
       .sort();

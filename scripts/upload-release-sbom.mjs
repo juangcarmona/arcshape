@@ -43,7 +43,9 @@ async function main() {
       "Usage: node scripts/upload-release-sbom.mjs <sbom-directory> <release-tag> [--dry-run]",
     );
   }
-  const packageJson = JSON.parse(await readFile("package.json", "utf8"));
+  const packageJson = JSON.parse(
+    await readFile("packages/cli/package.json", "utf8"),
+  );
   const release = await resolveReleaseSbom(directory, releaseTag, packageJson);
   const args = [
     "release",

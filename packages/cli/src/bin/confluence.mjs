@@ -4,7 +4,7 @@ import { dirname, join } from "node:path";
 import { JSDOM } from "jsdom";
 import createDOMPurify from "dompurify";
 import { marked } from "marked";
-import { loadDocs } from "../tools/arc42-site/loadDocs.mjs";
+import { loadDocs } from "../arc42-site/loadDocs.mjs";
 
 const window = new JSDOM("").window;
 const DOMPurify = createDOMPurify(window);

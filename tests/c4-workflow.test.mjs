@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   extractMermaidSources,
   renderMermaid,
-} from "../tools/arc42-site/render.mjs";
+} from "../packages/cli/src/arc42-site/render.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const examplesRoot = join(packageRoot, "examples", "c4-workflow");
@@ -26,13 +26,15 @@ describe("C4 workflow examples", () => {
     expect(context).toContain("System(arcshape");
     expect(context).toContain("System_Ext(repository");
 
-    expect(containersMarkdown).toContain("bin/arcshape.mjs");
-    expect(containersMarkdown).toContain("`capabilities/skills/`");
+    expect(containersMarkdown).toContain("packages/cli/src/bin/arcshape.mjs");
+    expect(containersMarkdown).toContain(
+      "`packages/cli/assets/capabilities/skills/`",
+    );
     expect(containers).toContain("System_Boundary(repository");
     expect(containers).toContain('Container(cli, "ArcShape CLI"');
     expect(containers).toContain('Container(skills, "ArcShape skills"');
 
-    expect(changedEvidence).toContain("bin/confluence.mjs");
+    expect(changedEvidence).toContain("packages/cli/src/bin/confluence.mjs");
     expect(changedEvidence).toContain("Preserve the unrelated");
     expect(updatedContext).toContain(
       "Publication is always explicit and uses a maintainer-selected destination.",
@@ -59,7 +61,10 @@ describe("C4 workflow examples", () => {
 
   it("ships the portable C4 capability with evidence and rendering rules", async () => {
     const skill = await readFile(
-      join(packageRoot, "capabilities/skills/arc-c4/SKILL.md"),
+      join(
+        packageRoot,
+        "packages/cli/assets/capabilities/skills/arc-c4/SKILL.md",
+      ),
       "utf8",
     );
     for (const rule of [

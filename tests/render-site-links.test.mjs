@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { renderMarkdown } from "../tools/arc42-site/render.mjs";
+import { renderMarkdown } from "../packages/cli/src/arc42-site/render.mjs";
 
 describe("reader site source links", () => {
   it("rewrites repository file and directory references to GitHub", async () => {
     const result = await renderMarkdown(
-      "[CLI](../../bin/arcshape.mjs) [product model](../product/model/)",
+      "[CLI](../../packages/cli/src/bin/arcshape.mjs) [product model](../product/model/)",
       {
         fileToRoute: new Map(),
         sourceContext: {
@@ -17,7 +17,7 @@ describe("reader site source links", () => {
     );
 
     expect(result.html).toContain(
-      "https://github.com/example/arcshape/blob/codex%2Ffeature/bin/arcshape.mjs",
+      "https://github.com/example/arcshape/blob/codex%2Ffeature/packages/cli/src/bin/arcshape.mjs",
     );
     expect(result.html).toContain(
       "https://github.com/example/arcshape/tree/codex%2Ffeature/docs/product/model",

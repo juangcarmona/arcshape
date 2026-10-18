@@ -86,6 +86,7 @@ export async function makePlan({
       for (const capability of selectedCapabilities) {
         const sourceRoot = join(
           packageRoot,
+          "assets",
           "capabilities",
           "skills",
           capability,
@@ -173,7 +174,7 @@ export async function makePlan({
   if (includeLegacy && operation !== "list") {
     const legacy = JSON.parse(
       await readFile(
-        join(packageRoot, "capabilities", LEGACY_FILENAME),
+        join(packageRoot, "assets", "capabilities", LEGACY_FILENAME),
         "utf8",
       ),
     );

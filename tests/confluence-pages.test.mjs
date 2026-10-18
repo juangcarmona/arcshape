@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { syncConfluencePages } from "../bin/confluence-pages.mjs";
+import { syncConfluencePages } from "../packages/cli/src/bin/confluence-pages.mjs";
 
 const originalCwd = process.cwd();
 const originalEmail = process.env.CONFLUENCE_EMAIL;

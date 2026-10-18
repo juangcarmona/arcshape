@@ -33,7 +33,7 @@ export async function runInit(
     output,
   });
   const architectureFiles = await collectFiles(
-    join(packageRoot, "templates", "architecture"),
+    join(packageRoot, "assets", "architecture"),
   );
   const architectureActions = [];
   for (const file of architectureFiles) {

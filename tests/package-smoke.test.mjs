@@ -14,7 +14,10 @@ import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 
 const execFileAsync = promisify(execFile);
-const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const packageRoot = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../packages/cli",
+);
 const temporaryDirectories = [];
 
 afterEach(async () => {
@@ -61,23 +64,34 @@ describe("packed ArcShape package", () => {
       const jsonStart = packed.stdout.indexOf("[\n");
       expect(jsonStart, packed.stdout).toBeGreaterThanOrEqual(0);
       const packageMetadata = JSON.parse(packed.stdout.slice(jsonStart))[0];
+      const packageJson = JSON.parse(
+        await readFile(join(packageRoot, "package.json"), "utf8"),
+      );
+      expect(packageMetadata.name).toBe("@arcshape/cli");
+      expect(packageMetadata.name).toBe(packageJson.name);
+      expect(packageMetadata.version).toBe(packageJson.version);
       const packageFileList = packageMetadata.files.map(({ path }) => path);
       expect(packageFileList.length).toBeLessThan(300);
       expect(packageMetadata.unpackedSize).toBeLessThan(800_000);
-      expect(packageFileList).toContain("capabilities/providers.json");
-      expect(packageFileList).toContain("capabilities/skills/arc-adr/SKILL.md");
+      expect(packageFileList).toContain("assets/capabilities/providers.json");
+      expect(packageFileList).toContain("assets/architecture/README.md");
       expect(packageFileList).toContain(
-        "capabilities/skills/arc-adr/references/template.md",
+        "assets/capabilities/skills/arc-adr/SKILL.md",
       );
       expect(packageFileList).toContain(
-        "capabilities/skills/arc-architecture/references/arc42/SOURCES.md",
+        "assets/capabilities/skills/arc-adr/references/template.md",
       );
       expect(packageFileList).toContain(
-        "capabilities/skills/arc-architecture/references/arc42/12-glossary/README.md",
+        "assets/capabilities/skills/arc-architecture/references/arc42/SOURCES.md",
       );
+      expect(packageFileList).toContain(
+        "assets/capabilities/skills/arc-architecture/references/arc42/12-glossary/README.md",
+      );
+      expect(packageFileList).toContain("src/bin/arcshape.mjs");
+      expect(packageFileList).toContain("src/arc42-site/generate.mjs");
       expect(
         packageFileList.some((path) =>
-          path.startsWith("templates/assistants/"),
+          path.startsWith("assets/templates/assistants/"),
         ),
       ).toBe(false);
       expect(
@@ -96,7 +110,7 @@ describe("packed ArcShape package", () => {
         packageFileList.filter(
           (path) =>
             path.startsWith(
-              "capabilities/skills/arc-architecture/references/arc42/",
+              "assets/capabilities/skills/arc-architecture/references/arc42/",
             ) && /\.(?:png|jpe?g|webp|gif|svg)$/i.test(path),
         ),
       ).toHaveLength(0);
@@ -107,9 +121,6 @@ describe("packed ArcShape package", () => {
           ),
         ),
       ).toBeTruthy();
-      const packageJson = JSON.parse(
-        await readFile(join(packageRoot, "package.json"), "utf8"),
-      );
       const packageFileName = packageJson.name
         .replace(/^@/, "")
         .replace("/", "-");
@@ -123,6 +134,13 @@ describe("packed ArcShape package", () => {
         installed.exitCode,
         `${installed.stderr}\n${installed.stdout}`,
       ).toBe(0);
+
+      const version = await runNpm(
+        ["exec", "--offline", "--", "arcshape", "--version"],
+        { cwd: repository, timeout: 30_000 },
+      );
+      expect(version.exitCode).toBe(0);
+      expect(version.stdout.trim()).toBe(packageJson.version);
 
       const initialized = await runNpm(
         [
@@ -138,7 +156,10 @@ describe("packed ArcShape package", () => {
         ],
         { cwd: repository, timeout: 30_000 },
       );
-      expect(initialized.exitCode).toBe(0);
+      expect(
+        initialized.exitCode,
+        `${initialized.stderr}\n${initialized.stdout}`,
+      ).toBe(0);
       expect(initialized.stdout).toContain("CLI-only setup");
 
       const installedCapabilities = await runNpm(

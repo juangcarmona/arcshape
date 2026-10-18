@@ -2,7 +2,12 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 export async function loadRegistry(packageRoot) {
-  const registryPath = join(packageRoot, "capabilities", "providers.json");
+  const registryPath = join(
+    packageRoot,
+    "assets",
+    "capabilities",
+    "providers.json",
+  );
   const registry = JSON.parse(await readFile(registryPath, "utf8"));
   if (registry.schemaVersion !== 1 || !Array.isArray(registry.providers))
     throw new Error("Invalid agent provider registry");

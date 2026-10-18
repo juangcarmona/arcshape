@@ -10,7 +10,7 @@ import { runValidate } from "./validate.mjs";
 import { runSync } from "./sync.mjs";
 import { runAgents } from "./agents/commands.mjs";
 
-const packageRoot = dirname(dirname(fileURLToPath(import.meta.url)));
+const packageRoot = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const packageJson = JSON.parse(
   await readFile(join(packageRoot, "package.json"), "utf8"),
 );

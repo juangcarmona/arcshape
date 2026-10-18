@@ -103,9 +103,11 @@ describe("ADR workflow examples", () => {
   });
 
   it("ships the portable ADR capability with its safety rules", async () => {
-    const skill = await read("../../capabilities/skills/arc-adr/SKILL.md");
+    const skill = await read(
+      "../../packages/cli/assets/capabilities/skills/arc-adr/SKILL.md",
+    );
     const template = await read(
-      "../../capabilities/skills/arc-adr/references/template.md",
+      "../../packages/cli/assets/capabilities/skills/arc-adr/references/template.md",
     );
     const repositorySkill = await readFile(
       join(packageRoot, ".agents/skills/arcshape-adr/SKILL.md"),

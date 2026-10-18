@@ -5,8 +5,8 @@ These screenshots are review evidence for the generated ArcShape reader. The can
 From the repository root, rebuild the reader and refresh all screenshots with:
 
 ```sh
-node bin/arcshape.mjs site build --title ArcShape --source-ref main
-node tools/arc42-site/capture-evidence.mjs \
+node packages/cli/src/bin/arcshape.mjs site build --title ArcShape --source-ref main
+node packages/cli/src/arc42-site/capture-evidence.mjs \
   docs/architecture-site/index.html \
   docs/architecture/evidence
 ```

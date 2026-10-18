@@ -2,7 +2,10 @@
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
   "testRunner": "vitest",
   "coverageAnalysis": "perTest",
-  "mutate": ["bin/init.mjs", "bin/agents/lifecycle.mjs"],
+  "mutate": [
+    "packages/cli/src/bin/init.mjs",
+    "packages/cli/src/bin/agents/lifecycle.mjs"
+  ],
   "vitest": { "related": true },
   "reporters": ["progress", "html", "json"],
   "jsonReporter": { "fileName": "reports/mutation/mutation.json" },

@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
-import { runValidate } from "../bin/validate.mjs";
+import { runValidate } from "../packages/cli/src/bin/validate.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
@@ -115,9 +115,13 @@ async function makeRepository(withModel) {
   const root = await mkdtemp(join(tmpdir(), "arcshape-citations-test-"));
   temporaryDirectories.push(root);
   const architectureDir = join(root, "docs", "architecture");
-  await cp(join(packageRoot, "templates", "architecture"), architectureDir, {
-    recursive: true,
-  });
+  await cp(
+    join(packageRoot, "packages/cli/assets/architecture"),
+    architectureDir,
+    {
+      recursive: true,
+    },
+  );
 
   if (withModel) {
     await cp(

@@ -4,20 +4,18 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "bin/**"
+      - "packages/cli/**"
       - "docs/architecture/**"
       - "package-lock.json"
       - "package.json"
-      - "tools/arc42-site/**"
       - ".github/workflows/pages.yml"
   push:
     branches: [main]
     paths:
-      - "bin/**"
+      - "packages/cli/**"
       - "docs/architecture/**"
       - "package-lock.json"
       - "package.json"
-      - "tools/arc42-site/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -40,7 +38,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Generate reader site
-        run: node bin/arcshape.mjs site build --out _site/index.html --title ArcShape --source-ref main
+        run: node packages/cli/src/bin/arcshape.mjs site build --out _site/index.html --title ArcShape --source-ref main
       - name: Verify generated site
         run: test -s _site/index.html
       - name: Upload Pages artifact

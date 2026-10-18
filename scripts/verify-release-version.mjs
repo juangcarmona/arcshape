@@ -4,7 +4,9 @@ import { promisify } from "node:util";
 
 const run = promisify(execFile);
 
-const packageJson = JSON.parse(await readFile("package.json", "utf8"));
+const packageJson = JSON.parse(
+  await readFile("packages/cli/package.json", "utf8"),
+);
 const tag = process.env.RELEASE_TAG;
 const expected = `v${packageJson.version}`;
 if (tag !== expected)

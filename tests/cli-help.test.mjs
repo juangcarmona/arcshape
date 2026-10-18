@@ -9,7 +9,7 @@ describe("ArcShape CLI help", () => {
   it("shows the setup, citation, and documentation destination workflows", () => {
     const help = execFileSync(
       process.execPath,
-      [resolve(packageRoot, "bin/arcshape.mjs"), "--help"],
+      [resolve(packageRoot, "packages/cli/src/bin/arcshape.mjs"), "--help"],
       { encoding: "utf8" },
     );
 

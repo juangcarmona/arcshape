@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { runSession } from "../bin/session.mjs";
+import { runSession } from "../packages/cli/src/bin/session.mjs";
 
 const temporaryDirectories = [];
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
