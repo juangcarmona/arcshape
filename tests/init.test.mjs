@@ -22,12 +22,30 @@ describe("arcshape init", () => {
     const capabilities = await listPaths(
       join(packageRoot, "capabilities", "skills"),
     );
-    expect(capabilities.map(normalizePath).sort()).toEqual([
+    const paths = capabilities.map(normalizePath).sort();
+    expect(paths.filter((path) => path.endsWith("/SKILL.md"))).toEqual([
       "arc-adr/SKILL.md",
       "arc-architecture/SKILL.md",
       "arc-c4/SKILL.md",
       "arc-docs-sync/SKILL.md",
     ]);
+    expect(paths).toContain("arc-architecture/references/arc42/SOURCES.md");
+    expect(paths).toContain("arc-adr/references/template.md");
+    expect(
+      paths
+        .filter((path) => path.startsWith("arc-architecture/references/arc42/"))
+        .filter((path) => /\/\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path)),
+    ).toHaveLength(145);
+    expect(
+      paths.filter((path) =>
+        /\/\d{2}-[^/]+\/examples\/example-[^/]+\.md$/.test(path),
+      ),
+    ).toHaveLength(35);
+    expect(
+      paths.filter((path) =>
+        path.startsWith("arc-architecture/references/arc42/assets/images/"),
+      ),
+    ).toHaveLength(0);
     expect(await readdir(join(packageRoot, "templates"))).toEqual([
       "architecture",
     ]);
@@ -122,7 +140,7 @@ describe("arcshape init", () => {
       ),
     );
     expect(manifest.providers).toEqual(["codex", "claude"]);
-  });
+  }, 30_000);
 
   it("shows dry-run plans without writing and preserves targets when declined", async () => {
     const dryRunTarget = await makeTarget();

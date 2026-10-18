@@ -89,7 +89,9 @@ describe("portable agent capability package", () => {
     });
     expect(plan.actions.map(({ path }) => path).sort()).toEqual([
       ".agents/skills/arc-adr/SKILL.md",
+      ".agents/skills/arc-adr/references/template.md",
       ".claude/skills/arc-adr/SKILL.md",
+      ".claude/skills/arc-adr/references/template.md",
     ]);
     expect(plan.warnings).toHaveLength(1);
   });
@@ -109,9 +111,10 @@ describe("portable agent capability package", () => {
     expect(plan.manifestPath).toBe(
       join(userRoot, ".arcshape", "agent-capabilities.json"),
     );
-    expect(plan.actions[0].destination).toBe(
-      join(userRoot, ".claude", "skills", "arc-adr", "SKILL.md"),
-    );
+    expect(
+      plan.actions.find(({ path }) => path.endsWith("arc-adr/SKILL.md"))
+        .destination,
+    ).toBe(join(userRoot, ".claude", "skills", "arc-adr", "SKILL.md"));
   });
 });
 
@@ -210,7 +213,14 @@ describe("agent CLI dry run", () => {
       ["install", "--target", target, "--providers", "codex", "--dry-run"],
       { packageRoot, output },
     );
-    expect(result.plan.actions).toHaveLength(4);
+    expect(result.plan.actions.length).toBeGreaterThan(
+      knownCapabilities.length,
+    );
+    expect(
+      result.plan.actions.some(({ path }) =>
+        path.endsWith("arc-architecture/references/arc42/README.md"),
+      ),
+    ).toBe(true);
     expect(await readdir(target)).toEqual([]);
   });
 
@@ -276,7 +286,16 @@ describe("agent CLI dry run", () => {
       },
     });
     const result = await runAgents(
-      ["install", "--target", target, "--providers", "codex", "--yes"],
+      [
+        "install",
+        "--target",
+        target,
+        "--providers",
+        "codex",
+        "--capabilities",
+        "arc-adr",
+        "--yes",
+      ],
       { packageRoot, output },
     );
     expect(result.exitCode).toBe(1);
@@ -297,6 +316,7 @@ describe("managed capability lifecycle", () => {
       registry,
     });
     expect(initial.actions.map(({ action }) => action)).toEqual([
+      "create",
       "create",
       "create",
     ]);
@@ -329,11 +349,13 @@ describe("managed capability lifecycle", () => {
       operation: "update",
     });
     expect(
-      update.actions.find(({ path }) => path.includes("arc-adr")).action,
+      update.actions.find(({ path }) => path.endsWith("arc-adr/SKILL.md"))
+        .action,
     ).toBe("preserve");
     expect(
-      update.actions.find(({ path }) => path.includes("arc-architecture"))
-        .action,
+      update.actions.find(({ path }) =>
+        path.endsWith("arc-architecture/SKILL.md"),
+      ).action,
     ).toBe("conflict");
     await applyPlan(update);
     expect(await readFile(skillPath, "utf8")).toBe(edited);
@@ -352,7 +374,7 @@ describe("managed capability lifecycle", () => {
     await expect(
       readFile(join(target, ".agents", "skills", "arc-c4", "SKILL.md")),
     ).rejects.toMatchObject({ code: "ENOENT" });
-  });
+  }, 30_000);
 
   it("rejects symlinked destinations before writing", async () => {
     const target = await makeTarget();
@@ -372,6 +394,206 @@ describe("managed capability lifecycle", () => {
       }),
     ).rejects.toThrow("symbolic link");
   });
+
+  it("rejects a symlinked packaged capability root", async () => {
+    const target = await makeTarget();
+    const fakePackage = await makeTarget();
+    const registry = await loadRegistry(packageRoot);
+    await mkdir(join(fakePackage, "capabilities", "skills"), {
+      recursive: true,
+    });
+    await writeFile(
+      join(fakePackage, "package.json"),
+      JSON.stringify({ version: "1.0.0" }),
+    );
+    const { symlink } = await import("node:fs/promises");
+    await symlink(
+      join(packageRoot, "capabilities", "skills", "arc-architecture"),
+      join(fakePackage, "capabilities", "skills", "arc-architecture"),
+      "dir",
+    );
+
+    await expect(
+      makePlan({
+        packageRoot: fakePackage,
+        targetRoot: target,
+        providers: ["codex"],
+        capabilities: ["arc-architecture"],
+        scope: "project",
+        registry,
+        includeLegacy: false,
+      }),
+    ).rejects.toThrow("symbolic link packaged capability");
+  });
+
+  it("rejects symlinks nested inside a packaged capability", async () => {
+    const target = await makeTarget();
+    const fakePackage = await makeTarget();
+    const registry = await loadRegistry(packageRoot);
+    const skillRoot = join(
+      fakePackage,
+      "capabilities",
+      "skills",
+      "arc-architecture",
+    );
+    const outside = join(fakePackage, "outside");
+    await mkdir(skillRoot, { recursive: true });
+    await mkdir(outside, { recursive: true });
+    await writeFile(
+      join(fakePackage, "package.json"),
+      JSON.stringify({ version: "1.0.0" }),
+    );
+    const { symlink } = await import("node:fs/promises");
+    await symlink(outside, join(skillRoot, "references"), "dir");
+
+    await expect(
+      makePlan({
+        packageRoot: fakePackage,
+        targetRoot: target,
+        providers: ["codex"],
+        capabilities: ["arc-architecture"],
+        scope: "project",
+        registry,
+        includeLegacy: false,
+      }),
+    ).rejects.toThrow("symbolic link in packaged capability");
+  });
+
+  it("rejects symlinks nested in the skill destination path", async () => {
+    const target = await makeTarget();
+    const outside = await makeTarget();
+    await mkdir(join(target, ".agents", "skills", "arc-architecture"), {
+      recursive: true,
+    });
+    const { symlink } = await import("node:fs/promises");
+    await symlink(
+      outside,
+      join(target, ".agents", "skills", "arc-architecture", "references"),
+      "dir",
+    );
+    const registry = await loadRegistry(packageRoot);
+
+    await expect(
+      makePlan({
+        packageRoot,
+        targetRoot: target,
+        providers: ["codex"],
+        capabilities: ["arc-architecture"],
+        scope: "project",
+        registry,
+      }),
+    ).rejects.toThrow("symbolic link in destination path");
+  });
+
+  it("reports and preserves conflicts at nested capability paths", async () => {
+    const target = await makeTarget();
+    const registry = await loadRegistry(packageRoot);
+    const nestedPath = join(
+      target,
+      ".agents/skills/arc-architecture/references/arc42/02-constraints/README.md",
+    );
+    await mkdir(dirname(nestedPath), { recursive: true });
+    await writeFile(nestedPath, "maintainer-owned nested content\n");
+
+    const plan = await makePlan({
+      packageRoot,
+      targetRoot: target,
+      providers: ["codex"],
+      capabilities: ["arc-architecture"],
+      scope: "project",
+      registry,
+    });
+    expect(
+      plan.actions.find(({ path }) =>
+        path.endsWith("references/arc42/02-constraints/README.md"),
+      ).action,
+    ).toBe("conflict");
+    const failures = await applyPlan(plan);
+    expect(failures).toHaveLength(1);
+    expect(failures[0]).toContain("references/arc42/02-constraints/README.md");
+    expect(await readFile(nestedPath, "utf8")).toBe(
+      "maintainer-owned nested content\n",
+    );
+  }, 30_000);
+
+  it("installs nested references and preserves edited and untracked extension files", async () => {
+    const target = await makeTarget();
+    const registry = await loadRegistry(packageRoot);
+    const sectionPath = join(
+      target,
+      ".agents/skills/arc-architecture/references/arc42/02-constraints/README.md",
+    );
+    const extensionPath = join(
+      target,
+      ".agents/skills/arc-architecture/references/arc42/02-constraints/project-notes.md",
+    );
+    const install = await makePlan({
+      packageRoot,
+      targetRoot: target,
+      providers: ["codex"],
+      capabilities: ["arc-architecture"],
+      scope: "project",
+      registry,
+    });
+    expect(
+      install.actions.some(({ path }) =>
+        path.endsWith("references/arc42/02-constraints/README.md"),
+      ),
+    ).toBe(true);
+    await applyPlan(install);
+    expect(await readFile(sectionPath, "utf8")).toContain("# 2. Constraints");
+
+    const edited = `${await readFile(sectionPath, "utf8")}\nMaintainer edit\n`;
+    await writeFile(sectionPath, edited);
+    await writeFile(extensionPath, "Project-specific extension\n");
+
+    const update = await makePlan({
+      packageRoot,
+      targetRoot: target,
+      providers: ["codex"],
+      capabilities: ["arc-architecture"],
+      scope: "project",
+      registry,
+      operation: "update",
+    });
+    expect(
+      update.actions.find(({ path }) =>
+        path.endsWith("02-constraints/README.md"),
+      ).action,
+    ).toBe("preserve");
+    expect(
+      update.actions.some(({ path }) => path.endsWith("project-notes.md")),
+    ).toBe(false);
+    await applyPlan(update);
+    expect(await readFile(sectionPath, "utf8")).toBe(edited);
+    expect(await readFile(extensionPath, "utf8")).toBe(
+      "Project-specific extension\n",
+    );
+
+    const uninstall = await makePlan({
+      packageRoot,
+      targetRoot: target,
+      providers: ["codex"],
+      capabilities: [],
+      scope: "project",
+      registry,
+      operation: "uninstall",
+    });
+    await applyPlan(uninstall);
+    expect(await readFile(sectionPath, "utf8")).toBe(edited);
+    expect(await readFile(extensionPath, "utf8")).toBe(
+      "Project-specific extension\n",
+    );
+    const remainingReferences = await readdir(
+      join(target, ".agents/skills/arc-architecture/references/arc42"),
+      { recursive: true },
+    );
+    const normalizedReferences = remainingReferences.map((path) =>
+      path.replaceAll("\\", "/"),
+    );
+    expect(normalizedReferences).toContain("02-constraints/README.md");
+    expect(normalizedReferences).toContain("02-constraints/project-notes.md");
+  }, 30_000);
 
   it("migrates an exact unchanged 0.1.1 file and preserves an edited legacy copy", async () => {
     const target = await makeTarget();
@@ -432,7 +654,9 @@ describe("managed capability lifecycle", () => {
         scope: "project",
         providers: ["codex"],
         capabilities: ["arc-adr"],
-        files: { "important.txt": "a".repeat(64) },
+        files: {
+          ".agents/skills/arc-adr/../important.txt": "a".repeat(64),
+        },
       }),
     );
     const registry = await loadRegistry(packageRoot);

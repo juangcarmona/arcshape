@@ -30,8 +30,9 @@ Architecture documentation exists and the maintainer can review the relevant rep
 
 1. The maintainer requests an architecture-documentation update.
 2. ArcShape uses available repository context and supported AI-assisted workflows to identify relevant documentation changes.
-3. ArcShape presents a proposal that preserves the arc42 structure.
-4. The maintainer reviews the proposal and decides what to accept.
+3. The assistant uses section-specific arc42 knowledge across the documentation workflow to assess relevant evidence and prepare proposed updates that preserve the arc42 structure.
+4. The assistant identifies evidence gaps or conflicts and asks the maintainer for context when needed, rather than presenting unsupported conclusions as facts.
+5. The maintainer reviews the proposal and decides what to accept.
 
 ## Alternative Flows
 

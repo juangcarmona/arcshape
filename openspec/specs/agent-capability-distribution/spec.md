@@ -10,19 +10,19 @@ Lets repository maintainers install and manage versioned ArcShape agent capabili
 
 ### Requirement: Package provider-neutral ArcShape skills
 
-ArcShape SHALL package portable Agent Skills with stable `arc-` names and standard `name` and `description` metadata. Provider adapters SHALL expose the same workflows without forking canonical instructions.
+ArcShape SHALL package portable Agent Skills and supporting files with stable names and standard skill metadata. Provider adapters SHALL expose the same skills and files without forking workflows.
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:98014c03adfa2316adefc39599fe80d1fce075121947d88b186d31400cffd64b" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:f5d7e3a6b239e2851ee9554633e1a19cddd05a71b703ed1f184ba0d21e4da3f9" -->
 
 #### Scenario: Install canonical skills for Codex and shared-path providers
 
 - **WHEN** a maintainer selects Codex, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, or GitHub Copilot
-- **THEN** ArcShape installs selected skills in a verified `.agents/skills/` location supported by that provider
+- **THEN** ArcShape installs selected skills and packaged resources in a verified `.agents/skills/` location
 
 #### Scenario: Install Claude Code adapter
 
 - **WHEN** a maintainer selects Claude Code
-- **THEN** ArcShape installs the selected skill workflow through the verified `.claude/skills/` project or user location
+- **THEN** ArcShape installs selected skill workflows and packaged resources through the verified `.claude/skills/` location
 
 ### Requirement: Detect providers from local evidence
 
@@ -38,7 +38,7 @@ The CLI SHALL detect providers from local executable and repository-configuratio
 #### Scenario: Do not infer a provider from an ambiguous signal
 
 - **WHEN** a local signal may apply to multiple providers or cannot identify a provider reliably
-- **THEN** the CLI reports it as ambiguous and asks the maintainer to choose rather than silently selecting a provider
+- **THEN** the CLI reports it as ambiguous and asks the maintainer to choose rather than silently selecting it
 
 ### Requirement: Keep deterministic onboarding independent
 
@@ -75,13 +75,13 @@ Before installation, update, or removal, the CLI SHALL preview providers, scope,
 
 ### Requirement: Preserve user-owned files across lifecycle operations
 
-The CLI SHALL track the package version and hashes of files it creates. Updates and removal SHALL affect only unchanged managed files. Edited, untracked, or conflicting files SHALL be preserved and reported.
+The CLI SHALL record package version and per-file hashes. Updates and removal SHALL change only unchanged managed files; edited or untracked files, including maintainer-added reference documents, SHALL be preserved and reported.
 <!-- pdac:cite id="UC-MANAGE-AGENT-CAPABILITIES" digest="sha256:adf18d2e641041617408bb55db6b91d2011f3073870ecafa98b454378d446bf1" -->
 <!-- pdac:cite id="FR-ONBOARD-REPOSITORY" digest="sha256:ad28a7a6a80b8c334af9daa92a36c929b812c654611bebe10aac9b487072ef98" -->
 
 #### Scenario: Update an unchanged managed skill
 
-- **WHEN** a tracked skill file still matches the hash ArcShape recorded at installation
+- **WHEN** a tracked file still matches the hash ArcShape recorded at installation
 - **THEN** an approved update replaces it with the package's current version and refreshes its managed hash
 
 #### Scenario: Preserve an edited skill on update or removal
@@ -94,6 +94,11 @@ The CLI SHALL track the package version and hashes of files it creates. Updates 
 - **WHEN** a destination already exists without ArcShape ownership metadata
 - **THEN** ArcShape does not overwrite or claim ownership of that file, even if its contents match a packaged skill
 
+#### Scenario: Preserve maintainer-added reference material
+
+- **WHEN** a maintainer adds a document under an installed skill's reference directory and later updates or removes the packaged capability
+- **THEN** ArcShape leaves the untracked document unchanged and does not claim ownership of it
+
 #### Scenario: Add another provider to an existing installation
 
 - **WHEN** a maintainer installs an additional provider or capability for the same scope
@@ -101,14 +106,14 @@ The CLI SHALL track the package version and hashes of files it creates. Updates 
 
 ### Requirement: Install from the package without external services
 
-Agent capabilities SHALL ship in the npm package at the CLI version. Their lifecycle SHALL work offline, without marketplaces, and SHALL NOT execute packaged scripts.
+Agent capabilities and their supporting resources SHALL ship in the npm package at the CLI version. Their lifecycle SHALL work offline, without marketplaces, and SHALL NOT execute packaged scripts.
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 <!-- pdac:cite id="FR-ONBOARD-REPOSITORY" digest="sha256:ad28a7a6a80b8c334af9daa92a36c929b812c654611bebe10aac9b487072ef98" -->
 
 #### Scenario: Install from an offline npm package
 
 - **WHEN** ArcShape is installed locally and the maintainer runs the confirmed install flow without network access
-- **THEN** all selected files are sourced from the installed package and installation succeeds
+- **THEN** all selected packaged resources are sourced from the installed package and installation succeeds
 
 #### Scenario: Do not run capability scripts
 

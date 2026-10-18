@@ -31,9 +31,10 @@ The repository and any existing architecture documentation are available for ana
 1. The maintainer requests an initial architecture description or a refinement of existing documentation.
 2. ArcShape inventories available sources and groups them into bounded, prioritized analysis rounds.
 3. In each round, ArcShape examines the sources, distinguishes documented intent from observed behavior and inference, reconciles duplicate or conflicting findings, and records leads and questions.
-4. ArcShape reports round coverage and remaining work so analysis can be resumed or continued with the next round.
-5. ArcShape prepares a proposal for the applicable Markdown architecture documentation and explains unresolved evidence gaps.
-6. The maintainer reviews the evidence and proposal, provides corrections or context, and decides what to accept.
+4. ArcShape uses section-specific arc42 knowledge to relate relevant evidence and findings to architecture-documentation topics across the workflow.
+5. ArcShape reports round coverage and remaining work so analysis can be resumed or continued with the next round.
+6. ArcShape prepares a proposal for the applicable Markdown architecture documentation and explains unresolved evidence gaps.
+7. The maintainer reviews the evidence and proposal, provides corrections or context, and decides what to accept.
 
 ## Alternative Flows
 

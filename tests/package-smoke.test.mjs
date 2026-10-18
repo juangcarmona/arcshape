@@ -1,5 +1,12 @@
 import { execFile } from "node:child_process";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  readdir,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { promisify } from "node:util";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -53,16 +60,53 @@ describe("packed ArcShape package", () => {
       expect(packed.exitCode, `${packed.stderr}\n${packed.stdout}`).toBe(0);
       const jsonStart = packed.stdout.indexOf("[\n");
       expect(jsonStart, packed.stdout).toBeGreaterThanOrEqual(0);
-      const packageFileList = JSON.parse(
-        packed.stdout.slice(jsonStart),
-      )[0].files.map(({ path }) => path);
+      const packageMetadata = JSON.parse(packed.stdout.slice(jsonStart))[0];
+      const packageFileList = packageMetadata.files.map(({ path }) => path);
+      expect(packageFileList.length).toBeLessThan(300);
+      expect(packageMetadata.unpackedSize).toBeLessThan(800_000);
       expect(packageFileList).toContain("capabilities/providers.json");
       expect(packageFileList).toContain("capabilities/skills/arc-adr/SKILL.md");
+      expect(packageFileList).toContain(
+        "capabilities/skills/arc-adr/references/template.md",
+      );
+      expect(packageFileList).toContain(
+        "capabilities/skills/arc-architecture/references/arc42/SOURCES.md",
+      );
+      expect(packageFileList).toContain(
+        "capabilities/skills/arc-architecture/references/arc42/12-glossary/README.md",
+      );
       expect(
         packageFileList.some((path) =>
           path.startsWith("templates/assistants/"),
         ),
       ).toBe(false);
+      expect(
+        packageFileList.filter((path) =>
+          /references\/arc42\/\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path),
+        ),
+      ).toHaveLength(145);
+      expect(
+        packageFileList.filter((path) =>
+          /references\/arc42\/\d{2}-[^/]+\/examples\/example-[^/]+\.md$/.test(
+            path,
+          ),
+        ),
+      ).toHaveLength(35);
+      expect(
+        packageFileList.filter(
+          (path) =>
+            path.startsWith(
+              "capabilities/skills/arc-architecture/references/arc42/",
+            ) && /\.(?:png|jpe?g|webp|gif|svg)$/i.test(path),
+        ),
+      ).toHaveLength(0);
+      expect(
+        packageFileList.find((path) =>
+          path.endsWith(
+            "01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md",
+          ),
+        ),
+      ).toBeTruthy();
       const packageJson = JSON.parse(
         await readFile(join(packageRoot, "package.json"), "utf8"),
       );
@@ -121,8 +165,88 @@ describe("packed ArcShape package", () => {
         ),
       ).resolves.toContain("ArcShape architecture documentation");
       await expect(
+        readFile(
+          join(
+            repository,
+            ".agents/skills/arc-architecture/references/arc42/01-introduction-and-goals/README.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("# 1. Introduction and Goals");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".claude/skills/arc-architecture/references/arc42/12-glossary/README.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("# 12. Glossary");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".agents/skills/arc-architecture/references/arc42/01-introduction-and-goals/tips/tip-1-1-give-a-compact-summary-of-requirements-and-driving-forces.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("source_revision:");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".claude/skills/arc-architecture/references/arc42/01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("Illustrative example");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".claude/skills/arc-architecture/references/arc42/01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain(
+        "https://docs.arc42.org/assets/images/examples/htmlsc/1-1-overview.png",
+      );
+      for (const providerRoot of [".agents", ".claude"]) {
+        await expect(
+          readFile(
+            join(
+              repository,
+              providerRoot,
+              "skills/arc-adr/references/template.md",
+            ),
+            "utf8",
+          ),
+        ).resolves.toContain("id: ADR-NNNN");
+      }
+      await expect(
         readFile(join(repository, ".claude/skills/arc-c4/SKILL.md"), "utf8"),
       ).resolves.toContain("name: arc-c4");
+
+      for (const providerRoot of [".agents", ".claude"]) {
+        const installedRoot = join(
+          repository,
+          providerRoot,
+          "skills/arc-architecture/references/arc42",
+        );
+        const installedFiles = await listFilesRecursively(installedRoot);
+        expect(
+          installedFiles.filter((path) =>
+            /^\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path),
+          ),
+          `${providerRoot} installed tip files`,
+        ).toHaveLength(145);
+        expect(
+          installedFiles.filter((path) =>
+            /^\d{2}-[^/]+\/examples\/example-[^/]+\.md$/.test(path),
+          ),
+          `${providerRoot} installed example files`,
+        ).toHaveLength(35);
+      }
 
       const repeated = await runNpm(
         [
@@ -227,4 +351,17 @@ async function runNpm(args, options) {
       };
     throw error;
   }
+}
+
+async function listFilesRecursively(directory, prefix = "") {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const nested = await Promise.all(
+    entries.map(async (entry) => {
+      const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.isDirectory())
+        return listFilesRecursively(join(directory, entry.name), relativePath);
+      return [relativePath];
+    }),
+  );
+  return nested.flat();
 }

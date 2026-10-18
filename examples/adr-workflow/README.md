@@ -1,6 +1,6 @@
 # ADR workflow examples
 
-These fixtures exercise the `arc-adr` capability's main decisions. Run `npm test -- --run tests/adr-workflow.test.mjs` to check the examples and the provider-neutral packaged skill.
+These fixtures exercise the `arc-adr` capability's main decisions. New records use YAML frontmatter for ID, title, status, date, and deciders, follow `ADR-0001-kebab-case-title.md` naming when the repository has no convention, and appear in the canonical `docs/adr/README.md` index. Run `npm test -- --run tests/adr-workflow.test.mjs` to check the examples and the provider-neutral packaged skill.
 
 ## Create a record from a supplied decision
 
@@ -9,6 +9,10 @@ These fixtures exercise the `arc-adr` capability's main decisions. Run `npm test
 ## Supersede an existing record
 
 `supersede/` starts with an accepted ADR and a maintainer-confirmed superseding relationship. The expected proposal preserves the old record, adds a new Proposed ADR with a `Supersedes` link, and updates the index to show the relationship. Acceptance of the new decision remains with the maintainer.
+
+## Reuse an established convention
+
+`existing-convention/` demonstrates a repository whose canonical records live under `architecture/decisions/`, use `DEC-NNNN` identifiers, and carry a project-specific metadata shape. The expected proposal continues that convention and updates its existing index instead of creating `docs/adr/` or introducing a parallel `ADR-NNNN` collection.
 
 ## Decision is unknown
 

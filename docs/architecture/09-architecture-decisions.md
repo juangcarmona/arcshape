@@ -6,4 +6,4 @@ description: Important architecture decisions and links to their records.
 
 # 9. Architecture decisions
 
-There are no accepted ArcShape ADRs yet. The first package scope includes a Markdown ADR workflow, tracked in issue [#21](https://github.com/juangcarmona/arcshape/issues/21). This section will link accepted records as they are created.
+There are no accepted ArcShape ADRs yet. The canonical ADR collection and index are in [`docs/adr/README.md`](../adr/README.md). Link accepted records here as they are created; keep their full content in the ADR collection.

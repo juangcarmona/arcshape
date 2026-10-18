@@ -1,6 +1,8 @@
 ---
+id: ADR-0001
+title: Use JSON files for session state
 status: Accepted
-date: 2026-01-10
+date: "2026-01-10"
 deciders:
   - Maintainer
 ---

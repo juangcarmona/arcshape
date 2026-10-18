@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import {
   lstat,
   mkdir,
+  readdir,
   readFile,
   rename,
   rm,
@@ -83,11 +84,19 @@ export async function makePlan({
   if (operation !== "uninstall") {
     for (const root of roots) {
       for (const capability of selectedCapabilities) {
-        const relativePath = `${root}/${capability}/SKILL.md`;
-        desired.set(
-          relativePath,
-          join(packageRoot, "capabilities", "skills", capability, "SKILL.md"),
+        const sourceRoot = join(
+          packageRoot,
+          "capabilities",
+          "skills",
+          capability,
         );
+        for (const {
+          relativePath: resourcePath,
+          source,
+        } of await listPackagedFiles(sourceRoot)) {
+          const relativePath = `${root}/${capability}/${resourcePath}`;
+          desired.set(relativePath, source);
+        }
       }
     }
   }
@@ -361,9 +370,14 @@ async function readManifest(path, scope, root) {
         throw new Error(`manifest has an invalid hash for ${filePath}`);
       const portablePath = filePath.replaceAll("\\", "/");
       const match = portablePath.match(
-        /^(\.agents\/skills|\.claude\/skills)\/(arc-[a-z0-9-]+)\/SKILL\.md$/,
+        /^(\.agents\/skills|\.claude\/skills)\/(arc-[a-z0-9-]+)\/(.+)$/,
       );
-      if (!match || !CAPABILITIES.includes(match[2]))
+      const resourceParts = match?.[3].split("/");
+      if (
+        !match ||
+        !CAPABILITIES.includes(match[2]) ||
+        resourceParts.some((part) => !part || part === "." || part === "..")
+      )
         throw new Error(
           `manifest contains an unsupported managed path: ${filePath}`,
         );
@@ -379,6 +393,37 @@ async function readManifest(path, scope, root) {
       `Cannot read ArcShape capability manifest: ${error.message}`,
     );
   }
+}
+
+async function listPackagedFiles(root) {
+  const files = [];
+  const rootInfo = await lstat(root);
+  if (rootInfo.isSymbolicLink())
+    throw new Error(`Refusing symbolic link packaged capability: ${root}`);
+  if (!rootInfo.isDirectory())
+    throw new Error(`Packaged capability root is not a directory: ${root}`);
+
+  async function visit(directory, parent = "") {
+    const entries = await readdir(directory, { withFileTypes: true });
+    entries.sort((left, right) => left.name.localeCompare(right.name));
+    for (const entry of entries) {
+      const source = join(directory, entry.name);
+      const relativePath = parent ? `${parent}/${entry.name}` : entry.name;
+      const info = await lstat(source);
+      if (info.isSymbolicLink())
+        throw new Error(
+          `Refusing symbolic link in packaged capability: ${source}`,
+        );
+      if (info.isDirectory()) await visit(source, relativePath);
+      else if (info.isFile()) files.push({ relativePath, source });
+      else
+        throw new Error(
+          `Unsupported file type in packaged capability: ${source}`,
+        );
+    }
+  }
+  await visit(root);
+  return files;
 }
 
 async function inspectDestination(root, destination, scope) {

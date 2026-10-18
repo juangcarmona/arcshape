@@ -1,6 +1,6 @@
 ---
 name: arc-architecture
-description: Reverse engineer, create, and maintain evidence-grounded arc42 architecture documentation in Markdown for any repository. Use when documenting a system, improving architecture docs, or reconciling docs with implementation evidence.
+description: Reverse engineer, create, and maintain evidence-grounded arc42 architecture documentation in Markdown for any repository. Use when documenting a system, improving architecture docs, or reconciling docs with implementation evidence. Includes focused, task-selected guidance for all twelve arc42 sections.
 ---
 
 # ArcShape architecture documentation
@@ -15,6 +15,12 @@ Use this skill to understand a repository and propose accurate architecture docu
 - Preserve the project's existing architecture documentation conventions. ArcShape's default Markdown location is `docs/architecture/` with the 12 numbered arc42 sections.
 - Draft changes for review. Do not declare proposals accepted or silently overwrite a maintainer's authored material.
 - Keep diagrams in Mermaid inside Markdown. Prefer C4 context/container/component views and label relationships with concise meaning.
+
+## Section-specific arc42 guidance
+
+Use the [arc42 guidance index](references/arc42/README.md) to select detailed references for the current task. Read only the relevant section `README.md` files, then use their titles and frontmatter tags to choose only the tip/example documents that answer a concrete question. Tip and example files preserve complete licensed source pages; do not load every file or every section by default. A task affecting several sections may read several references. Projects may omit, combine, or adapt sections, so preserve the project's existing structure.
+
+Each section reference provides its purpose, relevant subsections, evidence to inspect, handling for gaps and conflicts, practical guidance, and source links. Treat arc42 guidance as a framework for analysis, not evidence about the target system. Keep observations separate from maintainer intent, inference, and proposals. The [source register](references/arc42/SOURCES.md) records creator attribution and the CC BY-SA 4.0 scope for arc42-derived reference content.
 
 ## Reverse engineering workflow
 

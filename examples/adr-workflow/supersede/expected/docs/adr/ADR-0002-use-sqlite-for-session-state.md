@@ -1,6 +1,8 @@
 ---
+id: ADR-0002
+title: Use SQLite for session state
 status: Proposed
-date: 2026-10-17
+date: "2026-10-17"
 deciders:
   - Maintainer
 ---

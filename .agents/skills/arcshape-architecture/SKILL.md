@@ -7,6 +7,12 @@ description: Reverse engineer, create, and maintain evidence-grounded arc42 arch
 
 Use this skill to understand a repository and propose accurate architecture documentation. The repository language and stack are not prerequisites: follow evidence in Markdown, configuration, source, tests, deployment manifests, and operational files.
 
+## Section-specific arc42 guidance
+
+For ArcShape repository work, use the [canonical guidance index](../../../capabilities/skills/arc-architecture/references/arc42/README.md) and read only section references relevant to the current task. A cross-cutting task can select several sections; do not load the complete guidance tree by default. Preserve a project's chosen omission, combination, or adaptation of arc42 sections.
+
+The guidance provides section purpose, subsections, evidence leads, missing/conflicting evidence handling, practical tips, and source links. Read the section README, then select only the relevant tip/example files by their titles and frontmatter tags; do not load the full reference tree by default. Tip and example files preserve complete licensed source pages. Arc42 guidance does not establish facts about the repository. Keep observed behavior distinct from maintainer intent, inference, and proposals. Its source and CC BY-SA 4.0 attribution are recorded in the [source register](../../../capabilities/skills/arc-architecture/references/arc42/SOURCES.md).
+
 ## Operating rules
 
 - Treat existing repository evidence as observations, not proof of intent. Distinguish observed behavior, maintainer-supplied intent, and proposals.
