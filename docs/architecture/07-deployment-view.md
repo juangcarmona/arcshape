@@ -35,7 +35,7 @@ The source repository publishes two different artifacts. The Pages workflow buil
 
 ```mermaid
 accTitle: ArcShape documentation and package deployment paths
-flowchart LR
+flowchart TB
     maintainer[Repository maintainer]
 
     subgraph source[ArcShape source repository]
@@ -58,12 +58,11 @@ flowchart LR
         project[Adopter repository]
         localcli[Local ArcShape CLI]
         html[Self-contained reader HTML]
-        host[Adopter-selected hosting]
+        host[Adopter host]
     end
 
     maintainer -->|changes documentation or source| markdown
-    markdown -->|pull request validates build| pages
-    markdown -->|push to main deploys| pages
+    markdown -->|pull request validates; main push deploys| pages
     pages --> reader
     maintainer -->|publishes release| release
     release --> publish
