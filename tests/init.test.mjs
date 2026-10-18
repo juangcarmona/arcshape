@@ -33,8 +33,20 @@ describe("arcshape init", () => {
     expect(
       paths.filter((path) =>
         path.startsWith("arc-architecture/references/arc42/"),
+      ).filter((path) =>
+        /\/\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path),
       ),
-    ).toHaveLength(14);
+    ).toHaveLength(145);
+    expect(
+      paths.filter((path) =>
+        /\/\d{2}-[^/]+\/examples\/example-[^/]+\.md$/.test(path),
+      ),
+    ).toHaveLength(35);
+    expect(
+      paths.filter((path) =>
+        path.startsWith("arc-architecture/references/arc42/assets/images/"),
+      ),
+    ).toHaveLength(98);
     expect(await readdir(join(packageRoot, "templates"))).toEqual([
       "architecture",
     ]);
