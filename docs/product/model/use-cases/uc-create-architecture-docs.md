@@ -30,8 +30,9 @@ The repository has been onboarded and the maintainer can provide context or revi
 
 1. The maintainer asks for architecture documentation.
 2. ArcShape uses available repository context and supported AI-assisted workflows to prepare a proposal.
-3. The proposal follows the arc42 framework.
-4. The maintainer reviews the proposal and can identify questions or corrections.
+3. The assistant uses section-specific arc42 knowledge across the architecture-documentation workflow to identify relevant evidence, organize information, and prepare the proposal in the arc42 framework.
+4. The assistant identifies evidence gaps or conflicts and asks the maintainer for context when needed, rather than presenting unsupported conclusions as facts.
+5. The maintainer reviews the proposal and can identify questions or corrections.
 
 ## Alternative Flows
 
