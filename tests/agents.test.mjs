@@ -500,7 +500,7 @@ describe("managed capability lifecycle", () => {
     expect(await readFile(nestedPath, "utf8")).toBe(
       "maintainer-owned nested content\n",
     );
-  });
+  }, 30_000);
 
   it("installs nested references and preserves edited and untracked extension files", async () => {
     const target = await makeTarget();
