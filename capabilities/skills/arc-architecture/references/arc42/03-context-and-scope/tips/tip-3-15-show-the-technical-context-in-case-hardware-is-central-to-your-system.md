@@ -21,7 +21,7 @@ If hardware, processors, network, transmission-channels or buses are central to 
 
 Especially for integrated hardware/software systems (embedded systems) you almost always need a technical context diagram. 
 
-![technical context from an automotive system](../../assets/images/sections/03/technical-context-automotive.png)
+![technical context from an automotive system](https://docs.arc42.org/assets/images/sections/03/technical-context-automotive.png)
 
 The embedded systems context diagram above (especially on right side) is such an example.
 

@@ -26,7 +26,7 @@ This is a very simple example, created with Enterprise Architect(TM).
 
 ## 3. Context View
 
-![Business context](../../assets/images/examples/htmlsc/3-hsc-business-context.png)
+![Business context](https://docs.arc42.org/assets/images/examples/htmlsc/3-hsc-business-context.png)
 
 
 |Neighbor  |Description |

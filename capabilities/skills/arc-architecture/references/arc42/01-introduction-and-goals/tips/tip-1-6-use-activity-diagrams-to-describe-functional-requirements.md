@@ -22,4 +22,4 @@ Activity diagrams can do two things for you: give a good visual overview of acti
 and also explain the handling of special cases, alternatives, parallelisms or sequences.
 Potential drawback is the relatively high cost of creation and maintenance.
 
-!['Create invoice' activity diagram](../../assets/images/sections/01/simple-activity.png){:width="40%"}
+!['Create invoice' activity diagram](https://docs.arc42.org/assets/images/sections/01/simple-activity.png){:width="40%"}

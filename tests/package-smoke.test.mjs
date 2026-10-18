@@ -60,11 +60,15 @@ describe("packed ArcShape package", () => {
       expect(packed.exitCode, `${packed.stderr}\n${packed.stdout}`).toBe(0);
       const jsonStart = packed.stdout.indexOf("[\n");
       expect(jsonStart, packed.stdout).toBeGreaterThanOrEqual(0);
-      const packageFileList = JSON.parse(
-        packed.stdout.slice(jsonStart),
-      )[0].files.map(({ path }) => path);
+      const packageMetadata = JSON.parse(packed.stdout.slice(jsonStart))[0];
+      const packageFileList = packageMetadata.files.map(({ path }) => path);
+      expect(packageFileList.length).toBeLessThan(300);
+      expect(packageMetadata.unpackedSize).toBeLessThan(800_000);
       expect(packageFileList).toContain("capabilities/providers.json");
       expect(packageFileList).toContain("capabilities/skills/arc-adr/SKILL.md");
+      expect(packageFileList).toContain(
+        "capabilities/skills/arc-adr/references/template.md",
+      );
       expect(packageFileList).toContain(
         "capabilities/skills/arc-architecture/references/arc42/SOURCES.md",
       );
@@ -89,12 +93,20 @@ describe("packed ArcShape package", () => {
         ),
       ).toHaveLength(35);
       expect(
-        packageFileList.filter((path) =>
-          path.startsWith(
-            "capabilities/skills/arc-architecture/references/arc42/assets/images/",
+        packageFileList.filter(
+          (path) =>
+            path.startsWith(
+              "capabilities/skills/arc-architecture/references/arc42/",
+            ) && /\.(?:png|jpe?g|webp|gif|svg)$/i.test(path),
+        ),
+      ).toHaveLength(0);
+      expect(
+        packageFileList.find((path) =>
+          path.endsWith(
+            "01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md",
           ),
         ),
-      ).toHaveLength(98);
+      ).toBeTruthy();
       const packageJson = JSON.parse(
         await readFile(join(packageRoot, "package.json"), "utf8"),
       );
@@ -192,10 +204,25 @@ describe("packed ArcShape package", () => {
         readFile(
           join(
             repository,
-            ".agents/skills/arc-architecture/references/arc42/assets/images/examples/htmlsc/1-1-overview.png",
+            ".claude/skills/arc-architecture/references/arc42/01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md",
           ),
+          "utf8",
         ),
-      ).resolves.toBeInstanceOf(Buffer);
+      ).resolves.toContain(
+        "https://docs.arc42.org/assets/images/examples/htmlsc/1-1-overview.png",
+      );
+      for (const providerRoot of [".agents", ".claude"]) {
+        await expect(
+          readFile(
+            join(
+              repository,
+              providerRoot,
+              "skills/arc-adr/references/template.md",
+            ),
+            "utf8",
+          ),
+        ).resolves.toContain("id: ADR-NNNN");
+      }
       await expect(
         readFile(join(repository, ".claude/skills/arc-c4/SKILL.md"), "utf8"),
       ).resolves.toContain("name: arc-c4");

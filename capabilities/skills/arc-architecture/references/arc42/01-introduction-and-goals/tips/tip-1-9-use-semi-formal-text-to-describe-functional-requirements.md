@@ -50,4 +50,4 @@ that way you combine the benefits of plain text with graphical representation.
 
 PlantUML renders the code above to the following diagram:
 
-![](../../assets/images/sections/01/simple-activity.png){:width="40%"}
+![](https://docs.arc42.org/assets/images/sections/01/simple-activity.png){:width="40%"}

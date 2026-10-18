@@ -33,14 +33,4 @@ This index maps the twelve standard arc42 sections to focused guidance. Read onl
 
 ## Sources and content license
 
-The tip and example files preserve their complete source-page content with attribution and source metadata. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.
-
-The tip and example files preserve their complete source-page content with attribution and source metadata. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.
-
-The tip and example files preserve their complete source-page content with attribution and source metadata. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.
-
-The tip and example files preserve their complete source-page content with attribution and source metadata. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.
-
-The tip and example files preserve their complete source-page content with attribution and source metadata. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.
-
-The tip and example files preserve their complete source-page content with attribution and source metadata. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.
+The tip and example files preserve their complete source-page text with attribution and source metadata. Image references point to the upstream `docs.arc42.org` host; binary media is not copied into the ArcShape package. Consult only the files relevant to the task. See [SOURCES.md](./SOURCES.md) for the per-page register and license scope. The upstream [CC BY-SA 4.0 license](https://creativecommons.org/licenses/by-sa/4.0/) applies to this arc42-derived subtree, not the ArcShape software.

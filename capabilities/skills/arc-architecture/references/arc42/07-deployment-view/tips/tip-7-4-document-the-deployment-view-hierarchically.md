@@ -23,4 +23,4 @@ in heterogeneous or distributed systems.
 
 The diagram below gives an example:
 
-![hierarchical deployment view](../../assets/images/sections/07/deployment-hierarchy.jpg)
+![hierarchical deployment view](https://docs.arc42.org/assets/images/sections/07/deployment-hierarchy.jpg)

@@ -31,4 +31,4 @@ In the following diagram you find three different variants how the
 three architecture building blocks `A`, `B` and `C` can be deployed on
 different hardware environments.
 
-![three different variants how the three architecture building blocks A, B and C can be deployed](../../assets/images/sections/07/deployment-options.webp)
+![three different variants how the three architecture building blocks A, B and C can be deployed](https://docs.arc42.org/assets/images/sections/07/deployment-options.webp)

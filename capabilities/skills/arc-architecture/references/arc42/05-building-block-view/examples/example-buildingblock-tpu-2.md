@@ -27,7 +27,7 @@ This diagram (created with Enterprise Architect(TM) as a component model) shows 
 ## 5.2 Measuring Unit (Building Block View Level 2)
 The following figure shows the internal structure of the Measuring Unit. 
 
-![Building Block View Level 2 of Traffic Pursuit Unit](../../assets/images/examples/tpu/52-tpu-BuildingBlocks.jpg)
+![Building Block View Level 2 of Traffic Pursuit Unit](https://docs.arc42.org/assets/images/examples/tpu/52-tpu-BuildingBlocks.jpg)
 
 ### 1.1 MuServices
 

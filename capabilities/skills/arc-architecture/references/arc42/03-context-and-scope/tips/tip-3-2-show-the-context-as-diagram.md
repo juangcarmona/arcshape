@@ -30,4 +30,4 @@ You have a variety of graphical options:
 In any case, you should place your system in the middle and the other systems, roles,
 users, etc., around it.
 
-![](../../assets/images/sections/03/big-context.png)
+![](https://docs.arc42.org/assets/images/sections/03/big-context.png)

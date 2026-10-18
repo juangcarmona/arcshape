@@ -30,6 +30,7 @@ describe("arcshape init", () => {
       "arc-docs-sync/SKILL.md",
     ]);
     expect(paths).toContain("arc-architecture/references/arc42/SOURCES.md");
+    expect(paths).toContain("arc-adr/references/template.md");
     expect(
       paths
         .filter((path) => path.startsWith("arc-architecture/references/arc42/"))
@@ -44,7 +45,7 @@ describe("arcshape init", () => {
       paths.filter((path) =>
         path.startsWith("arc-architecture/references/arc42/assets/images/"),
       ),
-    ).toHaveLength(98);
+    ).toHaveLength(0);
     expect(await readdir(join(packageRoot, "templates"))).toEqual([
       "architecture",
     ]);

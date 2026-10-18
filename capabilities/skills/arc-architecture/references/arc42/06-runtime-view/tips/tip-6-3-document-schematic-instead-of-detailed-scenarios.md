@@ -32,8 +32,8 @@ building blocks from higher levels (e.g. level-1) of the building block view.
 In the following scenario only building-blocks from level-1 of the
 corresponding building block view interact.
 
-![schematic sequence diagram](../../assets/images/sections/07/schematic-sequence.png)
+![schematic sequence diagram](https://docs.arc42.org/assets/images/sections/07/schematic-sequence.png)
 
 #### Building Block Level-1 for the Example:
 
-![level 1 for schematic sequence diagram ](../../assets/images/sections/07/level-1-for-schematic-sequence.png)
+![level 1 for schematic sequence diagram ](https://docs.arc42.org/assets/images/sections/07/level-1-for-schematic-sequence.png)

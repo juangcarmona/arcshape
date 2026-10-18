@@ -159,6 +159,7 @@ describe("arc42 authoring examples", () => {
     expect(sourceRegister).toContain("145 practical tips");
     expect(sourceRegister).toContain("35 worked examples");
     expect(sourceRegister).toContain("12 section pages");
+    expect(sourceRegister).toContain("Binary image assets are not bundled");
     expect(sourceRegister).toContain(
       "3cb35782b62d0cd4103aedcc75fc4ba748f043ad",
     );
@@ -205,6 +206,10 @@ describe("arc42 authoring examples", () => {
           expect(document).toContain(`> Source: [${reference.title}]`);
           expect(sourceRegister).toContain(`./${path}`);
           await expectGuidanceLocalLinks(path, document);
+          for (const match of document.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g))
+            expect(match[1]).toMatch(
+              /^https:\/\/docs\.arc42\.org\/assets\/images\//,
+            );
           if (kind === "example")
             expect(document).toContain("Illustrative example");
           else expect(reference.id).toMatch(/^\d+-\d+$/);

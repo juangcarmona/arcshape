@@ -34,4 +34,4 @@ use tables to document or specify deployment of software on hardware.
 Please find the corresponding diagram below:
 
 
-![deployment diagram](../../assets/images/sections/07/deployment-diagram.png){:width="60%"}
+![deployment diagram](https://docs.arc42.org/assets/images/sections/07/deployment-diagram.png){:width="60%"}

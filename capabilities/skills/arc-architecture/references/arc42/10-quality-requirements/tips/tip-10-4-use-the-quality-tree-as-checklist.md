@@ -28,7 +28,7 @@ joint workshop.
 
 1. Start with something similar to the ISO 25010:2023 quality tree.
 
-![Quality tree of ISO/IEC 25010:2023 - the nine characteristics functional suitability, performance efficiency, compatibility, interaction capability, reliability, security, maintainability, flexibility and safety, each with its sub-characteristics](../../assets/images/sections/01/iso-25010-2023-tree-en.svg)
+![Quality tree of ISO/IEC 25010:2023 - the nine characteristics functional suitability, performance efficiency, compatibility, interaction capability, reliability, security, maintainability, flexibility and safety, each with its sub-characteristics](https://docs.arc42.org/assets/images/sections/01/iso-25010-2023-tree-en.svg)
 
 2. Let your stakeholders create quality scenarios
 3. Attach those scenarios to a specific quality tree
@@ -37,4 +37,4 @@ for missing scenarios. In the diagram below, neither scalability, robustness nor
 5. Let your stakeholders decide wether these topics are not relevant or if the corresponding scenarios
 are just missing or have been forgotten.
 
-![mind map as quality tree](../../assets/images/sections/10/quality-tree-mindmap-example.png)
+![mind map as quality tree](https://docs.arc42.org/assets/images/sections/10/quality-tree-mindmap-example.png)

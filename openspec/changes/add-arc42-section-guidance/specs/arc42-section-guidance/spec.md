@@ -20,7 +20,7 @@ ArcShape SHALL provide guidance for all twelve standard arc42 sections and relev
 
 ### Requirement: Provide a complete, selectively loaded tip and example catalog
 
-ArcShape SHALL provide one separately addressable reference for every practical tip and worked example in the pinned arc42 source snapshot. Each reference SHALL preserve the complete source content and referenced images and link to its source page.
+ArcShape SHALL provide one separately addressable reference for every practical tip and worked example in the pinned arc42 source snapshot. Each reference SHALL preserve the complete source text and link to its source page. Illustrations SHALL link to their upstream `docs.arc42.org` URLs; binary image assets SHALL NOT be bundled in the ArcShape package.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
 
 #### Scenario: Select a relevant tip or example

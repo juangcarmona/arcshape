@@ -104,6 +104,9 @@ describe("ADR workflow examples", () => {
 
   it("ships the portable ADR capability with its safety rules", async () => {
     const skill = await read("../../capabilities/skills/arc-adr/SKILL.md");
+    const template = await read(
+      "../../capabilities/skills/arc-adr/references/template.md",
+    );
     const repositorySkill = await readFile(
       join(packageRoot, ".agents/skills/arcshape-adr/SKILL.md"),
       "utf8",
@@ -122,6 +125,9 @@ describe("ADR workflow examples", () => {
     );
     expect(skill).toContain("name: arc-adr");
     expect(skill).toContain("`docs/adr/README.md`");
+    expect(skill).toContain(
+      "copying [`references/template.md`](references/template.md)",
+    );
     expect(skill).toContain("`ADR-0001-kebab-case-title.md`");
     expect(skill).toContain(
       "Reuse the repository's canonical folder, naming scheme, metadata, and index",
@@ -143,6 +149,21 @@ describe("ADR workflow examples", () => {
     expect(skill).toContain(
       "Do not put proposed decisions in the current architecture index",
     );
+    expect(parseFrontmatter(template)).toEqual(
+      expect.objectContaining({
+        id: "ADR-NNNN",
+        status: "Proposed",
+        deciders: [],
+      }),
+    );
+    for (const section of [
+      "## Context",
+      "## Decision",
+      "## Alternatives considered",
+      "## Consequences",
+      "## References",
+    ])
+      expect(template).toContain(section);
   });
 
   it("keeps example paths stable", async () => {

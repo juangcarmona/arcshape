@@ -30,4 +30,4 @@ is refined on level-1 into building blocks `A`, `B` and `C`.
 Only `A` is then refined and detailled in level-2.
 
 
-![refinement of only a few building blocks](../../assets/images/sections/05/refine-only-few-blocks.webp){:width="85%"}
+![refinement of only a few building blocks](https://docs.arc42.org/assets/images/sections/05/refine-only-few-blocks.webp){:width="85%"}

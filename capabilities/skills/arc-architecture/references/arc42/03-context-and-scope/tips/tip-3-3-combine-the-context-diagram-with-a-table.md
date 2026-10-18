@@ -30,7 +30,7 @@ characteristics of this typical "graphics/table" pair:
 
 See the following example:
 
-![User, product and service context](../../assets/images/sections/03/context-user-product-service.png)
+![User, product and service context](https://docs.arc42.org/assets/images/sections/03/context-user-product-service.png)
 
 
 | Neighbour     | Description                                            |

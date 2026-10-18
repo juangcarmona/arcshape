@@ -23,4 +23,4 @@ and materials used.
 
 Please consider the following example:
 
-![exemplary business process model](../../assets/images/sections/01/eGPM.webp)
+![exemplary business process model](https://docs.arc42.org/assets/images/sections/01/eGPM.webp)

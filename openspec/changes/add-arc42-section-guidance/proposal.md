@@ -8,12 +8,14 @@ ArcShape's architecture skill has a concise workflow but no section-specific arc
 
 ## What Changes
 
-- Add a complete, section-organized reference catalog of the published arc42 section pages, all 145 practical tips, and all 35 worked examples from a recorded upstream snapshot. Preserve each tip and example's full source content in its own file with source links and attribution, so AI can consult details without relying on lossy summaries.
+- Add a complete, section-organized reference catalog of the published arc42 section pages, all 145 practical tips, and all 35 worked examples from a recorded upstream snapshot. Preserve each tip and example's full source text in its own file with source links and attribution, so AI can consult details without relying on lossy summaries. Link illustrations to the upstream source host instead of bundling binary assets.
 - Add concise YAML frontmatter to the reference index, all section README files, and every tip and example reference so an assistant can identify its kind, section, source, license, and topics without reading unrelated detail.
 - Keep the architecture skill as the short entry point. Its frontmatter and instructions route the assistant from a section `README.md` to only the relevant tip and example documents for the current task.
 - Store guidance under numbered, lowercase kebab-case section folders. Each section folder has a main `README.md` and can contain additional focused Markdown documents; installed user-authored additions remain user-owned.
 - Make ADR records discoverable through the repository's ADR folder and index. When no repository convention exists, the ADR skill uses `docs/adr/`, `ADR-0001-kebab-case-title.md` names, and ADR frontmatter for ID, title, status, date, and deciders.
+- Ship the ADR Markdown template with the packaged ADR capability and instruct the skill to copy it for each new record.
 - Extend capability distribution to package, install, update, and uninstall nested skill resources while preserving edited, conflicting, and untracked files.
+- Keep this delivery's npm package below 300 files and 800 KB unpacked; enforce the limits in the packed-package smoke test alongside the no-image-binaries rule.
 - Include source attribution and CC BY-SA 4.0 licensing information for arc42-derived guidance; retain the upstream license and copyright notice in the reference subtree.
 
 ## Capabilities
@@ -48,7 +50,7 @@ The workflow also relies on `FR-REVERSE-ENGINEER-ARCHITECTURE` for bounded, evid
 
 Impacted and adjacent artifacts checked include `TERM-ARCHITECTURE-DOCUMENTATION`, `ACT-AI-ASSISTANT`, `ACT-REPOSITORY-MAINTAINER`, `BC-ARCHITECTURE-KNOWLEDGE`, `BR-PRODUCT-DEFINITION-AUTHORITY`, `TERM-APPROVED-PRODUCT-DEFINITION`, `CON-NO-ARCSHAPE-DATA-COLLECTION`, `FR-CLI-COMMANDS`, `FR-PRODUCT-DEFINITION-LINKS`, `FR-ADR-WORKFLOWS`, `UC-CREATE-ADRS`, `UC-CREATE-C4-DIAGRAMS`, `UC-LINK-PRODUCT-DEFINITION`, and `JRN-ESTABLISH-ARCHITECTURE-DOCS`. They remain unchanged because this work adds arc42 guidance and safe distribution of its files; it does not change terminology, product authority, data collection, CLI behavior, ADR/C4 guidance, or the wider journey.
 
-The implementation touches the architecture and ADR skills, their examples, `capabilities/skills/arc-architecture/`, capability installation, and the arc42, ADR, installer, and packed-package tests. The captured upstream source snapshot is the public `arc42/docs.arc42.org-site` repository at commit `3cb35782b62d0cd4103aedcc75fc4ba748f043ad` (2026-10-14): 145 tip pages and 35 worked examples. The site identifies arc42 documentation content as [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); preserve creator and contributor attribution, source links, and the applicable share-alike license for adapted guidance.
+The implementation touches the architecture and ADR skills, their examples, `capabilities/skills/arc-architecture/`, capability installation, and the arc42, ADR, installer, and packed-package tests. The captured upstream source snapshot is the public `arc42/docs.arc42.org-site` repository at commit `3cb35782b62d0cd4103aedcc75fc4ba748f043ad` (2026-10-14): 145 tip pages and 35 worked examples. The site identifies arc42 documentation content as [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/); preserve creator and contributor attribution, source links, and the applicable share-alike license for adapted guidance. Keep upstream image URLs in Markdown and leave image binaries out of the install package. For this delivery, treat the 300-file and 800 KB unpacked ceilings as measurable packaging guardrails, not changes to the product's architecture-guidance outcome.
 
 ### Definition of Done impact
 

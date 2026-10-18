@@ -28,7 +28,7 @@ consists of blackboxes A, B and D - which are refined in three diagrams.
 All those refinements look strikingly similar - that's too much
 redundancy.
 
-![building blocks diagram with too much redundancy](../../assets/images/sections/05/similar-building-blocks.webp){:width="85%"}
+![building blocks diagram with too much redundancy](https://docs.arc42.org/assets/images/sections/05/similar-building-blocks.webp){:width="85%"}
 
 
 ## Crosscutting Concepts to the rescue
@@ -40,7 +40,7 @@ they all carry the stereotype «X-service», refering to a crosscutting
 concept that explains how elements of type X-service» shall be constructed,
 build or implemented.
 
-![building blocks diagram, leaner approach](../../assets/images/sections/05/concepts-instead.webp){:width="85%"}
+![building blocks diagram, leaner approach](https://docs.arc42.org/assets/images/sections/05/concepts-instead.webp){:width="85%"}
 
 
 >Crosscutting concepts might describe principles, rules or implementation

@@ -27,4 +27,4 @@ This example has been created with Enterprise Architect(TM) as a data flow diagr
 ## 3. Business Context View
 The following figure shows the major inputs and outputs of the traffic pursuit unit - the human users as well as the technical environment (sensors,cameras, ...)
 
-![Business Context](../../assets/images/examples/tpu/31-tpu-business-context.jpg)
+![Business Context](https://docs.arc42.org/assets/images/examples/tpu/31-tpu-business-context.jpg)

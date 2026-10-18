@@ -37,4 +37,4 @@ Within the TPU many different events are generated partly as a result of measure
 
 **Solution**
 
-![Fig. 8.2: Event Handling Scenario](../../assets/images/examples/tpu/III82_EventDispatching.jpg)
+![Fig. 8.2: Event Handling Scenario](https://docs.arc42.org/assets/images/examples/tpu/III82_EventDispatching.jpg)

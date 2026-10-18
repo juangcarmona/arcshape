@@ -28,4 +28,4 @@ Typically we suggest to separate business- from such technical information,
 but a combination might save some documentation effort
 
 
-![business context diagram with technical information](../../assets/images/sections/03/business-context-with-technical-info.webp)
+![business context diagram with technical information](https://docs.arc42.org/assets/images/sections/03/business-context-with-technical-info.webp)

@@ -26,4 +26,4 @@ The little "infinity" symbol in the lower right corner (i.e. in Development)
 means there is a refined diagram available (that "infinity" symbol is a speciality
 of Sparx EnterpriseArchitect&reg;).
 
-![deployment overview](../../assets/images/sections/07/deployment-overview.png)
+![deployment overview](https://docs.arc42.org/assets/images/sections/07/deployment-overview.png)

@@ -24,4 +24,4 @@ to the systems' scope and context ([arc42 section 3](https://docs.arc42.org/sect
 The following diagram shows an example of such a consistent refinement from
 context to building block level 1.
 
-![ example of a consistent refinement from context to building block level 1](../../assets/images/sections/05/whitebox-level-1-consistent.png){:width="85%"}
+![ example of a consistent refinement from context to building block level 1](https://docs.arc42.org/assets/images/sections/05/whitebox-level-1-consistent.png){:width="85%"}

@@ -22,7 +22,7 @@ We have seen too many sequence diagrams resembling the one below: Scenarios that
 just propagate date over several participants - usually non-interesting stuff.
 
 
-![boring sequence diagram](../../assets/images/sections/06/long-and-mostly-boring.png){:width="40%"}
+![boring sequence diagram](https://docs.arc42.org/assets/images/sections/06/long-and-mostly-boring.png){:width="40%"}
 
 
 ## More effective: Partial scenarios
@@ -36,7 +36,7 @@ Describe only excerpts or parts of such scenarios.
 Compare the (compact) diagram below with the (boring and much longer) version above.
 
 
-![(partial) sequence diagram](../../assets/images/sections/06/short-and-interesting.png){:width="30%"}
+![(partial) sequence diagram](https://docs.arc42.org/assets/images/sections/06/short-and-interesting.png){:width="30%"}
 
 
 Btw: both diagrams were generated from a PlantUML textual description, the code for

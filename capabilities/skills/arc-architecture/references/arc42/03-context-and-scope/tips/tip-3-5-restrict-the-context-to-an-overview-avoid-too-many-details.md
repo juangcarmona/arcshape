@@ -28,4 +28,4 @@ _categorization_ or abstraction is a valid option.
 See the following counter-example - which contains too many details for
 a context _real_ context diagram:
 
-![an overly detailed context diagram](../../assets/images/sections/03/overly-detailed-context.png)
+![an overly detailed context diagram](https://docs.arc42.org/assets/images/sections/03/overly-detailed-context.png)

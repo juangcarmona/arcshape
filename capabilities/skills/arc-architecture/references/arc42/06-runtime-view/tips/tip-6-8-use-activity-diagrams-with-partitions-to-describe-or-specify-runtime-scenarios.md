@@ -21,7 +21,7 @@ tags:
 Take a look at the following example - which shows the _modularization_ or _partitioning_
 of an activity diagram.
 
-![activity diagram with partitions](../../assets/images/sections/06/activity-with-partition.png){:width="40%"}
+![activity diagram with partitions](https://docs.arc42.org/assets/images/sections/06/activity-with-partition.png){:width="40%"}
 
 The diagram above was rendered by PlantUML with the following code:
 

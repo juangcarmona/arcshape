@@ -25,7 +25,7 @@ tags:
 
 ### 8.1 Domain Entity Model 
 
-![Fig. 8.1: Domain Entity Model](../../assets/images/examples/tpu/III81_DomainEntityModel.jpg)
+![Fig. 8.1: Domain Entity Model](https://docs.arc42.org/assets/images/examples/tpu/III81_DomainEntityModel.jpg)
 
 
 | Term | Definition |

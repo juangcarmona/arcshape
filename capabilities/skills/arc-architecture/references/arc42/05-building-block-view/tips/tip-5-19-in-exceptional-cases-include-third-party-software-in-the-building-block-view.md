@@ -32,7 +32,7 @@ it has been marked with the stereotype `library` to better distinguish
 it from the building blocks specific for the system itself.)
 
 
-![whitebox from a HTML semantic analyser software with third party element](../../assets/images/sections/05/third-party-element.png){:width="85%"}
+![whitebox from a HTML semantic analyser software with third party element](https://docs.arc42.org/assets/images/sections/05/third-party-element.png){:width="85%"}
 
 
 ## See also

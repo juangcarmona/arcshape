@@ -1,6 +1,6 @@
 # Arc42 section guidance runtime evidence
 
-Observed on 2026-10-18 with Node.js 22.22.1 from the current implementation tree.
+Observed on 2026-10-18 with Node.js 22.22.1 from the corrected implementation tree.
 
 ## Drive command
 
@@ -8,16 +8,10 @@ Observed on 2026-10-18 with Node.js 22.22.1 from the current implementation tree
 
 ## Observation
 
-The actual ArcShape CLI installed `arc-architecture` and the other bundled capabilities into a temporary project for both providers. The installed project contained a frontmatter-bearing Section 1 tip, a complete worked example, its referenced image, and the upstream license file. I opened the installed Markdown files and confirmed their source URL, source revision `3cb35782b62d0cd4103aedcc75fc4ba748f043ad`, attribution, and example-only warning were visible. The CLI reported success. It also emitted its expected note that Claude Code and shared-path providers may discover duplicate copies of the same skill; provider behavior varies.
+The CLI installed `arc-architecture` and the other selected capabilities into a temporary project for Codex and Claude. It installed the section hierarchy and complete Markdown tip/example references, with image links remaining at `https://docs.arc42.org/assets/images/...`. No image binaries were installed. The packaged ADR template was installed under both `.agents/skills/arc-adr/references/template.md` and `.claude/skills/arc-adr/references/template.md`.
 
-The install selected 145 tip files, 35 example files, and 98 source images from the package. Selection remains per task: the skill directs assistants to read section indexes and only relevant topic files. This CLI workflow has no graphical screen to capture.
+The Codex arc42 tree contained 194 Markdown files: the index, source register, 12 section READMEs, 145 tips, and 35 examples. With both providers selected, the CLI creates provider-specific copies. The npm package itself contains 242 files, 629,308 unpacked bytes and 160,625 packed bytes; its packed-file smoke test enforces ceilings of 300 files and 800,000 unpacked bytes and rejects image files in the reference tree. This keeps the text guidance independently selectable without shipping the 98 upstream image binaries.
 
-## Captured CLI output
+The CLI exited with status 0. File existence and content were confirmed for both ADR templates, one Codex section tip, and one Claude example. The example retained its absolute upstream image URL. A filesystem scan found zero files below either installed `arc42/assets/images` path. The CLI emitted its expected note that Claude Code and shared-path providers may discover duplicate copies of the same skill; provider behavior varies.
 
-    Plan: install arc-adr, arc-architecture, arc-c4, arc-docs-sync for codex, claude (project scope)
-      create       .agents/skills/arc-architecture/references/arc42/01-introduction-and-goals/examples/example-overview-example-htmlsc-1.md
-      create       .agents/skills/arc-architecture/references/arc42/01-introduction-and-goals/tips/tip-1-1-give-a-compact-summary-of-requirements-and-driving-forces.md
-      create       .agents/skills/arc-architecture/references/arc42/09-architecture-decisions/README.md
-    Completed install for 4 capability(s).
-
-The CLI command exited with status 0. File existence and non-empty content were confirmed for the Codex tip, Claude example, Codex example image, and source license. The package smoke test also packed the package, installed its tarball offline into a temporary consumer project, and verified reference installation for both Codex and Claude.
+This CLI workflow has no graphical screen to capture.

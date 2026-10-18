@@ -27,4 +27,4 @@ Therefore you should only describe them if it is necessary for understanding the
 actual situation.
 
 
-![dependency diagram example](../../assets/images/sections/03/context-different-dependencies.webp)
+![dependency diagram example](https://docs.arc42.org/assets/images/sections/03/context-different-dependencies.webp)

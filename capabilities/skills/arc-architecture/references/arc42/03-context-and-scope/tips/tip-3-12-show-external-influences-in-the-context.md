@@ -46,4 +46,4 @@ in the same room - a spatial dependency.
 Some of these dependencies have impact on the achievement of the quality
 requirements for your system - and therefore might be risks ([see tip 3-4 (Show risks in contxt)](https://docs.arc42.org/tips/3-4)).
 
-![dependency diagram example](../../assets/images/sections/03/context-different-dependencies.webp)
+![dependency diagram example](https://docs.arc42.org/assets/images/sections/03/context-different-dependencies.webp)

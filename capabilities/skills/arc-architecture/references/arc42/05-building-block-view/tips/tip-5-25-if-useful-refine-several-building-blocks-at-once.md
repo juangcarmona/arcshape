@@ -31,7 +31,7 @@ contained in level-2.
 The _origin_ of the refined (level-2) blackboxes is given
 by prefixes.
 
-![whitebox with two blackboxes refined to single whitebox](../../assets/images/sections/05/mutual-refinement.webp){:width="85%"}
+![whitebox with two blackboxes refined to single whitebox](https://docs.arc42.org/assets/images/sections/05/mutual-refinement.webp){:width="85%"}
 
 
 >Apply this tip with care, as it violates the clean hierarchical

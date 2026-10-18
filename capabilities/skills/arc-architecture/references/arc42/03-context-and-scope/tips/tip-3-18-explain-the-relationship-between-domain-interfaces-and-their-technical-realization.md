@@ -33,4 +33,4 @@ The relationships (mapping) can easily be described with a table:
 
 
 
-![context diagram for mapping](../../assets/images/sections/03/context-for-mapping.webp)
+![context diagram for mapping](https://docs.arc42.org/assets/images/sections/03/context-for-mapping.webp)

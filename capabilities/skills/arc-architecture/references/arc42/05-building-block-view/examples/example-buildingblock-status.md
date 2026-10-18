@@ -27,7 +27,7 @@ This example contains the simple building block view of our [status-site](https:
 
 ### 5.1 Whitebox status.arc42.org
 
-![Whitebox (status-website)](../../assets/images/examples/status/05-building-blocks-status.drawio.png)
+![Whitebox (status-website)](https://docs.arc42.org/assets/images/examples/status/05-building-blocks-status.drawio.png)
 
 
 

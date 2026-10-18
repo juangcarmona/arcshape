@@ -33,10 +33,10 @@ The following diagram (the detailed version) shows three specific neighbour
 systems, all stereotyped with the category << logistics >>.
 
 
-![extensive context diagram](../../assets/images/sections/03/context-extensive.png)
+![extensive context diagram](https://docs.arc42.org/assets/images/sections/03/context-extensive.png)
 
 The next diagram groups these neighbours into one single "Logistics" external system
 on the left, stereotyped as << category >>.
 
 
-![compact context diagram](../../assets/images/sections/03/context-compact.png)
+![compact context diagram](https://docs.arc42.org/assets/images/sections/03/context-compact.png)

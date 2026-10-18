@@ -26,7 +26,7 @@ in single scenarios, instead of showing all low-level interactions.
 See the following example (building block hierarchy on the left,
   one scenario on the right)
 
-![building block hierarchy on the left, one scenario on the right](../../assets/images/sections/06/mixed-abstraction-levels.webp){:width="70%"}
+![building block hierarchy on the left, one scenario on the right](https://docs.arc42.org/assets/images/sections/06/mixed-abstraction-levels.webp){:width="70%"}
 
 
 ## Mixing abstraction levels saves effort

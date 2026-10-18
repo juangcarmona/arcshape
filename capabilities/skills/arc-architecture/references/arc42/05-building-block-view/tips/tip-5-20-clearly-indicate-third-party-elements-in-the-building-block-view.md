@@ -27,7 +27,7 @@ You have several options:
 
 In the diagram below, you find an example for the first option (stereotype).
 
-![include third party element in building block view, distinguish by stereotypes](../../assets/images/sections/05/third-party-element.png){:width="85%"}
+![include third party element in building block view, distinguish by stereotypes](https://docs.arc42.org/assets/images/sections/05/third-party-element.png){:width="85%"}
 
 
 ## See also

@@ -23,7 +23,7 @@ by interest and influence instead of a stakeholder table.
 Such a classification can be done very informally by gathering the team
 around a flipchart and put the outcome into the documentation as needed.
 
-![Interest vs influence diagram](../../assets/images/sections/01/stakeholder-prio-EN.png)
+![Interest vs influence diagram](https://docs.arc42.org/assets/images/sections/01/stakeholder-prio-EN.png)
 
  * High impact, great interest: you should involve these people intensively and/or take care of them. Do everything to satisfy this category of stakeholders in all respects. Communication pro-actively with them.
  * High impact, low interest: invest just as much effort as needed to satisfy these stakeholders

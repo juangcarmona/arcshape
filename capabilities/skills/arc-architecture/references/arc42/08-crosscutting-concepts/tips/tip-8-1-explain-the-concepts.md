@@ -30,11 +30,11 @@ _Crosscutting_ means exactly what it says: a concept is not the property of any 
 building block, but a decision that several of them share. That is why it does not belong
 in any one building block description - it would have to be repeated in each of them.
 
-![Three components side by side, with logging and security drawn as arrows running straight through all of them](../../assets/images/sections/08/crosscutting-concerns-EN.svg)
+![Three components side by side, with logging and security drawn as arrows running straight through all of them](https://docs.arc42.org/assets/images/sections/08/crosscutting-concerns-EN.svg)
 
 A concept does not have to run through _every_ building block to be crosscutting -
 spanning several of them is enough.
 
 Find a few _potential_ topics for such crosscutting concepts in the following diagram:
 
-![Examples of Crosscutting Concepts](../../assets/images/sections/08/concepts-EN.drawio.png)
+![Examples of Crosscutting Concepts](https://docs.arc42.org/assets/images/sections/08/concepts-EN.drawio.png)

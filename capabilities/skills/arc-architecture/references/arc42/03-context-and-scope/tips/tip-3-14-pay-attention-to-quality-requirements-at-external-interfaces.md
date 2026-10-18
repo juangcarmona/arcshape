@@ -28,7 +28,7 @@ You could denote special quality requirements or -goals in your context diagram.
 In the example below, you find two markers at external interfaces
 that indicate that the corresponding interfaces influence these Q-goals.
 
-![context diagram with quality goals](../../assets/images/sections/03/context-with-quality-goals.webp)
+![context diagram with quality goals](https://docs.arc42.org/assets/images/sections/03/context-with-quality-goals.webp)
 
 
 ## See also

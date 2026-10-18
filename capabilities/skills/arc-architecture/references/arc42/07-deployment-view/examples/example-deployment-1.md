@@ -28,14 +28,14 @@ The example shows an Enterprise Architect (TM) deployment diagram to show the pr
 
 The following picture shows the inside of the TPU hardware, an industrial rack with the main PC-board and several other Printed Circuit Boards (PCBs).
 
-![Deployment ViewLevel 1 of Traffic Pursuit Unit](../../assets/images/examples/tpu/71-HardwareVonOben.webp)
+![Deployment ViewLevel 1 of Traffic Pursuit Unit](https://docs.arc42.org/assets/images/examples/tpu/71-HardwareVonOben.webp)
 
 
 ## 7.1 Deployment Level 1
 The following UML diagram shows this hardware structure.
 
 
-![Deployment ViewLevel 1 of Traffic Pursuit Unit](../../assets/images/examples/tpu/71-Infrastructure.webp) 
+![Deployment ViewLevel 1 of Traffic Pursuit Unit](https://docs.arc42.org/assets/images/examples/tpu/71-Infrastructure.webp)
 
 ### 1. MeasuringUnit Node
 
@@ -44,7 +44,7 @@ This node mainly consists of a base PCB on which the MU-CPU-BOARD, the GPS Recei
 **MU-CPU-Board**
 
 * CPU: ARM processor 200 MIIPS at 180 Mhz
-* multiple RS232 lines with speeds up to 115Kbaud 
+* multiple RS232 lines with speeds up to 115Kbaud
 
 
 
@@ -64,7 +64,7 @@ transforms the GPS antenna signal into location information forwarded to the MU-
 
 is the central processoror of the TPU, mainly controlling all video functions of the system and storing relevant results.
 
-* CPU: Intel CPU xx cores, 
+* CPU: Intel CPU xx cores,
 * running RT debian Linux
 * multiple RS232 lines with speeds up to 115Kbaud
 

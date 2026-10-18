@@ -27,4 +27,4 @@ additional information that's currently hidden.
 We like to include references to specific scenarios in the tree,
 in the example below the major quality goals, e.g. Performance, usability, correctness and others.
 
-![mind map as quality tree](../../assets/images/sections/10/quality-tree-mindmap-example.png)
+![mind map as quality tree](https://docs.arc42.org/assets/images/sections/10/quality-tree-mindmap-example.png)

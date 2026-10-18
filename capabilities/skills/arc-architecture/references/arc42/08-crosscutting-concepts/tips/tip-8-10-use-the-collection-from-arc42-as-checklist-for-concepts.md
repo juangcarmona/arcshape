@@ -17,7 +17,7 @@ tags:
 > Source: [Tip 8-10: Use the collection from arc42 as checklist for concepts!](https://docs.arc42.org/tips/8-10/) — © 2016–2023 Dr. Gernot Starke; CC BY-SA 4.0.
 
 
-![Crosscutting concepts structure](../../assets/images/sections/08/concepts-EN.drawio.png)
+![Crosscutting concepts structure](https://docs.arc42.org/assets/images/sections/08/concepts-EN.drawio.png)
 
 
 | Category  | Topic | Explanation    |

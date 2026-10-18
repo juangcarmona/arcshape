@@ -89,7 +89,9 @@ describe("portable agent capability package", () => {
     });
     expect(plan.actions.map(({ path }) => path).sort()).toEqual([
       ".agents/skills/arc-adr/SKILL.md",
+      ".agents/skills/arc-adr/references/template.md",
       ".claude/skills/arc-adr/SKILL.md",
+      ".claude/skills/arc-adr/references/template.md",
     ]);
     expect(plan.warnings).toHaveLength(1);
   });
@@ -109,9 +111,10 @@ describe("portable agent capability package", () => {
     expect(plan.manifestPath).toBe(
       join(userRoot, ".arcshape", "agent-capabilities.json"),
     );
-    expect(plan.actions[0].destination).toBe(
-      join(userRoot, ".claude", "skills", "arc-adr", "SKILL.md"),
-    );
+    expect(
+      plan.actions.find(({ path }) => path.endsWith("arc-adr/SKILL.md"))
+        .destination,
+    ).toBe(join(userRoot, ".claude", "skills", "arc-adr", "SKILL.md"));
   });
 });
 
@@ -306,6 +309,7 @@ describe("managed capability lifecycle", () => {
     expect(initial.actions.map(({ action }) => action)).toEqual([
       "create",
       "create",
+      "create",
     ]);
     await applyPlan(initial);
 
@@ -336,7 +340,8 @@ describe("managed capability lifecycle", () => {
       operation: "update",
     });
     expect(
-      update.actions.find(({ path }) => path.includes("arc-adr")).action,
+      update.actions.find(({ path }) => path.endsWith("arc-adr/SKILL.md"))
+        .action,
     ).toBe("preserve");
     expect(
       update.actions.find(({ path }) =>

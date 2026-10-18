@@ -30,6 +30,6 @@ neighbours.
 
 See the examples below: First you see a context with ports, below you find the more extensive version with ports and explicit neighbour systems.
 
-![](../../assets/images/sections/03/context-with-ports.png)
+![](https://docs.arc42.org/assets/images/sections/03/context-with-ports.png)
 
-![](../../assets/images/sections/03/big-context.png)
+![](https://docs.arc42.org/assets/images/sections/03/big-context.png)

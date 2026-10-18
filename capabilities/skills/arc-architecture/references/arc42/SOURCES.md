@@ -8,7 +8,7 @@ Snapshot: [arc42/docs.arc42.org-site@3cb35782b62d0cd4103aedcc75fc4ba748f043ad](h
 
 Creator: Dr. Gernot Starke. Source content is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). This license applies to the arc42-derived reference subtree, not ArcShape software. The upstream license and copyright notice are retained in [ARC42-LICENSE](./ARC42-LICENSE).
 
-Inventory: 12 section pages, 145 practical tips, and 35 worked examples. Tip and example files contain the complete source page body with source attribution and selective-loading metadata; section READMEs are concise, original indexes and guidance. The source images referenced by these pages are bundled under [assets/images](./assets/images), and source-site template links are made portable.
+Inventory: 12 section pages, 145 practical tips, and 35 worked examples. Tip and example files contain the complete source page text with source attribution and selective-loading metadata; section READMEs are concise, original indexes and guidance. Image references point to the corresponding upstream `docs.arc42.org/assets/images/` URLs. Binary image assets are not bundled, keeping installs smaller while preserving access to the source illustrations.
 
 ## Sources
 

@@ -27,7 +27,7 @@ in discussing building-blocks.
 See the following example:
 
 
-![short and interesting UML sequence diagram](../../assets/images/sections/06/short-and-interesting.png){:width="30%"}
+![short and interesting UML sequence diagram](https://docs.arc42.org/assets/images/sections/06/short-and-interesting.png){:width="30%"}
 
 
 ### Downside (and a suggestion)

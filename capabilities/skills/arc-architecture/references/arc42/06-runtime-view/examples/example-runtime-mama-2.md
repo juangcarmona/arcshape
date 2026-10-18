@@ -39,7 +39,7 @@ We split the explanation of _import file_ into two phases:
 At first we explain the _generic_ import, where no campaign-specific activities are executed. 
 This concerns `configureReceiveChannel` and especially the `instantiateFilterChain()` activities.
 
-![(First part of data import:) Import Raw File](../../assets/images/examples/mama/9-getRawFile.png)
+![(First part of data import:) Import Raw File](https://docs.arc42.org/assets/images/examples/mama/9-getRawFile.png)
 
 1. tryImport: `ProcessControl` starts the import. The `activity` is a uniqe ID identifying the mandator, the campaign and the activity.
 2. `importConfiguration` gets all required configuration information 
@@ -62,4 +62,4 @@ The diagram below contains error handling.
 In _good cases_ there will be no errors.
 Calls to `ImportErrorHandler` are only executed if errors occur!
 
-![(Second part of data import:) Validate imported data](../../assets/images/examples/mama/9-validateRawData.png)
+![(Second part of data import:) Validate imported data](https://docs.arc42.org/assets/images/examples/mama/9-validateRawData.png)

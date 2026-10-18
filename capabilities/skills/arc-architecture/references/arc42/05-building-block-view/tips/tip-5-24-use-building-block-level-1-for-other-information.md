@@ -31,7 +31,7 @@ in a legend or textual explanation.
 
 See the following example:
 
-![whitebox with legend](../../assets/images/sections/05/whitebox-with-other-info.png){:width="65%"}
+![whitebox with legend](https://docs.arc42.org/assets/images/sections/05/whitebox-with-other-info.png){:width="65%"}
 
 
 ## Think twice before adding information

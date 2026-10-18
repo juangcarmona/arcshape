@@ -28,7 +28,7 @@ will tell you immediately that the number is far too high, that this particular 
 does not matter for their system at all, or that you have just hit the one thing they
 really care about. That reaction is the requirement - you only have to write it down.
 
-![Three steps: show a real example, let stakeholders react, rewrite it as your own - repeating for the next quality goal](../../assets/images/sections/01/quality-example-loop.svg)
+![Three steps: show a real example, let stakeholders react, rewrite it as your own - repeating for the next quality goal](https://docs.arc42.org/assets/images/sections/01/quality-example-loop.svg)
 
 The [arc42 quality model](https://quality.arc42.org) gives you the raw material for this:
 around 150 example requirements, plus some 190 quality characteristics to help you find

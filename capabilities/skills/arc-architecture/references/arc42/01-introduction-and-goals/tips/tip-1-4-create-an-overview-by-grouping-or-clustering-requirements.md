@@ -28,7 +28,7 @@ detailed individual requirements.
 The figure below shows an example: some ellipses group (cluster) multiple
 requirements, features or use cases. Some of them can be found in the table.
 
-![Requirements cluster](../../assets/images/sections/01/requirements-cluster.webp){:width="70%"}
+![Requirements cluster](https://docs.arc42.org/assets/images/sections/01/requirements-cluster.webp){:width="70%"}
 
 |Requirements cluster                  |Description                                     |
 |--------------------------------|------------------------------------------------|

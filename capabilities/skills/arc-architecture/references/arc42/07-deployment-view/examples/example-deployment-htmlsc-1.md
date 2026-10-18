@@ -24,7 +24,7 @@ tags:
 
 ## 7. Deployment View
 
-![HTML Sanity Checker Deployment Overview](../../assets/images/examples/htmlsc/7_1-deployment.png)
+![HTML Sanity Checker Deployment Overview](https://docs.arc42.org/assets/images/examples/htmlsc/7_1-deployment.png)
 
 
 |Node / Artifact    | Description                                                |

@@ -29,4 +29,4 @@ of your system and what are the responsibilities of its neighbor systems.
 You find an example in the diagram below: It shows the context of a webshop which delegates the payment handling to an external provider (removing this
 responsibility from the scope of the webshop).
 
-![](../../assets/images/sections/03/simple-context.png){:width="70%"}
+![](https://docs.arc42.org/assets/images/sections/03/simple-context.png){:width="70%"}

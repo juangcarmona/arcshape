@@ -34,7 +34,7 @@ alternatives how to map these sources to architectural building blocks:
 
 
 
-![mapping code to blocks diagram](../../assets/images/sections/05/mapping-code-to-blocks.png){:width="85%"}
+![mapping code to blocks diagram](https://docs.arc42.org/assets/images/sections/05/mapping-code-to-blocks.png){:width="85%"}
 
 There can be good reasons for both versions. For your system, you should
 have specific reasons why certain building blocks contain which source code.

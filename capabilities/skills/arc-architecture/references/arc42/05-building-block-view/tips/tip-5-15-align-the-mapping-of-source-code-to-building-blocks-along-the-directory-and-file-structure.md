@@ -30,4 +30,4 @@ with (higher-level) directories `a`,`b` and `c` and corresponding
 subdirectories.
 
 
-![simple mapping diagram](../../assets/images/sections/05/simple-mapping.webp){:width="85%"}
+![simple mapping diagram](https://docs.arc42.org/assets/images/sections/05/simple-mapping.webp){:width="85%"}

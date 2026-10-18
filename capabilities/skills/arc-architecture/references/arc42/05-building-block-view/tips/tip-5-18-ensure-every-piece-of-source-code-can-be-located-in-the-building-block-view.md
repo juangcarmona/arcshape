@@ -36,7 +36,7 @@ documentation (as completeness is otherwise overly expensive
 See the following diagram for an example:
 
 
-![infrastructure in building block view](../../assets/images/sections/05/infrastructure-in-building-block-view.jpg)
+![infrastructure in building block view](https://docs.arc42.org/assets/images/sections/05/infrastructure-in-building-block-view.jpg)
 
 
 The `Code Generator` (shaded in yellow color in the lower left corner)

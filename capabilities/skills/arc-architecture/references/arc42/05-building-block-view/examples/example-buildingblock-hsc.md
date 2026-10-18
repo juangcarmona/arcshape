@@ -27,7 +27,7 @@ This example contains several levels of the building block view - ranging from t
 
 ### 5.1 Whitebox HtmlSanityChecker
 
-![Whitebox (HtmlSC)](../../assets/images/examples/htmlsc/5-whitebox-hsc-level-1.png)
+![Whitebox (HtmlSC)](https://docs.arc42.org/assets/images/examples/htmlsc/5-whitebox-hsc-level-1.png)
 
 
 **Rationale:** We used _functional decomposition_ to separate responsibilities:
@@ -60,7 +60,7 @@ This example contains several levels of the building block view - ranging from t
 #### 5.2.1 HSC Core (Whitebox)
 
 
-![HSC-Core (Whitebox)](../../assets/images/examples/htmlsc/5-2-1-hsc-core.png)
+![HSC-Core (Whitebox)](https://docs.arc42.org/assets/images/examples/htmlsc/5-2-1-hsc-core.png)
 
 
 **Rationale:**
@@ -119,7 +119,7 @@ Source: `package org.aim42.htmlsanitycheck.suggest.Suggester`
 #### 5.3.1 ResultsCollector (Whitebox)
 
 
-![Results Collector (Whitebox)](../../assets/images/examples/htmlsc/5-3-results-collector.png)
+![Results Collector (Whitebox)](https://docs.arc42.org/assets/images/examples/htmlsc/5-3-results-collector.png)
 
 **Rationale:** This structures follows the hierarchy of checks, managing results for:
 

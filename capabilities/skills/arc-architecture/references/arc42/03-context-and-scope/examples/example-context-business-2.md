@@ -29,7 +29,7 @@ A simple diagram with a brief explanation in a table.
 ### 3.1 Business Context 
 
 
-![Business Context](../../assets/images/examples/mama/3-Mama-Business-Context.png)
+![Business Context](https://docs.arc42.org/assets/images/examples/mama/3-Mama-Business-Context.png)
 
 |Element         | Description |
 |------|:------|

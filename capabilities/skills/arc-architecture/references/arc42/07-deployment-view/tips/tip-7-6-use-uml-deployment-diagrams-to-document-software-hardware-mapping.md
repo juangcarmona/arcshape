@@ -23,4 +23,4 @@ In (UML) deployment diagrams you can show both:
 * mapping of architecture building blocks to hardware
 
 
-![deployment diagram](../../assets/images/sections/07/deployment-diagram.png){:width="70%"}
+![deployment diagram](https://docs.arc42.org/assets/images/sections/07/deployment-diagram.png){:width="70%"}

@@ -29,7 +29,7 @@ A simple diagram with a brief textual explanation.
 ### 6.1 Execute all checks
 A typical scenario within HtmlSC is the execution of _all_ available checking algorithms on a set of HTML pages.
 
-![Main Loop](../../assets/images/examples/htmlsc/6-main-loop.png)
+![Main Loop](https://docs.arc42.org/assets/images/examples/htmlsc/6-main-loop.png)
 
 **Explanation:**
 
@@ -44,7 +44,7 @@ A typical scenario within HtmlSC is the execution of _all_ available checking al
 
 ### 6.2 Report checking results
 
-![Sequence diagram: Report results](../../assets/images/examples/htmlsc/6-2-1-report-results.png)
+![Sequence diagram: Report results](https://docs.arc42.org/assets/images/examples/htmlsc/6-2-1-report-results.png)
 
 Reporting is done in the natural hierarchy of results (see the corresponding concept in section 8.2.1 for an example report).
 

@@ -60,7 +60,7 @@ end
 
 The (rendered) diagram from this textual description is shown below:
 
-![rendered sequence diagram from this textual description](../../assets/images/sections/06/textual-sequence.png){:width="50%"}
+![rendered sequence diagram from this textual description](https://docs.arc42.org/assets/images/sections/06/textual-sequence.png){:width="50%"}
 
 ## Text is easier for developer
 

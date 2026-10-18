@@ -28,7 +28,7 @@ Be especially careful with graphical interface descriptions
 Take a look at the following diagram, where `Blurp`
 provides a method/service `blurp` for the consumer `FooBar`.
 
-![simple interface description diagram](../../assets/images/sections/05/interface-simple-variant.png){:width="55%"}
+![simple interface description diagram](https://docs.arc42.org/assets/images/sections/05/interface-simple-variant.png){:width="55%"}
 
 
 You may add further details to this simple graphical model,

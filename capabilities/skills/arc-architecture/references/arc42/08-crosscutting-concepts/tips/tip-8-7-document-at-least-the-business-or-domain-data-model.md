@@ -33,7 +33,7 @@ Take the following as a brief example (based upon an idea from  <a target="_blan
 It lacks definitions or further explanations of the entities and their relations... in reality,
 you should be more thorough...
 
-![brief example for a data model, hospital domain](../../assets/images/sections/08/hospital-domain-EN.png){:width="70%"}
+![brief example for a data model, hospital domain](https://docs.arc42.org/assets/images/sections/08/hospital-domain-EN.png){:width="70%"}
 
 
 #### PlantUML source

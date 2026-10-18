@@ -30,7 +30,7 @@ You find two examples below:
 #### Document origin by naming convention
 
 
-![whitebox with two blackboxes refined to single whitebox](../../assets/images/sections/05/mutual-refinement.webp){:width="85%"}
+![whitebox with two blackboxes refined to single whitebox](https://docs.arc42.org/assets/images/sections/05/mutual-refinement.webp){:width="85%"}
 
 #### Document origin by graphical means
 
@@ -38,4 +38,4 @@ In the next diagram the origin of the refined building blocks
 is shown by a named rectangle around the refined blocks
 (for illustration purposes shown in pink color...)
 
-![refined building blocks](../../assets/images/sections/05/mutual-refinement-graphical.png){:width="85%"}
+![refined building blocks](https://docs.arc42.org/assets/images/sections/05/mutual-refinement-graphical.png){:width="85%"}

@@ -27,7 +27,7 @@ the ISO standard 25010:2023 provides a good checklist for top-level quality "top
 As a more practical alternative, consider the arc42 subproject "quality requirements examples" ([see tip 1-15](https://docs.arc42.org/tips/1-15/)) for around 150 real-world examples of
 quality requirements.
 
-![Quality tree of ISO/IEC 25010:2023 - the nine characteristics functional suitability, performance efficiency, compatibility, interaction capability, reliability, security, maintainability, flexibility and safety, each with its sub-characteristics](../../assets/images/sections/01/iso-25010-2023-tree-en.svg)
+![Quality tree of ISO/IEC 25010:2023 - the nine characteristics functional suitability, performance efficiency, compatibility, interaction capability, reliability, security, maintainability, flexibility and safety, each with its sub-characteristics](https://docs.arc42.org/assets/images/sections/01/iso-25010-2023-tree-en.svg)
 
 Some common "quality topics" are:
 

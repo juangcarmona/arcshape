@@ -41,7 +41,7 @@ The following goals have been established for this system:
 
 ## 1.1 Requirements
 
-![Introduction](../../assets/images/examples/tpu/1-UseCases.jpg)
+![Introduction](https://docs.arc42.org/assets/images/examples/tpu/1-UseCases.jpg)
 
 | Id | Requirement | Explanation |
 | :--- | :--- | --- |

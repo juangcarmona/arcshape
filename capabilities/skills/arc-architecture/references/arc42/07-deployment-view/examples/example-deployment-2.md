@@ -28,10 +28,10 @@ The example shows an Enterprise Architect (TM) deployment diagram to show the re
 
 ### Video Cards (Details)
 
-![Deployment View Level 2: Video Cards](../../assets/images/examples/tpu/72-VideoCards.webp) 
+![Deployment View Level 2: Video Cards](https://docs.arc42.org/assets/images/examples/tpu/72-VideoCards.webp)
 
 The video cards consists of two PCBs: one PCB contains two video inserters (UserInserter Node and LegalInserter Node, cf. figure 7.5 and the other one contains the Codec.
 
-![Videoboard with 2 Inserters](../../assets/images/examples/tpu/73-VideoboardMit2Insertern.webp) 
+![Videoboard with 2 Inserters](https://docs.arc42.org/assets/images/examples/tpu/73-VideoboardMit2Insertern.webp)
 
-![Codec Board](../../assets/images/examples/tpu/74-CodecBoard.webp)
+![Codec Board](https://docs.arc42.org/assets/images/examples/tpu/74-CodecBoard.webp)

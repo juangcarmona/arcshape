@@ -43,7 +43,7 @@ This stereotype (the name between the French guillements «..») refers to a cro
 concept that explains how elements of type X-service» shall be constructed,
 build or implemented.
 
-![building blocks diagram, lean approach](../../assets/images/sections/05/concepts-instead.webp){:width="85%"}
+![building blocks diagram, lean approach](https://docs.arc42.org/assets/images/sections/05/concepts-instead.webp){:width="85%"}
 
 ## Building blocks might apply several concepts
 

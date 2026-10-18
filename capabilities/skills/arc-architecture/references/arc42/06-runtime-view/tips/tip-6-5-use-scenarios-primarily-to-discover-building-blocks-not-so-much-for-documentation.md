@@ -44,7 +44,7 @@ I <--H : ok
 @enduml
 ```
 
-![PlantUML sequence diagram example](../../assets/images/sections/06/plantuml-example.png){:width="30%"}
+![PlantUML sequence diagram example](https://docs.arc42.org/assets/images/sections/06/plantuml-example.png){:width="30%"}
 
 
 Charming: Such textual descriptions can be merged and versioned like any other source code!

@@ -31,7 +31,7 @@ high manual effort.
 
 See the following example, where a risk is explicitly marked with a red label:
 
-![html sanity check context with 'checks external websites and resources' marked as risk](../../assets/images/sections/03/context-with-risk.png)
+![html sanity check context with 'checks external websites and resources' marked as risk](https://docs.arc42.org/assets/images/sections/03/context-with-risk.png)
 
 
 

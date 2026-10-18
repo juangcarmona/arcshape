@@ -48,7 +48,7 @@ public CheckingResultsCollector performCheck() {
 }
 ~~~~
 
-![Template Method (excerpt)](../../assets/images/examples/htmlsc/8-3-template-method.png)
+![Template Method (excerpt)](https://docs.arc42.org/assets/images/examples/htmlsc/8-3-template-method.png)
 
 |Component         | Description |
 |------|:------|
