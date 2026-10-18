@@ -31,11 +31,9 @@ describe("arcshape init", () => {
     ]);
     expect(paths).toContain("arc-architecture/references/arc42/SOURCES.md");
     expect(
-      paths.filter((path) =>
-        path.startsWith("arc-architecture/references/arc42/"),
-      ).filter((path) =>
-        /\/\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path),
-      ),
+      paths
+        .filter((path) => path.startsWith("arc-architecture/references/arc42/"))
+        .filter((path) => /\/\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path)),
     ).toHaveLength(145);
     expect(
       paths.filter((path) =>
