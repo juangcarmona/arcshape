@@ -13,52 +13,54 @@ import { createHash } from "node:crypto";
 /* ------------------------------------------------------------------ */
 /* Design tokens: a calm engineering instrument in two appearances.   */
 /* ------------------------------------------------------------------ */
-const lightBlock = `  --bg: #fbfbfa;
-  --panel: #f2f2ef;
+const lightBlock = `  --bg: #ffffff;
+  --panel: #f6f7f9;
   --raise: #ffffff;
-  --ink: #1c1e21;
-  --text: #33373d;
-  --muted: #6b7078;
-  --line: #dcdcd6;
-  --line-strong: #b9bab2;
-  --accent: #0b5cad;
-  --accent-soft: #e3edf7;
-  --mark: #ffe9a8;
-  --code-bg: #f0efe9;`;
+  --ink: #12161d;
+  --text: #1f2430;
+  --muted: #4f5560;
+  --line: #dfe3ea;
+  --line-strong: #bfc6d1;
+  --accent: #1c4fa3;
+  --accent-soft: #e8eef8;
+  --mark: #fff0b3;
+  --code-bg: #f3f5f8;
+  --edge: #47536b;`;
 
-const darkBlock = `  --bg: #16181b;
-  --panel: #1d2024;
-  --raise: #24272c;
-  --ink: #e8eaed;
-  --text: #c6cad0;
-  --muted: #8d939c;
-  --line: #33373d;
-  --line-strong: #4a4f57;
-  --accent: #6cb2eb;
-  --accent-soft: #22303c;
-  --mark: #6a5b1e;
-  --code-bg: #22252a;
+const darkBlock = `  --bg: #0f1216;
+  --panel: #141920;
+  --raise: #1a2029;
+  --ink: #eef1f5;
+  --text: #d4d9e1;
+  --muted: #9aa3b2;
+  --line: #262d37;
+  --line-strong: #3a4350;
+  --accent: #7aa7ff;
+  --accent-soft: #1a2640;
+  --mark: #5a4a12;
+  --code-bg: #141920;
+  --edge: #8e9ab0;
   --cat-quality: #f27ec2;
   --cat-views: #43c4da;
-  --cat-concepts: #e3b544;
+  --cat-concepts: #f79c50;
   --cat-other: #a9b2c5;`;
 
 const lightBlockWithSectionColors = `${lightBlock}
   --cat-quality: #b0287a;
   --cat-views: #0b7285;
-  --cat-concepts: #8a6100;
+  --cat-concepts: #b54708;
   --cat-other: #56607a;`;
 
 const SECTION_ICONS = [
   '<circle cx="8" cy="8" r="5.5"/><circle cx="8" cy="8" r="2"/><path d="M8 1v2M15 8h-2M8 15v-2M1 8h2"/>',
-  '<path d="M3 4h10M3 8h10M3 12h10"/><circle cx="6" cy="4" r="1.4"/><circle cx="10" cy="8" r="1.4"/><circle cx="7" cy="12" r="1.4"/>',
+  '<rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5 7V5a3 3 0 0 1 6 0v2M8 10v1.5"/>',
   '<rect x="2" y="3" width="5" height="5" rx="1"/><rect x="9" y="8" width="5" height="5" rx="1"/><path d="M7 5.5h2v5H9"/>',
-  '<circle cx="8" cy="8" r="6"/><path d="m8 2 1.2 5.2L14 8l-5.2 1.2L8 14l-1.2-4.8L2 8l4.8-.8z"/>',
+  '<circle cx="8" cy="8" r="6"/><path d="m10.7 5.3-1.4 3.6-4 1.8 1.8-4z"/>',
   '<path d="m2 5 6-3 6 3-6 3zM2 5v6l6 3 6-3V5M8 8v6"/>',
-  '<circle cx="3" cy="8" r="1.5"/><circle cx="13" cy="4" r="1.5"/><circle cx="13" cy="12" r="1.5"/><path d="m4.5 7.5 7-3M4.5 8.5l7 3"/>',
-  '<rect x="2" y="2" width="12" height="4" rx="1"/><rect x="2" y="7" width="12" height="4" rx="1"/><rect x="2" y="12" width="12" height="2" rx="1"/>',
-  '<path d="m8 2 6 3-6 3-6-3zM2 8l6 3 6-3M2 11l6 3 6-3"/>',
-  '<path d="M3 3v10h10M5 10l3-3 2 2 4-5M11 4h3v3"/>',
+  '<circle cx="8" cy="8" r="6"/><path d="m7 5 4 3-4 3z"/>',
+  '<rect x="3" y="2" width="10" height="5" rx="1"/><rect x="3" y="9" width="10" height="5" rx="1"/><path d="M5 4.5h.1M5 11.5h.1M8 7v2"/>',
+  '<circle cx="6" cy="8" r="3"/><circle cx="10" cy="8" r="3"/>',
+  '<path d="m8 1.5 6 3.4v6.2L8 14.5l-6-3.4V4.9zM8 5v4M8 11v.1"/>',
   '<path d="M2 12a6 6 0 1 1 12 0M8 10l3-4M4 12h8"/><circle cx="8" cy="10" r="1"/>',
   '<path d="m8 2 6 11H2zM8 6v3.5M8 11.5v.1"/>',
   '<path d="M3 2.5h7l3 3V14H3zM10 2.5V6h3M5 8h6M5 10h6M5 12h4"/>',
@@ -66,17 +68,17 @@ const SECTION_ICONS = [
 
 const SECTION_CODES = [
   "GOAL",
-  "CONS",
+  "CON",
   "CTX",
-  "STRAT",
-  "BLDG",
+  "STR",
+  "BBV",
   "RUN",
   "DEP",
-  "CONC",
+  "XCC",
   "ADR",
-  "QUAL",
-  "RISK",
-  "TERM",
+  "QR",
+  "RTD",
+  "GLO",
 ];
 
 function sectionCategory(number) {
@@ -114,7 +116,7 @@ ${darkBlock}
 html, body { height: 100%; }
 body {
   margin: 0; display: flex; flex-direction: column; overflow: hidden;
-  font: 15px/1.6 var(--sans); color: var(--text); background: var(--bg);
+  font: 14px/1.5 var(--sans); color: var(--text); background: var(--bg);
   -webkit-text-size-adjust: 100%;
 }
 h1, h2, h3, h4, h5, h6 { color: var(--ink); line-height: 1.3; }
@@ -125,7 +127,7 @@ code, kbd, .rev { font-family: var(--mono); font-size: 0.88em; }
 code { background: var(--code-bg); border: 1px solid var(--line); border-radius: 3px; padding: 0.05em 0.35em; }
 pre { background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0.6rem 0.8rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.5; }
 pre code { background: none; border: none; padding: 0; font-size: inherit; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .skip {
   position: absolute; left: -9999px; top: 0; z-index: 20;
@@ -133,30 +135,38 @@ pre code { background: none; border: none; padding: 0; font-size: inherit; }
   border: 1px solid var(--line-strong);
 }
 .skip:focus { left: 0.5rem; top: 0.5rem; }
+.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
 /* ---- Header ---- */
 header.site {
-  display: flex; align-items: center; gap: 0.9rem; flex: none;
-  padding: 0.45rem 1rem; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 0.75rem; flex: none;
+  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
   background: var(--raise);
 }
-header.site h1 { margin: 0; min-width: 0; font-size: 0.98rem; overflow-wrap: anywhere; }
+header.site h1 { display:flex; align-items:center; gap:.5rem; margin:0; min-width:0; font-size:.95rem; white-space:nowrap; }
+.brand-mark { display:grid; place-items:center; width:1.5rem; height:1.5rem; border:1px solid var(--accent); border-radius:3px; color:var(--accent); font:700 .66rem/1 var(--mono); }
+.project-context { min-width:0; overflow:hidden; color:var(--muted); font-size:.82rem; text-overflow:ellipsis; white-space:nowrap; }
 .revshort {
   font-family: var(--mono); font-size: 0.74rem; color: var(--muted);
   border: 1px solid var(--line); border-radius: 3px; padding: 0.05rem 0.4rem; white-space: nowrap;
 }
+.primary-nav { display:flex; align-self:stretch; align-items:stretch; gap:.25rem; margin-left:.5rem; }
+.primary-nav a { display:inline-flex; align-items:center; padding:.25rem .6rem; border-bottom:2px solid transparent; color:var(--muted); font-size:.9rem; }
+.primary-nav a:hover { color:var(--ink); text-decoration:none; background:var(--panel); }
+.primary-nav a[aria-current='page'] { color:var(--ink); border-bottom-color:var(--accent); background:var(--accent-soft); }
 header.site .spacer { flex: 1; }
 .iconbtn {
   display: inline-flex; align-items: center; justify-content: center;
   flex: none;
-  width: 1.7rem; height: 1.7rem; border: 1px solid var(--line-strong); border-radius: 4px;
+  width: 2rem; height: 2rem; border: 1px solid var(--line-strong); border-radius: 4px;
   background: var(--raise); cursor: pointer; color: var(--muted);
 }
+.iconbtn svg { width:1rem; height:1rem; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 .iconbtn:hover { color: var(--ink); border-color: var(--accent); }
 .appearance { display: inline-flex; flex: none; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden; }
 .appearance button {
-  border: none; background: var(--raise); color: var(--muted); cursor: pointer;
-  padding: 0.15rem 0.5rem; font-size: 0.78rem;
+  display: inline-flex; align-items: center; justify-content: center; min-width: 2.2rem; min-height: 2.2rem;
+  border: none; background: var(--raise); color: var(--muted); cursor: pointer; font-size: 1rem;
 }
 .appearance button + button { border-left: 1px solid var(--line); }
 .appearance button[aria-pressed='true'] { background: var(--accent-soft); color: var(--ink); }
@@ -164,7 +174,7 @@ header.site .spacer { flex: 1; }
 /* ---- Layout ---- */
 #shell { flex: 1 1 auto; min-height: 0; display: flex; }
 aside.nav {
-  position:relative; flex:none; width:17.5rem; overflow-y:auto; border-right:1px solid var(--line);
+  position:relative; flex:none; width:24rem; overflow-y:auto; border-right:1px solid var(--line);
   background: var(--panel); padding: 0.9rem 0.75rem;
   transition:width .18s ease,padding .18s ease;
 }
@@ -179,19 +189,22 @@ aside.nav h2 { margin:0; font-size:.72rem; text-transform:uppercase; letter-spac
 aside.nav ol { list-style: none; margin: 0; padding: 0; }
 aside.nav li { margin: 0; border-bottom: 1px solid var(--line); }
 aside.nav a {
-  display:flex; gap:.55rem; align-items:center; padding:.32rem .4rem;
+  display:flex; min-height:3.25rem; gap:.5rem; align-items:center; padding:.5rem .4rem;
   color: var(--text); border-left: 2px solid transparent;
 }
 aside.nav a:hover { color: var(--ink); text-decoration: none; background: var(--raise); }
 aside.nav a[aria-current='page'] { color: var(--ink); border-left-color: var(--accent); background: var(--raise); }
-aside.nav .nav-icon { display:inline-flex; flex:none; width:1rem; height:1rem; color:var(--category); }
-aside.nav .nav-icon svg, .prevnext svg { width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+aside.nav .nav-kind { display:inline-flex; flex:none; align-items:center; gap:.25rem; min-width:3.9rem; padding:.1rem .3rem; border:1px solid color-mix(in srgb,var(--category) 68%,var(--line)); border-radius:4px; color:var(--category); }
+aside.nav .nav-icon { display:inline-flex; flex:none; width:1rem; height:1rem; }
+aside.nav .nav-chevron { display:inline-flex; flex:none; width:.75rem; height:.75rem; color:var(--accent); }
+aside.nav .nav-icon svg, aside.nav .nav-chevron svg, .prevnext svg { width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
 aside.nav a[data-category="quality"], .prevnext a[data-category="quality"] { --category:var(--cat-quality); }
 aside.nav a[data-category="views"], .prevnext a[data-category="views"] { --category:var(--cat-views); }
 aside.nav a[data-category="concepts"], .prevnext a[data-category="concepts"] { --category:var(--cat-concepts); }
 aside.nav a[data-category="other"], .prevnext a[data-category="other"] { --category:var(--cat-other); }
-aside.nav .nav-code { display:none; font:600 .58rem/1 var(--mono); color:var(--category); }
-aside.nav .t { flex:1 1 auto; min-width:0; font-size:.86rem; }
+aside.nav .nav-code { display:inline-flex; flex:none; font:600 .75rem/1.2 var(--mono); color:inherit; }
+aside.nav .t { flex:1 1 auto; min-width:0; font-size:.95rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+aside.nav .nav-number { flex:none; color:var(--muted); font: .68rem/1 var(--mono); }
 .nav-foot { margin-top: 1rem; padding-top: 0.6rem; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--muted); }
 .nav-foot .prevnext { display: flex; justify-content: space-between; gap: 0.5rem; }
 .nav-foot .prevnext a { font-size: 0.78rem; }
@@ -200,8 +213,10 @@ aside.nav .t { flex:1 1 auto; min-width:0; font-size:.86rem; }
 body.nav-collapsed aside.nav { width:4.25rem; padding:.9rem .55rem; }
 body.nav-collapsed aside.nav .nav-heading { justify-content:center; }
 body.nav-collapsed aside.nav h2, body.nav-collapsed aside.nav .nav-title, body.nav-collapsed aside.nav .nav-foot { display:none; }
-body.nav-collapsed aside.nav a { flex-direction:column; gap:.12rem; align-items:center; padding:.48rem .15rem; }
+body.nav-collapsed aside.nav a { flex-direction:column; gap:.2rem; align-items:center; padding:.5rem .15rem; }
+body.nav-collapsed aside.nav .nav-kind { flex-direction:column; gap:.15rem; min-width:0; padding:.2rem; }
 body.nav-collapsed aside.nav .nav-icon { width:1.2rem; height:1.2rem; }
+body.nav-collapsed aside.nav .nav-chevron, body.nav-collapsed aside.nav .nav-number { display:none; }
 body.nav-collapsed aside.nav .nav-code { display:block; }
 .mobile-nav-toggle, #nav-close, #nav-backdrop { display:none; }
 
@@ -266,42 +281,52 @@ kbd {
 @media (max-width: 900px) {
   header.site .mobile-nav-toggle { display:inline-flex; }
   #shell { position:relative; }
-  aside.nav { position:absolute; z-index:25; inset:0 auto 0 0; width:min(19rem,86vw); transform:translateX(-105%); transition:transform .2s ease; box-shadow:0 12px 36px rgba(0,0,0,.28); }
+  aside.nav { position:absolute; z-index:25; inset:0 auto 0 0; width:min(24rem,86vw); transform:translateX(-105%); transition:transform .2s ease; box-shadow:0 12px 36px rgba(0,0,0,.28); }
   body.mobile-nav-open aside.nav { transform:translateX(0); }
   #nav-close { display:inline-flex; }
   #nav-backdrop { position:absolute; z-index:24; inset:0; display:block; border:0; background:rgba(0,0,0,.48); }
-  body.nav-collapsed aside.nav { width:min(19rem,86vw); padding:.9rem .75rem; }
+  body.nav-collapsed aside.nav { width:min(24rem,86vw); padding:.9rem .75rem; }
   body.nav-collapsed aside.nav .nav-heading { justify-content:space-between; }
   body.nav-collapsed aside.nav h2, body.nav-collapsed aside.nav .nav-title, body.nav-collapsed aside.nav .nav-foot { display:block; }
-  body.nav-collapsed aside.nav a { flex-direction:row; gap:.55rem; align-items:center; padding:.32rem .4rem; }
+  body.nav-collapsed aside.nav a { flex-direction:row; gap:.5rem; align-items:center; padding:.5rem .4rem; }
+  body.nav-collapsed aside.nav .nav-kind { flex-direction:row; gap:.25rem; min-width:3.9rem; padding:.1rem .3rem; }
   body.nav-collapsed aside.nav .nav-icon { width:1rem; height:1rem; }
+  body.nav-collapsed aside.nav .nav-chevron { display:inline-flex; }
+  body.nav-collapsed aside.nav .nav-number { display:inline; }
   body.nav-collapsed aside.nav .nav-code { display:none; }
   main#main { padding:1rem 1rem 3rem; }
 }
 @media (max-width: 520px) {
   header.site { flex-wrap: wrap; gap: 0.5rem; }
-  header.site h1 { flex: 1 1 calc(100% - 6rem); }
+  header.site h1 { flex:none; }
+  header.site .project-context { order:4; flex:1 0 calc(100% - 2.25rem); margin-left:2rem; }
   header.site .spacer { display: none; }
   header.site .appearance { margin-left: auto; }
 }
-.overview-intro { max-width:62rem; margin:0 auto 1.6rem; }
-.overview-intro h2 { margin:0 0 .4rem; font-size:clamp(1.7rem,3vw,2.5rem); }
-.overview-intro p { margin:0; color:var(--muted); font-size:1.05rem; }
-.section-cards { display:grid; grid-auto-flow:column; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:repeat(6,minmax(5rem,auto)); gap:.7rem; max-width:75rem; margin:auto; }
-.section-card { display:flex; align-items:flex-start; gap:.85rem; min-height:5rem; padding:.9rem 1rem; color:var(--ink); border:1px solid var(--line); border-radius:7px; background:color-mix(in srgb,var(--category) 9%,var(--raise)); }
+.overview-intro { max-width:72.5rem; margin:0 auto .5rem; }
+.overview-intro h2 { margin:0 0 .25rem; font-size:1.1rem; }
+.overview-intro p { margin:0; color:var(--muted); font-size:.85rem; }
+.section-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.5rem; max-width:72.5rem; margin:auto; }
+.section-card { display:flex; align-items:flex-start; gap:1rem; min-height:7.5rem; padding:1rem 1.125rem; color:var(--ink); border:1px solid color-mix(in srgb,var(--category) 48%,var(--line)); border-radius:5px; background:color-mix(in srgb,var(--category) 9%,var(--raise)); }
 .section-card:hover { border-color:var(--category); text-decoration:none; }
 .section-card[data-category="quality"] { --category:var(--cat-quality); }
 .section-card[data-category="views"] { --category:var(--cat-views); }
 .section-card[data-category="concepts"] { --category:var(--cat-concepts); }
 .section-card[data-category="other"] { --category:var(--cat-other); }
-.section-card .card-number { display:grid; place-items:center; width:2rem; height:2rem; flex:none; border-radius:50%; background:var(--category); color:#fff; font-weight:700; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-appearance='light']) .section-card .card-number { color:#16181b; }
-}
-:root[data-appearance='dark'] .section-card .card-number { color:#16181b; }
-.section-card strong { display:block; color:var(--ink); font-size:1rem; }
-.section-card small { display:block; margin-top:.2rem; color:var(--muted); font-size:.83rem; }
-@media(max-width:650px) { .section-cards { grid-auto-flow:row; grid-template-columns:1fr; grid-template-rows:none; } }
+.section-card .section-icon { display:inline-flex; flex:none; align-items:center; justify-content:center; width:2.625rem; height:2.625rem; margin-top:.1rem; border:1px solid color-mix(in srgb,var(--category) 42%,var(--line)); border-radius:50%; background:color-mix(in srgb,var(--category) 10%,var(--raise)); color:var(--category); }
+.section-card .section-icon svg { width:1.25rem; height:1.25rem; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.section-card .section-copy { flex:1 1 auto; min-width:0; }
+.section-card .section-meta { display:block; margin:0 0 .2rem; color:var(--category); font:600 .75rem/1.4 var(--mono); letter-spacing:.04em; }
+.section-card strong { display:block; color:var(--ink); font-size:1.1rem; line-height:1.35; }
+.section-card small { display:block; margin-top:.25rem; color:var(--muted); font-size:.95rem; }
+.section-legend { display:flex; flex-wrap:wrap; gap:.5rem 1rem; max-width:72.5rem; margin:.5rem auto 0; padding-top:.5rem; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; }
+.section-legend span { display:inline-flex; align-items:center; gap:.4rem; }
+.section-legend i { width:.8rem; height:.8rem; border-radius:50%; background:var(--category); }
+.section-legend [data-category="quality"] { --category:var(--cat-quality); }
+.section-legend [data-category="views"] { --category:var(--cat-views); }
+.section-legend [data-category="concepts"] { --category:var(--cat-concepts); }
+.section-legend [data-category="other"] { --category:var(--cat-other); }
+@media(max-width:650px) { .section-cards { grid-template-columns:1fr; } }
 @media print {
   body { overflow: visible; }
   aside.nav, header.site .appearance, header.site .iconbtn { display: none; }
@@ -390,10 +415,7 @@ const script = String.raw`
 
   function showOverview(host) {
     clear(host);
-    var intro = el('section', 'overview-intro');
-    intro.appendChild(el('h2', null, README.title || 'Raccord Architecture'));
-    if (README.description) intro.appendChild(el('p', null, README.description));
-    host.appendChild(intro);
+    host.appendChild(el('h2', 'visually-hidden', README.title || 'Architecture Documentation'));
     var cards = el('div', 'section-cards');
     for (var i = 0; i < SECTIONS.length; i += 1) {
       var section = SECTIONS[i];
@@ -401,14 +423,35 @@ const script = String.raw`
       card.className = 'section-card';
       card.href = '#/section/' + section.number;
       card.setAttribute('data-category', section.category);
-      card.appendChild(el('span', 'card-number', String(Number(section.number))));
-      var copy = el('span');
+      var icon = el('span', 'section-icon');
+      icon.innerHTML = section.icon;
+      card.appendChild(icon);
+      var copy = el('span', 'section-copy');
+      copy.appendChild(el('span', 'section-meta', section.code + ' · ' + String(Number(section.number)).padStart(2, '0')));
       copy.appendChild(el('strong', null, section.title));
       copy.appendChild(el('small', null, section.description || 'Explore this architecture section.'));
       card.appendChild(copy);
       cards.appendChild(card);
     }
     host.appendChild(cards);
+    var legend = el('div', 'section-legend');
+    legend.setAttribute('role', 'group');
+    legend.setAttribute('aria-label', 'Section color families');
+    [
+      ['quality', 'Requirements & quality'],
+      ['views', 'Structures & views'],
+      ['concepts', 'Concepts, technologies, decisions'],
+      ['other', 'Risks & reference'],
+    ].forEach(function (family) {
+      var label = el('span');
+      label.setAttribute('data-category', family[0]);
+      var swatch = el('i');
+      swatch.setAttribute('aria-hidden', 'true');
+      label.appendChild(swatch);
+      label.appendChild(doc.createTextNode(family[1]));
+      legend.appendChild(label);
+    });
+    host.appendChild(legend);
   }
 
   function showSection(host, number) {
@@ -445,6 +488,11 @@ const script = String.raw`
       var current = links[i].getAttribute('data-route') === route;
       if (current) links[i].setAttribute('aria-current', 'page');
       else links[i].removeAttribute('aria-current');
+    }
+    var tabs = doc.querySelectorAll('.primary-nav a[data-route]');
+    for (var t = 0; t < tabs.length; t += 1) {
+      if (tabs[t].getAttribute('data-route') === route) tabs[t].setAttribute('aria-current', 'page');
+      else tabs[t].removeAttribute('aria-current');
     }
     var m = /^#\/section\/(\d+)/.exec(route);
     var number = m ? m[1] : null;
@@ -669,7 +717,7 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
   const navItems = sections
     .map(
       (s) =>
-        `        <li><a href="#/section/${s.number}" data-route="#/section/${s.number}" data-category="${sectionCategory(s.number)}"><span class="nav-icon">${sectionIcon(s.number)}</span><span class="nav-title t">${esc(s.title)}</span><span class="nav-code">${SECTION_CODES[Number(s.number) - 1]}</span></a></li>`,
+        `        <li><a href="#/section/${s.number}" data-route="#/section/${s.number}" data-category="${sectionCategory(s.number)}"><span class="nav-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 5 5-5 5"/></svg></span><span class="nav-kind"><span class="nav-icon">${sectionIcon(s.number)}</span><span class="nav-code">${SECTION_CODES[Number(s.number) - 1] || "SEC"}</span></span><span class="nav-title t">${esc(s.title)}</span><span class="nav-number">${esc(s.number)}</span></a></li>`,
     )
     .join("\n");
 
@@ -685,6 +733,8 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
       description: s.description,
       html: s.html,
       category: sectionCategory(s.number),
+      icon: sectionIcon(s.number),
+      code: SECTION_CODES[Number(s.number) - 1] || "SEC",
     })),
   };
 
@@ -696,29 +746,30 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-${createHash("sha256").update(`\n${script}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
     '<meta name="color-scheme" content="light dark">',
-    `<title>${esc(stackName)} — arc42 Architecture Snapshot</title>`,
+    `<title>ArcShape — ${esc(stackName)} arc42 Architecture Snapshot</title>`,
     `<style>\n${style}\n</style>`,
     "</head>",
     "<body>",
     '<a class="skip" href="#main">Skip to content</a>',
     '<header class="site">',
-    `<h1>${esc(stackName)} · arc42</h1>`,
+    `<h1><span class="brand-mark" aria-hidden="true">AS</span><span>ArcShape</span></h1>`,
+    `<span class="project-context" title="${esc(stackName)} · arc42">${esc(stackName)} · arc42</span>`,
     revisionShort,
+    '<nav class="primary-nav" aria-label="Primary navigation"><a href="#/" data-route="#/">Overview</a></nav>',
     '<span class="spacer"></span>',
     '<div class="appearance" role="group" aria-label="Appearance">',
     '  <button type="button" data-appearance-set="auto" aria-pressed="true">Auto</button>',
     '  <button type="button" data-appearance-set="light" aria-pressed="false">Light</button>',
     '  <button type="button" data-appearance-set="dark" aria-pressed="false">Dark</button>',
     "</div>",
-    '<button type="button" class="iconbtn" id="ov-find" aria-haspopup="dialog" aria-label="Search (/)" title="Search (/)">\u2315</button>',
-    '<button type="button" class="iconbtn mobile-nav-toggle" id="mobile-nav-toggle" aria-controls="arc42-nav" aria-expanded="false" aria-label="Open sections navigation" title="Open navigation">☰</button>',
+    '<button type="button" class="iconbtn" id="ov-find" aria-haspopup="dialog" aria-label="Search (/)" title="Search (/)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.8" cy="6.8" r="4.4"/><path d="m10.2 10.2 3 3"/></svg></button>',
+    '<button type="button" class="iconbtn mobile-nav-toggle" id="mobile-nav-toggle" aria-controls="arc42-nav" aria-expanded="false" aria-label="Open sections navigation" title="Open navigation"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>',
     '<button type="button" class="iconbtn" id="keys-open" aria-haspopup="dialog" aria-label="Keyboard shortcuts (?)" title="Keyboard shortcuts (?)">?</button>',
     "</header>",
     '<div id="shell">',
     '<aside class="nav" id="arc42-nav" aria-label="arc42 sections">',
-    '  <div class="nav-heading"><h2>Sections</h2><button type="button" class="iconbtn" id="nav-collapse" aria-label="Collapse navigation" aria-expanded="true" title="Collapse navigation">◧</button><button type="button" class="iconbtn" id="nav-close" aria-label="Close navigation" title="Close navigation">×</button></div>',
+    '  <div class="nav-heading"><h2>Sections</h2><button type="button" class="iconbtn" id="nav-collapse" aria-label="Collapse navigation" aria-expanded="true" title="Collapse navigation"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="1"/><path d="M6 2v12"/></svg></button><button type="button" class="iconbtn" id="nav-close" aria-label="Close navigation" title="Close navigation"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg></button></div>',
     "  <ol>",
-    `    <li><a href="#/" data-route="#/" data-category="other"><span class="nav-icon"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m2 7 6-5 6 5v7H9v-4H7v4H2z"/></svg></span><span class="nav-title t">Overview</span><span class="nav-code">HOME</span></a></li>`,
     navItems,
     "  </ol>",
     '  <div class="nav-foot">',

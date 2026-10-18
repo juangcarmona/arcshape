@@ -27,7 +27,7 @@ try {
   await page.setViewport({ width: 1440, height: 1000, deviceScaleFactor: 1 });
   const siteUrl = pathToFileURL(site).href;
   await page.goto(`${siteUrl}#/`, { waitUntil: "load" });
-  await page.waitForSelector("#content .overview-intro");
+  await page.waitForSelector("#content .section-cards .section-card");
   await page.screenshot({ path: join(output, "arcshape-overview.png") });
 
   await page.goto(`${siteUrl}#/section/03`, { waitUntil: "load" });
