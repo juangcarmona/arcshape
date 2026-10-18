@@ -22,12 +22,19 @@ describe("arcshape init", () => {
     const capabilities = await listPaths(
       join(packageRoot, "capabilities", "skills"),
     );
-    expect(capabilities.map(normalizePath).sort()).toEqual([
+    const paths = capabilities.map(normalizePath).sort();
+    expect(paths.filter((path) => path.endsWith("/SKILL.md"))).toEqual([
       "arc-adr/SKILL.md",
       "arc-architecture/SKILL.md",
       "arc-c4/SKILL.md",
       "arc-docs-sync/SKILL.md",
     ]);
+    expect(paths).toContain("arc-architecture/references/arc42/SOURCES.md");
+    expect(
+      paths.filter((path) =>
+        path.startsWith("arc-architecture/references/arc42/"),
+      ),
+    ).toHaveLength(14);
     expect(await readdir(join(packageRoot, "templates"))).toEqual([
       "architecture",
     ]);

@@ -58,6 +58,12 @@ describe("packed ArcShape package", () => {
       )[0].files.map(({ path }) => path);
       expect(packageFileList).toContain("capabilities/providers.json");
       expect(packageFileList).toContain("capabilities/skills/arc-adr/SKILL.md");
+      expect(packageFileList).toContain(
+        "capabilities/skills/arc-architecture/references/arc42/SOURCES.md",
+      );
+      expect(packageFileList).toContain(
+        "capabilities/skills/arc-architecture/references/arc42/12-glossary/README.md",
+      );
       expect(
         packageFileList.some((path) =>
           path.startsWith("templates/assistants/"),
@@ -120,6 +126,24 @@ describe("packed ArcShape package", () => {
           "utf8",
         ),
       ).resolves.toContain("ArcShape architecture documentation");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".agents/skills/arc-architecture/references/arc42/01-introduction-and-goals/README.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("# 1. Introduction and Goals");
+      await expect(
+        readFile(
+          join(
+            repository,
+            ".claude/skills/arc-architecture/references/arc42/12-glossary/README.md",
+          ),
+          "utf8",
+        ),
+      ).resolves.toContain("# 12. Glossary");
       await expect(
         readFile(join(repository, ".claude/skills/arc-c4/SKILL.md"), "utf8"),
       ).resolves.toContain("name: arc-c4");
