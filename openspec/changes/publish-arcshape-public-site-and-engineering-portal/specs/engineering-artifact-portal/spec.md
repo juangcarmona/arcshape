@@ -36,7 +36,7 @@ The portal MUST generate the Product Snapshot from `docs/product/model` and the 
 
 #### Scenario: Product Snapshot reflects the active model
 - **WHEN** GitHub Pages is built from a repository revision
-- **THEN** the Product Snapshot is generated from that revision's canonical ProductShape model and reports that source revision
+- **THEN** the Product Snapshot is generated from that revision's canonical ArcShape product model and reports that source revision
 
 #### Scenario: Architecture Snapshot reflects the active documentation
 - **WHEN** GitHub Pages is built from a repository revision

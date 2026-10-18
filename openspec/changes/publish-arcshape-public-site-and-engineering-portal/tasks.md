@@ -2,7 +2,7 @@
 
 # Tasks
 
-The tasks preserve canonical ProductShape and architecture sources and constrain public product claims to approved capabilities.
+The tasks preserve ArcShape's canonical product model and architecture sources, and constrain public claims to its approved capabilities.
 
 <!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:0c2a1bb402fcf272e5ecfe15282e8d15dccd7fb57992a344071757f82cf457a7" -->
 <!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:f5d7e3a6b239e2851ee9554633e1a19cddd05a71b703ed1f184ba0d21e4da3f9" -->
@@ -10,8 +10,8 @@ The tasks preserve canonical ProductShape and architecture sources and constrain
 ## 1. Hosting and public-site foundation
 
 - [ ] 1.1 Inspect the Cloudflare Pages account/project configuration and record Git integration mode, preview URL behavior, production branch, domain state, and rollback path; verify the findings against the Cloudflare dashboard and keep production and domain activation disabled.
-- [ ] 1.2 Confirm the approved ArcShape logo/wordmark and shared ProductShape design-system consumption path, then add only approved assets and required public-site source to `src/public-site/`; verify the sources are tracked and a clean checkout can build them.
-- [ ] 1.3 Implement the ArcShape public site at `arcshape.dev` with current-capability copy and links to the engineering portal; build and verify all published claims against the active ProductShape model.
+- [ ] 1.2 Confirm the approved ArcShape logo/wordmark, then add ArcShape-owned styles and approved assets with the public-site source to `src/public-site/`; verify a clean site build needs no ProductShape site package or assets.
+- [ ] 1.3 Implement the ArcShape public site at `arcshape.dev` with current-capability copy and links to the engineering portal; build and verify all published claims against ArcShape's active product model.
 - [ ] 1.4 Add pull-request and `main` build validation plus Cloudflare preview configuration for `src/public-site/`; verify a PR preview is reviewable without changing production, and document the verified branch and preview behavior in the deployment guide.
 - [ ] 1.5 Add responsive and accessibility checks for the public site, including keyboard navigation, visible focus, image alternatives, contrast, and narrow viewport overflow; verify the checks against representative pages and document any accepted limitation.
 

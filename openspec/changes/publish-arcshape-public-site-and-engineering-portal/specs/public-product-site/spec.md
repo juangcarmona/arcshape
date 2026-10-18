@@ -16,7 +16,7 @@ Product claims must follow the approved capability model and authority boundary.
 
 ### Requirement: Public product site presents ArcShape's current product
 
-The public site MUST explain ArcShape's current capabilities using its identity and the shared ProductShape design language. Copy MUST match the active product definition and distinguish available capabilities from future work.
+The public site MUST explain ArcShape's current capabilities using ArcShape-owned identity, assets, and styles in a visual family aligned with ProductShape. Copy MUST match ArcShape's active product definition and distinguish current capabilities from future work. The site MUST NOT depend on ProductShape site packages or assets.
 
 #### Scenario: Reader finds the public site and engineering portal
 - **WHEN** a reader visits `https://arcshape.dev` after production activation
@@ -24,7 +24,7 @@ The public site MUST explain ArcShape's current capabilities using its identity 
 
 #### Scenario: Public copy stays within approved product intent
 - **WHEN** the site describes an ArcShape capability
-- **THEN** the claim is supported by the active ProductShape model and does not present planned work as available
+- **THEN** the claim is supported by ArcShape's active product model and does not present planned work as available
 
 ### Requirement: Public site previews are separate from production
 
