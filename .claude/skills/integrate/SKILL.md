@@ -32,7 +32,7 @@ Every external write is shown first and confirmed. The merge most of all.
 
 1. **Load the configuration.** Read `docs/engineering-lifecycle.md`. Absent means stop and say to run `adopt` first.
 2. **Refuse a change whose Done gate has not passed.** Delegate to the `done-gate-auditor` agent and require every applicable item satisfied, **both lanes**, with the judgement items decided by the roles the configuration names. Unmet means stop, list what remains, and point at `implement`. The audit runs again here, in a fresh context, rather than trusting a verdict recorded earlier: this is the Definition of Done's enforcement point, and everything before it was preparation.
-3. **Check the review.** `inspect-pull-request`: approved, no unresolved blocking threads, not a draft.
+3. **Check the review.** `inspect-pull-request`: no unresolved blocking threads and not a draft. Require a GitHub approval when the lifecycle policy or branch protection requires one. When the policy intentionally requires zero GitHub approvals, require the configured human reviewer to explicitly approve the change in the conversation; do not infer approval from labels, silence, or mergeability.
 4. **Bring the branch up to date with the target** via `rebase-safely`, so the specifications fold into current ones rather than stale ones. This is what keeps sequential merges from conflicting.
 5. **Fold the specifications** via `sync-specs`, on the branch. Where the configuration's **Provided roles** names a skill for this contract, that skill is `sync-specs`; the contract is the same either way.
 6. **Archive the plan artifact** via `archive-change`, on the branch, **after** the fold, never before. The same dispatch applies.
@@ -49,7 +49,7 @@ Every external write is shown first and confirmed. The merge most of all.
 
 - The Done gate was re-audited in this stage, not carried over from `implement`.
 - The Done gate was re-audited **again after the final push**, on the head that will merge, not on the pre-push commit.
-- The pull request was approved, not a draft, with no unresolved blocking threads, and its state was read again immediately before the merge.
+- The configured approval path passed: GitHub approval where required, or explicit approval from the configured human reviewer where GitHub approvals are intentionally zero. The pull request was not a draft, had no unresolved blocking threads, and its state was read again immediately before merge.
 - The branch was brought up to date before the specifications were folded.
 - The plan was archived after the fold, never before.
 - The merge commit message uses Conventional Commits and includes `Refs #<number>`.
