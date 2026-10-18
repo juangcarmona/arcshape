@@ -1,3 +1,7 @@
 name: ArcShape security analysis
 queries:
   - uses: security-extended
+paths-ignore:
+  # This tracked snapshot is generated from the reader sources and already has
+  # documented CodeQL findings; scan its source modules instead.
+  - docs/architecture-site/index.html
