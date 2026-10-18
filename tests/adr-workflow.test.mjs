@@ -69,6 +69,39 @@ describe("ADR workflow examples", () => {
     expect(unknownResponse).toContain("No ADR file or index change");
   });
 
+  it("reuses an established ADR folder, naming scheme, metadata, and index", async () => {
+    const currentIndex = await read(
+      "existing-convention/current/architecture/decisions/README.md",
+    );
+    const existingRecord = await read(
+      "existing-convention/current/architecture/decisions/DEC-0042-use-json-for-session-state.md",
+    );
+    const proposedRecord = await read(
+      "existing-convention/expected/architecture/decisions/DEC-0043-use-sqlite-for-session-state.md",
+    );
+    const updatedIndex = await read(
+      "existing-convention/expected/architecture/decisions/README.md",
+    );
+
+    expect(parseFrontmatter(existingRecord)).toEqual(
+      expect.objectContaining({ id: "DEC-0042", status: "Accepted" }),
+    );
+    expect(parseFrontmatter(proposedRecord)).toEqual(
+      expect.objectContaining({
+        id: "DEC-0043",
+        title: "Use SQLite for session state",
+        status: "Proposed",
+        deciders: ["Maintainer"],
+      }),
+    );
+    expect(currentIndex).toContain("DEC-0042");
+    expect(updatedIndex).toContain("DEC-0043");
+    expect(updatedIndex).toContain("DEC-0042");
+    expect(proposedRecord).toContain("## Context");
+    expect(proposedRecord).toContain("## Decision");
+    expect(proposedRecord).not.toContain("ADR-0001");
+  });
+
   it("ships the portable ADR capability with its safety rules", async () => {
     const skill = await read("../../capabilities/skills/arc-adr/SKILL.md");
     const repositorySkill = await readFile(
@@ -90,6 +123,9 @@ describe("ADR workflow examples", () => {
     expect(skill).toContain("name: arc-adr");
     expect(skill).toContain("`docs/adr/README.md`");
     expect(skill).toContain("`ADR-0001-kebab-case-title.md`");
+    expect(skill).toContain(
+      "Reuse the repository's canonical folder, naming scheme, metadata, and index",
+    );
     expect(skill).toContain(
       "YAML frontmatter with `id`, `title`, `status`, `date`, and `deciders`",
     );
@@ -114,6 +150,7 @@ describe("ADR workflow examples", () => {
     expect(topLevel.sort()).toEqual([
       "README.md",
       "create",
+      "existing-convention",
       "supersede",
       "unknown-decision",
     ]);

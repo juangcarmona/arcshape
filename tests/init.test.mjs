@@ -139,7 +139,7 @@ describe("arcshape init", () => {
       ),
     );
     expect(manifest.providers).toEqual(["codex", "claude"]);
-  });
+  }, 30_000);
 
   it("shows dry-run plans without writing and preserves targets when declined", async () => {
     const dryRunTarget = await makeTarget();

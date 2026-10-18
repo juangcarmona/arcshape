@@ -1,5 +1,12 @@
 import { execFile } from "node:child_process";
-import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  readdir,
+  readFile,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { promisify } from "node:util";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -193,6 +200,27 @@ describe("packed ArcShape package", () => {
         readFile(join(repository, ".claude/skills/arc-c4/SKILL.md"), "utf8"),
       ).resolves.toContain("name: arc-c4");
 
+      for (const providerRoot of [".agents", ".claude"]) {
+        const installedRoot = join(
+          repository,
+          providerRoot,
+          "skills/arc-architecture/references/arc42",
+        );
+        const installedFiles = await listFilesRecursively(installedRoot);
+        expect(
+          installedFiles.filter((path) =>
+            /^\d{2}-[^/]+\/tips\/tip-[^/]+\.md$/.test(path),
+          ),
+          `${providerRoot} installed tip files`,
+        ).toHaveLength(145);
+        expect(
+          installedFiles.filter((path) =>
+            /^\d{2}-[^/]+\/examples\/example-[^/]+\.md$/.test(path),
+          ),
+          `${providerRoot} installed example files`,
+        ).toHaveLength(35);
+      }
+
       const repeated = await runNpm(
         [
           "exec",
@@ -296,4 +324,17 @@ async function runNpm(args, options) {
       };
     throw error;
   }
+}
+
+async function listFilesRecursively(directory, prefix = "") {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const nested = await Promise.all(
+    entries.map(async (entry) => {
+      const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.isDirectory())
+        return listFilesRecursively(join(directory, entry.name), relativePath);
+      return [relativePath];
+    }),
+  );
+  return nested.flat();
 }

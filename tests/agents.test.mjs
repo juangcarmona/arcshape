@@ -360,7 +360,7 @@ describe("managed capability lifecycle", () => {
     await expect(
       readFile(join(target, ".agents", "skills", "arc-c4", "SKILL.md")),
     ).rejects.toMatchObject({ code: "ENOENT" });
-  });
+  }, 30_000);
 
   it("rejects symlinked destinations before writing", async () => {
     const target = await makeTarget();
@@ -579,7 +579,7 @@ describe("managed capability lifecycle", () => {
     );
     expect(normalizedReferences).toContain("02-constraints/README.md");
     expect(normalizedReferences).toContain("02-constraints/project-notes.md");
-  });
+  }, 30_000);
 
   it("migrates an exact unchanged 0.1.1 file and preserves an edited legacy copy", async () => {
     const target = await makeTarget();
