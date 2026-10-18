@@ -10,18 +10,18 @@
 
 ## 1. Deployment documentation example
 
-- [ ] 1.1 Reconcile section 07’s package and publication facts against `package.json`, release workflow, and repository release evidence; verify no stale 0.1.0/pending-publication claim remains in that section.
-- [ ] 1.2 Add an evidence-backed Mermaid deployment view in section 07 with a unique `accTitle`; run the site build and verify it produces an inline SVG in the generated HTML.
+- [x] 1.1 Reconcile section 07’s package and publication facts against `package.json`, release workflow, and repository release evidence; verify no stale 0.1.0/pending-publication claim remains in that section.
+- [x] 1.2 Add an evidence-backed Mermaid deployment view in section 07 with a unique `accTitle`; run the site build and verify it produces an inline SVG in the generated HTML.
 
 ## 2. Published-reader regression coverage
 
-- [ ] 2.1 Extend the reader browser E2E journey to navigate to section 07 and assert the deployment diagram’s accessible name and inline SVG; run the focused Playwright test.
-- [ ] 2.2 Verify responsive rendering at the repository’s supported narrow viewport in the same E2E journey; confirm the diagram remains within the reader’s responsive container.
+- [x] 2.1 Extend the reader browser E2E journey to navigate to section 07 and assert the deployment diagram’s accessible name and inline SVG; run the focused Playwright test.
+- [x] 2.2 Verify responsive rendering at the repository’s supported narrow viewport in the same E2E journey; confirm the diagram remains within the reader’s responsive container.
 
 ## 3. Integration and documentation review
 
-- [ ] 3.1 Run the Pages-equivalent reader build from the final Markdown and verify the generated HTML includes section 07 and its diagram without external diagram assets or runtime requests.
-- [ ] 3.2 Review the rendered section 07 against the source Markdown and current deployment evidence; record section 11’s stale release statement as a separate follow-up rather than expanding this change.
+- [x] 3.1 Run the Pages-equivalent reader build from the final Markdown and verify the generated HTML includes section 07 and its diagram without external diagram assets or runtime requests.
+- [x] 3.2 Review the rendered section 07 against the source Markdown and current deployment evidence; record section 11’s stale release statement as a separate follow-up rather than expanding this change.
 
 ## Workflow follow-up
 
