@@ -29,7 +29,7 @@ This change replaces the rendering engine for both site shells with Astro while 
 
 - Use Astro's static build for both public and engineering site shells.
 - Preserve the established page appearance, route URLs, themes, responsive behavior, typography, spacing, and navigation through the migration.
-- Keep English and Spanish route parity, with locale data and route mapping that support adding languages without duplicating shell templates.
+- Keep the existing English `/` route and add a Spanish `/es/` counterpart through locale data and route mapping that support adding languages without duplicating shell templates.
 - Keep Mermaid in Markdown and support Archify as an enhanced static HTML diagram renderer, with renderer labels, source links, revision provenance, accessibility, and root/subpath-safe links.
 - Produce separate static output artifacts for Cloudflare Pages and GitHub Pages, preserving their existing publication boundary and approval gates.
 
@@ -52,7 +52,7 @@ Astro is selected as the static generator only. No server adapter, request-time 
 
 ### 2. Freeze the established UX contract during migration
 
-Capture the current public and engineering route trees, navigation, screenshots, theme behavior, typography, spacing, and responsive states before replacing templates. Port those structures into Astro without changing their visible result or URLs. Keep the current English/Spanish routes and language-switch behavior; store locale text and route counterparts separately from templates, and make locale completeness a build validation rule for future additions.
+Capture the current public and engineering route trees, navigation, screenshots, appearance, typography, spacing, and responsive states before replacing templates. Port those structures into Astro without changing their visible result or URLs. The repository baseline contains only English public `/` and neither shell has an appearance selector; retain that route and light appearance, add public `/es/` for the approved Spanish parity requirement, and provide an equivalent-page language link. Store locale text and route counterparts separately from templates, and make locale completeness a build validation rule for future additions. See `docs/delivery/issue-78/baseline.md` for the evidence-based baseline correction.
 
 ProductShape remains the quality reference for the agreed visual relationship, but this change is an engine migration and must not redesign the established presentation. ArcShape-owned branding and assets remain unchanged.
 

@@ -1,0 +1,142 @@
+---
+import PublicLayout from "../layouts/PublicLayout.astro";
+import { locales } from "../data/locales.mjs";
+const { locale } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const repository = "https://github.com/juangcarmona/arcshape";
+const portal = "https://juangcarmona.github.io/arcshape/";
+const architecture = `${portal}architecture/`;
+const languageChoices = Object.values(locales).filter(({ code }) => code !== locale.code);
+---
+
+<PublicLayout {locale}>
+  <a class="skip" href="#main">{locale.skip}</a>
+  <header class="topbar">
+    <a class="brand" href={`${base}#top`} aria-label="ArcShape home">
+      <img
+        src={`${base}assets/arcshape-lockup.png`}
+        alt="ArcShape — Architecture Documentation"
+      />
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#workflow">{locale.nav.workflow}</a>
+      <a href="#artifacts">{locale.nav.artifacts}</a>
+      <a href={portal}>
+        {locale.engineering} <span aria-hidden="true">↗</span>
+      </a>
+      {languageChoices.map((choice) => (
+        <a class="language" href={`${base}${choice.path.slice(1)}`} hreflang={choice.code} aria-label={`View site in ${choice.code}`}>
+          {choice.code.toUpperCase()}
+        </a>
+      ))}
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">{locale.eyebrow}</p>
+        <h1>{locale.headline[0]}<em>{locale.headline[1]}</em></h1>
+        <p class="lead">{locale.lead}</p>
+        <div class="actions">
+          <a class="button primary" href={repository}>
+            {locale.explore} <span aria-hidden="true">↗</span>
+          </a>
+          <a class="text-link" href={portal}>
+            {locale.browse} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="note">{locale.note}</p>
+      </div>
+      <div class="hero-art" role="img" aria-label={locale.heroArt}>
+        <div class="orbit orbit-a"></div>
+        <div class="orbit orbit-b"></div>
+        <div class="core">
+          <span class="monogram" aria-hidden="true">AS</span>
+          <span>Architecture<br />knowledge</span>
+        </div>
+        {locale.stages.map((stage, index) => (
+          <div class:list={["node", `node-${["one", "two", "three"][index]}`]}>
+            <b>{`0${index + 1}`}</b><span>{stage}</span>
+          </div>
+        ))}
+        <div class="spark s1"></div>
+        <div class="spark s2"></div>
+      </div>
+    </section>
+    <section class="strip" aria-label="ArcShape principles">
+      {locale.principles.map((principle, index) => (
+        <>
+          {index > 0 && <i aria-hidden="true"></i>}
+          <span>{principle}</span>
+        </>
+      ))}
+    </section>
+    <section class="section" id="workflow">
+      <div class="section-heading">
+        <p class="eyebrow">{locale.workflowEyebrow}</p>
+        <h2>{locale.workflowTitle}</h2>
+        <p>{locale.workflowIntro}</p>
+      </div>
+      <div class="steps">
+        {locale.steps.map((step, index) => (
+          <article>
+            <div class="step-number">{`0${index + 1}`}</div>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="artifacts" id="artifacts">
+      <div class="artifact-copy">
+        <p class="eyebrow">{locale.artifactsEyebrow}</p>
+        <h2>{locale.artifactsTitle}</h2>
+        <p>{locale.artifactsIntro}</p>
+        <a class="button light" href={architecture}>
+          {locale.architecture} <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <div class="artifact-stack" aria-label={locale.artifactsTitle}>
+        <div class="artifact-card source">
+          <span class="card-label">{locale.canonicalSource}</span>
+          <div class="doc-lines">
+            <b></b><i></i><i></i><b></b><i></i><i></i>
+          </div>
+          <strong>{locale.sourceTitle}</strong>
+          <small>{locale.sourceText}</small>
+        </div>
+        <div class="connector" aria-hidden="true">↓</div>
+        <div class="artifact-card view">
+          <span class="card-label">{locale.generatedView}</span>
+          <div class="mini-browser">
+            <div class="dots"><i></i><i></i><i></i></div>
+            <div class="mini-layout">
+              <b></b><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <strong>{locale.readerTitle}</strong>
+          <small>{locale.readerText}</small>
+        </div>
+      </div>
+    </section>
+    <section class="closing">
+      <p class="eyebrow">{locale.closingEyebrow}</p>
+      <h2>{locale.closingTitle}</h2>
+      <p>{locale.closingIntro}</p>
+      <a class="button primary" href={repository}>
+        {locale.viewRepository} <span aria-hidden="true">↗</span>
+      </a>
+    </section>
+  </main>
+  <footer>
+    <a href={`${base}#top`} class="footer-brand">ArcShape</a>
+    <span>{locale.footerText}</span>
+    <a href={portal}>{locale.engineering}</a>
+    <a href={repository}>GitHub</a>
+    {languageChoices.map((choice) => (
+      <a href={`${base}${choice.path.slice(1)}`} hreflang={choice.code}>
+        {choice.code.toUpperCase()}
+      </a>
+    ))}
+  </footer>
+</PublicLayout>

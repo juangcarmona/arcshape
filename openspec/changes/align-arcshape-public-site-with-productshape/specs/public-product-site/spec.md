@@ -45,9 +45,9 @@ Astro MUST statically render the public-site shell. Replacing its rendering engi
 - **WHEN** a reader opens an existing public-site route after the Astro migration
 - **THEN** the route retains its established visual design, branding, theme behavior, and navigation
 
-#### Scenario: Reader chooses an appearance
-- **WHEN** a reader selects an existing appearance option
-- **THEN** the established theme behavior remains consistent across routes
+#### Scenario: Reader opens a localized page
+- **WHEN** a reader opens either public locale
+- **THEN** the established light appearance is retained without adding a new appearance control
 
 #### Scenario: Reader uses the site on a narrow screen
 - **WHEN** a reader opens a route at a phone viewport
