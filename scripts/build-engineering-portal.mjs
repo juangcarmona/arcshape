@@ -1,4 +1,4 @@
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 const arg = process.argv.indexOf("--out");
@@ -8,9 +8,12 @@ if (!/^[a-f0-9]{40}$/i.test(sha ?? ""))
   throw new Error("SOURCE_SHA must be a full commit SHA");
 await mkdir(out, { recursive: true });
 await rm(resolve(out, "e2e/latest"), { recursive: true, force: true });
-const portal = (
-  await readFile("src/engineering-portal/index.html", "utf8")
-).replaceAll("__SOURCE_SHA__", sha);
+const shell = resolve("src/engineering-portal/dist");
+await cp(shell, out, { recursive: true, force: true });
+const portal = (await readFile(resolve(out, "index.html"), "utf8")).replaceAll(
+  "__SOURCE_SHA__",
+  sha,
+);
 await writeFile(resolve(out, "index.html"), portal);
 
 async function readSafeSummary(
@@ -91,8 +94,8 @@ if (raw) {
     `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ArcShape E2E summary</title><style>body{font:1rem/1.6 system-ui,sans-serif;max-width:50rem;margin:4rem auto;padding:0 1.5rem;color:#17243a}dt{font-weight:700;margin-top:1rem}a{color:#2854d7}:focus-visible{outline:3px solid #e5a900;outline-offset:3px}</style>${summary}</html>`,
   );
   const updated = portal.replace(
-    'id="e2e-card" href="e2e/latest/" hidden',
-    'id="e2e-card" href="e2e/latest/"',
+    /(<a\b[^>]*\bid="e2e-card"[^>]*?)\s+hidden(?=[\s>])/,
+    "$1",
   );
   await writeFile(resolve(out, "index.html"), updated);
 }

@@ -17,6 +17,10 @@ describe("GitHub Pages engineering portal workflow", () => {
     expect(steps).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
+          name: "Build engineering portal shell",
+          run: expect.stringContaining("src/engineering-portal run build"),
+        }),
+        expect.objectContaining({
           name: "Generate Product Snapshot",
           run: expect.stringContaining("prodshape graph --format html"),
         }),
@@ -27,6 +31,10 @@ describe("GitHub Pages engineering portal workflow", () => {
         expect.objectContaining({
           name: "Assemble and validate portal",
           run: expect.stringContaining("build-engineering-portal.mjs"),
+        }),
+        expect.objectContaining({
+          name: "Verify published routes and allowlisted evidence",
+          run: expect.stringContaining("verify-engineering-portal.mjs"),
         }),
         expect.objectContaining({
           name: "Download latest completed main Assurance summary",

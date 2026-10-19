@@ -1,0 +1,11 @@
+{
+  "name": "@arcshape/engineering-portal",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro build"
+  },
+  "devDependencies": {
+    "astro": "7.4.1"
+  }
+}

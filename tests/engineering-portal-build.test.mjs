@@ -9,13 +9,13 @@ const sha = "a".repeat(40);
 async function setup() {
   const dir = await mkdtemp(join(tmpdir(), "arcshape-portal-"));
   tempDirs.push(dir);
-  await mkdir(join(dir, "src/engineering-portal"), { recursive: true });
+  await mkdir(join(dir, "src/engineering-portal/dist"), { recursive: true });
   await mkdir(join(dir, "src/public-site/assets"), { recursive: true });
   await mkdir(join(dir, "_site/model"), { recursive: true });
   await mkdir(join(dir, "_site/architecture"), { recursive: true });
   await writeFile(
-    join(dir, "src/engineering-portal/index.html"),
-    '<html><body><a id="e2e-card" href="e2e/latest/" hidden></a>__SOURCE_SHA__</body></html>',
+    join(dir, "src/engineering-portal/dist/index.html"),
+    '<html><body><a class="card" id="e2e-card" href="/arcshape/e2e/latest/" hidden></a>__SOURCE_SHA__</body></html>',
   );
   await writeFile(join(dir, "_site/model/index.html"), `model ${sha}`);
   await writeFile(
@@ -34,12 +34,12 @@ afterEach(async () =>
 describe("engineering portal assembly", () => {
   it("preserves old root architecture section bookmarks under the architecture route", async () => {
     const portal = await readFile(
-      join(process.cwd(), "src/engineering-portal/index.html"),
+      join(process.cwd(), "src/engineering-portal/src/pages/index.astro"),
       "utf8",
     );
     expect(portal).toContain('location.hash.startsWith("#/section/")');
     expect(portal).toContain(
-      'location.replace("architecture/" + location.hash)',
+      'location.replace(`${base}architecture/${location.hash}`)',
     );
   });
 
@@ -349,7 +349,7 @@ describe("engineering portal assembly", () => {
       readFile(join(dir, "_site/e2e/latest/index.html"), "utf8"),
     ).rejects.toThrow();
     expect(await readFile(join(dir, "_site/index.html"), "utf8")).toContain(
-      'id="e2e-card" href="e2e/latest/" hidden',
+      'id="e2e-card" href="/arcshape/e2e/latest/" hidden',
     );
   });
 

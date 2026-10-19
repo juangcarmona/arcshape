@@ -10,7 +10,7 @@
 ## 2. Move both site shells to Astro static output
 
 - [x] 2.1 Add the Astro static build for the public shell under `src/public-site`; preserve its Cloudflare project root, `npm run build`, `dist`, and site-local `test`/`verify` commands. Verify a clean isolated static build and no server adapter or runtime service.
-- [ ] 2.2 Convert the engineering portal shell to Astro while retaining independently generated Product and Architecture snapshots, E2E summary allowlist, source revision, route compatibility, and `/arcshape/` output base. Verify the static `_site` contains the complete portal and no public-site output.
+- [x] 2.2 Convert the engineering portal shell to Astro while retaining independently generated Product and Architecture snapshots, E2E summary allowlist, source revision, route compatibility, and `/arcshape/` output base. Verify the static `_site` contains the complete portal and no public-site output.
 - [ ] 2.3 Port current components, styles, assets, routes, navigation, and theme behavior without redesign; keep public and engineering outputs independent while sharing ArcShape-owned shell elements only where that does not couple their routes or deployment. Verify route-manifest parity and screenshot review at desktop, tablet, and phone widths.
 - [ ] 2.4 Keep the existing English `/` route and add Spanish `/es/` in locale-specific data with a shared template and explicit route counterpart; add a completeness check for route, navigation, title, description, and language-switch parity. Verify the existing English route remains stable and a third locale can be added by data/configuration without duplicating templates.
 

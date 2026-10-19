@@ -8,6 +8,8 @@ on:
       - "docs/architecture/**"
       - "docs/product/model/**"
       - "src/engineering-portal/**"
+      - "src/engineering-portal/package-lock.json"
+      - "src/engineering-portal/package.json"
       - "src/public-site/**"
       - "scripts/add-source-provenance.mjs"
       - "scripts/build-engineering-portal.mjs"
@@ -22,6 +24,8 @@ on:
       - "docs/architecture/**"
       - "docs/product/model/**"
       - "src/engineering-portal/**"
+      - "src/engineering-portal/package-lock.json"
+      - "src/engineering-portal/package.json"
       - "src/public-site/**"
       - "scripts/add-source-provenance.mjs"
       - "scripts/build-engineering-portal.mjs"
@@ -61,6 +65,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm ci --prefix src/engineering-portal
+      - name: Build engineering portal shell
+        env:
+          SITE_BASE: /arcshape/
+        run: npm --prefix src/engineering-portal run build
       - name: Record source revision
         id: revision
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -97,6 +106,11 @@ jobs:
           SELECTED_SOURCE_COMMIT: ${{ steps.assurance.outputs.source_commit }}
           DISABLE_E2E_SUMMARY: ${{ inputs.remove_e2e_summary }}
         run: node scripts/build-engineering-portal.mjs --out _site
+      - name: Verify published routes and allowlisted evidence
+        env:
+          SOURCE_SHA: ${{ steps.revision.outputs.sha }}
+          SITE_BASE: /arcshape/
+        run: node scripts/verify-engineering-portal.mjs _site
       - name: Validate public-site source
         run: node scripts/validate-public-site.mjs
       - name: Upload Pages artifact

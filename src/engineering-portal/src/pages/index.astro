@@ -1,0 +1,82 @@
+---
+import "../styles/portal.css";
+const base = import.meta.env.BASE_URL;
+const publicSite = "https://arcshape.dev";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Generated engineering views for ArcShape." />
+    <title>ArcShape Engineering</title>
+  </head>
+  <body data-base={base}>
+    <main class="wrap">
+      <header>
+        <h2>ArcShape <span aria-hidden="true">/</span> Engineering</h2>
+        <a href={publicSite}>Public site ↗</a>
+      </header>
+      <p class="eyebrow">Generated from canonical sources</p>
+      <h1>Engineering portal</h1>
+      <p class="lede">
+        Explore the current product definition and architecture documentation as
+        generated views. These snapshots are projections; the linked Markdown
+        sources remain canonical.
+      </p>
+      <section class="cards" aria-label="Engineering artifacts">
+        <a class="card" href={`${base}model/`}>
+          <span class="label">PRODUCT SNAPSHOT</span>
+          <h2>Product model</h2>
+          <p>
+            Generated from ArcShape’s product model. The source definition lives
+            in the repository.
+          </p>
+        </a>
+        <a class="card" href={`${base}architecture/`}>
+          <span class="label">ARCHITECTURE SNAPSHOT</span>
+          <h2>Architecture documentation</h2>
+          <p>
+            A navigable reader generated from the canonical arc42 Markdown.
+          </p>
+        </a>
+        <a class="card" id="e2e-card" href={`${base}e2e/latest/`} hidden>
+          <span class="label">END-TO-END EVIDENCE</span>
+          <h2>Latest E2E run</h2>
+          <p>
+            Allowlisted run summary with commit and result. Raw test artifacts
+            remain private in GitHub Actions.
+          </p>
+        </a>
+      </section>
+      <p class="public">
+        <a href={publicSite}>Discover ArcShape at arcshape.dev ↗</a>
+      </p>
+      <p class="meta">
+        Source revision:
+        <a href={`https://github.com/juangcarmona/arcshape/commit/__SOURCE_SHA__`}
+          >__SOURCE_SHA__</a
+        ><br />Canonical sources:
+        <a
+          href="https://github.com/juangcarmona/arcshape/tree/__SOURCE_SHA__/docs/product/model"
+          >product model</a
+        >
+        ·
+        <a
+          href="https://github.com/juangcarmona/arcshape/tree/__SOURCE_SHA__/docs/architecture"
+          >architecture</a
+        >
+      </p>
+      <footer>
+        ArcShape Engineering Portal · Static publication from GitHub Pages
+      </footer>
+    </main>
+    <script is:inline>
+      if (location.hash.startsWith("#/section/")) {
+        const base = document.body.dataset.base;
+        location.replace(`${base}architecture/${location.hash}`);
+      }
+    </script>
+  </body>
+</html>
