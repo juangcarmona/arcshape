@@ -13,7 +13,7 @@ Tracking issue: [#62](https://github.com/juangcarmona/arcshape/issues/62).
 - Add a static public product site at `arcshape.dev`, visually in the same family as ProductShape while using ArcShape-owned assets, styles, branding, and current capability claims.
 - Add a separate engineering portal at the GitHub Pages root. Publish a Product Snapshot of ArcShape's canonical model and the ArcShape architecture reader under stable routes.
 - Keep one GitHub Pages publisher responsible for assembling and deploying the complete engineering site. Preserve the former root reader URL's architecture-section hash links when moving the reader beneath its own route.
-- Publish a latest E2E summary only when a completed `main` run produces a reviewed, public-safe report. Identify its run, source commit, and result; do not expose raw traces or test data without a separate safety review.
+- Publish a latest E2E summary only when a completed `main` run produces data that passes the public-summary schema approved with this change and the publisher's run-identity checks. Approval applies to the schema and workflow, not each run. Identify the run, source commit, completion time, and result; keep raw traces and test data private.
 - Keep both web surfaces static and independent. Generated views remain derived from their Markdown sources. Do not change the ArcShape product model, add an ArcShape service, or change adopters' hosting choices.
 
 ## Capabilities

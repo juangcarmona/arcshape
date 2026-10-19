@@ -64,15 +64,15 @@ The engineering portal MUST preserve legacy root URLs that use the architecture 
 
 ### Requirement: Public E2E summary is conditional and provenance-bearing
 
-The portal MUST show an E2E destination only when a completed `main` run has produced a report approved for public use. Any published summary MUST identify its source commit, run, and result, and MUST omit credentials, private data, and unreviewed raw traces.
+The portal MUST show an E2E destination only when a completed `main` run produces a summary that passes the fixed public-summary schema and run-identity checks. The schema and publisher workflow are approved for public use through review of this change; individual runs do not require maintainer approval. Any published summary MUST identify its source commit, run, completion time, and result, and MUST omit credentials, private data, raw traces, and test-result files.
 
 #### Scenario: No suitable E2E report exists
-- **WHEN** no reviewed public-safe report exists for a completed `main` run
+- **WHEN** no completed `main` run has a valid summary that passes the approved public schema and run-identity checks
 - **THEN** the portal does not show an E2E report as available and other site content remains publishable
 
-#### Scenario: Reviewed E2E summary is published
-- **WHEN** a completed `main` run has a reviewed public-safe report
-- **THEN** the portal shows its run, source commit, and pass/fail result without publishing unreviewed raw trace data
+#### Scenario: Validated E2E summary is published
+- **WHEN** a completed `main` run has a summary that passes the approved public schema and run-identity checks
+- **THEN** the portal shows its run, source commit, completion time, and result without publishing raw traces or test-result files
 
 ### Requirement: Engineering portal remains understandable and accessible
 

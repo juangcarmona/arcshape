@@ -13,7 +13,7 @@ Pull requests build the complete portal and validate the public-site source with
 
 The portal's landing page links to the Product Snapshot, Architecture Snapshot, and `arcshape.dev`. The snapshots include their producing commit and links to the matching canonical source paths. The former root reader URL's `/#/section/...` bookmark is redirected to the same fragment under `/architecture/`.
 
-Assurance retains full Playwright reports and traces as private, temporary Actions artifacts. A separate private Actions artifact carries the validation envelope `repository`, `run_id`, `source_commit`, `completed_at`, and `result`; Pages requires the selected run ID and repository identity to match. The public `/e2e/latest/summary.json` projection contains exactly:
+Assurance retains full Playwright reports and traces as private, temporary Actions artifacts. Review of the fixed public-summary schema and publisher workflow approves that disclosure boundary; individual runs do not require a separate maintainer approval. A separate private Actions artifact carries the validation envelope `repository`, `run_id`, `source_commit`, `completed_at`, and `result`; Pages requires the selected run ID and repository identity to match. The public `/e2e/latest/summary.json` projection contains exactly:
 
 ```json
 {
