@@ -31,7 +31,7 @@
 <!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:0c2a1bb402fcf272e5ecfe15282e8d15dccd7fb57992a344071757f82cf457a7" -->
 <!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:2893462d429a0188eeb937215ceb47a55809d26825d2646d0897cc851d33ce13" -->
 
-- [ ] 3.1 Preserve Mermaid fenced-block rendering in the architecture reader. Add visible renderer identification, source links, source revision provenance, and accessible SVG title/description/caption behavior. Verify existing architecture Mermaid diagrams, keyboard flow, and non-colour labels.
+- [x] 3.1 Preserve Mermaid fenced-block rendering in the architecture reader. Add visible renderer identification, source links, source revision provenance, and accessible SVG title/description/caption behavior. Verify existing architecture Mermaid diagrams, keyboard flow, and non-colour labels.
 - [ ] 3.2 Add Archify as a build-time enhanced static HTML diagram renderer using authored/reproducible Archify artifacts; do not add its browser runtime to the deployed sites. Verify generated HTML identity, artifact/source links, revision provenance, artifact integrity, keyboard access, responsive presentation, and non-colour labels.
 - [ ] 3.3 Make site, asset, source, and diagram links base-aware for public root deployment and the engineering `/arcshape/` subpath. Verify both generated outputs when served from `/` and `/arcshape/`, including link integrity and no root-absolute route regression.
 

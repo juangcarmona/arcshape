@@ -237,6 +237,7 @@ function createMarked(
   currentRoute,
   sourceContext,
   sourceFile,
+  sourceRevision,
 ) {
   const marked = new Marked({ gfm: true });
   const slugger = new GithubSlugger();
@@ -269,7 +270,33 @@ function createMarked(
             throw new Error(
               `Mermaid diagram ${index + 1} is missing an accTitle accessibility name`,
             );
-          return `<figure class="diagram" role="img" aria-label="${escapeHtml(title)}">${svg}</figure>`;
+          const sourcePath = sourceFile ?? "canonical architecture Markdown";
+          const sourceHref = githubSourceFileLink(
+            sourceContext,
+            sourceFile,
+          );
+          const revisionHref =
+            sourceContext?.repositoryUrl && sourceRevision
+              ? `${sourceContext.repositoryUrl}/commit/${encodeURIComponent(sourceRevision)}`
+              : undefined;
+          const diagramId = `mermaid-${String(sourceFile ?? "source")
+            .replace(/[^a-zA-Z0-9_-]+/g, "-")}-${index}`;
+          const labelledSvg = addMermaidSvgLabels(
+            svg,
+            title,
+            `mermaid-title-${diagramId}`,
+            `mermaid-description-${diagramId}`,
+            `Mermaid diagram rendered from ${sourcePath}.`,
+          );
+          const source = sourceHref
+            ? `<a href="${escapeHtml(sourceHref)}" rel="noopener noreferrer">${escapeHtml(sourcePath)}</a>`
+            : `<span>${escapeHtml(sourcePath)}</span>`;
+          const revision = sourceRevision
+            ? revisionHref
+              ? `<a href="${escapeHtml(revisionHref)}" rel="noopener noreferrer">${escapeHtml(sourceRevision)}</a>`
+              : escapeHtml(sourceRevision)
+            : "unavailable";
+          return `<figure class="diagram"><figcaption id="${diagramId}" class="diagram-caption"><span class="diagram-title">${escapeHtml(title)}</span><span class="diagram-renderer">Renderer: Mermaid</span><span>Source Markdown: ${source}</span><span>Source revision: ${revision}</span></figcaption>${labelledSvg}</figure>`;
         }
         const escaped = escapeHtml(text);
         return `<pre><code${lang ? ` class="language-${escapeHtml(lang)}"` : ""}>${escaped}</code></pre>\n`;
@@ -321,6 +348,53 @@ function createMarked(
   return { marked, count: () => mermaidCount };
 }
 
+function githubSourceFileLink(sourceContext, sourceFile) {
+  if (!sourceContext || !sourceFile) return undefined;
+  const absolutePath = resolve(sourceContext.root, ...sourceFile.split("/"));
+  const relativePath = relative(sourceContext.root, absolutePath);
+  if (
+    relativePath === ".." ||
+    relativePath.startsWith(`..${sep}`) ||
+    !existsSync(absolutePath) ||
+    statSync(absolutePath).isDirectory()
+  )
+    return undefined;
+  const encodedRef = encodeURIComponent(sourceContext.ref);
+  const encodedPath = sourceFile
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  return `${sourceContext.repositoryUrl}/blob/${encodedRef}/${encodedPath}`;
+}
+
+function addMermaidSvgLabels(svg, title, titleId, descriptionId, description) {
+  const document = new window.DOMParser().parseFromString(
+    svg,
+    "image/svg+xml",
+  );
+  const root = document.documentElement;
+  if (root.localName !== "svg" || document.querySelector("parsererror"))
+    throw new Error("Rendered Mermaid diagram is not valid SVG");
+  const accessibleTitle = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "title",
+  );
+  accessibleTitle.setAttribute("id", titleId);
+  accessibleTitle.textContent = title;
+  const accessibleDescription = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "desc",
+  );
+  accessibleDescription.setAttribute("id", descriptionId);
+  accessibleDescription.textContent = description;
+  root.insertBefore(accessibleDescription, root.firstChild);
+  root.insertBefore(accessibleTitle, accessibleDescription);
+  root.setAttribute("role", "img");
+  root.setAttribute("aria-labelledby", titleId);
+  root.setAttribute("aria-describedby", descriptionId);
+  return new window.XMLSerializer().serializeToString(root);
+}
+
 function githubSourceLink(sourceContext, sourceFile, path, anchor) {
   if (!sourceContext || !sourceFile || !path) return undefined;
   const sourcePath = posix.normalize(
@@ -369,6 +443,7 @@ export async function renderMarkdown(
     title = "",
     sourceContext,
     sourceFile,
+    sourceRevision,
   },
 ) {
   const diagramSources = extractMermaidSources(body);
@@ -386,6 +461,7 @@ export async function renderMarkdown(
     currentRoute,
     sourceContext,
     sourceFile,
+    sourceRevision,
   );
   const html = await renderer.marked.parse(stripDuplicateTitle(body, title));
   if (renderer.count() !== svgs.length)

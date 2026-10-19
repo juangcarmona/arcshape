@@ -238,6 +238,14 @@ figure.diagram {
   margin: 1rem 0; padding: 0.85rem; border: 1px solid var(--line); border-radius: 6px;
   background: #ffffff; color: #183b56; overflow-x: auto; overscroll-behavior-x: contain;
 }
+figure.diagram figcaption {
+  display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; align-items: baseline;
+  margin: 0 0 0.7rem; padding-bottom: 0.55rem; border-bottom: 1px solid #dfe5ee;
+  color: #46566e; font-size: 0.76rem; line-height: 1.5;
+}
+figure.diagram figcaption a { color: #2854d7; text-decoration: underline; text-underline-offset: 0.12em; }
+.diagram-title { color: #17243a; font-weight: 700; }
+.diagram-renderer { font-weight: 650; }
 figure.diagram svg { display: block; width: auto; max-width: min(100%, 72rem); height: auto; margin-inline: auto; }
 .diagram-missing { color: var(--muted); font-style: italic; }
 mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 0.05em; }

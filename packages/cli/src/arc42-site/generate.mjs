@@ -155,6 +155,7 @@ async function main() {
     return slice;
   };
 
+  const revision = await gitRevision(docsDir);
   const sourceContext = await gitSourceContext(docsDir, flags["source-ref"]);
   const toSourcePath = (file) =>
     sourceContext
@@ -167,6 +168,7 @@ async function main() {
     title: docs.readme.title,
     sourceContext,
     sourceFile: toSourcePath(docs.readme.file),
+    sourceRevision: revision,
   });
   const sectionsRendered = [];
   for (let i = 0; i < docs.sections.length; i += 1) {
@@ -178,6 +180,7 @@ async function main() {
       title: section.title,
       sourceContext,
       sourceFile: toSourcePath(section.file),
+      sourceRevision: revision,
     });
     sectionsRendered.push({
       number: section.number,
@@ -187,7 +190,6 @@ async function main() {
     });
   }
 
-  const revision = await gitRevision(docsDir);
   const html = `${generatedMarker}\n${buildSnapshotHtml({
     readme: {
       title: docs.readme.title,

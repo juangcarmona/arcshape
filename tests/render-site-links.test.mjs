@@ -37,4 +37,35 @@ describe("reader site source links", () => {
     });
     expect(result.html).toContain('href="#/section/05"');
   });
+
+  it("labels Mermaid SVGs and exposes source and exact revision provenance", async () => {
+    const revision = "a".repeat(40);
+    const result = await renderMarkdown(
+      "```mermaid\naccTitle: Deployment boundary\nflowchart TD\n  A --> B\n```",
+      {
+        fileToRoute: new Map(),
+        svgs: ['<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>'],
+        sourceContext: {
+          root: process.cwd(),
+          repositoryUrl: "https://github.com/example/arcshape",
+          ref: "release/2026",
+        },
+        sourceFile: "docs/architecture/04-solution-strategy.md",
+        sourceRevision: revision,
+      },
+    );
+
+    expect(result.html).toContain("Renderer: Mermaid");
+    expect(result.html).toContain("Deployment boundary");
+    expect(result.html).toContain(
+      "https://github.com/example/arcshape/blob/release%2F2026/docs/architecture/04-solution-strategy.md",
+    );
+    expect(result.html).toContain(
+      `https://github.com/example/arcshape/commit/${revision}`,
+    );
+    expect(result.html).toContain('<title id="mermaid-title-');
+    expect(result.html).toContain('<desc id="mermaid-description-');
+    expect(result.html).toContain('aria-labelledby="mermaid-title-');
+    expect(result.html).toContain('aria-describedby="mermaid-description-');
+  });
 });
