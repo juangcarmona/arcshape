@@ -117,6 +117,14 @@ describe("ADR workflow examples", () => {
       join(packageRoot, ".claude/skills/arcshape-adr/SKILL.md"),
       "utf8",
     );
+    const repositoryTemplate = await readFile(
+      join(packageRoot, ".agents/skills/arcshape-adr/references/template.md"),
+      "utf8",
+    );
+    const claudeTemplate = await readFile(
+      join(packageRoot, ".claude/skills/arcshape-adr/references/template.md"),
+      "utf8",
+    );
     const adrIndex = await readFile(
       join(packageRoot, "docs/adr/README.md"),
       "utf8",
@@ -128,28 +136,28 @@ describe("ADR workflow examples", () => {
     expect(skill).toContain("name: arc-adr");
     expect(skill).toContain("`docs/adr/README.md`");
     expect(skill).toContain(
-      "copying [`references/template.md`](references/template.md)",
+      "Copy [`references/template.md`](references/template.md)",
     );
     expect(skill).toContain("`ADR-0001-kebab-case-title.md`");
     expect(skill).toContain(
-      "Reuse the repository's canonical folder, naming scheme, metadata, and index",
+      "Reuse the repository's folder, filename, metadata, status, and index conventions",
     );
-    expect(skill).toContain(
-      "YAML frontmatter with `id`, `title`, `status`, `date`, and `deciders`",
-    );
-    expect(skill).toContain("Add every new ADR to the canonical ADR index");
+    expect(skill).toContain("`id`, `title`, `status`, `date`, and `deciders`");
+    expect(skill).toContain("Update the canonical ADR index");
     expect(repositorySkill).toContain("`docs/adr/README.md`");
-    expect(claudeSkill).toContain(
-      "Add every new ADR to the canonical ADR index",
-    );
+    expect(claudeSkill).toContain("Update the canonical ADR index");
+    expect(repositorySkill).toContain("name: arcshape-adr");
+    expect(claudeSkill).toContain("name: arcshape-adr");
+    expect(repositoryTemplate).toContain("## Alternatives considered");
+    expect(claudeTemplate).toBe(repositoryTemplate);
     expect(adrIndex).toContain("No ADR records have been accepted");
     expect(sectionNine).toContain("[`docs/adr/README.md`](../adr/README.md)");
-    expect(skill).toContain("If the decision itself is unknown, ask");
+    expect(skill).toContain("Ask for the decision if it is unknown");
     expect(skill).toContain(
-      "Keep the existing ADR's status until the new decision is accepted; then mark the old record superseded",
+      "Do not mark the old decision superseded until the replacement is accepted",
     );
     expect(skill).toContain(
-      "Do not put proposed decisions in the current architecture index",
+      "Keep proposed decisions out of the current-architecture index",
     );
     expect(parseFrontmatter(template)).toEqual(
       expect.objectContaining({
