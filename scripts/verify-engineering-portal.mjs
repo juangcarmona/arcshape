@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { access, readFile, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
 
@@ -14,15 +15,21 @@ for (const [label, value] of [
   ["source revision", sha],
   ["Product route", `${base}model/`],
   ["Architecture route", `${base}architecture/`],
+  ["Archify diagram route", `${base}diagrams/publication-boundaries.html`],
 ]) {
   if (!portal.includes(value)) throw new Error(`Portal is missing ${label}`);
 }
 if (portal.includes("__SOURCE_SHA__"))
   throw new Error("Portal source revision placeholder was not replaced");
 const model = await readFile(resolve(out, "model/index.html"), "utf8");
-const architecture = await readFile(resolve(out, "architecture/index.html"), "utf8");
+const architecture = await readFile(
+  resolve(out, "architecture/index.html"),
+  "utf8",
+);
 if (!model.includes(sha) || !architecture.includes(sha))
-  throw new Error("Snapshot provenance does not match the publication revision");
+  throw new Error(
+    "Snapshot provenance does not match the publication revision",
+  );
 if (portal.includes("/es/") || (await readdir(out)).includes("es"))
   throw new Error("Public-site output leaked into the engineering artifact");
 if ((await readdir(out)).includes("assets"))
@@ -53,4 +60,57 @@ if (summary) {
 }
 await access(resolve(out, "model/index.html"));
 await access(resolve(out, "architecture/index.html"));
+
+const diagramManifest = JSON.parse(
+  await readFile(resolve(out, "diagrams/manifest.json"), "utf8"),
+);
+const candidate = JSON.parse(
+  await readFile(
+    resolve(
+      ".archify/arcshape-publications/arcshape-publication-boundaries.json",
+    ),
+    "utf8",
+  ),
+);
+const artifactPath = resolve(out, diagramManifest.artifact.path);
+const diagram = await readFile(artifactPath, "utf8");
+const sha256 = (value) => createHash("sha256").update(value).digest("hex");
+const candidateBytes = await readFile(diagramManifest.candidate.path);
+if (sha256(candidateBytes) !== diagramManifest.candidate.sha256)
+  throw new Error("Archify candidate hash does not match its manifest");
+if (sha256(await readFile(artifactPath)) !== diagramManifest.artifact.sha256)
+  throw new Error("Archify HTML hash does not match its manifest");
+if (
+  diagramManifest.generator.name !== "Archify" ||
+  !/^3\.1\.0$/.test(diagramManifest.generator.version) ||
+  diagramManifest.generator.repository !==
+    "https://github.com/tt-a1i/archify" ||
+  !/^[a-f0-9]{40}$/i.test(diagramManifest.generator.commit ?? "") ||
+  diagramManifest.candidate.path !==
+    ".archify/arcshape-publications/arcshape-publication-boundaries.json" ||
+  diagramManifest.artifact.path !== "diagrams/publication-boundaries.html" ||
+  candidate.meta.repository.url !== diagramManifest.source.repository ||
+  candidate.meta.repository.revision !== diagramManifest.source.revision
+)
+  throw new Error(
+    "Archify generator or source revision does not match its manifest",
+  );
+if (
+  !diagram.includes('<meta name="generator" content="archify 3.1.0">') ||
+  !diagram.includes("Archify 3.1.0 · source revision") ||
+  !diagram.includes(
+    `https://github.com/juangcarmona/arcshape/tree/${diagramManifest.source.revision}`,
+  ) ||
+  !diagram.includes(
+    `https://github.com/juangcarmona/arcshape/commit/${diagramManifest.source.revision}`,
+  )
+)
+  throw new Error(
+    "Archify renderer identity or source revision links are missing",
+  );
+for (const path of diagramManifest.licenses) await access(resolve(out, path));
+if (/\b(?:href|src)="\/(?!\/)/i.test(diagram))
+  throw new Error(
+    "Archify artifact contains a root-absolute link that breaks at a subpath",
+  );
 console.log(`Engineering output verified at ${base} for ${sha}`);

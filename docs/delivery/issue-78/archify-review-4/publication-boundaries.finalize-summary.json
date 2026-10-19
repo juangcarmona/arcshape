@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/srv/workspaces/juangcarmona/arcshape/arcshape-issue-78/.archify/arcshape-publications/arcshape-publication-boundaries.json",
+    "sha256": "89831c4f6076f162ef90924851789ed1b434e9cdcc48d93085ee66b3b0661d9d",
+    "bytes": 4332
+  },
+  "artifact": {
+    "path": "/srv/workspaces/juangcarmona/arcshape/arcshape-issue-78/src/engineering-portal/public/diagrams/publication-boundaries.html",
+    "sha256": "b82670015541d1db0f40cc2e2f671476aebe712d8f110bb2225c74acd3548e83",
+    "bytes": 820133
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/srv/workspaces/juangcarmona/arcshape/arcshape-issue-78/docs/delivery/issue-78/archify-review-4/publication-boundaries.finalize.json",
+    "summaryReceipt": "/srv/workspaces/juangcarmona/arcshape/arcshape-issue-78/docs/delivery/issue-78/archify-review-4/publication-boundaries.finalize-summary.json",
+    "browserCheckReceipt": "/srv/workspaces/juangcarmona/arcshape/arcshape-issue-78/docs/delivery/issue-78/archify-review-4/publication-boundaries.browser-check.json"
+  },
+  "update": {
+    "status": "update_available",
+    "installedVersion": "3.1.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": "https://github.com/tt-a1i/archify/releases/tag/v3.2.0",
+    "severity": "normal",
+    "checkedAt": "2026-10-19T15:58:09.168Z",
+    "source": "cache",
+    "noticeRequired": true,
+    "noticeText": "Archify update: 3.1.0 → 3.2.0. A previous check at 2026-10-19T15:58:09.168Z found a newer release. Release notes: https://github.com/tt-a1i/archify/releases/tag/v3.2.0. The installed Skill has not changed; ask to snooze or ignore this reminder.",
+    "eventKey": "archify@sha256:70e210265c59f24dcbdf2a502ff671104b5454e7ee7d3554aecd86bad32384f5"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3889,
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "routesOverSuggestedBends": 2
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [],
+      "detours": [
+        {
+          "relationship": {
+            "from": "maintainer",
+            "to": "source",
+            "label": "reviewed source changes",
+            "collectionIndex": 0,
+            "artifactIndex": 1
+          },
+          "bends": 3,
+          "stretch": 1.255
+        },
+        {
+          "relationship": {
+            "from": "public_site",
+            "to": "cloudflare",
+            "label": "Git integration · PR preview",
+            "collectionIndex": 2,
+            "artifactIndex": 3
+          },
+          "bends": 3,
+          "stretch": 1.209
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "maintainer → source needs 3 bends: move node maintainer or source so they share a row or column with matching centers, or sit diagonally with a clear corner.",
+      "public_site → cloudflare needs 3 bends: move node public_site or cloudflare so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

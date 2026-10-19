@@ -11,8 +11,11 @@ test.beforeAll(async () => {
       decodeURIComponent(
         new URL(request.url, "http://localhost").pathname,
       ).replace(/^\/+/, "") || "index.html";
-    const file = resolve("src/public-site", relative);
-    if (!file.startsWith(resolve("src/public-site") + sep)) {
+    const file = resolve(
+      "src/public-site/dist",
+      relative.endsWith("/") ? `${relative}index.html` : relative,
+    );
+    if (!file.startsWith(resolve("src/public-site/dist") + sep)) {
       response.writeHead(403).end();
       return;
     }
@@ -109,6 +112,13 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
   expect(metrics.overflow).toBe(false);
   expect(metrics.contrasts.every((ratio) => ratio >= 4.5)).toBe(true);
   expect(metrics.images).toBe(true);
+  await page.goto(`${origin}/es/`);
+  await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await expect(page.getByRole("main")).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "View site in en" }),
+  ).toHaveAttribute("href", "/");
+  await page.goto(origin);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.reload();
   await page.keyboard.press("Tab");

@@ -98,6 +98,9 @@
         padding-top: 18px;
         border-top: 1px solid #dfe5ee;
       }
+      .meta a {
+        overflow-wrap: anywhere;
+      }
       .public {
         display: inline-block;
         margin-top: 14px;

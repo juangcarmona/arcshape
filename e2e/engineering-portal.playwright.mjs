@@ -11,6 +11,12 @@ let output;
 const revision = spawnSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
 }).stdout.trim();
+const diagramRevision = JSON.parse(
+  await readFile(
+    "src/engineering-portal/public/diagrams/manifest.json",
+    "utf8",
+  ),
+).source.revision;
 
 test.beforeAll(async () => {
   output = await mkdtemp(join(tmpdir(), "arcshape-engineering-portal-"));
@@ -50,6 +56,8 @@ test.beforeAll(async () => {
       "ArcShape",
       "--source-ref",
       revision,
+      "--site-base",
+      "/arcshape/",
     ],
     { cwd: process.cwd(), env: process.env, encoding: "utf8" },
   );
@@ -118,10 +126,13 @@ test("portal links to revision-stamped model and architecture routes", async ({
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: /Product model/ }),
-  ).toHaveAttribute("href", "model/");
+  ).toHaveAttribute("href", "/arcshape/model/");
   await expect(
     page.getByRole("link", { name: /Architecture documentation/ }),
-  ).toHaveAttribute("href", "architecture/");
+  ).toHaveAttribute("href", "/arcshape/architecture/");
+  await expect(
+    page.getByRole("link", { name: /Publication boundaries/ }),
+  ).toHaveAttribute("href", "/arcshape/diagrams/publication-boundaries.html");
   await expect(
     page.getByRole("link", { name: revision }).first(),
   ).toHaveAttribute("href", new RegExp(`/commit/${revision}$`));
@@ -151,6 +162,49 @@ test("portal links to revision-stamped model and architecture routes", async ({
   });
   expect(readerFocus.visible).toBe(true);
   expect(readerFocus.outline).toBe("solid");
+  await page.goto(`${origin}diagrams/publication-boundaries.html`);
+  await expect(page).toHaveTitle(/ArcShape Publications Diagram/);
+  expect(
+    await page
+      .locator("#archify-source-evidence-data")
+      .evaluate((element) => element.textContent),
+  ).toContain(diagramRevision);
+  const sourceNode = page.getByRole("button", {
+    name: /Focus ArcShape repository/,
+  });
+  await sourceNode.focus();
+  await page.keyboard.press("Enter");
+  const sourceLink = page
+    .locator(`a[href*="/blob/${diagramRevision}"]`)
+    .first();
+  await expect(sourceLink).toBeVisible();
+  let keyboardReachedSource = false;
+  for (let index = 0; index < 40; index += 1) {
+    await page.keyboard.press("Tab");
+    if (
+      await page.evaluate(() =>
+        document.activeElement?.getAttribute("href")?.includes("/blob/"),
+      )
+    ) {
+      keyboardReachedSource = true;
+      const focusStyle = await page.evaluate(() => {
+        const style = getComputedStyle(document.activeElement);
+        return {
+          outline: style.outlineStyle,
+          width: parseFloat(style.outlineWidth),
+        };
+      });
+      expect(focusStyle.outline).not.toBe("none");
+      expect(focusStyle.width).toBeGreaterThan(0);
+      break;
+    }
+  }
+  expect(keyboardReachedSource).toBe(true);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
   await page.goto(`${origin}#/section/01`);
   await expect(page).toHaveURL(new RegExp(`/architecture/#/section/01$`));
   await expect(page.locator(".doc-title")).toBeVisible();

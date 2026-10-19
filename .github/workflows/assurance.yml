@@ -24,6 +24,16 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm ci --prefix src/public-site
+      - run: npm ci --prefix src/engineering-portal
+      - name: Build and verify the public static site
+        env:
+          SITE_BASE: /
+        run: npm --prefix src/public-site run verify
+      - name: Build the engineering portal shell
+        env:
+          SITE_BASE: /arcshape/
+        run: npm --prefix src/engineering-portal run build
       - name: Install the pinned Playwright Chromium browser
         run: npx playwright install --with-deps chromium
       - id: e2e

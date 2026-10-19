@@ -8,11 +8,14 @@ on:
       - "docs/architecture/**"
       - "docs/product/model/**"
       - "src/engineering-portal/**"
+      - ".archify/arcshape-publications/**"
       - "src/engineering-portal/package-lock.json"
       - "src/engineering-portal/package.json"
       - "src/public-site/**"
       - "scripts/add-source-provenance.mjs"
       - "scripts/build-engineering-portal.mjs"
+      - "scripts/verify-engineering-portal.mjs"
+      - "scripts/verify-engineering-shell.mjs"
       - "scripts/validate-public-site.mjs"
       - "package-lock.json"
       - "package.json"
@@ -24,11 +27,14 @@ on:
       - "docs/architecture/**"
       - "docs/product/model/**"
       - "src/engineering-portal/**"
+      - ".archify/arcshape-publications/**"
       - "src/engineering-portal/package-lock.json"
       - "src/engineering-portal/package.json"
       - "src/public-site/**"
       - "scripts/add-source-provenance.mjs"
       - "scripts/build-engineering-portal.mjs"
+      - "scripts/verify-engineering-portal.mjs"
+      - "scripts/verify-engineering-shell.mjs"
       - "scripts/validate-public-site.mjs"
       - "package-lock.json"
       - "package.json"
@@ -65,11 +71,32 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm ci --prefix src/public-site
+      - name: Build and verify Cloudflare static output (without deployment)
+        env:
+          SITE_BASE: /
+        run: npm --prefix src/public-site run verify
+      - name: Verify public Astro root and subpath outputs
+        env:
+          SITE_BASE: /arcshape/
+          SITE_OUT_DIR: ${{ runner.temp }}/public-subpath
+        run: npm --prefix src/public-site run verify
       - run: npm ci --prefix src/engineering-portal
+      - name: Verify engineering Astro root output
+        env:
+          SITE_BASE: /
+          SITE_OUT_DIR: ${{ runner.temp }}/engineering-root
+        run: |
+          npm --prefix src/engineering-portal run build
+          node scripts/verify-engineering-shell.mjs "$SITE_OUT_DIR" /
       - name: Build engineering portal shell
         env:
           SITE_BASE: /arcshape/
         run: npm --prefix src/engineering-portal run build
+      - name: Verify engineering Astro subpath output
+        env:
+          SITE_BASE: /arcshape/
+        run: node scripts/verify-engineering-shell.mjs src/engineering-portal/dist /arcshape/
       - name: Record source revision
         id: revision
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -97,7 +124,7 @@ jobs:
       - name: Generate Architecture Snapshot
         run: |
           mkdir -p _site/architecture
-          node packages/cli/src/bin/arcshape.mjs site build --out _site/architecture/index.html --title ArcShape --source-ref "${{ steps.revision.outputs.sha }}"
+          node packages/cli/src/bin/arcshape.mjs site build --out _site/architecture/index.html --title ArcShape --source-ref "${{ steps.revision.outputs.sha }}" --site-base /arcshape/
       - name: Assemble and validate portal
         env:
           SOURCE_SHA: ${{ steps.revision.outputs.sha }}

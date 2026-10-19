@@ -238,6 +238,7 @@ function createMarked(
   sourceContext,
   sourceFile,
   sourceRevision,
+  siteBase,
 ) {
   const marked = new Marked({ gfm: true });
   const slugger = new GithubSlugger();
@@ -271,16 +272,15 @@ function createMarked(
               `Mermaid diagram ${index + 1} is missing an accTitle accessibility name`,
             );
           const sourcePath = sourceFile ?? "canonical architecture Markdown";
-          const sourceHref = githubSourceFileLink(
-            sourceContext,
-            sourceFile,
-          );
+          const sourceHref = githubSourceFileLink(sourceContext, sourceFile);
           const revisionHref =
             sourceContext?.repositoryUrl && sourceRevision
               ? `${sourceContext.repositoryUrl}/commit/${encodeURIComponent(sourceRevision)}`
               : undefined;
-          const diagramId = `mermaid-${String(sourceFile ?? "source")
-            .replace(/[^a-zA-Z0-9_-]+/g, "-")}-${index}`;
+          const diagramId = `mermaid-${String(sourceFile ?? "source").replace(
+            /[^a-zA-Z0-9_-]+/g,
+            "-",
+          )}-${index}`;
           const labelledSvg = addMermaidSvgLabels(
             svg,
             title,
@@ -328,6 +328,18 @@ function createMarked(
             : route;
           return `<a href="${escapeHtml(hash)}"${titleAttribute}>${text}</a>`;
         }
+        const publicationAsset = path
+          ? posix.normalize(posix.join(posix.dirname(sourceFile ?? ""), path))
+          : "";
+        const publicationPrefix = "src/engineering-portal/public/diagrams/";
+        if (publicationAsset.startsWith(publicationPrefix)) {
+          const filename = publicationAsset.slice(publicationPrefix.length);
+          if (/^[a-zA-Z0-9._-]+\.html$/.test(filename)) {
+            const base = siteBase.endsWith("/") ? siteBase : `${siteBase}/`;
+            const href = `${base}diagrams/${encodeURIComponent(filename)}${anchor ? `#${encodeURIComponent(anchor)}` : ""}`;
+            return `<a href="${escapeHtml(href)}"${titleAttribute}>${text}</a>`;
+          }
+        }
         const sourceLink = githubSourceLink(
           sourceContext,
           sourceFile,
@@ -368,10 +380,7 @@ function githubSourceFileLink(sourceContext, sourceFile) {
 }
 
 function addMermaidSvgLabels(svg, title, titleId, descriptionId, description) {
-  const document = new window.DOMParser().parseFromString(
-    svg,
-    "image/svg+xml",
-  );
+  const document = new window.DOMParser().parseFromString(svg, "image/svg+xml");
   const root = document.documentElement;
   if (root.localName !== "svg" || document.querySelector("parsererror"))
     throw new Error("Rendered Mermaid diagram is not valid SVG");
@@ -444,6 +453,7 @@ export async function renderMarkdown(
     sourceContext,
     sourceFile,
     sourceRevision,
+    siteBase = "/",
   },
 ) {
   const diagramSources = extractMermaidSources(body);
@@ -462,6 +472,7 @@ export async function renderMarkdown(
     sourceContext,
     sourceFile,
     sourceRevision,
+    siteBase,
   );
   const html = await renderer.marked.parse(stripDuplicateTitle(body, title));
   if (renderer.count() !== svgs.length)

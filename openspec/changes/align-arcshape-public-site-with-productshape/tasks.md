@@ -32,14 +32,14 @@
 <!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:2893462d429a0188eeb937215ceb47a55809d26825d2646d0897cc851d33ce13" -->
 
 - [x] 3.1 Preserve Mermaid fenced-block rendering in the architecture reader. Add visible renderer identification, source links, source revision provenance, and accessible SVG title/description/caption behavior. Verify existing architecture Mermaid diagrams, keyboard flow, and non-colour labels.
-- [ ] 3.2 Add Archify as a build-time enhanced static HTML diagram renderer using authored/reproducible Archify artifacts; do not add its browser runtime to the deployed sites. Verify generated HTML identity, artifact/source links, revision provenance, artifact integrity, keyboard access, responsive presentation, and non-colour labels.
-- [ ] 3.3 Make site, asset, source, and diagram links base-aware for public root deployment and the engineering `/arcshape/` subpath. Verify both generated outputs when served from `/` and `/arcshape/`, including link integrity and no root-absolute route regression.
+- [x] 3.2 Add Archify as a build-time enhanced static HTML diagram renderer using authored/reproducible Archify artifacts; do not add its browser runtime to the deployed sites. Verify generated HTML identity, artifact/source links, revision provenance, artifact integrity, keyboard access, responsive presentation, and non-colour labels.
+- [x] 3.3 Make site, asset, source, and diagram links base-aware for public root deployment and the engineering `/arcshape/` subpath. Verify both generated outputs when served from `/` and `/arcshape/`, including link integrity and no root-absolute route regression.
 
 ## 4. Integrate validation and deployment documentation
 
-- [ ] 4.1 Add or update a path-filtered CI workflow to build and verify both Astro outputs on pull requests and `main`; verify no Cloudflare credential or deployment action is introduced and that output artifacts cannot cross publication boundaries.
-- [ ] 4.2 Extend Playwright journeys to cover the established route map, English/Spanish switching, preserved light appearance, keyboard navigation, responsive behavior, source links, Mermaid/Archify output, and provenance at root and subpath bases. Verify with the repository's configured E2E command.
-- [ ] 4.3 Update both site READMEs and `docs/pages-deployment.md` with the Astro commands, artifact paths, diagram authoring/rendering, source/revision conventions, Cloudflare preview flow, GitHub Pages base path, production approval, and recovery steps. Verify each command and setting against the checked-in configuration.
+- [x] 4.1 Add or update a path-filtered CI workflow to build and verify both Astro outputs on pull requests and `main`; verify no Cloudflare credential or deployment action is introduced and that output artifacts cannot cross publication boundaries.
+- [x] 4.2 Extend Playwright journeys to cover the established route map, English/Spanish switching, preserved light appearance, keyboard navigation, responsive behavior, source links, Mermaid/Archify output, and provenance at root and subpath bases. Verify with the repository's configured E2E command.
+- [x] 4.3 Update both site READMEs and `docs/pages-deployment.md` with the Astro commands, artifact paths, diagram authoring/rendering, source/revision conventions, Cloudflare preview flow, GitHub Pages base path, production approval, and recovery steps. Verify each command and setting against the checked-in configuration.
 - [ ] 4.4 Verify a real Cloudflare pull-request preview and record its URL and actual dashboard root/build/output/preview settings. Leave production deployment and `arcshape.dev` domain binding disabled.
 
 ## 5. Review integrated evidence

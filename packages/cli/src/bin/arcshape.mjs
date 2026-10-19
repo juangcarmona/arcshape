@@ -85,7 +85,7 @@ function printHelp(stream = process.stdout) {
     `  agents detect|list|install|update|uninstall  Manage packaged agent capabilities\n`,
   );
   stream.write(
-    `  site build [--docs <directory>] [--out <file>]  Render the Markdown reader site\n`,
+    `  site build [--docs <directory>] [--out <file>] [--site-base </path/>]  Render the Markdown reader site\n`,
   );
   stream.write(
     `  validate [--docs <directory>] [--links] [--citations]  Validate docs, links, and citations\n`,

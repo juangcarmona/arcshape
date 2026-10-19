@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ArcShape Publications",
+    "subtitle": "Archify 3.1.0 · source revision cf247ae",
+    "output": "src/engineering-portal/public/diagrams/publication-boundaries.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/juangcarmona/arcshape",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "cf247ae125d61051305e899afb2372c95ae94e72"
+    }
+  },
+  "components": [
+    {
+      "id": "maintainer",
+      "type": "external",
+      "label": "Maintainer",
+      "sublabel": "reviews repository changes",
+      "pos": [40, 245],
+      "size": [154, 66]
+    },
+    {
+      "id": "source",
+      "type": "backend",
+      "label": "ArcShape repository",
+      "sublabel": "canonical site sources",
+      "pos": [274, 245],
+      "size": [180, 70],
+      "sources": [
+        { "path": "docs/architecture/07-deployment-view.md", "line": 33, "end_line": 35 },
+        { "path": "src/public-site/astro.config.mjs", "line": 3, "end_line": 8 }
+      ]
+    },
+    {
+      "id": "public_site",
+      "type": "frontend",
+      "label": "Public site",
+      "sublabel": "Astro static output · dist/",
+      "pos": [548, 140],
+      "size": [188, 76],
+      "sources": [
+        { "path": "src/public-site/astro.config.mjs", "line": 3, "end_line": 8 },
+        { "path": "src/public-site/package.json", "line": 5, "end_line": 12 }
+      ]
+    },
+    {
+      "id": "cloudflare",
+      "type": "cloud",
+      "label": "Cloudflare Pages",
+      "sublabel": "Git integration · preview",
+      "pos": [834, 140],
+      "size": [202, 76],
+      "sources": [
+        { "path": "docs/architecture/07-deployment-view.md", "line": 24, "end_line": 25 }
+      ]
+    },
+    {
+      "id": "engineering_shell",
+      "type": "frontend",
+      "label": "Engineering shell",
+      "sublabel": "Astro static output · /arcshape/",
+      "pos": [548, 350],
+      "size": [202, 76],
+      "sources": [
+        { "path": "src/engineering-portal/astro.config.mjs", "line": 3, "end_line": 8 },
+        { "path": "src/engineering-portal/src/pages/index.astro", "line": 28, "end_line": 43 }
+      ]
+    },
+    {
+      "id": "pages_workflow",
+      "type": "backend",
+      "label": "Pages workflow",
+      "sublabel": "assemble · verify · publish main",
+      "pos": [834, 350],
+      "size": [210, 76],
+      "sources": [
+        { "path": ".github/workflows/pages.yml", "line": 60, "end_line": 75 },
+        { "path": ".github/workflows/pages.yml", "line": 97, "end_line": 120 }
+      ]
+    },
+    {
+      "id": "github_pages",
+      "type": "cloud",
+      "label": "GitHub Pages",
+      "sublabel": "engineering portal publication",
+      "pos": [1138, 350],
+      "size": [202, 76],
+      "sources": [
+        { "path": "docs/architecture/07-deployment-view.md", "line": 24, "end_line": 25 }
+      ]
+    }
+  ],
+  "connections": [
+    { "from": "maintainer", "to": "source", "label": "reviewed source changes", "variant": "emphasis" },
+    { "from": "source", "to": "public_site", "label": "Astro build", "variant": "emphasis" },
+    { "from": "public_site", "to": "cloudflare", "label": "Git integration · PR preview", "variant": "emphasis" },
+    { "from": "source", "to": "engineering_shell", "label": "Astro build", "variant": "emphasis" },
+    { "from": "engineering_shell", "to": "pages_workflow", "label": "static shell", "variant": "default" },
+    { "from": "pages_workflow", "to": "github_pages", "label": "main publication", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Separate publication boundaries",
+      "items": [
+        "Cloudflare serves the public site output from src/public-site/.",
+        "GitHub Pages receives the engineering shell and generated snapshots.",
+        "The two site outputs are independently built and verified."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Preview and production state",
+      "items": [
+        "Pull requests validate the engineering output; main publishes GitHub Pages.",
+        "Cloudflare preview URLs, production branch, and custom-domain state require dashboard verification.",
+        "Production deployment and arcshape.dev binding remain disabled until explicitly configured."
+      ]
+    }
+  ]
+}

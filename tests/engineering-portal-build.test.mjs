@@ -39,7 +39,7 @@ describe("engineering portal assembly", () => {
     );
     expect(portal).toContain('location.hash.startsWith("#/section/")');
     expect(portal).toContain(
-      'location.replace(`${base}architecture/${location.hash}`)',
+      "location.replace(`${base}architecture/${location.hash}`)",
     );
   });
 

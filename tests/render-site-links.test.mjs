@@ -38,13 +38,44 @@ describe("reader site source links", () => {
     expect(result.html).toContain('href="#/section/05"');
   });
 
+  it.each([
+    ["root", "/", 'href="/diagrams/publication-boundaries.html"'],
+    [
+      "subpath",
+      "/arcshape/",
+      'href="/arcshape/diagrams/publication-boundaries.html"',
+    ],
+  ])(
+    "maps the Archify artifact to its %s publication route",
+    async (_label, siteBase, expected) => {
+      const result = await renderMarkdown(
+        "[Publication boundaries](../../src/engineering-portal/public/diagrams/publication-boundaries.html)",
+        {
+          fileToRoute: new Map(),
+          sourceContext: {
+            root: process.cwd(),
+            repositoryUrl: "https://github.com/example/arcshape",
+            ref: "main",
+          },
+          sourceFile: "docs/architecture/07-deployment-view.md",
+          siteBase,
+        },
+      );
+      expect(result.html).toContain(expected);
+      expect(result.html).not.toContain("xref-dead");
+      expect(result.html).not.toContain("github.com/example/arcshape/blob");
+    },
+  );
+
   it("labels Mermaid SVGs and exposes source and exact revision provenance", async () => {
     const revision = "a".repeat(40);
     const result = await renderMarkdown(
       "```mermaid\naccTitle: Deployment boundary\nflowchart TD\n  A --> B\n```",
       {
         fileToRoute: new Map(),
-        svgs: ['<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>'],
+        svgs: [
+          '<svg xmlns="http://www.w3.org/2000/svg"><rect width="10" height="10"/></svg>',
+        ],
         sourceContext: {
           root: process.cwd(),
           repositoryUrl: "https://github.com/example/arcshape",

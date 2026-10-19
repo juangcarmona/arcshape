@@ -4,6 +4,6 @@ export default defineConfig({
   output: "static",
   trailingSlash: "always",
   base: process.env.SITE_BASE ?? "/",
-  outDir: "./dist",
+  outDir: process.env.SITE_OUT_DIR ?? "./dist",
   publicDir: "./public",
 });

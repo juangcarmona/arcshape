@@ -10,6 +10,39 @@ const workflow = load(
 );
 
 describe("GitHub Pages engineering portal workflow", () => {
+  it("verifies both Astro outputs at root and subpath bases without Cloudflare deployment", () => {
+    const steps = workflow.jobs.build.steps;
+    expect(steps).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          name: "Build and verify Cloudflare static output (without deployment)",
+          run: expect.stringContaining("src/public-site run verify"),
+          env: expect.objectContaining({ SITE_BASE: "/" }),
+        }),
+        expect.objectContaining({
+          name: "Verify public Astro root and subpath outputs",
+          env: expect.objectContaining({ SITE_BASE: "/arcshape/" }),
+        }),
+        expect.objectContaining({
+          name: "Verify engineering Astro root output",
+          run: expect.stringContaining("verify-engineering-shell.mjs"),
+          env: expect.objectContaining({ SITE_BASE: "/" }),
+        }),
+        expect.objectContaining({
+          name: "Verify engineering Astro subpath output",
+          run: expect.stringContaining("verify-engineering-shell.mjs"),
+          env: expect.objectContaining({ SITE_BASE: "/arcshape/" }),
+        }),
+      ]),
+    );
+    const serialized = JSON.stringify(workflow);
+    expect(serialized).not.toMatch(
+      /wrangler|cloudflare_api_token|pages\.dev deploy/i,
+    );
+    expect(workflow.on.pull_request.paths).toContain("src/public-site/**");
+    expect(workflow.on.push.paths).toContain("src/engineering-portal/**");
+  });
+
   it("builds both generated snapshots and the portal from the exact checked out revision", () => {
     expect(workflow.on.pull_request.branches).toContain("main");
     expect(workflow.on.workflow_run.workflows).toContain("Assurance");
