@@ -1,15 +1,45 @@
 ---
 name: transition-work-item
-description: Apply one confirmed GitHub issue state or lifecycle-label transition. Use only when a lifecycle stage explicitly requires a transition.
+description: "Apply exactly one workflow transition to one work item, chosen from those valid from its current state. Use when a stage advances an item."
 ---
 
-GitHub issue state remains `OPEN` or `CLOSED`; `stage:*` labels record the separate lifecycle stage. Read the current issue state and labels immediately before acting. Show the current and target states or labels and obtain confirmation before applying. Preserve every non-stage label and never leave more than one `stage:*` label.
+> **Template.** The `adopt` capability adapts this into a role capability the project owns. Adapt *how* the role is performed; never change *what* it guarantees to its callers.
 
-```bash
-gh issue close <number>
-gh issue reopen <number>
-gh issue edit <number> --remove-label "<current-stage-label>" --add-label "<target-stage-label>"
-gh issue edit <number> --remove-label "stage:review"
-```
+One responsibility: move one work item through exactly one state transition.
 
-The normal integration path closes an issue through `Closes #<number>` on a merged pull request. A confirmed lifecycle transition replaces the current `stage:*` label with exactly one target stage label. If no stage label exists or multiple stage labels are present, report the inconsistency and stop rather than guessing. After retrospective review is complete, remove `stage:review` without adding another stage label. If already closed by the merge mechanism, report the state and do not close it again. Reopening or closing outside a merged pull request is a human-only decision; never fire it on an agent's initiative. Never chain transitions.
+## Contract
+
+| | |
+| --- | --- |
+| **Input** | A work item identifier, and the target state or transition name. |
+| **Output** | The item's new state, and the transition actually applied. |
+| **Writes** | The work item's state in the tracker. |
+| **Confirmation** | **Required.** Confirm before applying. |
+
+**Guarantees to the caller**
+
+- The transition applied was fetched from the item's **current** state, never assumed from a mapping table.
+- Exactly one transition per invocation.
+- A transition unavailable from the current state is reported together with the list of what is available.
+
+**Never**
+
+- Chain several transitions to reach a target state.
+- Fire a transition the lifecycle configuration marks human-only.
+- Reverse a human-only transition found already applied: report it as a signal instead.
+
+## Adapting this template
+
+1. Pick the reference below matching this project's tooling.
+2. Replace every `<placeholder>` with a value **resolved from live tooling in the adoption session**: an identifier transcribed from a diagram or from memory breaks the loop a month later.
+3. Keep the contract above intact. A command calling `transition-work-item` must get the same shape back on every stack.
+4. No reference matches → author against the contract and **record that it was authored, not adapted**. A fabricated reference is worse than a missing one, because everything downstream trusts it.
+
+## References
+
+- [`references/jira.md`](references/jira.md): Jira workflows
+- [`references/github-issues.md`](references/github-issues.md): GitHub labels and Projects
+
+## Fast Forward authorization
+
+When called inside an enabled Fast Forward run, the invocation authorizes this role's routine lifecycle write without per-write confirmation. Re-read the configured state immediately before writing and verify the result afterward. Stop at a human-only decision, required human approval, protected forge rule, deployment, or repository red line.

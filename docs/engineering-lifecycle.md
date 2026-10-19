@@ -1,6 +1,6 @@
 # Engineering lifecycle
 
-**Project**: ArcShape **Adopted**: 2026-10-16 · **Last amended**: 2026-10-16
+**Project**: ArcShape **Adopted**: 2026-10-16 · **Last amended**: 2026-10-19
 
 ## Definition of Ready
 
@@ -85,15 +85,15 @@ CI definitions: `.github/workflows/ci.yml`, `.github/workflows/security.yml`, `.
 
 ## Lifecycle stages and states
 
-GitHub Issues is the tracker. GitHub issue state remains `OPEN` or `CLOSED`; one mutually exclusive `stage:*` label records the lifecycle stage. Preserve type and other non-stage labels. New issues receive `stage:refine`. Change the stage label at each confirmed lifecycle transition. A pull request body uses `Closes #<number>` so GitHub closes the issue when the pull request merges to the default branch. The merged issue receives `stage:review` while its retrospective is pending; remove that label when review is complete. Do not infer a stage when no `stage:*` label exists or when multiple stage labels exist.
+GitHub Issues is the tracker. GitHub's `OPEN` or `CLOSED` state remains separate from lifecycle status. Every open issue has exactly one canonical `status:*` label. New issues receive `status:backlog`. Preserve type and other non-status labels. A pull request body uses `Closes #<number>` so GitHub closes the issue when the pull request merges to the default branch. A merged issue stays `status:done` while its post-merge retrospective is pending; review debt is determined from the retrospective file and baseline date, not another status label.
 
 | Stage | State on entry | State on exit | Transition | Fired by |
 | --- | --- | --- | --- | --- |
-| `refine` | `OPEN` | `OPEN` | `stage:refine` | `create-work-item` when creating the issue |
-| `propose` | `OPEN` | `OPEN` | `stage:propose` | `transition-work-item` when refinement exits and proposal begins |
-| `implement` | `OPEN` | `OPEN` | `stage:implement` | `transition-work-item` after proposal approval |
-| `integrate` | `OPEN` | `CLOSED` | `stage:integrate` and `Closes #<number>` | `transition-work-item` before merge; GitHub closes the issue when the linked pull request merges |
-| `review` | `CLOSED` | `CLOSED` | Apply `stage:review` after merge, then remove it at review completion | `integrate` applies it after merge; `review` removes it via `transition-work-item` |
+| `refine` | `status:backlog` | `status:ready` | Add `status:ready` after the Ready gate passes | `refine` |
+| `propose` | `status:ready` | `status:proposed` | Add `status:proposed` after the plan passes review | `propose` |
+| `implement` | `status:proposed` | `status:in-progress` → `status:in-review` | Set in-progress on entry; set in-review when the Done gate passes and the PR is ready | `implement` |
+| `integrate` | `status:in-review` | `status:done`, issue closed | Merge the linked PR; verify issue closure, then set done | `integrate` |
+| `review` | `status:done` | `status:done` | Create the per-item retrospective; no lifecycle transition | `review` |
 
 ### Transitions no capability ever fires
 
@@ -106,14 +106,31 @@ Reopening, rejecting, or otherwise closing an issue outside the linked-PR merge 
 
 ## Work item fields
 
-GitHub issue creation requires a title and body. Lifecycle stage is represented by exactly one `stage:*` issue label when a stage is active, not by a GitHub issue state, field, or Project field.
+GitHub issue creation requires a title and body. Lifecycle status is represented by exactly one `status:*` issue label, not by GitHub's open/closed state, a field, or a Project field.
 
-Post-merge retrospective records are stored as `docs/reviews/issue-<number>.md`, with one record per issue and no shared index.
+Post-merge retrospective records are stored as `docs/reviews/issue-<number>.md`, with one record per issue and no shared index. The baseline date is 2026-10-19; earlier merges are historical and are excluded from review debt.
 
 | Field | Identifier | Required by | Notes |
 | --- | --- | --- | --- |
 | Title | GitHub issue `title` | Issue creation | Outcome-oriented. |
 | Description | GitHub issue `body` | Issue creation | Markdown shaped by the general-work or bug issue form when available. |
+
+## Label conventions
+
+Lifecycle labels use the shared Agentic SDLC defaults: `status:backlog`, `status:ready`, `status:proposed`, `status:in-progress`, `status:in-review`, and `status:done`. Exactly one is present on each open issue. `blocked` and `owner-review` are optional overlays; classification labels remain independent. The per-item retrospective is `docs/reviews/issue-<number>.md`, with baseline date 2026-10-19. No separate process ledger is used.
+
+## Fast Forward
+
+| Setting | This project requires |
+| --- | --- |
+| Enabled | Yes when the active harness can attest a distinct reviewer model |
+| Executor and reviewer | Resolve at run time; reviewer must be a different model |
+| Maximum correction rounds | 3 per gate |
+| Substitutable judgement items | None by default |
+| Run evidence | `docs/delivery/ff/<work-item-id>/<run-id>/run.json` and `summary.md` |
+| Human-only or protected gates | Human review, product-scope or accepted-decision changes, required forge approvals, production publication, and repository red lines |
+
+`/ff` may create or update the PR, push its branch, and merge only after all configured gates pass and repository protection permits it. It never publishes the production site unattended.
 
 ## Branch and commit conventions
 
@@ -133,22 +150,23 @@ Use Conventional Commit messages in the form `<type>(<optional-scope>): <descrip
 
 ## Installed roles
 
-Role capabilities installed into `.agents/skills/` are the project-owned source. The corresponding `.claude/skills/` files are copies; edit the `.agents/skills/` source and refresh the copies.
+Role capabilities installed into `.agents/skills/` are the project-owned source. The corresponding `.claude/skills/` files are generated copies; edit the `.agents/skills/` source and refresh the copies. These roles were reset to Agentic SDLC 0.2.2 defaults on 2026-10-19.
 
 | Role skill | Adapted from | Installed | Projected to |
 | --- | --- | --- | --- |
-| `read-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-16 | Codex, Claude |
-| `create-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-16 | Codex, Claude |
-| `update-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-16 | Codex, Claude |
-| `transition-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-16 | Codex, Claude |
-| `comment-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-16 | Codex, Claude |
-| `create-branch` | Agentic SDLC branch role template | 2026-10-16 | Codex, Claude |
-| `checkout-branch` | Agentic SDLC branch role template | 2026-10-16 | Codex, Claude |
-| `open-pull-request` | Agentic SDLC GitHub role template | 2026-10-16 | Codex, Claude |
-| `inspect-pull-request` | Agentic SDLC GitHub role template | 2026-10-16 | Codex, Claude |
-| `update-pull-request` | Agentic SDLC GitHub role template | 2026-10-16 | Codex, Claude |
-| `inspect-ci-result` | Agentic SDLC GitHub Actions role template | 2026-10-16 | Codex, Claude |
-| `merge-pull-request` | Agentic SDLC GitHub role template | 2026-10-16 | Codex, Claude |
+| `read-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-19 | Codex, Claude |
+| `read-work-item-links` | Agentic SDLC GitHub Issues role template | 2026-10-19 | Codex, Claude |
+| `create-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-19 | Codex, Claude |
+| `update-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-19 | Codex, Claude |
+| `transition-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-19 | Codex, Claude |
+| `comment-work-item` | Agentic SDLC GitHub Issues role template | 2026-10-19 | Codex, Claude |
+| `create-branch` | Agentic SDLC branch role template | 2026-10-19 | Codex, Claude |
+| `checkout-branch` | Agentic SDLC branch role template | 2026-10-19 | Codex, Claude |
+| `open-pull-request` | Agentic SDLC GitHub role template | 2026-10-19 | Codex, Claude |
+| `inspect-pull-request` | Agentic SDLC GitHub role template | 2026-10-19 | Codex, Claude |
+| `update-pull-request` | Agentic SDLC GitHub role template | 2026-10-19 | Codex, Claude |
+| `inspect-ci-result` | Agentic SDLC GitHub Actions role template | 2026-10-19 | Codex, Claude |
+| `merge-pull-request` | Agentic SDLC GitHub role template | 2026-10-19 | Codex, Claude |
 
 ## Provided roles
 
@@ -169,3 +187,5 @@ Claude Code equivalents are `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, and `/
 | --- | --- | --- | --- |
 | 2026-10-16 | All | Adopted initial lifecycle, issue intake, delivery, and assurance policy. | Establish ArcShape's engineering process for Codex and Claude workflows. |
 | 2026-10-17 | Lifecycle stages, branch and commit conventions | Added mutually exclusive lifecycle labels, per-issue retrospective records, and issue-linked branch and commit conventions. | Reduce shared-file conflicts and make work traceable across issues, branches, commits, and pull requests. |
+| 2026-10-19 | Lifecycle labels, Fast Forward, retrospective baseline | Reset status labels to the shared `status:*` set and configured bounded `/ff` with per-item review records. | Align issue handling and PR integration across repositories while preserving ArcShape's gates. |
+| 2026-10-19 | Lifecycle labels, Fast Forward, review baseline | Reset lifecycle labels to the shared `status:*` defaults, kept per-item retrospectives, recorded the legacy-history baseline, and enabled configured `/ff`. | Align issue status, retrospective tracking, and bounded PR integration across repositories. |
