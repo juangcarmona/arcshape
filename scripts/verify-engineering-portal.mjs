@@ -102,7 +102,7 @@ if (
     `https://github.com/juangcarmona/arcshape/tree/${diagramManifest.source.revision}`,
   ) ||
   !diagram.includes(
-    `https://github.com/juangcarmona/arcshape/commit/${diagramManifest.source.revision}`,
+    `https://github.com/juangcarmona/arcshape/blob/${diagramManifest.source.revision}/`,
   )
 )
   throw new Error(
