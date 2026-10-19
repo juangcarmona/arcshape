@@ -15,6 +15,7 @@ Captured from plan revision `2a2f35c5299b1117fa316d13fc4a027f54a8c462` on 2026-1
 - Portal routes are `/arcshape/`, `/arcshape/model/`, `/arcshape/architecture/`, and the conditional `/arcshape/e2e/latest/` allowlisted report.
 - Architecture reader deep links use `/arcshape/architecture/#/section/<section-id>`.
 - The engineering shell is a separate one-column light page with a 980 px maximum and a 620 px cards/header breakpoint. It has no theme control.
+- The architecture reader has its own Auto/Light/Dark appearance controls, a section sidebar, responsive navigation, and hash-based section routes. These reader controls remain part of the engineering publication and are preserved by the shell migration.
 - `scripts/build-engineering-portal.mjs` assembles a source-SHA-stamped shell, an allowlisted E2E summary, and the separately generated Product and Architecture snapshots. The Pages workflow uploads only `_site`.
 
 ## Scope discrepancy found before implementation
@@ -27,6 +28,8 @@ The reviewed issue and plan describe existing English/Spanish route parity and e
 | --- | --- | --- | --- |
 | Public | `public-desktop.png` | `public-tablet.png` | `public-phone.png` |
 | Engineering | `engineering-desktop.png` | `engineering-tablet.png` | `engineering-phone.png` |
+
+The architecture reader additionally has `reader-desktop.png`, `reader-phone.png`, and `reader-dark.png` captures to preserve its theme and responsive baseline.
 
 ## Build and deployment contracts
 

@@ -60,6 +60,10 @@ export const locales = {
     footerText: "Architecture documentation, made clear.",
     engineering: "Engineering portal",
     langName: "English",
+    brandHome: "ArcShape home",
+    mainNavigation: "Main navigation",
+    principlesLabel: "ArcShape principles",
+    coreText: ["Architecture", "knowledge"],
     skip: "Skip to content",
   },
   es: {
@@ -123,6 +127,10 @@ export const locales = {
     footerText: "Documentación de arquitectura, con claridad.",
     engineering: "Portal de ingeniería",
     langName: "Español",
+    brandHome: "Inicio de ArcShape",
+    mainNavigation: "Navegación principal",
+    principlesLabel: "Principios de ArcShape",
+    coreText: ["Conocimiento", "arquitectónico"],
     skip: "Ir al contenido",
   },
 };

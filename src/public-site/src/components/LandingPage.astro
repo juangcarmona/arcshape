@@ -12,13 +12,13 @@ const languageChoices = Object.values(locales).filter(({ code }) => code !== loc
 <PublicLayout {locale}>
   <a class="skip" href="#main">{locale.skip}</a>
   <header class="topbar">
-    <a class="brand" href={`${base}#top`} aria-label="ArcShape home">
+    <a class="brand" href={`${base}#top`} aria-label={locale.brandHome}>
       <img
         src={`${base}assets/arcshape-lockup.png`}
         alt="ArcShape — Architecture Documentation"
       />
     </a>
-    <nav aria-label="Main navigation">
+    <nav aria-label={locale.mainNavigation}>
       <a href="#workflow">{locale.nav.workflow}</a>
       <a href="#artifacts">{locale.nav.artifacts}</a>
       <a href={portal}>
@@ -52,7 +52,7 @@ const languageChoices = Object.values(locales).filter(({ code }) => code !== loc
         <div class="orbit orbit-b"></div>
         <div class="core">
           <span class="monogram" aria-hidden="true">AS</span>
-          <span>Architecture<br />knowledge</span>
+          <span>{locale.coreText[0]}<br />{locale.coreText[1]}</span>
         </div>
         {locale.stages.map((stage, index) => (
           <div class:list={["node", `node-${["one", "two", "three"][index]}`]}>
@@ -63,7 +63,7 @@ const languageChoices = Object.values(locales).filter(({ code }) => code !== loc
         <div class="spark s2"></div>
       </div>
     </section>
-    <section class="strip" aria-label="ArcShape principles">
+    <section class="strip" aria-label={locale.principlesLabel}>
       {locale.principles.map((principle, index) => (
         <>
           {index > 0 && <i aria-hidden="true"></i>}

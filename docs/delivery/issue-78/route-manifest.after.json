@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-10-19",
+  "public": {
+    "base": "/",
+    "routes": [
+      {
+        "path": "/",
+        "language": "en",
+        "sections": ["#top", "#workflow", "#artifacts"],
+        "navigation": ["#workflow", "#artifacts", "engineering portal", "/es/"],
+        "themeControl": false
+      },
+      {
+        "path": "/es/",
+        "language": "es",
+        "sections": ["#top", "#workflow", "#artifacts"],
+        "navigation": ["#workflow", "#artifacts", "portal de ingeniería", "/"],
+        "themeControl": false
+      }
+    ]
+  },
+  "engineering": {
+    "base": "/arcshape/",
+    "routes": [
+      { "path": "/arcshape/", "language": "en", "themeControl": false },
+      { "path": "/arcshape/model/", "language": "en" },
+      {
+        "path": "/arcshape/architecture/",
+        "language": "en",
+        "themeControl": true,
+        "deepLinks": "/arcshape/architecture/#/section/<section-id>"
+      },
+      {
+        "path": "/arcshape/e2e/latest/",
+        "language": "en",
+        "conditional": "Published only when the validated E2E allowlist has a summary"
+      }
+    ]
+  }
+}
