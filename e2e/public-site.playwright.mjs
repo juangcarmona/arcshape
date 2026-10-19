@@ -69,7 +69,7 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: /engineering portal/i }).first(),
-  ).toHaveAttribute("href", /juangcarmona\.github\.io/);
+  ).toHaveAttribute("href", "https://juangcarmona.github.io/arcshape/");
   const metrics = await page.evaluate(() => {
     const luminance = (color) => {
       const [r, g, b] = color

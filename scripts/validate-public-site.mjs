@@ -11,12 +11,20 @@ const required = [
   ["skip link", /class="skip" href="#main"/],
   ["visible keyboard focus", /:focus-visible/],
   ["narrow viewport layout", /@media\s*\(max-width:/],
-  ["engineering portal link", /juangcarmona\.github\.io\/arcshape/],
-  ["GitHub project link", /github\.com\/juangcarmona\/arcshape/],
 ];
 for (const [label, pattern] of required) {
   if (!pattern.test(`${html}\n${css}`))
     throw new Error(`Public site is missing ${label}`);
+}
+const requiredLinks = [
+  [
+    "engineering portal link",
+    'href="https://juangcarmona.github.io/arcshape/"',
+  ],
+  ["GitHub project link", 'href="https://github.com/juangcarmona/arcshape"'],
+];
+for (const [label, link] of requiredLinks) {
+  if (!html.includes(link)) throw new Error(`Public site is missing ${label}`);
 }
 const files = await readdir(join(root, "assets"));
 if (!files.includes("arcshape-lockup.png"))
