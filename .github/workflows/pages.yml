@@ -72,11 +72,9 @@ jobs:
         run: |
           mkdir -p .e2e-carry-forward .e2e-latest
           curl --fail --silent --show-error https://juangcarmona.github.io/arcshape/e2e/latest/summary.json --output .e2e-carry-forward/summary.json || true
-          run_record="$(gh api "repos/$GH_REPO/actions/workflows/assurance.yml/runs?branch=main&status=completed&per_page=1" --jq 'if .workflow_runs[0] then [.workflow_runs[0].id, .workflow_runs[0].completed_at, .workflow_runs[0].head_sha] | @tsv else "\t\t" end' || true)"
-          IFS=$'\t' read -r run_id completed_at source_commit <<< "$run_record"
-          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
-          echo "completed_at=$completed_at" >> "$GITHUB_OUTPUT"
-          echo "source_commit=$source_commit" >> "$GITHUB_OUTPUT"
+          run_record="$(gh api "repos/$GH_REPO/actions/workflows/assurance.yml/runs?branch=main&status=completed&per_page=1" --jq '.workflow_runs[0] // {}' || printf '{}')"
+          printf '%s' "$run_record" | node scripts/select-assurance-run.mjs >> "$GITHUB_OUTPUT"
+          run_id="$(sed -n 's/^run_id=//p' "$GITHUB_OUTPUT" | tail -n 1)"
           if test -n "$run_id"; then gh run download "$run_id" --repo "$GH_REPO" --name arcshape-public-e2e-summary --dir .e2e-latest || true; fi
         id: assurance
       - name: Generate Product Snapshot
@@ -93,7 +91,6 @@ jobs:
         env:
           SOURCE_SHA: ${{ steps.revision.outputs.sha }}
           SELECTED_RUN_ID: ${{ steps.assurance.outputs.run_id }}
-          SELECTED_COMPLETED_AT: ${{ steps.assurance.outputs.completed_at }}
           SELECTED_SOURCE_COMMIT: ${{ steps.assurance.outputs.source_commit }}
           DISABLE_E2E_SUMMARY: ${{ inputs.remove_e2e_summary }}
         run: node scripts/build-engineering-portal.mjs --out _site

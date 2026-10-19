@@ -51,6 +51,13 @@ describe("GitHub Pages engineering portal workflow", () => {
           name === "Download latest completed main Assurance summary",
       ).run,
     ).toContain(".e2e-carry-forward");
+    const selection = steps.find(
+      ({ name }) => name === "Download latest completed main Assurance summary",
+    ).run;
+    expect(selection).toContain("select-assurance-run.mjs");
+    expect(selection).not.toContain(".completed_at");
+    expect(selection).not.toContain("IFS=$'\\t' read");
+    expect(selection).toContain('run_id="$(sed -n');
     expect(workflow.jobs.build.if).toContain("head_branch == 'main'");
     expect(workflow.jobs.build.if).toContain(
       "head_repository.full_name == github.repository",
