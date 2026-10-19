@@ -28,20 +28,20 @@ Invoke deliberately. No lifecycle stage runs this one on its own.
 
 ## Workflow
 
-Every external write is shown first and confirmed. The merge most of all.
+Every external write is shown first and confirmed. The merge most of all. An enabled `/ff` invocation may authorize routine lifecycle writes without per-write confirmation; it never waives required human approvals, branch protection, deterministic gates, or repository red lines.
 
 1. **Load the configuration.** Read `docs/engineering-lifecycle.md`. Absent means stop and say to run `adopt` first.
-2. **Refuse a change whose Done gate has not passed.** Delegate to the `done-gate-auditor` agent and require every applicable item satisfied, **both lanes**, with the judgement items decided by the roles the configuration names. Unmet means stop, list what remains, and point at `implement`. The audit runs again here, in a fresh context, rather than trusting a verdict recorded earlier: this is the Definition of Done's enforcement point, and everything before it was preparation.
-3. **Check the review.** `inspect-pull-request`: no unresolved blocking threads and not a draft. Require a GitHub approval when the lifecycle policy or branch protection requires one. When the policy intentionally requires zero GitHub approvals, require the configured human reviewer to explicitly approve the change in the conversation; do not infer approval from labels, silence, or mergeability.
+2. **Refuse a change whose Done gate has not passed.** Delegate to the `done-gate-auditor` agent and require every applicable item satisfied, **both lanes**, with judgement items decided by their configured human roles or, in enabled `/ff` mode, by the independent reviewer only when explicitly marked substitutable. Unmet means stop, list what remains, and point at `implement`. The audit runs again here, in a fresh context, rather than trusting a verdict recorded earlier: this is the Definition of Done's enforcement point, and everything before it was preparation.
+3. **Check the review.** `inspect-pull-request`: approved, no unresolved blocking threads, not a draft. In `/ff` mode an independent review decision may satisfy the lifecycle's substitutable review gate, but it never substitutes for approval required by the forge or repository policy.
 4. **Bring the branch up to date with the target** via `rebase-safely`, so the specifications fold into current ones rather than stale ones. This is what keeps sequential merges from conflicting.
 5. **Fold the specifications** via `sync-specs`, on the branch. Where the configuration's **Provided roles** names a skill for this contract, that skill is `sync-specs`; the contract is the same either way.
 6. **Archive the plan artifact** via `archive-change`, on the branch, **after** the fold, never before. The same dispatch applies.
 7. **Push** the branch, so the pull request carries the complete final state.
 8. **Re-audit the Done gate on the final head.** Steps 4 through 7 rebased, folded, archived and pushed new commits, so the diff the step-2 audit covered is no longer the diff that will merge. Delegate to the `done-gate-auditor` agent again, in a fresh context, and require its verdict on the final head before proceeding. An audit of an earlier commit is not evidence for this one.
-9. **Re-check the review immediately before merging.** Reviewer approval can be reset by a push, and steps 4 through 7 pushed. Read the pull request's state again: a vote read ten minutes ago is not evidence now.
-10. **Merge** via `merge-pull-request`. Set the Conventional Commit subject and `Refs #<number>` body **explicitly**: the subject describes the implemented change, not the proposal the pull request opened with, and no auto-generated body is allowed to carry anything unintended onto the target branch.
+9. **Re-check the review immediately before merging.** Reviewer approval can be reset by a push, and steps 4 through 7 pushed. Read the pull request's state again and, in `/ff` mode, ensure the independent review covers the final head. A vote or model decision for an earlier commit is not evidence now.
+10. **Merge** via `merge-pull-request`. Set the commit message **explicitly**: the subject describes the implemented change, not the proposal the pull request opened with, and no auto-generated body is allowed to carry anything unintended onto the target branch.
 11. **Verify traceability.** The branch, the commits, the pull request and the artifacts all carry the work item identifier, and the item links to the merge.
-12. **Close the loop in the tracker.** GitHub closes the issue through `Closes #<number>`. Once the merge is confirmed, set `stage:review` via `transition-work-item` and `comment-work-item` with the merge link.
+12. **Close the loop in the tracker.** `transition-work-item` to the state the mapping names, and `comment-work-item` with the merge link. In `/ff` mode, include the run ID, completion status, merged commit, reviewer model and decisions, and the durable evidence path in that comment.
 13. **Publish documentation** where a pair is repository-ahead, via `sync-doc-to-kb`. A pair reported diverged is refused: both sides changed, and either write destroys work.
 14. **Offer the review now.** Draft the entry from what just happened, taking effort figures from `collect-usage`, and offer it while the human is still here. Declining is one word. This is the moment attention exists, and it never blocks the merge, which has already happened. Offering is not running: `review` runs when a human accepts.
 
@@ -49,10 +49,10 @@ Every external write is shown first and confirmed. The merge most of all.
 
 - The Done gate was re-audited in this stage, not carried over from `implement`.
 - The Done gate was re-audited **again after the final push**, on the head that will merge, not on the pre-push commit.
-- The configured approval path passed: GitHub approval where required, or explicit approval from the configured human reviewer where GitHub approvals are intentionally zero. The pull request was not a draft, had no unresolved blocking threads, and its state was read again immediately before merge.
+- The pull request was approved, not a draft, with no unresolved blocking threads, and its state was read again immediately before the merge.
 - The branch was brought up to date before the specifications were folded.
 - The plan was archived after the fold, never before.
-- The merge commit message uses Conventional Commits and includes `Refs #<number>`.
+- The merge commit message was set explicitly.
 - The work item identifier appears on the branch, the commits, the pull request and the artifacts, and the item links to the merge.
 - No diverged documentation pair was written to.
 - The review was offered and not run.

@@ -1,6 +1,6 @@
 ---
 name: review-entry
-description: "Create one per-issue retrospective record after a change has merged: what worked, what did not, what to change next time, plus the effort figures the caller supplies. Use when closing out a loop."
+description: "Create one dated, per-work-item retrospective after a change has merged: what worked, what did not, what to change next time, and sourced effort figures. Use when `review` closes out a work item."
 metadata:
   plugin: agentic-sdlc
   author: "juangcarmona"
@@ -8,78 +8,47 @@ metadata:
 
 ## Purpose
 
-One responsibility: create **exactly one** dated retrospective record for a work item. Separate files keep parallel reviews of different issues from contending on a shared append-only ledger.
+Create exactly one retrospective record for one merged work item. The default path is `docs/reviews/issue-<number>.md`, configured by the project's `## Label conventions` section. One file per issue prevents parallel reviews from contending on a shared append-only file.
 
-Use this format:
-
-```markdown
-# Review #<number>: <title>
-
-**Date:** YYYY-MM-DD
-
-## What worked
-<reflection>
-
-## What did not
-<reflection>
-
-## What to change next time
-<reflection>
-
-## Effort
-<figures and source, or not captured>
-
-## Amendments
-<destinations, or none>
-```
-
-**This skill does not compute effort figures.** The caller runs `collect-usage` and passes the numbers in. Nothing here starts a collector, reads telemetry, or re-derives a figure.
+This skill does not measure effort. The caller supplies the effort figures and their source. Missing telemetry is recorded as `not captured`.
 
 ## When to use
 
-- At loop close-out, when `review` has drafted the reflections for a merged work item.
+- At post-merge close-out when `review` has drafted the reflections.
 - When recording a retrospective for a completed work item.
-- When a post-merge finding needs capturing where the team will meet it again.
+- When a post-merge finding needs to be attached to the work item.
 
 ## When not to use
 
-- Measuring effort. That is `collect-usage`, whose output this skill records.
-- Proposing an amendment to the Definition of Ready or Definition of Done. This skill notes that one is warranted and names where it goes; `review` proposes it and a human confirms it.
-- Authoring the decision record itself. That is `adr`; put its identifier on the amendment line.
+- Measuring effort; that is `collect-usage`.
+- Amending the Definition of Ready or Definition of Done; `review` proposes that change for human approval.
+- Recording a cross-item process rule; use the configured process ledger for that durable lesson.
+- Authoring a decision record; use `adr` and link its identifier in the record.
 
 ## Workflow
 
-The caller supplies the work item identifier and a short title, the date (`YYYY-MM-DD`, defaulting to today), the three reflections (**what worked**, **what did not**, **what to change next time**), and the effort figures **and their source**. The path is `docs/reviews/issue-<number>.md`, as configured by the project lifecycle. There is one retrospective record per issue.
+The caller supplies the work item identifier and title, date (`YYYY-MM-DD`, default today), what worked, what did not, what to change next time, effort figures and their source, and the configured path.
 
-1. **Check the target path.** If `docs/reviews/issue-<number>.md` already exists, stop and report it; never overwrite or append to it. This prevents duplicate review work from silently colliding. *Done when:* the target is confirmed absent.
-2. **Compose one record** using the format below: the item identifier and title, date, three reflections, effort figures, and amendments. *Done when:* every field is filled or explicitly marked absent.
-3. **Name the effort source.** The figures line says where the numbers came from, so a reader knows what they cover. Telemetry missing means write `not captured`. **Never invent a number to fill the line**, and never round an absent figure up to a plausible one. *Done when:* every figure carries a source, or is marked `not captured`.
-4. **Route what graduates.** A reflection that is a recurring, structural change to how the team works does not belong buried in prose:
-   - a decision with lasting trade-offs becomes an ADR candidate, and the resulting record's identifier goes in the `Amendments` section;
-   - a missing guard the process should have had is noted for hardening;
-   - a gap in what the team calls ready or done is noted as a proposed amendment to their Definition of Ready or Definition of Done.
-
-   *Done when:* each structural reflection names its destination, or the `Amendments` section reads `none`.
-5. **Create the new file without replacement.** Create `docs/reviews/` if needed, then use exclusive-create semantics for the target file (for example, `open` with `wx` or shell noclobber). If creation reports that the path exists, stop and report it. *Done when:* exactly one new per-issue record exists.
-6. **Report** the created record and file path to the caller. *Done when:* the caller knows what was written and where.
+1. **Resolve the target.** Read `docs/engineering-lifecycle.md` and use its configured per-item review path. If none is configured, use `docs/reviews/issue-<number>.md`. *Done when:* the exact target path is known.
+2. **Check for an existing record.** If the target exists, stop and report it. Never overwrite it or append a second entry. *Done when:* the target is confirmed absent.
+3. **Compose the record.** Include the work item and title, date, three reflections, sourced effort or `not captured`, and an amendments section. Route structural lessons to an ADR, process ledger, hardening change, or proposed Ready/Done amendment; use `none` when no amendment is warranted. *Done when:* every field is filled or explicitly marked absent.
+4. **Create the file exclusively.** Use a create-if-absent write. If another run creates the same path first, stop and read the existing record; do not overwrite it. *Done when:* exactly one record exists at the target.
+5. **Report the record.** Give the caller the work item, path, and any lesson routed to another destination. *Done when:* the record and its follow-up are clear.
 
 ## Validation
 
-- Exactly one new per-issue record was created; no existing record was modified.
-- The record follows the format documented by the skill.
-- Every figure carries a source, or reads `not captured`.
-- Each structural reflection names its destination, or the `Amendments` section reads `none`.
-- No telemetry was read and no collector was started from here.
+- Exactly one per-item record was created and any existing record remained unchanged.
+- The record follows the configured format and includes all required reflections.
+- Every effort figure names its source or is marked `not captured`.
+- Structural lessons have a destination or the amendments section says `none`.
+- No telemetry was read and no collector was started here.
 
 ## Common pitfalls
 
 | Pitfall | Fix |
 |---|---|
-| Rewriting an existing review record | Stop if the per-issue record already exists; do not overwrite it |
-| Batching several work items into one call | One entry per invocation |
-| Reaching for telemetry to fill a missing figure | Figures come from the caller. `collect-usage` measures them |
-| Writing a plausible number instead of `not captured` | Honest absence beats an invented figure, which corrupts every summary built on the log afterwards |
-| Leaving a structural lesson as prose in the entry | It graduates to a decision record or an amendment to the team's definitions, linked from the entry |
-| Proposing the amendment here | Note that one is warranted and name where it goes. `review` proposes it, a human confirms it |
-| Calling another skill from here | Composition happens in the calling capability |
-| Appending different issues to one shared log | Create a separate file for each issue |
+| Appending different issues to one shared file | Create one file per issue |
+| Replacing an existing issue record | Stop; a correction is a later, explicit amendment, never an overwrite |
+| Guessing an effort figure | Record `not captured` |
+| Leaving a structural lesson buried in a retrospective | Route it to the process ledger, hardening work, Ready/Done amendment, or ADR |
+| Running another capability from here | The calling `review` stage owns composition |
