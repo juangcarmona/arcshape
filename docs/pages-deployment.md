@@ -38,24 +38,27 @@ The Cloudflare project is separate from GitHub Pages: marketing content does not
 
 ## Implementation verification evidence
 
-Local verification on 2026-10-18, using the Linux runner and the checked-out implementation tree:
+Local verification on 2026-10-19, using Linux, Node `v22.22.1`, and the checked-out implementation tree. The repository CI matrix also covers Windows and macOS and Node 24; those matrix runs require CI.
 
 | Command | Result |
 | --- | --- |
 | `npm run format:check` | Passed. |
 | `npm run lint` | Passed. |
 | `npm run typecheck` | Passed. |
-| `npm test` | Passed: 23 files, 99 tests, including portal assembly, workflow, summary validation, and route compatibility tests. |
+| `GITHUB_ACTIONS=true TMPDIR=/var/tmp npm test` | Passed: 23 files, 104 tests, including portal assembly, workflow, summary validation, and route compatibility tests. |
 | `npm run build` | Passed. |
 | `npm run product:model:check` | Passed; all model artifacts have accepted statuses. |
 | `npm exec -- prodshape validate --format json` | Passed; 35 artifacts, no diagnostics. |
-| `npm exec -- openspec validate --all --no-interactive` | Passed; 3 items. |
-| `npx prodshape citations verify --provider openspec` | Passed; 51 citations current, none stale, tampered, or unresolved. |
+| `npm exec -- openspec validate --all --no-interactive` | Passed; 4 items. |
+| `npm exec -- prodshape citations verify --provider openspec` | Passed; 70 citations current, none stale, tampered, or unresolved. |
 | `npm run security:audit` | Passed; no unexcepted High or Critical dependency findings. |
+| `RUNNER_TEMP=/tmp bash scripts/test-secret-scan.sh` | Passed; the scanner blocked its harmless synthetic fixture. |
 | `node scripts/test-npm-audit-gate.mjs` | Passed; the synthetic High finding was rejected. |
 | `node scripts/test-license-policy.mjs` | Passed; synthetic allow, deny, unknown, and exception cases behaved as expected. |
 | `node scripts/test-codeql-sarif.mjs` | Passed; synthetic High finding was rejected. |
 | `node scripts/validate-public-site.mjs` | Passed. |
-| `TMPDIR=/var/tmp GITHUB_ACTIONS=true npm run test:e2e` | Passed: 4 Playwright tests, including public-site accessibility and the generated portal mounted under `/arcshape/`. |
+| `npx --yes --package=npm@10.9.9 -c 'PATH="$(dirname "$(command -v npm)"):$PATH" bash scripts/generate-release-sbom.sh /tmp/arcshape-62-sbom'` and `node scripts/check-license-policy.mjs /tmp/arcshape-62-sbom/arcshape-0.1.1-sbom.cdx.json` | Passed; generated a CycloneDX SBOM with 247 components and passed the license policy with 5 active, scoped exceptions. |
+| Pinned ZAP Baseline `2.17.0` against the built local architecture reader, followed by `node scripts/check-zap-report.mjs` | Passed the configured severity policy; 58 checks passed, with 4 Medium, 6 Low, and 2 Informational alerts. No High alerts. |
+| `GITHUB_ACTIONS=true TMPDIR=/var/tmp npm run test:e2e` | Passed: 5 Playwright tests, including public-site accessibility, the generated portal mounted under `/arcshape/`, and the section 07 deployment diagram. |
 
-The portal browser test builds the model and architecture snapshots from the current checkout, checks their source revision, follows both routes, and opens a prior `/#/section/01` bookmark at `/architecture/#/section/01`. The public-site browser test checks keyboard focus, image alternatives, primary-action contrast, and overflow at mobile and desktop widths. Cloudflare dashboard configuration and a Cloudflare-hosted preview were not available to inspect from this environment; those external deployment facts remain unverified.
+The portal browser test builds the model and architecture snapshots from the current checkout, checks their source revision, follows both routes, and opens a prior `/#/section/01` bookmark at `/architecture/#/section/01`. The public-site browser test checks keyboard focus, image alternatives, primary-action contrast, and overflow at mobile and desktop widths. I also inspected local browser screenshots of both pages: `/tmp/arcshape-62-public-site.png` and `/tmp/arcshape-62-engineering-portal.png`. Cloudflare dashboard configuration and a Cloudflare-hosted preview were not available to inspect from this environment; those external deployment facts remain unverified. The full TruffleHog scan and cross-platform CI matrix are also not reproduced locally.

@@ -24,13 +24,7 @@ async function readSafeSummary(
     const raw = JSON.parse(await readFile(file, "utf8"));
     const keys = publicProjection
       ? ["completed_at", "result", "run_id", "source_commit"]
-      : [
-          "completed_at",
-          "repository",
-          "result",
-          "run_id",
-          "source_commit",
-        ];
+      : ["completed_at", "repository", "result", "run_id", "source_commit"];
     if (Object.keys(raw).sort().join(",") !== keys.sort().join(","))
       throw new Error("Unexpected E2E summary fields");
     if (

@@ -387,8 +387,12 @@ describe("engineering portal assembly", () => {
       result: "success",
     });
     const projection = (run_id) => {
-      const { run_id: id, source_commit, completed_at, result } =
-        envelope(run_id);
+      const {
+        run_id: id,
+        source_commit,
+        completed_at,
+        result,
+      } = envelope(run_id);
       return { run_id: id, source_commit, completed_at, result };
     };
     await writeFile(
