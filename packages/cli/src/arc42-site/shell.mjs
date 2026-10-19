@@ -106,11 +106,15 @@ ${lightBlockWithSectionColors}
 ${darkBlock}
     color-scheme: dark;
   }
+  :root:not([data-appearance='light']) .brand-logo-light { display:none; }
+  :root:not([data-appearance='light']) .brand-logo-dark { display:block; }
 }
 :root[data-appearance='dark'] {
 ${darkBlock}
   color-scheme: dark;
 }
+:root[data-appearance='dark'] .brand-logo-light { display:none; }
+:root[data-appearance='dark'] .brand-logo-dark { display:block; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { height: 100%; }
@@ -145,8 +149,10 @@ header.site {
 .header-inner { width:min(1160px,calc(100% - 2.5rem)); min-height:52px; margin:auto; display:flex; align-items:center; gap:.65rem; }
 header.site h1 { display:flex; align-items:center; gap:.5rem; margin:0; min-width:0; font-size:.95rem; white-space:nowrap; }
 .brand-mark { display:grid; place-items:center; flex:none; width:1.75rem; height:1.75rem; color:var(--accent); }
-.brand-mark svg { display:block; width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:square; stroke-linejoin:miter; }
+.brand-mark svg { display:block; width:100%; height:100%; }
+.brand-logo-dark { display:none; filter:invert(1) hue-rotate(180deg); mix-blend-mode:screen; }
 .brand-title { color:var(--ink); font-size:.96rem; font-weight:650; letter-spacing:-.025em; }
+.brand-caption { color:var(--muted); font-size:.72rem; white-space:nowrap; }
 .project-context { min-width:0; overflow:hidden; color:var(--muted); font-size:.82rem; text-overflow:ellipsis; white-space:nowrap; }
 .revshort {
   font-family: var(--mono); font-size: 0.74rem; color: var(--muted);
@@ -720,8 +726,18 @@ function stableJson(value) {
  * @param {Array<{number: string, title: string, description: string, html: string}>} input.sections
  * @param {string} input.stackName
  * @param {string|undefined} input.revision
+ * @param {string} input.brandImage ArcShape lockup WebP encoded as base64
  */
-export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
+export function buildSnapshotHtml({
+  readme,
+  sections,
+  stackName,
+  revision,
+  brandImage,
+}) {
+  const brandMark = brandImage
+    ? `<span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><image class="brand-logo-light" href="data:image/webp;base64,${brandImage}" x="-10.8" y="-3.9" width="60" height="60" preserveAspectRatio="none"/><image class="brand-logo-dark" href="data:image/webp;base64,${brandImage}" x="-10.8" y="-3.9" width="60" height="60" preserveAspectRatio="none"/></svg></span>`
+    : '<span class="brand-mark" aria-hidden="true"></span>';
   const revisionShort = revision
     ? `<span class="revshort" title="revision ${esc(revision)}">${esc(revision.slice(0, 7))}</span>`
     : '<span class="revshort" title="Not generated from a Git checkout">no revision</span>';
@@ -756,7 +772,7 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     "<head>",
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-${createHash("sha256").update(`\n${script}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
+    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; script-src 'sha256-${createHash("sha256").update(`\n${script}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
     '<meta name="color-scheme" content="light dark">',
     `<title>ArcShape — ${esc(stackName)} arc42 Architecture Snapshot</title>`,
     `<style>\n${style}\n</style>`,
@@ -765,8 +781,8 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     '<a class="skip" href="#main">Skip to content</a>',
     '<header class="site">',
     '<div class="header-inner">',
-    '<h1><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M4 4h32v32H4z" stroke-width="1.5"/><path d="M8 31 16.2 9h4L28 31m-16.5-8h13M22 9h4.2L32 14l-1.1 4.3-4 2.1 4.8 2.6L33 31h-8"/><circle cx="4" cy="4" r="1.5" fill="currentColor"/><circle cx="36" cy="36" r="1.5" fill="currentColor"/></svg></span><span class="brand-title">ArcShape</span></h1>',
-    '<span class="revshort">Engineering Documentation</span>',
+    `<h1>${brandMark}<span class="brand-title">ArcShape</span></h1>`,
+    '<span class="brand-caption">AI-driven engineering documentation</span>',
     `<span class="project-context" title="${esc(stackName)} · arc42">${esc(stackName)} · arc42</span>`,
     revisionShort,
     '<nav class="primary-nav" aria-label="Primary navigation"><a href="#/" data-route="#/">Overview</a></nav>',

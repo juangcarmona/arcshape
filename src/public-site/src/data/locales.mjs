@@ -2,14 +2,13 @@ export const locales = {
   en: {
     code: "en",
     path: "/",
-    title: "ArcShape — Make architecture clear",
+    title: "ArcShape — AI-driven engineering documentation",
     description:
       "ArcShape helps teams create and maintain clear, useful architecture documentation with AI-assisted workflows.",
     nav: { workflow: "How it works", artifacts: "Artifacts" },
-    eyebrow: "Architecture, made understandable",
-    headline: ["Make your system’s architecture ", "clear."],
-    lead:
-      "ArcShape helps teams create, evolve, and explain software architecture documentation with AI-assisted workflows grounded in your repository.",
+    eyebrow: "Engineering documentation, powered by AI",
+    headline: ["AI-driven engineering documentation", "."],
+    lead: "ArcShape helps teams create, evolve, and explain software architecture documentation with AI-assisted workflows grounded in your repository.",
     explore: "Explore ArcShape on GitHub",
     browse: "Browse engineering artifacts",
     note: "Open source tooling. Your repository stays yours.",
@@ -57,7 +56,7 @@ export const locales = {
     closingIntro:
       "See the project, its current capabilities, and the engineering artifacts behind this site.",
     viewRepository: "View the repository",
-    footerText: "Architecture documentation, made clear.",
+    footerText: "AI-driven engineering documentation.",
     engineering: "Engineering portal",
     langName: "English",
     brandHome: "ArcShape home",
@@ -69,14 +68,13 @@ export const locales = {
   es: {
     code: "es",
     path: "/es/",
-    title: "ArcShape — Arquitectura clara",
+    title: "ArcShape — Documentación de ingeniería con IA",
     description:
       "ArcShape ayuda a los equipos a crear y mantener documentación de arquitectura clara y útil con flujos de trabajo asistidos por IA.",
     nav: { workflow: "Cómo funciona", artifacts: "Artefactos" },
-    eyebrow: "Arquitectura, fácil de entender",
-    headline: ["Haz clara la arquitectura ", "de tu sistema."],
-    lead:
-      "ArcShape ayuda a los equipos a crear, evolucionar y explicar la documentación de arquitectura de software con flujos asistidos por IA basados en su repositorio.",
+    eyebrow: "Documentación de ingeniería, impulsada por IA",
+    headline: ["Documentación de ingeniería con IA", "."],
+    lead: "ArcShape ayuda a los equipos a crear, evolucionar y explicar la documentación de arquitectura de software con flujos asistidos por IA basados en su repositorio.",
     explore: "Explora ArcShape en GitHub",
     browse: "Ver artefactos de ingeniería",
     note: "Herramientas de código abierto. Tu repositorio sigue siendo tuyo.",
@@ -124,7 +122,7 @@ export const locales = {
     closingIntro:
       "Conoce el proyecto, sus capacidades actuales y los artefactos de ingeniería que respaldan este sitio.",
     viewRepository: "Ver el repositorio",
-    footerText: "Documentación de arquitectura, con claridad.",
+    footerText: "Documentación de ingeniería con IA.",
     engineering: "Portal de ingeniería",
     langName: "Español",
     brandHome: "Inicio de ArcShape",

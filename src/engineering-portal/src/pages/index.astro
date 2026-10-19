@@ -1,5 +1,7 @@
 ---
 import "../styles/portal.css";
+import BrandLockup from "../components/BrandLockup.astro";
+
 const base = import.meta.env.BASE_URL;
 const publicSite = "https://arcshape.dev";
 ---
@@ -15,10 +17,9 @@ const publicSite = "https://arcshape.dev";
   <body data-base={base}>
     <header class="site-header">
       <a class="brand" href={base} aria-label="ArcShape engineering portal">
-        <img src={`${base}assets/arcshape-icon.svg`} data-theme-light={`${base}assets/arcshape-icon.svg`} data-theme-dark={`${base}assets/arcshape-icon-dark.svg`} width="28" height="28" alt="" />
-        <span class="brand-title">ArcShape</span>
+        <BrandLockup id="site-header-brand" width={175} height={27} />
       </a>
-      <span class="header-badge">Engineering Documentation</span>
+      <span class="header-badge">AI-driven engineering documentation</span>
       <nav aria-label="Engineering navigation">
         <a href={base}>Portal</a>
         <a href={`${base}model/`}>Product Snapshot</a>
@@ -93,7 +94,7 @@ const publicSite = "https://arcshape.dev";
       </p>
       </section>
       <footer class="site-footer">
-        <a class="footer-brand" href={publicSite} aria-label="ArcShape — Engineering Documentation"><img src={`${base}assets/arcshape-branding.svg`} data-theme-light={`${base}assets/arcshape-branding.svg`} data-theme-dark={`${base}assets/arcshape-branding-dark.svg`} width="175" height="27" alt="ArcShape — Engineering Documentation" /></a>
+        <a class="footer-brand" href={publicSite} aria-label="ArcShape — AI-driven engineering documentation"><BrandLockup id="site-footer-brand" /></a>
         <p>
         ArcShape Engineering Portal · Static publication from GitHub Pages
         </p>

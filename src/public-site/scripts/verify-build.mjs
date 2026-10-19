@@ -105,14 +105,7 @@ for (const [code, locale] of Object.entries(locales)) {
 if (expectedRoutes.size)
   throw new Error(`Missing routes: ${[...expectedRoutes].join(", ")}`);
 await access(resolve(dist, "styles.css"));
-await access(resolve(dist, "assets/arcshape-lockup.png"));
-for (const asset of [
-  "arcshape-icon.svg",
-  "arcshape-icon-dark.svg",
-  "arcshape-branding.svg",
-  "arcshape-branding-dark.svg",
-])
-  await access(resolve(dist, "assets", asset));
+await access(resolve(dist, "assets/arcshape-lockup.webp"));
 if (!/:focus-visible/.test(css))
   throw new Error("Public site is missing visible keyboard focus styling");
 for (const locale of Object.values(locales)) {
@@ -124,11 +117,11 @@ for (const locale of Object.values(locales)) {
   )
     throw new Error(`${path} is missing accessible appearance controls`);
   if (
-    !/Engineering Documentation/.test(output) ||
+    !/AI-driven engineering documentation/.test(output) ||
     /Architecture Documentation/.test(output)
   )
     throw new Error(
-      `${path} does not use the Engineering Documentation brand lockup`,
+      `${path} does not use the AI-driven engineering documentation brand label`,
     );
 }
 console.log(

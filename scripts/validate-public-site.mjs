@@ -29,19 +29,14 @@ for (const [label, link] of requiredLinks) {
   if (!html.includes(link)) throw new Error(`Public site is missing ${label}`);
 }
 const files = await readdir(join(root, "assets"));
-for (const name of [
-  "arcshape-icon.svg",
-  "arcshape-icon-dark.svg",
-  "arcshape-branding.svg",
-  "arcshape-branding-dark.svg",
-]) {
-  if (!files.includes(name))
-    throw new Error(`Theme-aware ArcShape brand asset ${name} is missing`);
-}
+if (!files.includes("arcshape-lockup.webp"))
+  throw new Error("Optimized original ArcShape lockup is missing");
 if (files.some((file) => /product.?shape/i.test(file)))
   throw new Error(
     "ProductShape branded assets must not be used by ArcShape public site",
   );
-if (!html.includes('alt="ArcShape — Engineering Documentation"'))
-  throw new Error("Brand image needs the Engineering Documentation label");
+if (!html.includes("AI-driven engineering documentation"))
+  throw new Error(
+    "Public site is missing its AI-driven engineering documentation label",
+  );
 console.log("Public Astro output checks passed.");

@@ -209,6 +209,11 @@ async function main() {
     sections: sectionsRendered,
     stackName,
     revision,
+    brandImage: (
+      await readFile(
+        new URL("../../assets/arcshape-lockup.webp", import.meta.url),
+      )
+    ).toString("base64"),
   })}`;
 
   await mkdir(dirname(outFile), { recursive: true });

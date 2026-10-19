@@ -1,5 +1,6 @@
 ---
 import PublicLayout from "../layouts/PublicLayout.astro";
+import BrandLockup from "./BrandLockup.astro";
 import { locales } from "../data/locales.mjs";
 const { locale } = Astro.props;
 const base = import.meta.env.BASE_URL;
@@ -13,10 +14,9 @@ const languageChoices = Object.values(locales).filter(({ code }) => code !== loc
   <a class="skip" href="#main">{locale.skip}</a>
   <header class="topbar">
     <a class="brand" href={`${base}#top`} aria-label={locale.brandHome}>
-      <img src={`${base}assets/arcshape-icon.svg`} data-theme-light={`${base}assets/arcshape-icon.svg`} data-theme-dark={`${base}assets/arcshape-icon-dark.svg`} width="28" height="28" alt="" />
-      <span class="brand-title">ArcShape</span>
+      <BrandLockup id="site-header-brand" width={175} height={27} />
     </a>
-    <span class="header-badge">Engineering Documentation</span>
+    <span class="header-badge">AI-driven engineering documentation</span>
     <nav id="primary-navigation" aria-label={locale.mainNavigation}>
       <a href="#workflow">{locale.nav.workflow}</a>
       <a href="#artifacts">{locale.nav.artifacts}</a>
@@ -134,8 +134,8 @@ const languageChoices = Object.values(locales).filter(({ code }) => code !== loc
     </section>
   </main>
   <footer>
-    <a href={`${base}#top`} class="footer-brand" aria-label="ArcShape — Engineering Documentation">
-      <img src={`${base}assets/arcshape-branding.svg`} data-theme-light={`${base}assets/arcshape-branding.svg`} data-theme-dark={`${base}assets/arcshape-branding-dark.svg`} alt="ArcShape — Engineering Documentation" width="175" height="27" />
+    <a href={`${base}#top`} class="footer-brand" aria-label="ArcShape — AI-driven engineering documentation">
+      <BrandLockup id="site-footer-brand" />
     </a>
     <span>{locale.footerText}</span>
     <a href={portal}>{locale.engineering}</a>

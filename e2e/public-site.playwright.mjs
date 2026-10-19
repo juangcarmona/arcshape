@@ -67,7 +67,9 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
   ).toBeVisible();
   await expect(page.getByRole("main")).toBeVisible();
   await expect(
-    page.getByRole("img", { name: /ArcShape — Engineering Documentation/ }),
+    page
+      .getByRole("link", { name: "ArcShape home" })
+      .locator("svg.brand-lockup"),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: /engineering portal/i }).first(),

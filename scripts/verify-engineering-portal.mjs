@@ -33,12 +33,7 @@ if (!model.includes(sha) || !architecture.includes(sha))
 if (portal.includes("/es/") || (await readdir(out)).includes("es"))
   throw new Error("Public-site output leaked into the engineering artifact");
 const assetDirectory = resolve(out, "assets");
-const brandingAssets = [
-  "arcshape-icon.svg",
-  "arcshape-icon-dark.svg",
-  "arcshape-branding.svg",
-  "arcshape-branding-dark.svg",
-];
+const brandingAssets = ["arcshape-lockup.webp"];
 const publishedAssets = await readdir(assetDirectory);
 if (
   publishedAssets.slice().sort().join(",") !==
@@ -48,8 +43,8 @@ if (
     "Engineering output must contain only its theme-aware brand assets",
   );
 if (
-  !portal.includes(`${base}assets/arcshape-icon.svg`) ||
-  !portal.includes("Engineering Documentation")
+  !portal.includes(`${base}assets/arcshape-lockup.webp`) ||
+  !portal.includes("AI-driven engineering documentation")
 )
   throw new Error("Engineering portal is missing its shared brand identity");
 

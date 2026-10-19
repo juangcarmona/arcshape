@@ -1,0 +1,32 @@
+---
+const { id, width = 175, height = 27 } = Astro.props;
+const source = `${import.meta.env.BASE_URL}assets/arcshape-lockup.webp`;
+---
+
+<svg class="brand-lockup" width={width} height={height} viewBox="0 0 350 54" aria-hidden="true">
+  <defs>
+    <clipPath id={`${id}-mark-crop`}><rect width="48" height="48" /></clipPath>
+    <clipPath id={`${id}-word-crop`}><rect x="55" y="3" width="265" height="28" /></clipPath>
+  </defs>
+  <g class="brand-light">
+    <g clip-path={`url(#${id}-mark-crop)`}><image href={source} x="-12.7" y="-4" width="72.5" height="72.5" preserveAspectRatio="none" /></g>
+    <g clip-path={`url(#${id}-word-crop)`}><image href={source} x="23.8" y="-231.3" width="326" height="326" preserveAspectRatio="none" /></g>
+  </g>
+  <g class="brand-dark">
+    <g clip-path={`url(#${id}-mark-crop)`}><image href={source} x="-12.7" y="-4" width="72.5" height="72.5" preserveAspectRatio="none" /></g>
+    <g clip-path={`url(#${id}-word-crop)`}><image href={source} x="23.8" y="-231.3" width="326" height="326" preserveAspectRatio="none" /></g>
+  </g>
+  <text class="brand-caption" x="56" y="48" font-size="9" font-weight="650" letter-spacing="1.1">AI-DRIVEN ENGINEERING DOCUMENTATION</text>
+</svg>
+
+<style>
+  .brand-lockup { display: block; flex: none; }
+  .brand-dark { display: none; filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
+  .brand-caption { fill: var(--muted); font-family: system-ui, sans-serif; }
+  :global(:root[data-appearance="dark"]) .brand-light { display: none; }
+  :global(:root[data-appearance="dark"]) .brand-dark { display: initial; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-appearance="light"])) .brand-light { display: none; }
+    :global(:root:not([data-appearance="light"])) .brand-dark { display: initial; }
+  }
+</style>
