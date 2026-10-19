@@ -26,7 +26,23 @@ jobs:
       - run: npm ci
       - name: Install the pinned Playwright Chromium browser
         run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+      - id: e2e
+        run: npm run test:e2e
+      - name: Write public-safe E2E summary
+        if: always() && steps.e2e.outcome != '' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          RUN_RESULT: ${{ steps.e2e.outcome }}
+        run: |
+          mkdir -p public-e2e-summary
+          node -e 'const fs=require("node:fs"); const s={repository:process.env.GITHUB_REPOSITORY,run_id:Number(process.env.GITHUB_RUN_ID),source_commit:process.env.GITHUB_SHA,completed_at:new Date().toISOString(),result:process.env.RUN_RESULT === "success" ? "success" : "failure"}; fs.writeFileSync("public-e2e-summary/summary.json", JSON.stringify(s,null,2)+"\n")'
+      - name: Retain allowlisted summary for the engineering portal
+        if: always() && steps.e2e.outcome != '' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: arcshape-public-e2e-summary
+          path: public-e2e-summary/summary.json
+          if-no-files-found: warn
+          retention-days: 90
       - name: Retain Playwright reports and traces
         if: always()
         uses: actions/upload-artifact@v7

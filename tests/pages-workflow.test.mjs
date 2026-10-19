@@ -9,36 +9,68 @@ const workflow = load(
   ),
 );
 
-describe("GitHub Pages workflow", () => {
-  it("builds the reader for pull requests without uploading or deploying it", () => {
+describe("GitHub Pages engineering portal workflow", () => {
+  it("builds both generated snapshots and the portal from the exact checked out revision", () => {
     expect(workflow.on.pull_request.branches).toContain("main");
-    expect(workflow.jobs.build.steps).toEqual(
+    expect(workflow.on.workflow_run.workflows).toContain("Assurance");
+    const steps = workflow.jobs.build.steps;
+    expect(steps).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          name: "Generate reader site",
-          run: expect.stringContaining("site build"),
+          name: "Generate Product Snapshot",
+          run: expect.stringContaining("prodshape graph --format html"),
         }),
         expect.objectContaining({
-          name: "Upload Pages artifact",
-          if: "github.event_name != 'pull_request'",
+          name: "Generate Architecture Snapshot",
+          run: expect.stringContaining("--source-ref"),
+        }),
+        expect.objectContaining({
+          name: "Assemble and validate portal",
+          run: expect.stringContaining("build-engineering-portal.mjs"),
+        }),
+        expect.objectContaining({
+          name: "Download latest completed main Assurance summary",
         }),
       ]),
     );
-    expect(workflow.jobs.deploy.if).toContain(
+    expect(
+      steps.find(({ name }) => name === "Record source revision").run,
+    ).toContain("git rev-parse HEAD");
+    expect(steps.find(({ name }) => name === "Upload Pages artifact").if).toBe(
       "github.event_name != 'pull_request'",
+    );
+    expect(
+      steps.find(
+        ({ name }) =>
+          name === "Download latest completed main Assurance summary",
+      ).run,
+    ).toContain("branch=main&status=completed&per_page=1");
+    expect(
+      steps.find(
+        ({ name }) =>
+          name === "Download latest completed main Assurance summary",
+      ).run,
+    ).toContain(".e2e-carry-forward");
+    expect(workflow.jobs.build.if).toContain("head_branch == 'main'");
+    expect(workflow.jobs.build.if).toContain(
+      "head_repository.full_name == github.repository",
     );
   });
 
-  it("limits deployment permissions to the protected main-branch environment", () => {
-    expect(workflow.permissions).toEqual({ contents: "read" });
+  it("keeps one complete serialized publisher and restricts deployment permissions", () => {
+    expect(workflow.permissions).toEqual({ contents: "read", actions: "read" });
     expect(workflow.jobs.deploy.permissions).toEqual({
       pages: "write",
       "id-token": "write",
     });
     expect(workflow.jobs.deploy.environment.name).toBe("github-pages");
+    expect(workflow.jobs.deploy.needs).toBe("build");
     expect(workflow.jobs.deploy.if).toContain(
-      "github.ref == 'refs/heads/main'",
+      "github.event_name != 'pull_request'",
     );
     expect(workflow.concurrency.group).toContain("production");
+    expect(workflow.concurrency["cancel-in-progress"]).toBe(
+      "${{ github.event_name == 'pull_request' }}",
+    );
   });
 });

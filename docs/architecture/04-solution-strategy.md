@@ -19,7 +19,8 @@ ArcShape is distributed as the `@arcshape/cli` npm workspace package and runs lo
 - `packages/cli/src/arc42-site/` contains the architecture reader implementation.
 - `packages/cli/assets/architecture/` contains the Markdown scaffold shipped in the package.
 - `packages/cli/assets/capabilities/` contains provider-neutral skills, the provider discovery registry, and exact legacy hashes for migration.
-- `src/public-site/` is reserved for future ArcShape-owned static site source; it contains no implementation or deployment in this change.
+- `src/public-site/` contains the ArcShape-owned static product site source and assets. Cloudflare Pages serves this surface independently of engineering-artifact publication.
+- `src/engineering-portal/` contains the compact landing page published at the GitHub Pages root. The workflow generates the Product Snapshot and Architecture Snapshot from canonical Markdown into separate routes.
 - `docs/product/model/` records product intent; it is not generated from implementation.
 - `openspec/` contains temporary delivery planning and validation integration.
 
