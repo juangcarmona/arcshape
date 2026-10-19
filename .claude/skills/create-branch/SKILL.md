@@ -1,13 +1,44 @@
 ---
 name: create-branch
-description: Create one issue-linked working branch from the latest origin/main.
+description: "Create a working branch named by the project's convention, from a named base. Use when starting work on an item."
 ---
 
-Use `<type>/<issue-number>-<kebab-case-slug>` as the branch name, following the project's branch convention in `docs/engineering-lifecycle.md`. Example: `feat/47-agent-capability-distribution`. Never use a tool or agent name as the prefix. Fetch `origin` immediately before branching and use `origin/main` as the base.
+> **Template.** The `adopt` capability adapts this into a role capability the project owns. Adapt *how* the role is performed; never change *what* it guarantees to its callers.
 
-```bash
-git fetch origin
-git switch -c <type>/<issue-number>-<kebab-case-slug> origin/main
-```
+One responsibility: create one branch for one work item, from the right base.
 
-If the branch already exists, report and reuse it; never recreate or force-update it. Confirm before pushing a newly created branch. Return the created branch and base.
+## Contract
+
+| | |
+| --- | --- |
+| **Input** | The work item identifier, a short slug, and the base reference. |
+| **Output** | The branch name created, and the base it was created from. |
+| **Writes** | Creates a local branch, and pushes it where the project's convention says. |
+| **Confirmation** | Confirm before pushing; local creation needs none. |
+
+**Guarantees to the caller**
+
+- The branch name carries the work item identifier, so branch, commits and pull request all correlate to the item.
+- The base is fetched immediately before branching, so the branch starts from the true latest.
+- An existing branch of that name is reported and reused, never silently recreated.
+
+**Never**
+
+- Branch from a stale local reference.
+- Create a second branch for an item that already has one.
+- Force-update an existing branch.
+
+## Adapting this template
+
+1. Pick the reference below matching this project's tooling.
+2. Replace every `<placeholder>` with a value **resolved from live tooling in the adoption session**: an identifier transcribed from a diagram or from memory breaks the loop a month later.
+3. Keep the contract above intact. A command calling `create-branch` must get the same shape back on every stack.
+4. No reference matches → author against the contract and **record that it was authored, not adapted**. A fabricated reference is worse than a missing one, because everything downstream trusts it.
+
+## References
+
+- [`references/convention.md`](references/convention.md): naming and base conventions
+
+## Fast Forward authorization
+
+When called inside an enabled Fast Forward run, the invocation authorizes this role's routine lifecycle write without per-write confirmation. Re-read the configured state immediately before writing and verify the result afterward. Stop at a human-only decision, required human approval, protected forge rule, deployment, or repository red line.
