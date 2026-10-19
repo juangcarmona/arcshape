@@ -32,8 +32,26 @@ if (!model.includes(sha) || !architecture.includes(sha))
   );
 if (portal.includes("/es/") || (await readdir(out)).includes("es"))
   throw new Error("Public-site output leaked into the engineering artifact");
-if ((await readdir(out)).includes("assets"))
-  throw new Error("Public-site assets leaked into the engineering artifact");
+const assetDirectory = resolve(out, "assets");
+const brandingAssets = [
+  "arcshape-icon.svg",
+  "arcshape-icon-dark.svg",
+  "arcshape-branding.svg",
+  "arcshape-branding-dark.svg",
+];
+const publishedAssets = await readdir(assetDirectory);
+if (
+  publishedAssets.slice().sort().join(",") !==
+  brandingAssets.slice().sort().join(",")
+)
+  throw new Error(
+    "Engineering output must contain only its theme-aware brand assets",
+  );
+if (
+  !portal.includes(`${base}assets/arcshape-icon.svg`) ||
+  !portal.includes("Engineering Documentation")
+)
+  throw new Error("Engineering portal is missing its shared brand identity");
 
 const summaryPath = resolve(out, "e2e/latest/summary.json");
 let summary;

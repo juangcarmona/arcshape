@@ -8,12 +8,35 @@ const base = import.meta.env.BASE_URL;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f7f8fb" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="description" content={locale.description} />
     <title>{locale.title}</title>
     <link rel="stylesheet" href={`${base}styles.css`} />
   </head>
   <body>
     <slot />
+    <script is:inline>
+      const root = document.documentElement;
+      const key = "arcshape-appearance";
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const buttons = document.querySelectorAll("[data-appearance-choice]");
+      function syncAssets(choice) {
+        const dark = choice === "dark" || (choice === "auto" && media.matches);
+        document.querySelectorAll("[data-theme-light][data-theme-dark]").forEach((image) => {
+          image.src = dark ? image.dataset.themeDark : image.dataset.themeLight;
+        });
+      }
+      function setAppearance(choice) {
+        if (choice === "auto") root.removeAttribute("data-appearance");
+        else root.setAttribute("data-appearance", choice);
+        localStorage.setItem(key, choice);
+        syncAssets(choice);
+        buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.appearanceChoice === choice)));
+      }
+      const saved = localStorage.getItem(key) || "auto";
+      setAppearance(saved);
+      media.addEventListener("change", () => { if ((localStorage.getItem(key) || "auto") === "auto") syncAssets("auto"); });
+      buttons.forEach((button) => button.addEventListener("click", () => setAppearance(button.dataset.appearanceChoice)));
+    </script>
   </body>
 </html>

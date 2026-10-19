@@ -25,6 +25,7 @@ test.beforeAll(async () => {
         ".html": "text/html; charset=utf-8",
         ".css": "text/css; charset=utf-8",
         ".png": "image/png",
+        ".svg": "image/svg+xml",
       };
       response
         .writeHead(200, {
@@ -60,15 +61,13 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "ArcShape home" })).toBeFocused();
   await page.keyboard.press("Tab");
-  await expect(
-    page.getByRole("link", { name: /Engineering portal/ }).first(),
-  ).toBeFocused();
+  await expect(page.getByRole("link", { name: "How it works" })).toBeFocused();
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
   await expect(page.getByRole("main")).toBeVisible();
   await expect(
-    page.getByRole("img", { name: /ArcShape — Architecture Documentation/ }),
+    page.getByRole("img", { name: /ArcShape — Engineering Documentation/ }),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: /engineering portal/i }).first(),
@@ -105,7 +104,9 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
       }),
       images: [...document.images].every(
         (image) =>
-          image.alt.length > 0 && image.complete && image.naturalWidth > 0,
+          (image.alt.length > 0 || Boolean(image.closest("a[aria-label]"))) &&
+          image.complete &&
+          image.naturalWidth > 0,
       ),
     };
   });
@@ -115,6 +116,11 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
   await page.goto(`${origin}/es/`);
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
   await expect(page.getByRole("main")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tema claro" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tema oscuro" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Tema del sistema" }),
+  ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "View site in en" }),
   ).toHaveAttribute("href", "/");

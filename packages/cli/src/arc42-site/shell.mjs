@@ -139,16 +139,18 @@ pre code { background: none; border: none; padding: 0; font-size: inherit; }
 
 /* ---- Header ---- */
 header.site {
-  display: flex; align-items: center; gap: 0.75rem; flex: none;
-  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+  flex: none; border-bottom: 1px solid var(--line);
   background: var(--raise);
 }
+.header-inner { width:min(1160px,calc(100% - 2.5rem)); min-height:52px; margin:auto; display:flex; align-items:center; gap:.65rem; }
 header.site h1 { display:flex; align-items:center; gap:.5rem; margin:0; min-width:0; font-size:.95rem; white-space:nowrap; }
-.brand-mark { display:grid; place-items:center; width:1.5rem; height:1.5rem; border:1px solid var(--accent); border-radius:3px; color:var(--accent); font:700 .66rem/1 var(--mono); }
+.brand-mark { display:grid; place-items:center; flex:none; width:1.75rem; height:1.75rem; color:var(--accent); }
+.brand-mark svg { display:block; width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:square; stroke-linejoin:miter; }
+.brand-title { color:var(--ink); font-size:.96rem; font-weight:650; letter-spacing:-.025em; }
 .project-context { min-width:0; overflow:hidden; color:var(--muted); font-size:.82rem; text-overflow:ellipsis; white-space:nowrap; }
 .revshort {
   font-family: var(--mono); font-size: 0.74rem; color: var(--muted);
-  border: 1px solid var(--line); border-radius: 3px; padding: 0.05rem 0.4rem; white-space: nowrap;
+  border: 1px solid var(--line); border-radius: 3px; padding: 0.12rem 0.4rem; white-space: nowrap;
 }
 .primary-nav { display:flex; align-self:stretch; align-items:stretch; gap:.25rem; margin-left:.5rem; }
 .primary-nav a { display:inline-flex; align-items:center; padding:.25rem .6rem; border-bottom:2px solid transparent; color:var(--muted); font-size:.9rem; }
@@ -305,11 +307,13 @@ kbd {
   main#main { padding:1rem 1rem 3rem; }
 }
 @media (max-width: 520px) {
-  header.site { flex-wrap: wrap; gap: 0.5rem; }
+  .header-inner { width:calc(100% - 1.5rem); flex-wrap:wrap; gap:.5rem; padding:.5rem 0; }
   header.site h1 { flex:none; }
-  header.site .project-context { order:4; flex:1 0 calc(100% - 2.25rem); margin-left:2rem; }
-  header.site .spacer { display: none; }
-  header.site .appearance { margin-left: auto; }
+  header.site .project-context { order:5; flex:1 0 calc(100% - 2.25rem); margin-left:2.25rem; }
+  header.site .spacer { display:none; }
+  header.site .appearance { margin-left:auto; }
+  header.site .primary-nav { order:6; flex:1 0 100%; overflow-x:auto; margin:0; border-top:1px solid var(--line); }
+  header.site .primary-nav a { min-height:2.5rem; }
 }
 .overview-intro { max-width:72.5rem; margin:0 auto .5rem; }
 .overview-intro h2 { margin:0 0 .25rem; font-size:1.1rem; }
@@ -760,7 +764,9 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     "<body>",
     '<a class="skip" href="#main">Skip to content</a>',
     '<header class="site">',
-    `<h1><span class="brand-mark" aria-hidden="true">AS</span><span>ArcShape</span></h1>`,
+    '<div class="header-inner">',
+    '<h1><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M4 4h32v32H4z" stroke-width="1.5"/><path d="M8 31 16.2 9h4L28 31m-16.5-8h13M22 9h4.2L32 14l-1.1 4.3-4 2.1 4.8 2.6L33 31h-8"/><circle cx="4" cy="4" r="1.5" fill="currentColor"/><circle cx="36" cy="36" r="1.5" fill="currentColor"/></svg></span><span class="brand-title">ArcShape</span></h1>',
+    '<span class="revshort">Engineering Documentation</span>',
     `<span class="project-context" title="${esc(stackName)} · arc42">${esc(stackName)} · arc42</span>`,
     revisionShort,
     '<nav class="primary-nav" aria-label="Primary navigation"><a href="#/" data-route="#/">Overview</a></nav>',
@@ -773,6 +779,7 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     '<button type="button" class="iconbtn" id="ov-find" aria-haspopup="dialog" aria-label="Search (/)" title="Search (/)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.8" cy="6.8" r="4.4"/><path d="m10.2 10.2 3 3"/></svg></button>',
     '<button type="button" class="iconbtn mobile-nav-toggle" id="mobile-nav-toggle" aria-controls="arc42-nav" aria-expanded="false" aria-label="Open sections navigation" title="Open navigation"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>',
     '<button type="button" class="iconbtn" id="keys-open" aria-haspopup="dialog" aria-label="Keyboard shortcuts (?)" title="Keyboard shortcuts (?)">?</button>',
+    "</div>",
     "</header>",
     '<div id="shell">',
     '<aside class="nav" id="arc42-nav" aria-label="arc42 sections">',

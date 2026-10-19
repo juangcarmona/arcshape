@@ -13,11 +13,26 @@ const publicSite = "https://arcshape.dev";
     <title>ArcShape Engineering</title>
   </head>
   <body data-base={base}>
+    <header class="site-header">
+      <a class="brand" href={base} aria-label="ArcShape engineering portal">
+        <img src={`${base}assets/arcshape-icon.svg`} data-theme-light={`${base}assets/arcshape-icon.svg`} data-theme-dark={`${base}assets/arcshape-icon-dark.svg`} width="28" height="28" alt="" />
+        <span class="brand-title">ArcShape</span>
+      </a>
+      <span class="header-badge">Engineering Documentation</span>
+      <nav aria-label="Engineering navigation">
+        <a href={base}>Portal</a>
+        <a href={`${base}model/`}>Product Snapshot</a>
+        <a href={`${base}architecture/`}>Architecture Snapshot</a>
+      </nav>
+      <span class="header-spacer"></span>
+      <div class="appearance" role="group" aria-label="Appearance">
+        <button type="button" data-appearance-choice="light" aria-label="Light theme" title="Light theme" aria-pressed="false">☼</button>
+        <button type="button" data-appearance-choice="dark" aria-label="Dark theme" title="Dark theme" aria-pressed="false">☾</button>
+        <button type="button" data-appearance-choice="auto" aria-label="System theme" title="Theme follows system" aria-pressed="true">▣</button>
+      </div>
+    </header>
     <main class="wrap">
-      <header>
-        <h2>ArcShape <span aria-hidden="true">/</span> Engineering</h2>
-        <a href={publicSite}>Public site ↗</a>
-      </header>
+      <section class="page">
       <p class="eyebrow">Generated from canonical sources</p>
       <h1>Engineering portal</h1>
       <p class="lede">
@@ -76,8 +91,12 @@ const publicSite = "https://arcshape.dev";
           >architecture</a
         >
       </p>
-      <footer>
+      </section>
+      <footer class="site-footer">
+        <a class="footer-brand" href={publicSite} aria-label="ArcShape — Engineering Documentation"><img src={`${base}assets/arcshape-branding.svg`} data-theme-light={`${base}assets/arcshape-branding.svg`} data-theme-dark={`${base}assets/arcshape-branding-dark.svg`} width="175" height="27" alt="ArcShape — Engineering Documentation" /></a>
+        <p>
         ArcShape Engineering Portal · Static publication from GitHub Pages
+        </p>
       </footer>
     </main>
     <script is:inline>
@@ -85,6 +104,22 @@ const publicSite = "https://arcshape.dev";
         const base = document.body.dataset.base;
         location.replace(`${base}architecture/${location.hash}`);
       }
+      const root = document.documentElement;
+      const key = "arcshape-appearance";
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const buttons = document.querySelectorAll("[data-appearance-choice]");
+      function syncAssets(choice) {
+        const dark = choice === "dark" || (choice === "auto" && media.matches);
+        document.querySelectorAll("[data-theme-light][data-theme-dark]").forEach((image) => { image.src = dark ? image.dataset.themeDark : image.dataset.themeLight; });
+      }
+      function setAppearance(choice) {
+        if (choice === "auto") root.removeAttribute("data-appearance"); else root.setAttribute("data-appearance", choice);
+        localStorage.setItem(key, choice); syncAssets(choice);
+        buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.appearanceChoice === choice)));
+      }
+      setAppearance(localStorage.getItem(key) || "auto");
+      media.addEventListener("change", () => { if ((localStorage.getItem(key) || "auto") === "auto") syncAssets("auto"); });
+      buttons.forEach((button) => button.addEventListener("click", () => setAppearance(button.dataset.appearanceChoice)));
     </script>
   </body>
 </html>

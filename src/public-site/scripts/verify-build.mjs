@@ -106,13 +106,30 @@ if (expectedRoutes.size)
   throw new Error(`Missing routes: ${[...expectedRoutes].join(", ")}`);
 await access(resolve(dist, "styles.css"));
 await access(resolve(dist, "assets/arcshape-lockup.png"));
+for (const asset of [
+  "arcshape-icon.svg",
+  "arcshape-icon-dark.svg",
+  "arcshape-branding.svg",
+  "arcshape-branding-dark.svg",
+])
+  await access(resolve(dist, "assets", asset));
 if (!/:focus-visible/.test(css))
   throw new Error("Public site is missing visible keyboard focus styling");
 for (const locale of Object.values(locales)) {
   const path = locale.path === "/" ? "index.html" : `${locale.code}/index.html`;
   const output = await readFile(resolve(dist, path), "utf8");
-  if (/<script\b/i.test(output))
-    throw new Error(`${path} must not include a browser runtime`);
+  if (
+    !output.includes("data-appearance-choice") ||
+    !output.includes("arcshape-appearance")
+  )
+    throw new Error(`${path} is missing accessible appearance controls`);
+  if (
+    !/Engineering Documentation/.test(output) ||
+    /Architecture Documentation/.test(output)
+  )
+    throw new Error(
+      `${path} does not use the Engineering Documentation brand lockup`,
+    );
 }
 console.log(
   "Public Astro output routes, locale metadata, and static assets passed.",
