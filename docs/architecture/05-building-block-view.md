@@ -8,7 +8,7 @@ description: The static decomposition of the system into building blocks.
 
 ## Level 1: system
 
-ArcShape is currently one npm package with a deterministic CLI, separately packaged provider-neutral agent skills, provider adapters, repository setup and evidence-session operations, and a Markdown site renderer. It has no server or database.
+ArcShape is a private npm workspace with a distributable CLI package, separately packaged provider-neutral agent skills, provider adapters, repository setup and evidence-session operations, and a Markdown site renderer. The workspace root owns development dependencies and repository automation. ArcShape has no server or database.
 
 ## Level 2: building blocks
 
@@ -20,7 +20,9 @@ ArcShape is currently one npm package with a deterministic CLI, separately packa
 | Capability package     | Supplies four provider-neutral Agent Skills and the seven-provider path registry.                                    | [`packages/cli/assets/capabilities/`](../../packages/cli/assets/capabilities/) |
 | Site renderer          | Validates Markdown metadata, sanitizes rendered HTML, and embeds Mermaid diagrams in one reader page.                | [`packages/cli/src/arc42-site/`](../../packages/cli/src/arc42-site/) |
 | Product model          | Owns user-facing product intent and constraints.                                                                     | [`docs/product/model/`](../product/model/)                                                                                                           |
-| Delivery configuration | Defines CI and temporary OpenSpec change workflows.                                                                  | [`.github/workflows/`](../../.github/workflows/) and [`openspec/`](../../openspec/)                                                                  |
+| Public product site    | ArcShape-owned static marketing content and assets; Cloudflare Pages is configured independently from portal publishing. | [`src/public-site/`](../../src/public-site/) and [deployment guide](../pages-deployment.md) |
+| Engineering portal     | Links source-revision-stamped product and architecture projections.                                                   | [`src/engineering-portal/`](../../src/engineering-portal/) and [Pages workflow](../../.github/workflows/pages.yml) |
+| Delivery configuration | Defines CI, single-writer Pages publication, and temporary OpenSpec change workflows.                                 | [`.github/workflows/`](../../.github/workflows/) and [`openspec/`](../../openspec/)                                                                  |
 
 <!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:98014c03adfa2316adefc39599fe80d1fce075121947d88b186d31400cffd64b" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->

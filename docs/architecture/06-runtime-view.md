@@ -50,7 +50,7 @@ Initialization does not inspect source code, make architecture claims, contact a
 
 ### Build the reader site
 
-`arcshape site build` reads the README and twelve Markdown sections, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes `docs/architecture-site/index.html`. It does not modify canonical Markdown.
+`arcshape site build` reads the README and twelve Markdown sections, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes the requested output file (default `docs/architecture-site/index.html`). The GitHub Pages workflow writes its projection to `_site/architecture/index.html` with the exact source revision. It does not modify canonical Markdown.
 
 ### Resume an evidence-analysis session
 

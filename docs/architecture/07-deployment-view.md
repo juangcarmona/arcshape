@@ -20,8 +20,9 @@ Obsidian sync writes Markdown into the selected local vault and stores its manif
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Developer checkout        | Node.js source and Markdown templates | Available                                                                                                                                            |
 | Local tarball install     | `@arcshape/cli@0.1.1` package         | Current published package; packed-package initialization smoke check passed                                                                         |
-| Generated reader site     | `docs/architecture-site/index.html`   | Self-contained snapshot built from canonical Markdown                                                                                                |
-| GitHub Pages              | Public ArcShape architecture reader   | Deployed from `main` after a workflow build; adopters choose their own host                                                                          |
+| Local generated reader    | `docs/architecture-site/index.html`   | Optional self-contained local snapshot built from canonical Markdown                                                                                |
+| GitHub Pages              | ArcShape engineering portal           | One serialized workflow publishes `/`, `/model/`, `/architecture/`, and the optional allowlisted `/e2e/latest/` summary from `main`                 |
+| Cloudflare Pages          | ArcShape public product site          | Source is `src/public-site/`; Git integration, preview URLs, production branch, and custom-domain state require dashboard verification               |
 | Obsidian vault            | Markdown notes and sync manifest      | Local filesystem path selected by the maintainer                                                                                                     |
 | Confluence Cloud          | Selected parent and child pages       | Updated only by explicit sync; remote edits stop subsequent updates                                                                                  |
 | GitHub Actions            | npm release workflow                  | Verifies version and package, then waits for the `npm-publish` environment                                                                           |
@@ -31,26 +32,28 @@ Obsidian sync writes Markdown into the selected local vault and stores its manif
 
 ## Published artifacts and adopter deployment
 
-The source repository publishes two different artifacts. The Pages workflow builds the architecture reader on pull requests and deploys it to GitHub Pages from `main`. A published GitHub Release triggers the npm workflow, which verifies the package and SBOM before publication through the protected `npm-publish` environment. Adopters install the npm package into their own repository, build a self-contained reader locally, and choose their own hosting. The diagram shows these boundaries; it does not imply that ArcShape operates an adopter's runtime or hosting.
+The source repository publishes separate product, engineering, and package artifacts. Cloudflare Pages serves the ArcShape-owned product site from `src/public-site/` through Git integration. One Pages workflow validates the complete engineering portal on pull requests and publishes its generated snapshots from `main`; Assurance runs contribute only the allowlisted E2E summary. A published GitHub Release triggers the npm workflow, which verifies the package and SBOM before publication through the protected `npm-publish` environment. Adopters install the npm package into their own repository, build a self-contained reader locally, and choose their own hosting. The diagram shows these boundaries; it does not imply that ArcShape operates an adopter's runtime or hosting.
 
 ```mermaid
-accTitle: ArcShape documentation and package deployment paths
+accTitle: ArcShape site, documentation, and package deployment paths
 flowchart TB
     maintainer[Repository maintainer]
 
     subgraph source[ArcShape source repository]
+        product[Public product site source]
         markdown[Architecture Markdown and reader source]
         release[Published GitHub Release]
     end
 
     subgraph actions[GitHub Actions]
-        pages[Pages workflow: build reader]
+        pages[Pages workflow: assemble portal and snapshots]
         publish[Release workflow: verify package and SBOM]
         approval[Protected npm-publish environment]
     end
 
     subgraph public[ArcShape public artifacts]
-        reader[GitHub Pages reader]
+        portal[GitHub Pages engineering portal]
+        productsite[Cloudflare Pages product site]
         registry[npm registry: @arcshape/cli]
     end
 
@@ -62,8 +65,9 @@ flowchart TB
     end
 
     maintainer -->|changes documentation or source| markdown
-    markdown -->|pull request validates; main push deploys| pages
-    pages --> reader
+    product -->|Git integration builds previews and main| productsite
+    markdown -->|pull request validates; main push publishes| pages
+    pages --> portal
     maintainer -->|publishes release| release
     release --> publish
     publish --> approval

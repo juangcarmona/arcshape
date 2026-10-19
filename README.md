@@ -1,6 +1,6 @@
 # ArcShape repository
 
-ArcShape's repository separates canonical documentation, implementation, distributable packages, and future site source. The npm workspace root owns repository automation and development dependencies; the public CLI package lives under `packages/cli/`.
+ArcShape's repository separates canonical documentation, implementation, distributable packages, and public-site source. The npm workspace root owns repository automation and development dependencies; the public CLI package lives under `packages/cli/`.
 
 ## Repository layout
 
@@ -14,11 +14,15 @@ packages/cli/
   assets/architecture/ Packaged architecture templates
   assets/capabilities/ Packaged agent capabilities
 scripts/              Repository automation and CI helpers
-src/public-site/       Reserved source boundary for a future ArcShape-owned static site
+src/public-site/       ArcShape-owned public marketing site for Cloudflare Pages
+src/engineering-portal/ Engineering portal landing page for GitHub Pages
 tests/                Unit, integration, and package smoke tests
 ```
 
-`src/public-site/` is intentionally only a documented boundary. It contains no site implementation or deployment configuration. The public site and engineering portal are tracked separately in [issue #62](https://github.com/juangcarmona/arcshape/issues/62).
+ArcShape publishes two independent static surfaces. The public marketing site is sourced from `src/public-site/` and hosted separately from GitHub Pages. The engineering portal is generated from the canonical product and architecture sources and published by one GitHub Pages workflow. See the [deployment guide](docs/pages-deployment.md) for routes, provenance, operational boundaries, and recovery.
+
+- Public site: [arcshape.dev](https://arcshape.dev)
+- Engineering portal: [GitHub Pages](https://juangcarmona.github.io/arcshape/)
 
 ## Development
 
