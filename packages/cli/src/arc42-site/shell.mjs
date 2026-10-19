@@ -782,7 +782,7 @@ export function buildSnapshotHtml({
     '<header class="site">',
     '<div class="header-inner">',
     `<h1>${brandMark}<span class="brand-title">ArcShape</span></h1>`,
-    '<span class="brand-caption">AI-driven engineering documentation</span>',
+    '<span class="brand-caption">AI driven engineering documentation</span>',
     `<span class="project-context" title="${esc(stackName)} · arc42">${esc(stackName)} · arc42</span>`,
     revisionShort,
     '<nav class="primary-nav" aria-label="Primary navigation"><a href="#/" data-route="#/">Overview</a></nav>',

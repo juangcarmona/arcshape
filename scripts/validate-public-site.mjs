@@ -35,8 +35,8 @@ if (files.some((file) => /product.?shape/i.test(file)))
   throw new Error(
     "ProductShape branded assets must not be used by ArcShape public site",
   );
-if (!html.includes("AI-driven engineering documentation"))
+if (!html.includes("AI driven engineering documentation"))
   throw new Error(
-    "Public site is missing its AI-driven engineering documentation label",
+    "Public site is missing its AI driven engineering documentation label",
   );
 console.log("Public Astro output checks passed.");

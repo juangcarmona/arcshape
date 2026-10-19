@@ -44,7 +44,7 @@ if (
   );
 if (
   !portal.includes(`${base}assets/arcshape-lockup.webp`) ||
-  !portal.includes("AI-driven engineering documentation")
+  !portal.includes("AI driven engineering documentation")
 )
   throw new Error("Engineering portal is missing its shared brand identity");
 

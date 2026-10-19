@@ -2,12 +2,12 @@ export const locales = {
   en: {
     code: "en",
     path: "/",
-    title: "ArcShape — AI-driven engineering documentation",
+    title: "ArcShape — AI driven engineering documentation",
     description:
       "ArcShape helps teams create and maintain clear, useful architecture documentation with AI-assisted workflows.",
     nav: { workflow: "How it works", artifacts: "Artifacts" },
     eyebrow: "Engineering documentation, powered by AI",
-    headline: ["AI-driven engineering documentation", "."],
+    headline: ["AI driven engineering documentation", "."],
     lead: "ArcShape helps teams create, evolve, and explain software architecture documentation with AI-assisted workflows grounded in your repository.",
     explore: "Explore ArcShape on GitHub",
     browse: "Browse engineering artifacts",
@@ -56,7 +56,7 @@ export const locales = {
     closingIntro:
       "See the project, its current capabilities, and the engineering artifacts behind this site.",
     viewRepository: "View the repository",
-    footerText: "AI-driven engineering documentation.",
+    footerText: "AI driven engineering documentation.",
     engineering: "Engineering portal",
     langName: "English",
     brandHome: "ArcShape home",

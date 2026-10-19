@@ -117,11 +117,11 @@ for (const locale of Object.values(locales)) {
   )
     throw new Error(`${path} is missing accessible appearance controls`);
   if (
-    !/AI-driven engineering documentation/.test(output) ||
+    !/AI driven engineering documentation/.test(output) ||
     /Architecture Documentation/.test(output)
   )
     throw new Error(
-      `${path} does not use the AI-driven engineering documentation brand label`,
+      `${path} does not use the AI driven engineering documentation brand label`,
     );
 }
 console.log(

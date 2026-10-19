@@ -210,9 +210,7 @@ async function main() {
     stackName,
     revision,
     brandImage: (
-      await readFile(
-        new URL("../../assets/arcshape-lockup.webp", import.meta.url),
-      )
+      await readFile(new URL("./arcshape-lockup.webp", import.meta.url))
     ).toString("base64"),
   })}`;
 
