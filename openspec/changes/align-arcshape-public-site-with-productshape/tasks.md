@@ -4,8 +4,8 @@
 
 ## 1. Capture the migration contract
 
-- [ ] 1.1 Inventory current public and engineering route URLs, navigation, themes, typography, spacing, responsive breakpoints, assets, and host base paths; retain representative desktop/tablet/mobile screenshots and a route manifest for comparison.
-- [ ] 1.2 Record the public Cloudflare root/build/output contract and the engineering GitHub Pages output/base/provenance contract; verify which existing scripts and generated snapshot artifacts each workflow consumes.
+- [x] 1.1 Inventory current public and engineering route URLs, navigation, themes, typography, spacing, responsive breakpoints, assets, and host base paths; retain representative desktop/tablet/mobile screenshots and a route manifest for comparison.
+- [x] 1.2 Record the public Cloudflare root/build/output contract and the engineering GitHub Pages output/base/provenance contract; verify which existing scripts and generated snapshot artifacts each workflow consumes.
 
 ## 2. Move both site shells to Astro static output
 
