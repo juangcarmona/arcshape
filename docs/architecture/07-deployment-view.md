@@ -8,7 +8,7 @@ description: Infrastructure and environment mapping for the system.
 
 ## Infrastructure overview
 
-ArcShape runs as a local Node.js process in the adopter's repository. The package is prepared for public npm distribution and can be assembled as a tarball. The first registry publication remains pending; later GitHub releases use the reviewed, environment-gated workflow.
+ArcShape runs as a local Node.js process in the adopter's repository. The `@arcshape/cli` package is published on npm; version 0.1.0 was the manual first publication and version 0.1.1 was published through the reviewed GitHub Actions workflow with npm provenance. Later releases follow the same environment-gated workflow ([release record](https://github.com/juangcarmona/arcshape/issues/12)).
 
 Session state is stored locally in `.arcshape/sessions/<session-id>/session.json`. It is not sent to an ArcShape service.
 
@@ -19,7 +19,7 @@ Obsidian sync writes Markdown into the selected local vault and stores its manif
 | Environment               | Artifact                              | Current state                                                                                                                                        |
 | ------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Developer checkout        | Node.js source and Markdown templates | Available                                                                                                                                            |
-| Local tarball install     | `arcshape@0.1.0` package              | Packed-package initialization smoke check passed                                                                                                     |
+| Local tarball install     | `@arcshape/cli@0.1.1` package         | Current published package; packed-package initialization smoke check passed                                                                         |
 | Local generated reader    | `docs/architecture-site/index.html`   | Optional self-contained local snapshot built from canonical Markdown                                                                                |
 | GitHub Pages              | ArcShape engineering portal           | One serialized workflow publishes `/`, `/model/`, `/architecture/`, and the optional allowlisted `/e2e/latest/` summary from `main`                 |
 | Cloudflare Pages          | ArcShape public product site          | Source is `src/public-site/`; Git integration, preview URLs, production branch, and custom-domain state require dashboard verification               |
@@ -27,7 +27,53 @@ Obsidian sync writes Markdown into the selected local vault and stores its manif
 | Confluence Cloud          | Selected parent and child pages       | Updated only by explicit sync; remote edits stop subsequent updates                                                                                  |
 | GitHub Actions            | npm release workflow                  | Verifies version and package, then waits for the `npm-publish` environment                                                                           |
 | GitHub Actions            | Assurance workflow                    | Runs E2E against a temporary repository, passive DAST against an ephemeral loopback preview, and scheduled/manual mutation analysis; retains reports |
-| npm registry              | Published ArcShape package            | Pending issue [#12](https://github.com/juangcarmona/arcshape/issues/12)                                                                              |
+| npm registry              | `@arcshape/cli@0.1.1`                 | Published with npm provenance; subsequent releases use the protected `npm-publish` environment ([release record](https://github.com/juangcarmona/arcshape/issues/12)) |
 | ArcShape-operated service | None                                  | Not part of the architecture                                                                                                                         |
 
-The public product site and engineering portal are independent static publishing surfaces. ArcShape uses its existing `@prodshape/cli` development dependency only to generate a snapshot of ArcShape's own product model; the deployed sites do not depend on each other or on ProductShape's public site.
+## Published artifacts and adopter deployment
+
+The source repository publishes separate product, engineering, and package artifacts. Cloudflare Pages serves the ArcShape-owned product site from `src/public-site/` through Git integration. One Pages workflow validates the complete engineering portal on pull requests and publishes its generated snapshots from `main`; Assurance runs contribute only the allowlisted E2E summary. A published GitHub Release triggers the npm workflow, which verifies the package and SBOM before publication through the protected `npm-publish` environment. Adopters install the npm package into their own repository, build a self-contained reader locally, and choose their own hosting. The diagram shows these boundaries; it does not imply that ArcShape operates an adopter's runtime or hosting.
+
+```mermaid
+accTitle: ArcShape site, documentation, and package deployment paths
+flowchart TB
+    maintainer[Repository maintainer]
+
+    subgraph source[ArcShape source repository]
+        product[Public product site source]
+        markdown[Architecture Markdown and reader source]
+        release[Published GitHub Release]
+    end
+
+    subgraph actions[GitHub Actions]
+        pages[Pages workflow: assemble portal and snapshots]
+        publish[Release workflow: verify package and SBOM]
+        approval[Protected npm-publish environment]
+    end
+
+    subgraph public[ArcShape public artifacts]
+        portal[GitHub Pages engineering portal]
+        productsite[Cloudflare Pages product site]
+        registry[npm registry: @arcshape/cli]
+    end
+
+    subgraph adopter[Adopter-controlled environment]
+        project[Adopter repository]
+        localcli[Local ArcShape CLI]
+        html[Self-contained reader HTML]
+        host[Adopter host]
+    end
+
+    maintainer -->|changes documentation or source| markdown
+    product -->|Git integration builds previews and main| productsite
+    markdown -->|pull request validates; main push publishes| pages
+    pages --> portal
+    maintainer -->|publishes release| release
+    release --> publish
+    publish --> approval
+    approval --> registry
+    registry -->|install package| project
+    project --> localcli
+    localcli -->|arcshape site build| html
+    html -->|optional publication| host
+```
