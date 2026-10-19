@@ -5,3 +5,7 @@ paths-ignore:
   # This tracked snapshot is generated from the reader sources and already has
   # documented CodeQL findings; scan its source modules instead.
   - docs/architecture-site/index.html
+  # This pinned Archify publication is generated vendor HTML. Its source
+  # revision and artifact hash are checked by verify-engineering-portal.mjs;
+  # scan ArcShape-authored scripts instead of reclassifying its renderer code.
+  - src/engineering-portal/public/diagrams/publication-boundaries.html
