@@ -68,6 +68,69 @@ test("onboards, creates and updates architecture docs, and serves the reader", a
   await expect(page.locator(".doc-body")).toContainText(authoredMarker);
 });
 
+test("publishes the accessible deployment diagram from section 07 on a narrow viewport", async ({
+  page,
+}) => {
+  const sourceSection = join(
+    repositoryRoot,
+    "docs",
+    "architecture",
+    "07-deployment-view.md",
+  );
+  const targetSection = join(
+    target,
+    "docs",
+    "architecture",
+    "07-deployment-view.md",
+  );
+  await writeFile(targetSection, await readFile(sourceSection, "utf8"));
+  await buildSite();
+
+  const generatedHtml = await readFile(siteFile, "utf8");
+  expect(generatedHtml).toContain(
+    "ArcShape documentation and package deployment paths",
+  );
+  expect(generatedHtml).toMatch(
+    /\\u003cfigure class=\\"diagram\\"[\s\S]*?\\u003csvg/,
+  );
+
+  const externalRequests = [];
+  page.on("request", (request) => {
+    if (!request.url().startsWith("http://127.0.0.1:")) {
+      externalRequests.push(request.url());
+    }
+  });
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(`${siteUrl}#/section/07`);
+
+  const diagram = page.locator(
+    'figure.diagram[role="img"][aria-label="ArcShape documentation and package deployment paths"]',
+  );
+  await expect(diagram).toHaveCount(1);
+  await diagram.scrollIntoViewIfNeeded();
+  const svg = diagram.locator("svg");
+  await expect(svg).toBeVisible();
+
+  const dimensions = await diagram.evaluate((figure) => {
+    const figureRect = figure.getBoundingClientRect();
+    const svgRect = figure.querySelector("svg").getBoundingClientRect();
+    const bodyRect = document
+      .querySelector(".doc-body")
+      .getBoundingClientRect();
+    return {
+      figureLeft: figureRect.left,
+      figureRight: figureRect.right,
+      svgRight: svgRect.right,
+      bodyLeft: bodyRect.left,
+      bodyRight: bodyRect.right,
+    };
+  });
+  expect(dimensions.figureLeft).toBeGreaterThanOrEqual(dimensions.bodyLeft - 1);
+  expect(dimensions.figureRight).toBeLessThanOrEqual(dimensions.bodyRight + 1);
+  expect(dimensions.svgRight).toBeLessThanOrEqual(dimensions.figureRight - 1);
+  expect(externalRequests).toEqual([]);
+});
+
 test("detects a broken generated reader route", async ({ page }) => {
   const original = await readFile(siteFile, "utf8");
   const broken = original.replace(
