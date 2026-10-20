@@ -36,10 +36,7 @@ describe("Changesets release workflow", () => {
   it("publishes only a merged Version Packages commit or explicit recovery dispatch", () => {
     const publish = workflow.jobs["publish-stable"];
     expect(publish.if).toContain(
-      "startsWith(github.event.head_commit.message, 'chore: Version Packages')",
-    );
-    expect(publish.if).toContain(
-      "startsWith(github.event.head_commit.message, 'Version Packages')",
+      "contains(github.event.head_commit.message, 'Version Packages')",
     );
     expect(publish.if).toContain("publish-current-stable");
     expect(publish.environment).toEqual({ name: "npm-publish" });
@@ -54,6 +51,17 @@ describe("Changesets release workflow", () => {
     );
     expect(serializedSteps).toContain("scripts/verify-published-version.mjs");
     expect(serializedSteps).toContain("refs/tags/${tag}");
+    expect(serializedSteps).toContain("Resolve release evidence commit");
+    const tagStep = publish.steps.find(
+      (step) => step.name === "Synchronize package tag",
+    );
+    expect(tagStep.run).toContain('git tag "${tag}" "$RELEASE_COMMIT"');
+    const releaseStep = publish.steps.find(
+      (step) => step.name === "Create or reuse GitHub Release",
+    );
+    expect(releaseStep.run).toContain(
+      'RELEASE_TAG="$GITHUB_TAG" RELEASE_COMMIT="$RELEASE_COMMIT"',
+    );
     expect(serializedSteps).toContain("gh release create");
     expect(serializedSteps).toContain("scripts/upload-release-sbom.mjs");
   });

@@ -52,7 +52,7 @@ jobs:
   publish-stable:
     name: Publish stable release
     if: >-
-      (github.event_name == 'push' && (startsWith(github.event.head_commit.message, 'chore: Version Packages') || startsWith(github.event.head_commit.message, 'Version Packages'))) ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, 'Version Packages')) ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.task == 'publish-current-stable')
     runs-on: ubuntu-latest
     environment:
@@ -111,30 +111,54 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Synchronize package tag
+      - name: Resolve release evidence commit
+        id: release-context
         run: |
+          git fetch --tags --force origin
           version=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version")
-          tag="@arcshape/cli@${version}"
+          package_tag="@arcshape/cli@${version}"
+          github_tag="v${version}"
+          release_commit=""
+          for candidate in "$package_tag" "$github_tag"; do
+            if git rev-parse --verify "refs/tags/${candidate}^{commit}" >/dev/null 2>&1; then
+              release_commit=$(git rev-list -n 1 "refs/tags/${candidate}")
+              break
+            fi
+          done
+          release_commit=${release_commit:-$(git rev-parse HEAD)}
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "package_tag=${package_tag}" >> "$GITHUB_OUTPUT"
+          echo "github_tag=${github_tag}" >> "$GITHUB_OUTPUT"
+          echo "release_commit=${release_commit}" >> "$GITHUB_OUTPUT"
+          echo "Release evidence commit: ${release_commit}"
+      - name: Synchronize package tag
+        env:
+          PACKAGE_TAG: ${{ steps.release-context.outputs.package_tag }}
+          RELEASE_COMMIT: ${{ steps.release-context.outputs.release_commit }}
+        run: |
+          tag="$PACKAGE_TAG"
           if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
             echo "Package tag ${tag} already exists."
           else
-            git tag "${tag}" -m "${tag}"
+            git tag "${tag}" "$RELEASE_COMMIT" -m "${tag}"
             git push origin "refs/tags/${tag}"
           fi
+          test "$(git rev-list -n 1 "refs/tags/${tag}")" = "$RELEASE_COMMIT"
           git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null
       - name: Create or reuse GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TAG: ${{ steps.release-context.outputs.github_tag }}
+          RELEASE_COMMIT: ${{ steps.release-context.outputs.release_commit }}
         run: |
           version=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version")
-          github_tag="v${version}"
-          if gh release view "$github_tag" >/dev/null 2>&1; then
-            echo "GitHub Release ${github_tag} already exists."
+          if gh release view "$GITHUB_TAG" >/dev/null 2>&1; then
+            echo "GitHub Release ${GITHUB_TAG} already exists."
           else
-            gh release create "$github_tag" --target "$(git rev-parse HEAD)" --title "ArcShape ${version}" --generate-notes
+            gh release create "$GITHUB_TAG" --target "$RELEASE_COMMIT" --title "ArcShape ${version}" --generate-notes
           fi
           git fetch --tags --force origin
-          RELEASE_TAG="$github_tag" node scripts/verify-release-version.mjs
+          RELEASE_TAG="$GITHUB_TAG" RELEASE_COMMIT="$RELEASE_COMMIT" node scripts/verify-release-version.mjs
       - name: Attach verified SBOM to the GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
