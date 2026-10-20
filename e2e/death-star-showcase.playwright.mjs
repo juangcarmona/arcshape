@@ -1,4 +1,5 @@
 import { createServer } from "node:http";
+import { createHash } from "node:crypto";
 import { copyFile, mkdir, mkdtemp, readFile, rm, stat } from "node:fs/promises";
 import { extname, join, resolve, sep } from "node:path";
 import { tmpdir } from "node:os";
@@ -78,6 +79,30 @@ test.beforeAll(async () => {
 
   const diagramDirectory = join(output, "diagrams");
   await mkdir(diagramDirectory, { recursive: true });
+  const sourceDiagramDirectory = join(
+    repositoryRoot,
+    "examples/starwars-deathstar/diagrams",
+  );
+  const manifest = JSON.parse(
+    await readFile(join(sourceDiagramDirectory, "manifest.json"), "utf8"),
+  );
+  if (
+    manifest.generator.name !== "Archify" ||
+    manifest.generator.version !== "3.1.0" ||
+    manifest.source.revision !== archifySourceRevision
+  ) {
+    throw new Error(
+      "Archify manifest does not match the pinned source contract",
+    );
+  }
+  for (const entry of [manifest.candidate, manifest.artifact]) {
+    const digest = createHash("sha256")
+      .update(await readFile(join(repositoryRoot, entry.path)))
+      .digest("hex");
+    if (digest !== entry.sha256) {
+      throw new Error(`Archify manifest hash mismatch for ${entry.path}`);
+    }
+  }
   await copyFile(
     join(
       repositoryRoot,

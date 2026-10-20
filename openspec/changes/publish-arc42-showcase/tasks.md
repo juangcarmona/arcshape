@@ -19,6 +19,7 @@ These tasks exercise the established Arc42 and reader requirements with an illus
 - [ ] 2.1 Confirm representative Mermaid diagrams render from the adapted Markdown with accessible titles/descriptions and revision-pinned source links; verify with the built pages and Playwright assertions.
 - [ ] 2.2 Add one focused Archify static HTML view plus its source/manifest in the example folder, following the contract pinned from draft PR #79 at `eb4974b8db8b158fa907ceff15c247d198d07cff`; verify renderer identity, provenance, accessible labeling, and no external runtime fetches in the built output.
 - [ ] 2.3 Extend Playwright to exercise both locale outputs, Mermaid and Archify identity, source/revision links, keyboard interaction, expected architecture sections, and no horizontal overflow at a narrow viewport; preserve report and trace in Actions.
+- [ ] 2.4 Exclude only the pinned generated Archify HTML from CodeQL after evaluating the generated-code alerts; keep ArcShape-authored sources and tests scanned, and verify the manifest hash/provenance checks.
 
 ## 3. Publish review evidence
 
