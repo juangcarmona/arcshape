@@ -4,7 +4,7 @@
 
 ## Context
 
-See proposal.md for motivation. Issue #78 supplies the Astro shells and static publication routes this change consumes. ArcShape already generates a self-contained reader from canonical Markdown with source and revision provenance; the showcase should compose those existing outputs and avoid a second hand-maintained rendering path.
+See proposal.md for the source and motivation. ArcShape's reader requires a navigation `README.md`, twelve `01`–`12` Markdown files with YAML frontmatter, and links/assets that survive static generation. The supplied example has EN/ES directories with `00` overview files and sections `01`–`12`, no reader frontmatter, Mermaid, and images. Its source's CC BY-NC 4.0 license and fan-work disclaimer must accompany the adaptation.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
 <!-- pdac:cite id="CON-ARC42-FRAMEWORK" digest="sha256:11948980ab0be21b0a7a61b2bc2d428ec4adeb5b73d808aa3d7df1b6b8329e79" -->
 <!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
@@ -13,29 +13,31 @@ See proposal.md for motivation. Issue #78 supplies the Astro shells and static p
 
 ## Goals / Non-Goals
 
-**Goals:** Make one coherent, clearly illustrative architecture story discoverable from the engineering portal; demonstrate Mermaid and Archify outputs with accessible names and provenance; verify the same static route works at root and `/arcshape/`; publish evidence a reviewer can open directly from the PR.
+**Goals:** Keep the adapted EN/ES example self-contained in `examples/starwars-deathstar/`; exercise the real reader against meaningful content; demonstrate Mermaid and Archify with observable identity/provenance/accessibility; and make the folder suitable as a future static-publication input.
 
-**Non-Goals:** Change canonical product behavior or model facts, build another application shell, add a runtime renderer/service, activate Cloudflare production, or decide subjective visual quality with automated tests.
+**Non-Goals:** Add an Astro/public/engineering route, link the example from portal navigation, deploy it to Cloudflare, rewrite ArcShape's own architecture, or carry out a broad product change.
 
 ## Decisions
 
-1. **Keep Markdown as the Arc42 source and build its reader through the existing CLI.** This preserves reviewable source and reader provenance. Hand-authored generated HTML was considered and rejected because it can drift from the Markdown.
-2. **Keep the Archify source and generated static HTML distinct but adjacent to the example.** Archify demonstrates an enhanced viewer not supplied by the Mermaid reader. Its authored input, renderer identity, revision/source evidence, and generated output remain linked. Rebuilding the same diagram in a hosted service was rejected because this is a static publication slice.
-3. **Compose the output in the Astro/static engineering portal delivered by #78.** Reuse its route, theme, and base-path facilities. A parallel shell or production deployment change was rejected to preserve the existing site structure and keep #78's publication decision separate.
-4. **Use Playwright against the built artifact and publish two forms of evidence.** The suite verifies concrete behavior and saves the HTML report/trace as CI artifacts; committed desktop/narrow screenshots and an evidence README make the visual result inspectable after CI retention expires. Recording only a local screenshot was rejected because reviewers on another machine need the images in the PR itself.
+1. **Use two locale-specific ArcShape reader inputs under the examples folder.** Map each source `00` overview into the reader's `README.md`, and adapt all twelve numbered sections to ArcShape filenames and metadata. A single merged-language reader was rejected because it obscures the source's bilingual value and complicates future static publication.
+2. **Adapt content rather than copying it verbatim.** Preserve the fictional story and useful explanatory diagrams, but check each claim/diagram against its heading and the other sections. Fix issues found in the source, including duplicated/mismatched runtime sequence diagrams and Spanish image alternative text that says English. This makes the sample a credible ArcShape exercise rather than a format-only conversion.
+3. **Keep source, assets, license/attribution, disclaimer, and Archify output together.** Reuse Mermaid authored in the Markdown and add a focused Archify view that contributes a different diagram perspective. Retaining source and generated HTML side by side makes renderer identity and provenance inspectable and supports later static builds. Do not relicense the CC BY-NC source material as part of ArcShape's repository license.
+4. **Test built reader output locally at root and subpath prefixes.** Playwright should build both locales via the real generator and open the outputs without requiring the Astro portal or a deployed site. This validates future-publishing readiness without adding the publication route now.
+5. **Publish screenshots in-repository and diagnostics in CI.** Commit inspected desktop/narrow captures with an evidence README; link the Actions report and trace for interactive diagnostics. A CI-only screenshot was rejected because it is less durable and not visible inline in the PR.
 
 ## Risks / Trade-offs
 
-- **[Fictional details could be mistaken for ArcShape facts]** → Prominently label the showcase as illustrative in the portal, example landing section, and evidence README; keep it outside canonical architecture and product model paths.
-- **[Mermaid and Archify facts could drift]** → Keep the scope to one coherent small story and assert each renderer's source/revision provenance in E2E.
-- **[Root and subpath links could diverge]** → Build and test both prefixes; verify internal navigation and source links from both builds.
-- **[Screenshots could prove only a narrow viewport or stale revision]** → Record the exact tested commit and viewport dimensions, inspect both captures, and link the current-head Actions report/trace. State that this evidence does not prove Cloudflare production deployment.
-- **[Archify output may have viewer-specific accessibility limitations]** → Inspect the generated output and keyboard path, retain accessible source evidence, and report any limitation for the human Done review rather than claiming unsupported accessibility.
+- **[The source's fictional detail could be mistaken for ArcShape fact]** → Mark the content as a fictional Star Wars fan-work in each locale and keep it under `examples/`, outside canonical architecture/product paths.
+- **[The original license is non-commercial]** → Preserve CC BY-NC 4.0 attribution, modification notice, and disclaimer; keep public-site publication out of scope and flag the license constraint for any later publishing decision.
+- **[A format migration could preserve content errors]** → Review diagrams and section claims during adaptation; add assertions for both locale builds and their expected diagrams.
+- **[Archify output may have viewer-specific accessibility limits]** → Test keyboard interaction and accessible source/renderer labels in the built output; record any remaining limitation for human review.
+- **[Future base paths could break links]** → Build and test at root and `/arcshape/`, and keep assets/links local and relative to the example's future publication root.
+- **[Screenshots could be stale or overstated]** → Record the tested commit and exact dimensions, inspect images, link current-head Actions artifacts, and state that evidence is local static-build output rather than production deployment.
 
 ## Migration Plan
 
-No data or service migration is required. The change adds static source and build output. Revert by removing the example content, portal entry, E2E coverage, and issue evidence bundle together. Cloudflare production activation remains a separate maintainer action after #78.
+No existing user data or runtime service is changed. Add the example and its tests as an isolated folder. Revert by removing the example, E2E coverage, and issue evidence bundle. A later public-site integration can consume the self-contained folder in a separate issue and must first assess its CC BY-NC and trademark/disclaimer constraints.
 
 ## Open Questions
 
-None. The final Astro route names and build seams are to be confirmed against merged #78 when implementation begins; that verification may select exact file paths without changing the agreed scope or approach.
+None. Exact output filenames and Archify source format can follow the contracts merged from #78 without changing the agreed scope.
