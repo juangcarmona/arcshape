@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "runId": "ae6fe25d-2cb6-4e1a-8cb5-cbccd36eeada",
+  "workItem": 86,
+  "branch": "chore/86-changesets-release-flow",
+  "startedAt": "2026-10-20T21:01:47Z",
+  "executorModel": "gpt-5",
+  "reviewerModel": "gpt-6-luna",
+  "maxCorrectionRounds": 3,
+  "status": "running",
+  "stages": [
+    {
+      "name": "refine",
+      "start": "2026-10-20T21:01:47Z",
+      "end": "2026-10-20T21:04:00Z",
+      "inputCommit": "74f51c8",
+      "outputCommit": "74f51c8",
+      "result": "ready",
+      "evidence": [
+        "Issue #86 contains intent, stakeholders, dependencies, scope, observable acceptance criteria, affected behavior, quality expectations, test impact, and known risks.",
+        "Issue transitioned from status:backlog to status:ready.",
+        "Review debt observed for merged post-baseline items without docs/reviews entries: #69, #70, #75, #77, #79, #81, #83, #85. This did not block refinement."
+      ]
+    }
+  ],
+  "reviews": [],
+  "corrections": [],
+  "stopReason": null,
+  "pullRequest": null,
+  "links": {
+    "workItem": "https://github.com/juangcarmona/arcshape/issues/86",
+    "evidence": "docs/delivery/ff/86/ae6fe25d-2cb6-4e1a-8cb5-cbccd36eeada"
+  },
+  "startingCommit": "74f51c8"
+}
