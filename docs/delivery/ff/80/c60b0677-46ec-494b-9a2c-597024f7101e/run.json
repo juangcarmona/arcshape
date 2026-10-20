@@ -7,7 +7,7 @@
   "executorModel": "Codex GPT-6 (runtime variant not exposed; user directed continuation despite this limitation)",
   "reviewerModel": "gpt-6-astra (explicitly selected for isolated review)",
   "maxCorrectionRounds": 3,
-  "status": "running",
+  "status": "blocked",
   "stages": [
     {
       "name": "refine",
@@ -33,18 +33,23 @@
         "PR #81 is the existing draft for #80; no duplicate branch or PR created.",
         "Plan pins the unmerged #78 contract to PR #79 head eb4974b8db8b158fa907ceff15c247d198d07cff and requires revalidation before integration."
       ]
-    }
-    ,
+    },
     {
       "name": "implement",
       "startedAt": "2026-10-20T14:46:00Z",
-      "endedAt": null,
+      "endedAt": "2026-10-20T15:44:25Z",
       "inputCommit": "b2286cb97bb8539451d616df465b49c198657726",
-      "outputCommit": null,
-      "result": "in-progress",
+      "outputCommit": "485dca5a21b0a1aa71a27e01f8b485de995db5da",
+      "result": "implemented; done gate not passed",
       "evidence": [
         "Issue #80 transitioned proposed -> in-progress.",
-        "OpenSpec apply status: 0/23 tasks complete; schema spec-driven."
+        "Implementation and evidence are committed through 485dca5a21b0a1aa71a27e01f8b485de995db5da.",
+        "OpenSpec validation: 5 passed, 0 failed; Product model validation passed.",
+        "Local verification at implementation revision edf7716: 7 Playwright E2E scenarios, 23 Vitest files / 104 tests, format, lint, typecheck, build, product model, secret/dependency/license/SBOM checks passed.",
+        "Current-head CI at 485dca5: all six quality-matrix jobs, Product model, secret scan, dependency audit, SBOM/license policy, CodeQL, E2E, and passive DAST passed; mutation analysis skipped as scheduled/manual.",
+        "Repository conventions failed only for historical commit f2a6fe433871936c24df208f7d889202bdcaed16, which lacks Refs #80. The implement-skill commitlint preflight rejects missing references and accepts the corrected footer; clearing the historical failure requires an authorized branch-history rewrite.",
+        "Evidence README and three inspected screenshots are committed under docs/delivery/issue-80/evidence/; exact-head E2E report and traces are retained in Actions run 39450823125.",
+        "Independent done-gate audit reviewed commit 485dca5 and returned Not Done: maintainer judgment remains open and #78 has not merged, so task 4.13 remains open."
       ]
     }
   ],
@@ -58,9 +63,7 @@
         "Bilingual adaptation, licensing, diagram requirements, runtime evidence, and scope are sufficiently specified.",
         "Before implementation, pin and confirm the #78 contract; reviewer clarified that PR #79's pinned contract is sufficient if #80 carries the generated artifact and source locally, and #80 must be revalidated against merged #78 before integration."
       ],
-      "evidence": [
-        "Plan review response for #80."
-      ]
+      "evidence": ["Plan review response for #80."]
     },
     {
       "reviewerModel": "gpt-6-astra",
@@ -75,15 +78,31 @@
       "evidence": [
         "Final independent plan review of PR #81 head b2286cb97bb8539451d616df465b49c198657726."
       ]
+    },
+    {
+      "reviewerModel": "gpt-6-astra",
+      "kind": "independent-done-gate-audit",
+      "reviewedCommit": "485dca5a21b0a1aa71a27e01f8b485de995db5da",
+      "decision": "not-done",
+      "findings": [
+        "Implementation, bilingual evidence, screenshots, E2E, security checks, and product validation are present.",
+        "Human review remains required for acceptance criteria, completeness, test adequacy, architecture, documentation, product consistency, security exceptions, and residual risks.",
+        "Issue #78 and PR #79 remain open/draft; task 4.13 requires revalidation against the merged contract before integration.",
+        "All six matrix checks passed on the reviewed head; Repository conventions failed because historical commit f2a6fe433871936c24df208f7d889202bdcaed16 lacks Refs #80."
+      ],
+      "evidence": [
+        "docs/delivery/issue-80/evidence/README.md",
+        "Actions run 39450823416 (CI), 39450823512 (Security), 39450823444 (CodeQL), and 39450823125 (Assurance)."
+      ]
     }
   ],
   "corrections": [],
-  "stopReason": null,
+  "stopReason": "Done gate not passed. Repository conventions fails on historical commit f2a6fe433871936c24df208f7d889202bdcaed16, and resolving it requires maintainer authorization to rewrite the pushed PR branch history. Human-owned review remains open, and integration is blocked until issue #78 merges and task 4.13 revalidates the Archify contract. PR #81 remains draft; issue #80 remains status:in-progress.",
   "pullRequest": {
     "number": 81,
     "url": "https://github.com/juangcarmona/arcshape/pull/81",
     "draft": true,
-    "headSha": "8c1e701ae070ba4afe042b84217af92551a35bd0"
+    "headSha": "485dca5a21b0a1aa71a27e01f8b485de995db5da"
   },
   "links": {
     "issue": "https://github.com/juangcarmona/arcshape/issues/80",
@@ -91,6 +110,8 @@
   },
   "notes": [
     "Executor model variant is not exposed by the active harness. A reviewer model was explicitly selected at user direction; distinctness cannot be independently attested by the harness.",
-    "Issue #78 remains open and its pull request #79 remains draft at run start."
+    "Issue #78 remains open and its pull request #79 remains draft.",
+    "The user explicitly directed Fast Forward to proceed despite the unexposed executor-model variant; the limitation remains disclosed and was not treated as attested distinctness.",
+    "PR #81 was not marked ready, no lifecycle transition was made, and integrate/review stages were not run because Done is unmet."
   ]
 }
