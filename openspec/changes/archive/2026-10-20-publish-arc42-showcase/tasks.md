@@ -31,15 +31,15 @@ These tasks exercise the established Arc42 and reader requirements with an illus
 
 - [x] 4.1 **DoD 1 — Acceptance criteria:** map each issue #80 criterion to a build/test, screenshot/README artifact, or named human judgement in the PR.
 - [x] 4.2 **DoD 2 — Implementation completeness:** confirm all bilingual adaptation, diagram, E2E, and evidence tasks are complete; explain dropped content.
-- [ ] 4.3 **DoD 3 — Tests:** report reader builds and focused E2E results; have the reviewer judge test adequacy.
+- [x] 4.3 **DoD 3 — Tests:** both locale reader builds and focused E2E checks passed on the rebased tree; the maintainer approved the example and test adequacy in this conversation. The E2E asserts accessible names on Mermaid SVG images (`role="img"`), matching the implementation's `aria-labelledby` contract.
 - [x] 4.4 **DoD 4 — Quality checks:** link current-head CI results for format, lint, typecheck, unit/integration, helper build, and supported matrix combinations.
 - [x] 4.5 **DoD 5 — Security:** link current-head security scan results and document new findings or applicable exceptions.
 - [x] 4.6 **DoD 6 — Architecture/design conformance:** verify the example is isolated under `examples/` and introduces no runtime/publication boundary; record deviations.
 - [x] 4.7 **DoD 7 — Documentation:** verify both locales, attribution/license notice, disclaimer, and evidence README are complete.
 - [x] 4.8 **DoD 8 — Product/spec consistency:** verify citations and confirm no canonical ArcShape product or architecture facts changed.
 - [x] 4.9 **DoD 9 — Evidence:** open screenshot files, match them to the tested revision/viewports, and follow the linked current-head report/trace.
-- [ ] 4.10 **DoD 10 — Human review:** obtain maintainer judgement on clarity, visual appeal, bilingual adaptation, and test adequacy before marking the PR ready.
+- [x] 4.10 **DoD 10 — Human review:** maintainer approved both PRs after reviewing the bilingual example, visual evidence, and test adequacy in this conversation; final merge authorization followed the #79 merge and #81 conflict resolution.
 - [x] 4.11 **DoD 11 — Known limitations:** disclose fictional content, CC BY-NC restrictions, Archify accessibility limitations, and absence of a deployed public route.
 - [x] 4.12 **Additional — Phased assurance:** distinguish advisory E2E/DAST results from required branch-protection checks; verify the PR does not overstate enforcement.
-- [ ] 4.13 Revalidate the example's Archify artifact against the merged #78 contract before integrating #80; record the merged revision and any compatibility changes.
+- [x] 4.13 Revalidated against merged #78 / PR #79 at `fc0f7986a32eb285955adf24810297dfba5d583c`. The example manifest now carries the merged schema, Archify 3.1.0 repository/commit identity, source revision, relative candidate/artifact/license paths, and candidate/artifact SHA-256 values. Regenerated the artifact with the exact pinned Archify commit; `archify check --require-provenance` passed 9 checks, and Playwright verified reader-contract metadata, identity, provenance, and root plus `/arcshape/` behavior.
 - [x] 4.14 Add a commitlint preflight to the implement workflow after CI caught a missing `Refs #80`; verify it against the original commit message before closing this process finding.

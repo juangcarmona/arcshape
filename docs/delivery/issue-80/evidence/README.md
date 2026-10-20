@@ -5,8 +5,8 @@ This bundle records the locally built Death Star architecture example and the au
 ## Revisions and license
 
 - Source example: [`juangcarmona/starwars-deathstar-arc42-documentation`](https://github.com/juangcarmona/starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5), revision `6a5576bda72de08a217ccdf94461c5eaeea9f8a5`.
-- ArcShape implementation revision used to generate the local screenshots: `2c59529a49be017494887fcae376aa5893118cbf`.
-- GitHub Actions tested PR head: `9eeabf34307933ee1e0a9427492a855bcc9e3180`; its synthetic merge revision was `24b8148840b007be20a9b2db8ea006b3dd65da27`.
+- ArcShape implementation revision used to generate the current local screenshots: `d9c4113c3671181a6b60f25aa14d07872366f73e`.
+- PR #81 was rebased onto #79 merge commit `fc0f7986a32eb285955adf24810297dfba5d583c`. The CodeQL conflict resolution keeps exclusions for both generated portal HTML and the example's generated Archify HTML.
 - The adapted source material is licensed CC BY-NC 4.0. Attribution, a link to the license, and a modification notice are retained in both locale entry points. The example is fictional fan work and is not affiliated with or endorsed by Lucasfilm Ltd. or Disney. The non-commercial restriction must be considered before any later publication.
 
 The adaptation keeps the overview and all twelve arc42 sections in English and Spanish, along with the referenced artwork. It corrects the runtime-sequence inconsistencies identified in the source and the Spanish overview's English image alternative text. No narrative section was intentionally dropped. The original content was adapted to ArcShape's README, numbered-file, and frontmatter contract.
@@ -19,7 +19,7 @@ The adaptation keeps the overview and all twelve arc42 sections in English and S
 | Reader contract, corrected scenario/sequence content, localized alternative text, and self-contained root/subpath links | The two locale source folders; Playwright root and `/arcshape/` coverage in the retained report and traces.                                       |
 | Accessible Mermaid and Archify with renderer/source provenance                                                          | Mermaid source and built reader assertions; `examples/starwars-deathstar/diagrams/` manifest and HTML; Archify screenshot and E2E checks.         |
 | Desktop and narrow examples plus review evidence                                                                        | The three screenshots in this folder, dimensions and observations below, and the linked Actions report/traces.                                    |
-| Human judgement on clarity, visual appeal, Spanish adaptation, and test adequacy                                        | Still open for the repository maintainer; screenshots and automation supply evidence but do not decide these criteria.                            |
+| Human judgement on clarity, visual appeal, Spanish adaptation, and test adequacy                                        | The maintainer approved both PRs and the example/test adequacy in this conversation; the screenshots and browser assertions are supporting evidence. |
 | Isolated example without a public route or Cloudflare publication                                                       | Example remains under `examples/`; no public or engineering route was added. Publication was not tested.                                          |
 
 ## Captures
@@ -50,14 +50,14 @@ The adaptation keeps the overview and all twelve arc42 sections in English and S
 
 ## Automated browser evidence
 
-The [Assurance workflow run](https://github.com/juangcarmona/arcshape/actions/runs/39453712336) tested PR head `9eeabf34307933ee1e0a9427492a855bcc9e3180`. Its `arcshape-e2e-24b8148840b007be20a9b2db8ea006b3dd65da27` artifact contains the Playwright HTML report, test results, and traces for both showcase scenarios. The workflow reports **7 E2E scenarios passed** and **passive DAST passed**; mutation analysis was skipped because it is scheduled/manual.
+The focused local Playwright run passed both showcase scenarios, including EN/ES reader coverage, accessible Mermaid SVG names, and Archify checks against the merged #78 reader contract. The refreshed screenshots came from that run at source revision `d9c4113c3671181a6b60f25aa14d07872366f73e`. The full local Vitest run passed **23 files / 108 tests** with the repository's CI browser setting (`GITHUB_ACTIONS=true`).
 
 The E2E scenarios build both locales at root and `/arcshape/`, assert all twelve sections, check Mermaid and Archify identity/accessibility/provenance, exercise keyboard interaction, and check narrow layout and offline behavior. The local screenshots above are from the same branch revision. The Archify source, generated document, and candidate manifest are retained alongside the example; E2E verifies the pinned renderer/source revisions and generated-artifact hashes.
 
-The current-head CI quality matrix, Product model, and Repository conventions checks are reported in [CI run 39453712280](https://github.com/juangcarmona/arcshape/actions/runs/39453712280); security, dependency, SBOM/license, and CodeQL checks are reported in [Security run 39453712445](https://github.com/juangcarmona/arcshape/actions/runs/39453712445) and [CodeQL run 39453712468](https://github.com/juangcarmona/arcshape/actions/runs/39453712468). All required contexts passed on this head. The original Repository conventions failure was fixed by adding the missing `Refs #80` footer to historical commit `f2a6fe433871936c24df208f7d889202bdcaed16` (rewritten as `c15316f7f4fa257dd9bd5d4ed498923a4f1ba943`). The 14-commit range and full source tree were preserved; only that commit message changed.
+The branch's current-hosted CI, security, CodeQL, Assurance and repository-convention outcomes are available from [PR #81](https://github.com/juangcarmona/arcshape/pull/81). The focused Playwright command and successful local run are `GITHUB_ACTIONS=true npm run test:e2e -- e2e/death-star-showcase.playwright.mjs` (**2 passed**). The earlier Repository conventions failure was fixed by adding the missing `Refs #80` footer to historical commit `f2a6fe4` while preserving its tree and the full commit range.
 
 ## Evidence limits and open review
 
 These captures and checks demonstrate a local static build and its browser behavior. They do not demonstrate a public-site route, Cloudflare Pages configuration, production deployment, or publication approval. They are not a full screen-reader audit and do not establish that every architecture document will be clear or visually compelling. A human reviewer still needs to judge the adaptation's clarity and visual appeal, Spanish quality, test adequacy, security exceptions, and Archify's accessibility limitations.
 
-The Archify contract was initially pinned to PR #79 at `eb4974b8db8b158fa907ceff15c247d198d07cff`. Issue #78 / PR #79 remains unmerged; this example must be revalidated against the merged #78 contract before integration. No merge or publication is implied by this evidence bundle.
+The Archify contract was initially pinned to PR #79 and has now been revalidated against its merged #78 implementation at `fc0f7986a32eb285955adf24810297dfba5d583c`. The local checks and screenshots do not demonstrate a public-site route, Cloudflare Pages configuration, production deployment, or publication approval.

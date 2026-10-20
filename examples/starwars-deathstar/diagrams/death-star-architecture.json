@@ -3,14 +3,14 @@
   "diagram_type": "architecture",
   "meta": {
     "title": "Death Star systems",
-    "subtitle": "Archify 3.1.0 · source revision 437bd1153527d1baaaa209377b74d027f58a9d6a",
+    "subtitle": "Archify 3.1.0 · source revision 2bae49f8546eb020aa48d1e5a4c203a6da0506a2",
     "output": "examples/starwars-deathstar/diagrams/death-star-architecture.html",
     "quality_profile": "showcase",
     "repository": {
       "url": "https://github.com/juangcarmona/arcshape",
       "provider": "github",
       "link_mode": "web",
-      "revision": "437bd1153527d1baaaa209377b74d027f58a9d6a"
+      "revision": "2bae49f8546eb020aa48d1e5a4c203a6da0506a2"
     }
   },
   "components": [

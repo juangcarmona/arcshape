@@ -8,15 +8,15 @@
   },
   "source": {
     "repository": "https://github.com/juangcarmona/arcshape",
-    "revision": "437bd1153527d1baaaa209377b74d027f58a9d6a"
+    "revision": "2bae49f8546eb020aa48d1e5a4c203a6da0506a2"
   },
   "candidate": {
     "path": "examples/starwars-deathstar/diagrams/death-star-architecture.json",
-    "sha256": "82dacb7f102b93547bf5c21a5f351d5f7294c323eebd3b9f2a20c858f56bd877"
+    "sha256": "6c292ba5060ee3cfcadc7b444bc984a981a75860db9ada8ec07e18b345a6f592"
   },
   "artifact": {
     "path": "examples/starwars-deathstar/diagrams/death-star-architecture.html",
-    "sha256": "94c9a269f6c1435416de31896ac3c196cd7c457aa53b4c58751771ffa7166bbe"
+    "sha256": "68acf26af968799ce826b56cdba597951a47068b8882fcd081b9d51647f884b2"
   },
   "licenses": [
     "examples/starwars-deathstar/diagrams/ARCHIFY-LICENSE.txt",

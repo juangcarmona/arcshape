@@ -9,7 +9,9 @@ import { expect, test } from "@playwright/test";
 test.use({ trace: "on" });
 
 const repositoryRoot = resolve(import.meta.dirname, "..");
-const archifySourceRevision = "437bd1153527d1baaaa209377b74d027f58a9d6a";
+const archifyGeneratorRepository = "https://github.com/tt-a1i/archify";
+const archifyGeneratorCommit = "1c2b42d660e4a7571813fb43839c79e3e9ca7720";
+const archifySourceRevision = "2bae49f8546eb020aa48d1e5a4c203a6da0506a2";
 const sourceAssets = [
   "star_wars_death_star_3d_blueprint.png",
   "star_wars_death_star_architecture_EN.png",
@@ -87,13 +89,35 @@ test.beforeAll(async () => {
     await readFile(join(sourceDiagramDirectory, "manifest.json"), "utf8"),
   );
   if (
+    manifest.schemaVersion !== 1 ||
     manifest.generator.name !== "Archify" ||
     manifest.generator.version !== "3.1.0" ||
-    manifest.source.revision !== archifySourceRevision
+    manifest.generator.repository !== archifyGeneratorRepository ||
+    manifest.generator.commit !== archifyGeneratorCommit ||
+    manifest.source.repository !== "https://github.com/juangcarmona/arcshape" ||
+    manifest.source.revision !== archifySourceRevision ||
+    manifest.candidate.path !==
+      "examples/starwars-deathstar/diagrams/death-star-architecture.json" ||
+    manifest.artifact.path !==
+      "examples/starwars-deathstar/diagrams/death-star-architecture.html" ||
+    manifest.licenses.join(",") !==
+      [
+        "examples/starwars-deathstar/diagrams/ARCHIFY-LICENSE.txt",
+        "examples/starwars-deathstar/diagrams/THIRD_PARTY_NOTICES.md",
+      ].join(",")
   ) {
     throw new Error(
-      "Archify manifest does not match the pinned source contract",
+      "Archify manifest does not match the merged #78 publication contract",
     );
+  }
+  const candidate = JSON.parse(
+    await readFile(join(repositoryRoot, manifest.candidate.path), "utf8"),
+  );
+  if (
+    candidate.meta.repository.url !== manifest.source.repository ||
+    candidate.meta.repository.revision !== manifest.source.revision
+  ) {
+    throw new Error("Archify candidate provenance does not match its manifest");
   }
   for (const entry of [manifest.candidate, manifest.artifact]) {
     const digest = createHash("sha256")
@@ -102,6 +126,21 @@ test.beforeAll(async () => {
     if (digest !== entry.sha256) {
       throw new Error(`Archify manifest hash mismatch for ${entry.path}`);
     }
+  }
+  const diagramHtml = await readFile(
+    join(repositoryRoot, manifest.artifact.path),
+    "utf8",
+  );
+  if (
+    !diagramHtml.includes('<meta name="generator" content="archify 3.1.0">') ||
+    !diagramHtml.includes(
+      '<meta name="archify-reader-contract" content="declared-wide-v1">',
+    ) ||
+    /\b(?:href|src)="\/(?!\/)/i.test(diagramHtml)
+  ) {
+    throw new Error(
+      "Archify HTML does not satisfy the merged #78 reader and path contract",
+    );
   }
   await copyFile(
     join(
@@ -230,20 +269,18 @@ test("bilingual reader builds, links sources, and works at root and subpath", as
       await page.keyboard.press("Enter");
       await expect(page).toHaveURL(/#\/section\/06$/);
       await expect(page.locator(".doc-body figure.diagram")).toHaveCount(3);
-      const names = await page
-        .locator(".doc-body figure.diagram")
-        .evaluateAll((figures) =>
-          figures.map((figure) => figure.getAttribute("aria-label")),
-        );
-      expect(names.every((name) => name && name.length > 8)).toBe(true);
-      if (locale === "en") {
-        expect(names[0]).toContain("Planetary destruction sequence");
-        expect(names[1]).toContain("Intruder detection and response");
-        expect(names[2]).toContain("Hyperdrive activation and navigation");
-      } else {
-        expect(names[0]).toContain("destrucción planetaria");
-        expect(names[1]).toContain("intrusos");
-        expect(names[2]).toContain("hiperimpulsor");
+      const diagrams = page.locator(".doc-body figure.diagram svg[role='img']");
+      await expect(diagrams).toHaveCount(3);
+      for (const [index, image] of (await diagrams.all()).entries()) {
+        const expectedName =
+          locale === "en"
+            ? [
+                "Planetary destruction sequence",
+                "Intruder detection and response",
+                "Hyperdrive activation and navigation",
+              ][index]
+            : ["destrucción planetaria", "intrusos", "hiperimpulsor"][index];
+        await expect(image).toHaveAccessibleName(new RegExp(expectedName, "i"));
       }
 
       if (locale === "en" && !base) {
@@ -279,6 +316,13 @@ test("Archify artifact preserves accessible identity and revision provenance at 
   for (const base of ["", "/arcshape"]) {
     await page.setViewportSize({ width: 1600, height: 1100 });
     await page.goto(`${origin}${base}/diagrams/death-star-architecture.html`);
+    await expect(page.locator('meta[name="generator"]')).toHaveAttribute(
+      "content",
+      "archify 3.1.0",
+    );
+    await expect(
+      page.locator('meta[name="archify-reader-contract"]'),
+    ).toHaveAttribute("content", "declared-wide-v1");
     await expect(
       page.getByRole("heading", { name: "Death Star systems" }),
     ).toBeVisible();
