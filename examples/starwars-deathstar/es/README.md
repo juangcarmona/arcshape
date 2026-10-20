@@ -41,3 +41,9 @@ Plano de la Estrella de la Muerte (español)](../assets/star_wars_death_star_3d_
 ---
 
 **Fuente y licencia:** Adaptado del ejemplo arc42 de la Estrella de la Muerte de [Juan G. Carmona](https://github.com/juangcarmona/starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5), revisión `6a5576bda72de08a217ccdf94461c5eaeea9f8a5`. Términos de [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.es). Se adaptó al lector de ArcShape y se corrigieron inconsistencias en diagramas y texto alternativo. Es una obra de ficción no comercial y no está afiliada ni respaldada por Lucasfilm Ltd. ni Disney.
+
+## Imágenes de origen
+
+- [Plano 3D de la Estrella de la Muerte](../assets/star_wars_death_star_3d_blueprint.png)
+- [Diagrama arquitectónico de la Estrella de la Muerte (inglés)](../assets/star_wars_death_star_architecture_EN.png)
+- [Diagrama arquitectónico de la Estrella de la Muerte (español)](../assets/star_wars_death_star_architecture_ES.png)

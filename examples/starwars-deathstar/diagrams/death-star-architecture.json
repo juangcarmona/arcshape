@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Death Star systems",
+    "subtitle": "Archify 3.1.0 · source revision 437bd1153527d1baaaa209377b74d027f58a9d6a",
+    "output": "examples/starwars-deathstar/diagrams/death-star-architecture.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/juangcarmona/arcshape",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "437bd1153527d1baaaa209377b74d027f58a9d6a"
+    }
+  },
+  "components": [
+    {
+      "id": "imperial_command",
+      "type": "external",
+      "label": "Imperial Command",
+      "sublabel": "sets mission objectives",
+      "pos": [40, 170],
+      "size": [176, 72],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/01-introduction-and-goals.md", "line": 1, "end_line": 27 }
+      ]
+    },
+    {
+      "id": "command_control",
+      "type": "backend",
+      "label": "Command and Control",
+      "sublabel": "coordinates station systems",
+      "pos": [304, 170],
+      "size": [196, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/05-building-block-view.md", "line": 1, "end_line": 40 },
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 1, "end_line": 34 }
+      ]
+    },
+    {
+      "id": "reactor_core",
+      "type": "backend",
+      "label": "Reactor Core",
+      "sublabel": "supplies station power",
+      "pos": [590, 86],
+      "size": [190, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/05-building-block-view.md", "line": 1, "end_line": 50 },
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 1, "end_line": 30 }
+      ]
+    },
+    {
+      "id": "superlaser",
+      "type": "frontend",
+      "label": "Superlaser",
+      "sublabel": "primary weapon system",
+      "pos": [866, 40],
+      "size": [182, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 1, "end_line": 30 }
+      ]
+    },
+    {
+      "id": "hyperdrive",
+      "type": "backend",
+      "label": "Hyperdrive",
+      "sublabel": "enables hyperspace travel",
+      "pos": [866, 176],
+      "size": [182, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 48, "end_line": 76 }
+      ]
+    },
+    {
+      "id": "sensors",
+      "type": "frontend",
+      "label": "Sensor Arrays",
+      "sublabel": "detect unauthorized presence",
+      "pos": [304, 374],
+      "size": [196, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 30, "end_line": 48 }
+      ]
+    },
+    {
+      "id": "cooling",
+      "type": "backend",
+      "label": "Cooling System",
+      "sublabel": "monitors reactor temperature",
+      "pos": [590, 374],
+      "size": [196, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 1, "end_line": 30 }
+      ]
+    },
+    {
+      "id": "security",
+      "type": "external",
+      "label": "Stormtrooper squad",
+      "sublabel": "responds to intruders",
+      "pos": [866, 374],
+      "size": [182, 76],
+      "sources": [
+        { "path": "examples/starwars-deathstar/en/06-runtime-view.md", "line": 30, "end_line": 48 }
+      ]
+    }
+  ],
+  "connections": [
+    { "from": "imperial_command", "to": "command_control", "label": "mission order", "variant": "emphasis" },
+    { "from": "command_control", "to": "reactor_core", "label": "power request", "variant": "emphasis" },
+    { "from": "reactor_core", "to": "superlaser", "label": "energy", "variant": "emphasis" },
+    { "from": "reactor_core", "to": "hyperdrive", "label": "hyperspace power", "variant": "default" },
+    { "from": "sensors", "to": "command_control", "label": "intrusion alert", "variant": "emphasis" },
+    { "from": "command_control", "to": "security", "label": "dispatch", "variant": "default" },
+    { "from": "cooling", "to": "reactor_core", "label": "temperature feedback", "variant": "default" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Mission control",
+      "items": [
+        "Imperial Command sets the objective.",
+        "Command and Control coordinates power, weapons, navigation, and security responses."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Operational safeguards",
+      "items": [
+        "Cooling monitors reactor conditions during superlaser operation.",
+        "Sensor alerts initiate an automated response with a manual fallback."
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Fictional example",
+      "items": [
+        "This diagram summarizes the adapted fan-work documentation and does not describe ArcShape or a real system.",
+        "Source links and revision provenance identify the adapted documentation used to author this view."
+      ]
+    }
+  ]
+}

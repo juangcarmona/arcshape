@@ -66,3 +66,13 @@ This glossary includes all essential terms used throughout the Death Star’s ar
 ## Motivation
 
 The glossary supports a common understanding of terms across all stakeholders, reducing misinterpretation and enhancing communication within the Death Star project.
+
+## Source, License, and Artwork
+
+This fictional example adapts [Juan G. Carmona’s Death Star arc42 documentation](https://github.com/juangcarmona/starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5), revision `6a5576bda72de08a217ccdf94461c5eaeea9f8a5`. Changes adapt the material to ArcShape’s reader format and correct diagram and alternative-text inconsistencies. The source is available under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). This non-commercial fan work is not affiliated with or endorsed by Lucasfilm Ltd. or Disney.
+
+Source artwork:
+
+- [Death Star 3D blueprint](../assets/star_wars_death_star_3d_blueprint.png)
+- [Death Star architecture diagram (English)](../assets/star_wars_death_star_architecture_EN.png)
+- [Death Star architecture diagram (Spanish)](../assets/star_wars_death_star_architecture_ES.png)

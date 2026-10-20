@@ -51,3 +51,13 @@ Este glosario incluye todos los términos esenciales utilizados en la documentac
 ## Motivación
 
 El glosario respalda una comprensión común de los términos entre todas las partes interesadas, reduciendo la interpretación errónea y mejorando la comunicación en el proyecto de la Estrella de la Muerte.
+
+## Fuente, licencia e imágenes
+
+Este ejemplo ficticio adapta la documentación arc42 de la Estrella de la Muerte de [Juan G. Carmona](https://github.com/juangcarmona/starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5), revisión `6a5576bda72de08a217ccdf94461c5eaeea9f8a5`. El material se adaptó al lector de ArcShape y se corrigieron inconsistencias en diagramas y textos alternativos. La fuente se distribuye bajo los términos de [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Esta obra derivada de carácter no comercial no está afiliada ni cuenta con el respaldo de Lucasfilm Ltd. o Disney.
+
+Imágenes de origen:
+
+- [Plano 3D de la Estrella de la Muerte](../assets/star_wars_death_star_3d_blueprint.png)
+- [Diagrama de arquitectura de la Estrella de la Muerte (inglés)](../assets/star_wars_death_star_architecture_EN.png)
+- [Diagrama de arquitectura de la Estrella de la Muerte (español)](../assets/star_wars_death_star_architecture_ES.png)

@@ -41,3 +41,9 @@ Death Star blueprint (English)](../assets/star_wars_death_star_3d_blueprint.png)
 ---
 
 **Source and license:** Adapted from [Juan G. Carmona’s Death Star arc42 example](https://github.com/juangcarmona/starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5), source revision `6a5576bda72de08a217ccdf94461c5eaeea9f8a5`. [CC BY-NC 4.0 terms](https://creativecommons.org/licenses/by-nc/4.0/). Changes were made for ArcShape’s reader format and to correct diagram and alt-text inconsistencies. This is a non-commercial fan work and is not affiliated with or endorsed by Lucasfilm Ltd. or Disney.
+
+## Source artwork
+
+- [Death Star 3D blueprint](../assets/star_wars_death_star_3d_blueprint.png)
+- [Death Star architecture diagram (English)](../assets/star_wars_death_star_architecture_EN.png)
+- [Death Star architecture diagram (Spanish)](../assets/star_wars_death_star_architecture_ES.png)
