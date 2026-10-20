@@ -18,4 +18,5 @@ review debt was reported for merged post-baseline items #69, #70, #75, #77,
 The first independent plan review requested one correction: the issue had
 been moved to `status:proposed` before the plan gate. Round 1 restored
 `status:ready`; the plan itself was found coherent and complete. The review
-must be repeated before implementation.
+was repeated by the independent `gpt-6-luna` reviewer and approved with no
+remaining findings. Implementation may proceed.

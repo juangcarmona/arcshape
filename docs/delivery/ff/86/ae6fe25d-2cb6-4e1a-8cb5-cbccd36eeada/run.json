@@ -25,14 +25,14 @@
     {
       "name": "propose",
       "start": "2026-10-20T21:05:00Z",
-      "end": "2026-10-20T21:08:00Z",
+      "end": "2026-10-20T21:18:00Z",
       "inputCommit": "74f51c8",
       "outputCommit": "bb6740d",
-      "result": "request-changes",
+      "result": "approved",
       "evidence": [
         "Plan artifacts are complete in openspec/changes/adopt-changesets-release-flow/.",
         "Draft PR #87 contains the plan and FF evidence.",
-        "Reviewer requested only lifecycle-state correction: status:proposed was applied before the plan review gate. Issue was corrected to status:ready."
+        "Reviewer requested only lifecycle-state correction: status:proposed was applied before the plan review gate. Issue was corrected to status:ready and the plan was independently re-reviewed."
       ]
     }
   ],
@@ -47,6 +47,14 @@
         "The issue status was ahead of the plan gate; corrected from status:proposed to status:ready."
       ],
       "evidence": ["Independent subagent review 01a15b21-44ac-7e53-a280-a924f0469946"]
+    },
+    {
+      "model": "gpt-6-luna",
+      "kind": "plan-rerun",
+      "commit": "2c709b1",
+      "decision": "approve",
+      "findings": ["No findings; plan approved after lifecycle-state correction."],
+      "evidence": ["Independent subagent review 01a15b22-ba7c-74d2-ac70-9472307cb5ba"]
     }
   ],
   "corrections": [
@@ -54,7 +62,7 @@
       "gate": "propose",
       "round": 1,
       "requestedChanges": ["Align the issue lifecycle label with the pending plan-review gate."],
-      "result": "status:ready restored; plan artifacts unchanged; rerun independent review required."
+      "result": "status:ready restored; plan artifacts unchanged; independent rerun approved the plan."
     }
   ],
   "stopReason": null,
