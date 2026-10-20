@@ -34,6 +34,167 @@
       "reason": "Repository authoring CLI only; this is a moderate sprintf-js finding inherited through gray-matter and is excluded from the published ArcShape tarball. Recheck for an upstream fix before expiry.",
       "owner": "ArcShape maintainers",
       "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/apply-release-plan",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/apply-release-plan",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/assemble-release-plan",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/assemble-release-plan",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/cli",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/cli",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/config",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/config",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/get-dependents-graph",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/get-dependents-graph",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/get-release-plan",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/get-release-plan",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/git",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/git",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/pre",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/pre",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/read",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/read",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/should-skip-package",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@changesets/should-skip-package",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@manypkg/get-packages",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "@manypkg/get-packages",
+      "advisory": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and these packages are excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
+    },
+    {
+      "package": "globby",
+      "advisory": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "reason": "Dev-only Changesets release tooling path; no patched compatible Changesets v2 release is published and this package is excluded from the ArcShape tarball. Recheck before expiry.",
+      "owner": "ArcShape maintainers",
+      "expiresOn": "2026-11-17"
     }
   ]
 }
