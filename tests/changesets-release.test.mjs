@@ -3,12 +3,12 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const execFileAsync = promisify(execFile);
-const changesetCli = new URL(
-  "../node_modules/@changesets/cli/bin.js",
-  import.meta.url,
+const changesetCli = fileURLToPath(
+  new URL("../node_modules/@changesets/cli/bin.js", import.meta.url),
 );
 
 describe("Changesets package release contract", () => {
@@ -47,13 +47,9 @@ describe("Changesets package release contract", () => {
         join(root, ".changeset", "release.md"),
         `---\n"@arcshape/cli": patch\n---\n\nExercise the release contract.\n`,
       );
-      await execFileAsync(
-        process.execPath,
-        [changesetCli.pathname, "version"],
-        {
-          cwd: root,
-        },
-      );
+      await execFileAsync(process.execPath, [changesetCli, "version"], {
+        cwd: root,
+      });
 
       const manifest = JSON.parse(
         await readFile(join(packageRoot, "package.json"), "utf8"),
