@@ -1,54 +1,59 @@
-name: Publish to npm
+name: Release
+
+# Versioning is prepared by Changesets after feature PRs merge to main. npm
+# publication happens only from the reviewed Version Packages commit or the
+# explicit recovery dispatch; creating a GitHub Release is a later idempotent
+# evidence step in this same workflow and cannot trigger a second publisher.
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Release operation
+        type: choice
+        required: true
+        default: publish-current-stable
+        options:
+          - publish-current-stable
 
-permissions:
-  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
 
 jobs:
-  verify:
-    name: Verify release package
+  version-pr:
+    name: Maintain Version Packages PR
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Install npm runtime for reproducible SBOM generation
-        run: npm install --global npm@10.9.9
-      - run: npm run format:check
-      - run: npm run lint
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
-      - name: Verify release tag and package version
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: node scripts/verify-release-version.mjs
-      - name: Generate SBOM from the release package
-        run: bash scripts/generate-release-sbom.sh "$RUNNER_TEMP/arcshape-sbom"
-      - name: Enforce runtime transitive license policy
-        run: |
-          sbom_file=$(find "$RUNNER_TEMP/arcshape-sbom" -maxdepth 1 -type f -name '*.cdx.json' -print -quit)
-          test -n "$sbom_file"
-          node scripts/check-license-policy.mjs "$sbom_file"
-      - name: Retain verified release SBOM
-        uses: actions/upload-artifact@v7
+      - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1
         with:
-          name: arcshape-release-sbom-${{ github.event.release.tag_name }}
-          path: ${{ runner.temp }}/arcshape-sbom/*.cdx.json
-          retention-days: 90
+          version: npm run version
+          commit: "chore: Version Packages"
+          title: "Version Packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  publish:
-    name: Publish reviewed release
-    needs: verify
+  publish-stable:
+    name: Publish stable release
+    if: >-
+      (github.event_name == 'push' && contains(github.event.head_commit.message, 'Version Packages')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.task == 'publish-current-stable')
     runs-on: ubuntu-latest
     environment:
       name: npm-publish
@@ -58,31 +63,105 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && 'refs/heads/main' || github.sha }}
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           package-manager-cache: false
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - name: Install npm runtime for reproducible SBOM generation
+        run: npm install --global npm@10.9.9
+      - name: Check committed release state
+        run: node scripts/check-release-state.mjs > "$RUNNER_TEMP/arcshape-release-state.json"
+      - name: Verify committed release state
+        run: cat "$RUNNER_TEMP/arcshape-release-state.json"
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run security:audit
+      - name: Generate release SBOM
+        run: bash scripts/generate-release-sbom.sh "$RUNNER_TEMP/arcshape-sbom"
+      - name: Enforce runtime transitive license policy
+        run: |
+          sbom_file=$(find "$RUNNER_TEMP/arcshape-sbom" -maxdepth 1 -type f -name '*.cdx.json' -print -quit)
+          test -n "$sbom_file"
+          node scripts/check-license-policy.mjs "$sbom_file"
       - name: Install npm with Trusted Publishing support
         run: npm install --global npm@11.5.1
-      - name: Verify release tag and package version
-        env:
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: node scripts/verify-release-version.mjs
-      - name: Download verified release SBOM
-        uses: actions/download-artifact@v7
-        with:
-          name: arcshape-release-sbom-${{ github.event.release.tag_name }}
-          path: ${{ runner.temp }}/arcshape-sbom
-      - name: Attach SBOM to GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: node scripts/upload-release-sbom.mjs "$RUNNER_TEMP/arcshape-sbom" "$RELEASE_TAG"
-      - run: npm publish --provenance --access public
-        working-directory: packages/cli
+      - name: Publish the committed package when it is pending
+        run: |
+          state=$(node -p "JSON.parse(require('node:fs').readFileSync('$RUNNER_TEMP/arcshape-release-state.json', 'utf8')).state")
+          if [ "$state" = "pending" ]; then
+            npm publish --provenance --access public --workspace packages/cli
+          elif [ "$state" = "already-published" ]; then
+            echo "The committed package version is already published; repairing release evidence only."
+          else
+            echo "Unexpected release state: $state"
+            exit 1
+          fi
       - name: Verify published registry version
+        run: |
+          PACKAGE_VERSION=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version") \
+            node scripts/verify-published-version.mjs
+      - name: Configure release identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Resolve release evidence commit
+        id: release-context
+        run: |
+          git fetch --tags --force origin
+          version=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version")
+          package_tag="@arcshape/cli@${version}"
+          github_tag="v${version}"
+          release_commit=""
+          for candidate in "$package_tag" "$github_tag"; do
+            if git rev-parse --verify "refs/tags/${candidate}^{commit}" >/dev/null 2>&1; then
+              release_commit=$(git rev-list -n 1 "refs/tags/${candidate}")
+              break
+            fi
+          done
+          release_commit=${release_commit:-$(git rev-parse HEAD)}
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "package_tag=${package_tag}" >> "$GITHUB_OUTPUT"
+          echo "github_tag=${github_tag}" >> "$GITHUB_OUTPUT"
+          echo "release_commit=${release_commit}" >> "$GITHUB_OUTPUT"
+          echo "Release evidence commit: ${release_commit}"
+      - name: Synchronize package tag
         env:
-          PACKAGE_VERSION: ${{ github.event.release.tag_name }}
-        run: node scripts/verify-published-version.mjs
+          PACKAGE_TAG: ${{ steps.release-context.outputs.package_tag }}
+          RELEASE_COMMIT: ${{ steps.release-context.outputs.release_commit }}
+        run: |
+          tag="$PACKAGE_TAG"
+          if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "Package tag ${tag} already exists."
+          else
+            git tag "${tag}" "$RELEASE_COMMIT" -m "${tag}"
+            git push origin "refs/tags/${tag}"
+          fi
+          test "$(git rev-list -n 1 "refs/tags/${tag}")" = "$RELEASE_COMMIT"
+          git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null
+      - name: Create or reuse GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TAG: ${{ steps.release-context.outputs.github_tag }}
+          RELEASE_COMMIT: ${{ steps.release-context.outputs.release_commit }}
+        run: |
+          version=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version")
+          if gh release view "$GITHUB_TAG" >/dev/null 2>&1; then
+            echo "GitHub Release ${GITHUB_TAG} already exists."
+          else
+            gh release create "$GITHUB_TAG" --target "$RELEASE_COMMIT" --title "ArcShape ${version}" --generate-notes
+          fi
+          git fetch --tags --force origin
+          RELEASE_TAG="$GITHUB_TAG" RELEASE_COMMIT="$RELEASE_COMMIT" node scripts/verify-release-version.mjs
+      - name: Attach verified SBOM to the GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version")
+          node scripts/upload-release-sbom.mjs "$RUNNER_TEMP/arcshape-sbom" "v${version}"

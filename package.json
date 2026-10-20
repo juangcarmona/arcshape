@@ -17,11 +17,14 @@
     "product:model:check": "node dist/scripts/check-product-model-status.js docs/product/model",
     "security:audit": "node scripts/check-npm-audit.mjs",
     "check:branch": "node scripts/check-branch-name.mjs",
+    "version": "changeset version && npm install --package-lock-only --ignore-scripts",
+    "release": "changeset publish",
     "openspec:init": "openspec init --tools codex,claude",
     "product:init": "prodshape init --sdd openspec --ai codex,claude --full",
     "product:openspec:add": "prodshape integration add openspec"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
     "@fission-ai/openspec": "1.14.3",
