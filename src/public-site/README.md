@@ -16,19 +16,24 @@ Astro writes the deployable static site to `dist/`. `npm run verify` builds the 
 
 The GitHub Pages workflow also builds and verifies the output at `/` and `/arcshape/`. The Cloudflare site uses `/`.
 
-## Cloudflare Pages Git integration
+## Cloudflare Workers Builds
 
-Configure the Pages project against this repository with:
+The Cloudflare project uses Git integration with Workers Builds. The site itself is Astro static output; the build writes files to `dist/`.
+
+Use these settings in the Worker's Build configuration:
 
 | Setting                | Value                                         |
 | ---------------------- | --------------------------------------------- |
 | Root directory         | `src/public-site`                             |
 | Build command          | `npm run build`                               |
-| Build output directory | `dist`                                        |
-| Build system           | Astro static; no adapter or server runtime    |
+| Deploy command         | Leave blank (Workers Builds uses `npx wrangler deploy`) |
+| Worker name            | `arcshape`                                    |
+| Build system           | Astro static; build output is `dist/`         |
 | Pull request previews  | Enable, then verify using a real pull request |
 
-Set the production branch to `main` only when production builds are explicitly authorized. Keep production publishing and the `arcshape.dev` custom-domain binding disabled until the maintainer reviews a real preview and authorizes activation. Record the actual Cloudflare preview URL and dashboard settings in `docs/pages-deployment.md`; repository configuration cannot prove account state.
+The Build configuration has no output-directory field; `dist/` is where Astro writes the built site. Leave Deploy command blank to use Workers Builds' default `npx wrangler deploy`. The checked-in `wrangler.jsonc` supplies the valid Worker name (`arcshape`) and static asset directory, so Wrangler does not enter automatic Astro setup.
+
+The production branch is `main`; pushes there can publish production. Enable pull-request previews to review changes before merging. Keep production publishing and the `arcshape.dev` custom-domain binding disabled until the maintainer reviews a real preview and authorizes activation. Record the actual Cloudflare preview URL and dashboard settings in `docs/pages-deployment.md`; repository configuration cannot prove account state.
 
 GitHub Actions runs `npm run verify` against the public output and separately assembles the engineering artifact. That workflow contains no Cloudflare credentials and never deploys this site.
 
