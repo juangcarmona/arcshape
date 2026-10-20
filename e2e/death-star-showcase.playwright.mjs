@@ -170,6 +170,24 @@ test("bilingual reader builds, links sources, and works at root and subpath", as
           ? "Source, License, and Artwork"
           : "Fuente, licencia e imágenes",
       );
+      const legalDisclosure = page.locator(".doc-body");
+      await expect(legalDisclosure).toContainText(
+        "6a5576bda72de08a217ccdf94461c5eaeea9f8a5",
+      );
+      await expect(legalDisclosure).toContainText("CC BY-NC 4.0");
+      await expect(legalDisclosure).toContainText(
+        locale === "en"
+          ? "Changes adapt the material"
+          : "El material se adaptó",
+      );
+      await expect(legalDisclosure).toContainText(
+        locale === "en" ? "not affiliated" : "no está afiliada",
+      );
+      await expect(
+        legalDisclosure.locator(
+          "a[href*='starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5']",
+        ),
+      ).toBeVisible();
 
       for (const asset of sourceAssets) {
         const link = page.locator(`.doc-body a[href*="${asset}"]`).first();
