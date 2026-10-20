@@ -42,3 +42,4 @@ These tasks exercise the established Arc42 and reader requirements with an illus
 - [ ] 4.11 **DoD 11 — Known limitations:** disclose fictional content, CC BY-NC restrictions, Archify accessibility limitations, and absence of a deployed public route.
 - [ ] 4.12 **Additional — Phased assurance:** distinguish advisory E2E/DAST results from required branch-protection checks; verify the PR does not overstate enforcement.
 - [ ] 4.13 Revalidate the example's Archify artifact against the merged #78 contract before integrating #80; record the merged revision and any compatibility changes.
+- [ ] 4.14 Add a commitlint preflight to the implement workflow after CI caught a missing `Refs #80`; verify it against the original commit message before closing this process finding.
