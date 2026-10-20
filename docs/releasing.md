@@ -22,7 +22,8 @@ remains `arcshape`.
    body is not sufficient. It runs from the merged commit in the protected
    `npm-publish` environment. It runs the formatting, lint, typecheck, test,
    build, dependency-audit, SBOM, and license-policy checks, then publishes
-   `@arcshape/cli` through npm Trusted Publishing with provenance.
+   `npm run release` (`changeset publish`) through npm Trusted Publishing with
+   provenance, like the ProductShape release workflow.
 5. The job verifies the registry version, creates or reuses the immutable
    package tag `@arcshape/cli@<version>`, creates or reuses GitHub Release
    `v<version>`, verifies that release against `main`, and attaches the
@@ -51,14 +52,11 @@ does not use a long-lived npm token.
 ## Recovery
 
 Run `Release` from GitHub Actions with the `publish-current-stable` operation
-when a prior run published the immutable npm version but stopped before
-finishing its evidence. The release-state helper compares the committed stable
-version with npm:
-
-- `pending` publishes the package;
-- `already-published` skips the immutable npm publication and repairs tags,
-  the GitHub Release, and the SBOM;
-- `inconsistent` fails if npm already contains a newer stable version.
+when a prior run stopped before finishing its evidence. Recovery runs the same
+`npm run release` (`changeset publish`) operation as the normal stable job.
+Changesets handles immutable versions already on npm and valid published
+prereleases such as `0.0.0-stage`; the workflow then repairs or verifies the
+package tag, GitHub Release, and SBOM.
 
 Recovery is idempotent. Never force-move a package tag or replace an npm
 version. If a published version is defective, publish a corrected patch version

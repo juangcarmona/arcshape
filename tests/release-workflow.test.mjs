@@ -56,10 +56,17 @@ describe("Changesets release workflow", () => {
       "id-token": "write",
     });
     const serializedSteps = JSON.stringify(publish.steps);
-    expect(serializedSteps).toContain("scripts/check-release-state.mjs");
-    expect(serializedSteps).toContain(
-      "npm publish --provenance --access public",
+    expect(serializedSteps).toContain("npm run release");
+    expect(serializedSteps).not.toContain("scripts/check-release-state.mjs");
+    expect(serializedSteps).not.toContain("npm publish --provenance");
+    const identityIndex = publish.steps.findIndex(
+      (step) => step.name === "Configure release identity",
     );
+    const publishIndex = publish.steps.findIndex(
+      (step) => step.name === "Publish committed packages",
+    );
+    expect(identityIndex).toBeGreaterThanOrEqual(0);
+    expect(identityIndex).toBeLessThan(publishIndex);
     expect(serializedSteps).toContain("scripts/verify-published-version.mjs");
     expect(serializedSteps).toContain("refs/tags/${tag}");
     expect(serializedSteps).toContain("Resolve release evidence commit");

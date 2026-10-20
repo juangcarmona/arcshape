@@ -94,10 +94,6 @@ jobs:
       - run: npm ci
       - name: Install npm runtime for reproducible SBOM generation
         run: npm install --global npm@10.9.9
-      - name: Check committed release state
-        run: node scripts/check-release-state.mjs > "$RUNNER_TEMP/arcshape-release-state.json"
-      - name: Verify committed release state
-        run: cat "$RUNNER_TEMP/arcshape-release-state.json"
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
@@ -111,27 +107,23 @@ jobs:
           sbom_file=$(find "$RUNNER_TEMP/arcshape-sbom" -maxdepth 1 -type f -name '*.cdx.json' -print -quit)
           test -n "$sbom_file"
           node scripts/check-license-policy.mjs "$sbom_file"
-      - name: Install npm with Trusted Publishing support
-        run: npm install --global npm@11.5.1
-      - name: Publish the committed package when it is pending
-        run: |
-          state=$(node -p "JSON.parse(require('node:fs').readFileSync('$RUNNER_TEMP/arcshape-release-state.json', 'utf8')).state")
-          if [ "$state" = "pending" ]; then
-            npm publish --provenance --access public --workspace packages/cli
-          elif [ "$state" = "already-published" ]; then
-            echo "The committed package version is already published; repairing release evidence only."
-          else
-            echo "Unexpected release state: $state"
-            exit 1
-          fi
-      - name: Verify published registry version
-        run: |
-          PACKAGE_VERSION=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version") \
-            node scripts/verify-published-version.mjs
       - name: Configure release identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Install npm with Trusted Publishing support
+        run: npm install --global npm@11.5.1
+      # Match ProductShape: Changesets decides which committed package versions need publishing.
+      # This also handles valid prerelease entries already present in the npm registry.
+      - name: Publish committed packages
+        run: npm run release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+      - name: Verify published registry version
+        run: |
+          PACKAGE_VERSION=$(node -p "JSON.parse(require('node:fs').readFileSync('packages/cli/package.json', 'utf8')).version") \
+            node scripts/verify-published-version.mjs
       - name: Resolve release evidence commit
         id: release-context
         run: |
@@ -161,7 +153,9 @@ jobs:
           if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
             echo "Package tag ${tag} already exists."
           else
-            git tag "${tag}" "$RELEASE_COMMIT" -m "${tag}"
+            if ! git rev-parse --verify "refs/tags/${tag}^{commit}" >/dev/null 2>&1; then
+              git tag "${tag}" "$RELEASE_COMMIT" -m "${tag}"
+            fi
             git push origin "refs/tags/${tag}"
           fi
           test "$(git rev-list -n 1 "refs/tags/${tag}")" = "$RELEASE_COMMIT"

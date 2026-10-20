@@ -72,8 +72,6 @@ describe("Changesets package release contract", () => {
     );
     expect(workflow).toContain('tag="@arcshape/cli@${version}"');
     expect(workflow).toContain('github_tag="v${version}"');
-    expect(workflow).toContain(
-      "npm publish --provenance --access public --workspace packages/cli",
-    );
+    expect(workflow).toContain("npm run release");
   });
 });
