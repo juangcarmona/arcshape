@@ -4,8 +4,41 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
-const NPM_VERSION =
-  /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
+const IDENTIFIER = /^[0-9A-Za-z-]+$/;
+const NUMERIC_IDENTIFIER = /^(0|[1-9]\d*)$/;
+
+function isValidNpmVersion(value) {
+  if (typeof value !== "string") return false;
+
+  const buildIndex = value.indexOf("+");
+  const withoutBuild = buildIndex === -1 ? value : value.slice(0, buildIndex);
+  if (
+    buildIndex !== -1 &&
+    !value
+      .slice(buildIndex + 1)
+      .split(".")
+      .every((part) => IDENTIFIER.test(part))
+  ) {
+    return false;
+  }
+
+  const prereleaseIndex = withoutBuild.indexOf("-");
+  const core =
+    prereleaseIndex === -1
+      ? withoutBuild
+      : withoutBuild.slice(0, prereleaseIndex);
+  if (!VERSION.test(core)) return false;
+  if (prereleaseIndex === -1) return true;
+
+  const prerelease = withoutBuild.slice(prereleaseIndex + 1);
+  return (
+    prerelease.length > 0 &&
+    prerelease.split(".").every((part) => {
+      if (!IDENTIFIER.test(part)) return false;
+      return !/^\d+$/.test(part) || NUMERIC_IDENTIFIER.test(part);
+    })
+  );
+}
 
 export function compareVersions(left, right) {
   const leftParts = VERSION.exec(left);
@@ -28,12 +61,7 @@ export function parsePublishedVersions(value) {
     : typeof value === "string"
       ? [value]
       : null;
-  if (
-    !versions ||
-    versions.some(
-      (version) => typeof version !== "string" || !NPM_VERSION.test(version),
-    )
-  ) {
+  if (!versions || versions.some((version) => !isValidNpmVersion(version))) {
     throw new Error("npm returned an invalid version list");
   }
   return [...new Set(versions.filter((version) => VERSION.test(version)))].sort(
