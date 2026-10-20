@@ -23,8 +23,8 @@
 
 ## 5. Integration verification
 
-- [ ] 5.1 Run the repository CI-equivalent deterministic lane, OpenSpec validation, ProductShape model/citation checks, and release workflow contract checks; verify all results are captured under the FF evidence directory and current-head evidence supports the issue acceptance criteria.
-- [ ] 5.2 Re-read the final diff against this plan, record the required external GitHub/npm configuration as observed or unverified, and verify the release branch is ready for the independent Done-gate audit.
+- [x] 5.1 Run the repository CI-equivalent deterministic lane, OpenSpec validation, ProductShape model/citation checks, and release workflow contract checks; verify all results are captured under the FF evidence directory and current-head evidence supports the issue acceptance criteria.
+- [x] 5.2 Re-read the final diff against this plan, record the required external GitHub/npm configuration as observed or unverified, and verify the release branch is ready for the independent Done-gate audit.
 
 ## Workflow follow-up
 

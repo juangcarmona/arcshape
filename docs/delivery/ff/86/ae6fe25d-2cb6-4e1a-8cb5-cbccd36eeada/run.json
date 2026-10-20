@@ -7,7 +7,7 @@
   "executorModel": "gpt-5",
   "reviewerModel": "gpt-6-luna",
   "maxCorrectionRounds": 3,
-  "status": "running",
+  "status": "blocked",
   "stages": [
     {
       "name": "refine",
@@ -27,12 +27,30 @@
       "start": "2026-10-20T21:05:00Z",
       "end": "2026-10-20T21:18:00Z",
       "inputCommit": "74f51c8",
-      "outputCommit": "bb6740d",
+      "outputCommit": "93084c7",
       "result": "approved",
       "evidence": [
         "Plan artifacts are complete in openspec/changes/adopt-changesets-release-flow/.",
         "Draft PR #87 contains the plan and FF evidence.",
         "Reviewer requested only lifecycle-state correction: status:proposed was applied before the plan review gate. Issue was corrected to status:ready and the plan was independently re-reviewed."
+      ]
+    },
+    {
+      "name": "implement",
+      "start": "2026-10-20T21:08:00Z",
+      "end": "2026-10-20T21:24:00Z",
+      "inputCommit": "93084c7",
+      "outputCommit": "0f32604",
+      "result": "implemented; deterministic and independent Done audit passed; human gate remains",
+      "evidence": [
+        "Issue #86 transitioned proposed -> in-progress during implementation; PR #87 is ready for review at current head 0f32604.",
+        "Changesets CLI v2.31.1, config, contributor guidance, version/release scripts, release-state recovery helper, stable workflow, documentation, and deterministic tests are implemented.",
+        "Focused release tests passed: 3 files, 11 tests; full GITHUB_ACTIONS=true Vitest passed: 26 files, 119 tests, 1 skipped.",
+        "Local deterministic lane passed: format, lint, typecheck, build, npm audit gate, secret self-test, SBOM/license policy with npm 10.9.9, Product model check, ProductShape validation, and OpenSpec validation.",
+        "Current-head GitHub Actions passed: CI 39499802347, Security 39499802289, CodeQL 39499801994, Assurance 39499802451, and engineering portal build 39499802048. Mutation analysis skipped by its scheduled/manual condition.",
+        "Active main ruleset 25255343 requires pull requests, the six quality checks, Product model, Secrets scan, Dependency audit, SBOM and license policy, and CodeQL; branch protection endpoint is not configured, ruleset enforcement is active.",
+        "Independent gpt-6-luna Done-gate audit approved current head after the merge-commit trigger and exact release-evidence corrections.",
+        "GitHub npm-publish environment was verified with a required reviewer; npm Trusted Publisher configuration remains unverified outside this repository."
       ]
     }
   ],
@@ -55,6 +73,29 @@
       "decision": "approve",
       "findings": ["No findings; plan approved after lifecycle-state correction."],
       "evidence": ["Independent subagent review 01a15b22-ba7c-74d2-ac70-9472307cb5ba"]
+    },
+    {
+      "model": "gpt-6-luna",
+      "kind": "independent-done-gate-audit",
+      "commit": "397e12f",
+      "decision": "request-changes",
+      "findings": [
+        "A merge commit could bypass publication when the trigger required a Version Packages message prefix.",
+        "Existing package and GitHub release tags were not required to point to one verified release commit.",
+        "Current-head CI and integration evidence were still pending."
+      ],
+      "evidence": ["Independent subagent review 01a15b2f-7fdf-7cd1-8271-3f730821ce56"]
+    },
+    {
+      "model": "gpt-6-luna",
+      "kind": "independent-done-gate-audit-rerun",
+      "commit": "0f32604",
+      "decision": "approve",
+      "findings": [
+        "Merge commits are recognized by the release trigger and package/GitHub tags plus the tagged package manifest are bound to one release commit.",
+        "Current-head CI and assurance checks pass. Human review, merge, and npm Trusted Publisher verification remain external gates."
+      ],
+      "evidence": ["Independent subagent review 01a15b2f-7fdf-7cd1-8271-3f730821ce56"]
     }
   ],
   "corrections": [
@@ -63,13 +104,36 @@
       "round": 1,
       "requestedChanges": ["Align the issue lifecycle label with the pending plan-review gate."],
       "result": "status:ready restored; plan artifacts unchanged; independent rerun approved the plan."
+    },
+    {
+      "gate": "implement",
+      "round": 1,
+      "requestedChanges": [
+        "Recognize merge-commit messages allowed by the active ruleset.",
+        "Bind existing package and GitHub release tags to one verified release commit and manifest version.",
+        "Complete current-head deterministic and GitHub evidence before the Done audit."
+      ],
+      "result": "Implemented in 0f32604; current-head checks passed and independent rerun approved."
     }
   ],
-  "stopReason": null,
-  "pullRequest": null,
+  "stopReason": "Implementation and all deterministic/current-head checks passed. The run stops at the human review/merge gate and unverified external npm Trusted Publisher configuration; no merge or real publication was performed.",
+  "pullRequest": {
+    "number": 87,
+    "url": "https://github.com/juangcarmona/arcshape/pull/87",
+    "draft": false,
+    "headSha": "0f3260496b2430a4240a62ca7d66ec06460b9243"
+  },
   "links": {
     "workItem": "https://github.com/juangcarmona/arcshape/issues/86",
-    "evidence": "docs/delivery/ff/86/ae6fe25d-2cb6-4e1a-8cb5-cbccd36eeada"
+    "evidence": "docs/delivery/ff/86/ae6fe25d-2cb6-4e1a-8cb5-cbccd36eeada",
+    "pullRequest": "https://github.com/juangcarmona/arcshape/pull/87",
+    "ci": [
+      "https://github.com/juangcarmona/arcshape/actions/runs/39499802347",
+      "https://github.com/juangcarmona/arcshape/actions/runs/39499802289",
+      "https://github.com/juangcarmona/arcshape/actions/runs/39499801994",
+      "https://github.com/juangcarmona/arcshape/actions/runs/39499802451",
+      "https://github.com/juangcarmona/arcshape/actions/runs/39499802048"
+    ]
   },
   "startingCommit": "74f51c8"
 }
