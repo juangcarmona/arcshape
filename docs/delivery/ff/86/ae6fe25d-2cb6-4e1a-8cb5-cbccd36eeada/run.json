@@ -21,10 +21,42 @@
         "Issue transitioned from status:backlog to status:ready.",
         "Review debt observed for merged post-baseline items without docs/reviews entries: #69, #70, #75, #77, #79, #81, #83, #85. This did not block refinement."
       ]
+    },
+    {
+      "name": "propose",
+      "start": "2026-10-20T21:05:00Z",
+      "end": "2026-10-20T21:08:00Z",
+      "inputCommit": "74f51c8",
+      "outputCommit": "bb6740d",
+      "result": "request-changes",
+      "evidence": [
+        "Plan artifacts are complete in openspec/changes/adopt-changesets-release-flow/.",
+        "Draft PR #87 contains the plan and FF evidence.",
+        "Reviewer requested only lifecycle-state correction: status:proposed was applied before the plan review gate. Issue was corrected to status:ready."
+      ]
     }
   ],
-  "reviews": [],
-  "corrections": [],
+  "reviews": [
+    {
+      "model": "gpt-6-luna",
+      "kind": "plan",
+      "commit": "bb6740d",
+      "decision": "request-changes",
+      "findings": [
+        "The plan is coherent and covers the ProductShape stable flow, Changesets, protected publication, tags, GitHub Release, SBOM, recovery, and acceptance-task mapping.",
+        "The issue status was ahead of the plan gate; corrected from status:proposed to status:ready."
+      ],
+      "evidence": ["Independent subagent review 01a15b21-44ac-7e53-a280-a924f0469946"]
+    }
+  ],
+  "corrections": [
+    {
+      "gate": "propose",
+      "round": 1,
+      "requestedChanges": ["Align the issue lifecycle label with the pending plan-review gate."],
+      "result": "status:ready restored; plan artifacts unchanged; rerun independent review required."
+    }
+  ],
   "stopReason": null,
   "pullRequest": null,
   "links": {
