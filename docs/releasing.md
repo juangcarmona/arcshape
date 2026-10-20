@@ -60,6 +60,9 @@ version with npm:
   the GitHub Release, and the SBOM;
 - `inconsistent` fails if npm already contains a newer stable version.
 
+Published prerelease versions, such as `0.0.0-stage`, are ignored when this
+stable release state is calculated.
+
 Recovery is idempotent. Never force-move a package tag or replace an npm
 version. If a published version is defective, publish a corrected patch version
 and deprecate the affected version with a clear explanation.

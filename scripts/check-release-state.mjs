@@ -3,7 +3,9 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
-const VERSION = /^(\d+)\.(\d+)\.(\d+)$/;
+const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+const NPM_VERSION =
+  /^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/;
 
 export function compareVersions(left, right) {
   const leftParts = VERSION.exec(left);
@@ -29,12 +31,14 @@ export function parsePublishedVersions(value) {
   if (
     !versions ||
     versions.some(
-      (version) => typeof version !== "string" || !VERSION.test(version),
+      (version) => typeof version !== "string" || !NPM_VERSION.test(version),
     )
   ) {
-    throw new Error("npm returned an invalid stable-version list");
+    throw new Error("npm returned an invalid version list");
   }
-  return [...new Set(versions)].sort(compareVersions);
+  return [...new Set(versions.filter((version) => VERSION.test(version)))].sort(
+    compareVersions,
+  );
 }
 
 export function classifyReleaseState(

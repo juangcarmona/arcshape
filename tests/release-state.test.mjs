@@ -44,11 +44,35 @@ describe("release state", () => {
 
   it("rejects malformed registry data", () => {
     expect(() => parsePublishedVersions({ versions: ["0.1.2"] })).toThrow(
-      "invalid stable-version list",
+      "invalid version list",
     );
-    expect(() => parsePublishedVersions(["0.1.2-alpha.1"])).toThrow(
-      "invalid stable-version list",
+    expect(() => parsePublishedVersions(["not-a-version"])).toThrow(
+      "invalid version list",
     );
+    expect(() => parsePublishedVersions(["01.0.0"])).toThrow(
+      "invalid version list",
+    );
+    expect(() => parsePublishedVersions(["1.2.3-01"])).toThrow(
+      "invalid version list",
+    );
+  });
+
+  it("ignores valid prereleases when comparing stable versions", () => {
+    expect(parsePublishedVersions(["0.0.0-stage", "0.1.0", "0.1.1"])).toEqual([
+      "0.1.0",
+      "0.1.1",
+    ]);
+    expect(
+      classifyReleaseState("@arcshape/cli", "0.1.2", [
+        "0.0.0-stage",
+        "0.1.0",
+        "0.1.1",
+      ]),
+    ).toEqual({
+      packageName: "@arcshape/cli",
+      packageVersion: "0.1.2",
+      state: "pending",
+    });
   });
 
   it("treats an unclaimed package as pending", async () => {
