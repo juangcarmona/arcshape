@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "runId": "c60b0677-46ec-494b-9a2c-597024f7101e",
+  "workItem": "80",
+  "branch": "docs/80-arc42-showcase",
+  "startedAt": "2026-10-20T14:42:38Z",
+  "executorModel": "Codex GPT-6 (runtime variant not exposed; user directed continuation despite this limitation)",
+  "reviewerModel": "gpt-6-astra (explicitly selected for isolated review)",
+  "maxCorrectionRounds": 3,
+  "status": "running",
+  "stages": [
+    {
+      "name": "refine",
+      "startedAt": "2026-10-20T14:42:38Z",
+      "endedAt": "2026-10-20T14:43:37Z",
+      "inputCommit": "8c1e701ae070ba4afe042b84217af92551a35bd0",
+      "outputCommit": "8c1e701ae070ba4afe042b84217af92551a35bd0",
+      "result": "ready",
+      "evidence": [
+        "Issue #80 satisfies the applicable Definition of Ready dimensions.",
+        "Post-baseline retrospective debt identified for merged PRs #75, #77, and #70; lifecycle says it does not block."
+      ]
+    },
+    {
+      "name": "propose",
+      "startedAt": "2026-10-20T14:43:37Z",
+      "endedAt": null,
+      "inputCommit": "8c1e701ae070ba4afe042b84217af92551a35bd0",
+      "outputCommit": null,
+      "result": "review-in-progress",
+      "evidence": [
+        "OpenSpec validation: 5 passed, 0 failed.",
+        "PR #81 is the existing draft for #80; no duplicate branch or PR created.",
+        "Plan pins the unmerged #78 contract to PR #79 head eb4974b8db8b158fa907ceff15c247d198d07cff and requires revalidation before integration."
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "reviewerModel": "gpt-6-astra",
+      "kind": "independent-plan-review",
+      "reviewedCommit": "8c1e701ae070ba4afe042b84217af92551a35bd0",
+      "decision": "approve-with-prerequisite",
+      "findings": [
+        "Bilingual adaptation, licensing, diagram requirements, runtime evidence, and scope are sufficiently specified.",
+        "Before implementation, pin and confirm the #78 contract; reviewer clarified that PR #79's pinned contract is sufficient if #80 carries the generated artifact and source locally, and #80 must be revalidated against merged #78 before integration."
+      ],
+      "evidence": [
+        "Plan review response for #80."
+      ]
+    }
+  ],
+  "corrections": [],
+  "stopReason": null,
+  "pullRequest": {
+    "number": 81,
+    "url": "https://github.com/juangcarmona/arcshape/pull/81",
+    "draft": true,
+    "headSha": "8c1e701ae070ba4afe042b84217af92551a35bd0"
+  },
+  "links": {
+    "issue": "https://github.com/juangcarmona/arcshape/issues/80",
+    "dependencyIssue": "https://github.com/juangcarmona/arcshape/issues/78"
+  },
+  "notes": [
+    "Executor model variant is not exposed by the active harness. A reviewer model was explicitly selected at user direction; distinctness cannot be independently attested by the harness.",
+    "Issue #78 remains open and its pull request #79 remains draft at run start."
+  ]
+}

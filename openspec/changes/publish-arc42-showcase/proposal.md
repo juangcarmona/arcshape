@@ -49,7 +49,7 @@ This delivery depends on `FR-ARC42-DOCUMENTATION`, `FR-READER-VIEW`, `QR-READER-
 
 ### Existing decisions and dependencies
 
-- [Issue #78](https://github.com/juangcarmona/arcshape/issues/78) defines the static Mermaid/Archify publication and provenance boundaries that this example should exercise. Issue #80 does not add a site route or publish the example.
+- [Issue #78](https://github.com/juangcarmona/arcshape/issues/78) defines the static Mermaid/Archify publication and provenance boundaries that this example should exercise. At planning time, its draft PR #79 exposes that contract at `eb4974b8db8b158fa907ceff15c247d198d07cff`; #80 will keep its own source and generated static artifact in the example so builds do not depend on that unmerged branch. Revalidate against the merged #78 contract before integrating #80. Issue #80 does not add a site route or publish the example.
 - The [ArcShape architecture documentation](https://github.com/juangcarmona/arcshape/tree/main/docs/architecture) and [reader deployment guide](https://github.com/juangcarmona/arcshape/blob/main/docs/pages-deployment.md) remain canonical references; the Death Star example must not be confused with ArcShape's own architecture facts.
 - Raccord issue #363 is the evidence-publishing reference: tracked screenshots are embedded in a README with exact viewport sizes, observed outcomes, and evidence limits. Keep detailed Playwright report/trace artifacts in the linked Actions run.
 

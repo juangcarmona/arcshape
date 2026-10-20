@@ -17,7 +17,7 @@ These tasks exercise the established Arc42 and reader requirements with an illus
 ## 2. Demonstrate Mermaid and Archify
 
 - [ ] 2.1 Confirm representative Mermaid diagrams render from the adapted Markdown with accessible titles/descriptions and revision-pinned source links; verify with the built pages and Playwright assertions.
-- [ ] 2.2 Add one focused Archify static HTML view plus its source/manifest in the example folder; verify renderer identity, provenance, accessible labeling, and no external runtime fetches in the built output.
+- [ ] 2.2 Add one focused Archify static HTML view plus its source/manifest in the example folder, following the contract pinned from draft PR #79 at `eb4974b8db8b158fa907ceff15c247d198d07cff`; verify renderer identity, provenance, accessible labeling, and no external runtime fetches in the built output.
 - [ ] 2.3 Extend Playwright to exercise both locale outputs, Mermaid and Archify identity, source/revision links, keyboard interaction, expected architecture sections, and no horizontal overflow at a narrow viewport; preserve report and trace in Actions.
 
 ## 3. Publish review evidence
@@ -40,3 +40,4 @@ These tasks exercise the established Arc42 and reader requirements with an illus
 - [ ] 4.10 **DoD 10 — Human review:** obtain maintainer judgement on clarity, visual appeal, bilingual adaptation, and test adequacy before marking the PR ready.
 - [ ] 4.11 **DoD 11 — Known limitations:** disclose fictional content, CC BY-NC restrictions, Archify accessibility limitations, and absence of a deployed public route.
 - [ ] 4.12 **Additional — Phased assurance:** distinguish advisory E2E/DAST results from required branch-protection checks; verify the PR does not overstate enforcement.
+- [ ] 4.13 Revalidate the example's Archify artifact against the merged #78 contract before integrating #80; record the merged revision and any compatibility changes.
