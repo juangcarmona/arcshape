@@ -17,6 +17,22 @@ test.beforeAll(async () => {
   target = await mkdtemp(join(tmpdir(), "arcshape-assurance-e2e-"));
   siteFile = join(target, "docs", "architecture-site", "index.html");
   await runCli(["init", "--target", target, "--no-agents", "--yes"]);
+  await execFile("git", ["init", "-b", "main"], { cwd: target });
+  await execFile("git", ["config", "user.name", "ArcShape E2E"], {
+    cwd: target,
+  });
+  await execFile("git", ["config", "user.email", "e2e@arcshape.invalid"], {
+    cwd: target,
+  });
+  await execFile(
+    "git",
+    ["remote", "add", "origin", "https://github.com/example/arcshape.git"],
+    { cwd: target },
+  );
+  await execFile("git", ["add", "docs/architecture"], { cwd: target });
+  await execFile("git", ["commit", "-m", "test: create architecture fixture"], {
+    cwd: target,
+  });
   await buildSite();
 
   server = createServer(async (_request, response) => {
@@ -103,13 +119,24 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto(`${siteUrl}#/section/07`);
 
-  const diagram = page.locator(
-    'figure.diagram[role="img"][aria-label="ArcShape site, documentation, and package deployment paths"]',
-  );
+  const diagram = page.locator("figure.diagram").filter({
+    hasText: "ArcShape site, documentation, and package deployment paths",
+  });
   await expect(diagram).toHaveCount(1);
+  await expect(diagram).toContainText("Renderer: Mermaid");
+  await expect(diagram).toContainText("Source Markdown:");
+  await expect(diagram).toContainText("Source revision:");
+  await expect(diagram.locator('figcaption a[href*="/blob/"]')).toHaveCount(1);
+  await expect(diagram.locator('figcaption a[href*="/commit/"]')).toHaveCount(
+    1,
+  );
   await diagram.scrollIntoViewIfNeeded();
-  const svg = diagram.locator("svg");
+  const svg = diagram.locator(
+    'svg[role="img"][aria-labelledby][aria-describedby]',
+  );
   await expect(svg).toBeVisible();
+  await expect(svg.locator("title[id]")).toHaveCount(1);
+  await expect(svg.locator("desc[id]")).toHaveCount(1);
 
   const dimensions = await diagram.evaluate((figure) => {
     const figureRect = figure.getBoundingClientRect();

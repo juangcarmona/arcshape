@@ -1,0 +1,7 @@
+---
+import LandingPage from "../components/LandingPage.astro";
+import { getLocale } from "../data/locales.mjs";
+const locale = getLocale("en");
+---
+
+<LandingPage {locale} />

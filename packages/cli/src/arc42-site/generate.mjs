@@ -3,7 +3,7 @@
  * generate.mjs — arc42 snapshot generator (portable, bundled with the architecture-docs skill).
  *
  * Usage:
- *   node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>]
+ *   node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]
  *
  * Reads an arc42 documentation folder (README.md + NN-*.md sections with the
  * architecture-docs skill's frontmatter contract) and writes exactly one
@@ -32,7 +32,7 @@ const generatedMarker =
 function usage(code = 1) {
   process.stdout.write(
     [
-      "Usage: node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>]",
+      "Usage: node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]",
       "",
       "  docsDir   folder containing README.md and NN-*.md arc42 sections",
       "  --out     output HTML path (default: <docsDir>/../arc42-snapshot.html)",
@@ -49,7 +49,12 @@ function parseArgs(argv) {
   const flags = {};
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
-    if (arg === "--out" || arg === "--title" || arg === "--source-ref") {
+    if (
+      arg === "--out" ||
+      arg === "--title" ||
+      arg === "--source-ref" ||
+      arg === "--site-base"
+    ) {
       if (!argv[i + 1] || argv[i + 1].startsWith("--")) usage(1);
       flags[arg.slice(2)] = argv[i + 1];
       i += 1;
@@ -61,6 +66,9 @@ function parseArgs(argv) {
       positional.push(arg);
     }
   }
+  const siteBase = flags["site-base"] ?? "/";
+  if (!siteBase.startsWith("/") || !siteBase.endsWith("/"))
+    throw new Error("--site-base must start and end with a slash");
   return { positional, flags };
 }
 
@@ -155,6 +163,7 @@ async function main() {
     return slice;
   };
 
+  const revision = await gitRevision(docsDir);
   const sourceContext = await gitSourceContext(docsDir, flags["source-ref"]);
   const toSourcePath = (file) =>
     sourceContext
@@ -167,6 +176,8 @@ async function main() {
     title: docs.readme.title,
     sourceContext,
     sourceFile: toSourcePath(docs.readme.file),
+    sourceRevision: revision,
+    siteBase: flags["site-base"] ?? "/",
   });
   const sectionsRendered = [];
   for (let i = 0; i < docs.sections.length; i += 1) {
@@ -178,6 +189,8 @@ async function main() {
       title: section.title,
       sourceContext,
       sourceFile: toSourcePath(section.file),
+      sourceRevision: revision,
+      siteBase: flags["site-base"] ?? "/",
     });
     sectionsRendered.push({
       number: section.number,
@@ -187,7 +200,6 @@ async function main() {
     });
   }
 
-  const revision = await gitRevision(docsDir);
   const html = `${generatedMarker}\n${buildSnapshotHtml({
     readme: {
       title: docs.readme.title,
@@ -197,6 +209,9 @@ async function main() {
     sections: sectionsRendered,
     stackName,
     revision,
+    brandImage: (
+      await readFile(new URL("./arcshape-lockup.webp", import.meta.url))
+    ).toString("base64"),
   })}`;
 
   await mkdir(dirname(outFile), { recursive: true });

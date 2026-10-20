@@ -1,0 +1,40 @@
+{
+  "capturedAt": "2026-10-19",
+  "sourceRevision": "2a2f35c5299b1117fa316d13fc4a027f54a8c462",
+  "public": {
+    "base": "/",
+    "routes": [
+      {
+        "path": "/",
+        "language": "en",
+        "sections": ["#top", "#workflow", "#artifacts"],
+        "navigation": ["#workflow", "#artifacts", "engineering portal"],
+        "themeControl": false
+      }
+    ],
+    "externalDestinations": [
+      "https://github.com/juangcarmona/arcshape",
+      "https://juangcarmona.github.io/arcshape/",
+      "https://juangcarmona.github.io/arcshape/architecture/"
+    ]
+  },
+  "engineering": {
+    "base": "/arcshape/",
+    "routes": [
+      { "path": "/arcshape/", "language": "en", "themeControl": false },
+      { "path": "/arcshape/model/", "language": "en" },
+      {
+        "path": "/arcshape/architecture/",
+        "language": "en",
+        "themeControl": true,
+        "deepLinks": "/arcshape/architecture/#/section/<section-id>"
+      },
+      {
+        "path": "/arcshape/e2e/latest/",
+        "language": "en",
+        "conditional": "Published only when the validated E2E allowlist has a summary"
+      }
+    ],
+    "architectureDeepLinks": "/arcshape/architecture/#/section/<section-id>"
+  }
+}

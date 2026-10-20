@@ -1,0 +1,126 @@
+---
+import "../styles/portal.css";
+import BrandLockup from "../components/BrandLockup.astro";
+
+const base = import.meta.env.BASE_URL;
+const publicSite = "https://arcshape.dev";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Generated engineering views for ArcShape." />
+    <title>ArcShape Engineering</title>
+  </head>
+  <body data-base={base}>
+    <header class="site-header">
+      <a class="brand" href={base} aria-label="ArcShape engineering portal">
+        <BrandLockup id="site-header-brand" width={175} height={27} />
+      </a>
+      <span class="header-badge">AI driven engineering documentation</span>
+      <nav aria-label="Engineering navigation">
+        <a href={base}>Portal</a>
+        <a href={`${base}model/`}>Product Snapshot</a>
+        <a href={`${base}architecture/`}>Architecture Snapshot</a>
+      </nav>
+      <span class="header-spacer"></span>
+      <div class="appearance" role="group" aria-label="Appearance">
+        <button type="button" data-appearance-choice="light" aria-label="Light theme" title="Light theme" aria-pressed="false">☼</button>
+        <button type="button" data-appearance-choice="dark" aria-label="Dark theme" title="Dark theme" aria-pressed="false">☾</button>
+        <button type="button" data-appearance-choice="auto" aria-label="System theme" title="Theme follows system" aria-pressed="true">▣</button>
+      </div>
+    </header>
+    <main class="wrap">
+      <section class="page">
+      <p class="eyebrow">Generated from canonical sources</p>
+      <h1>Engineering portal</h1>
+      <p class="lede">
+        Explore the current product definition and architecture documentation as
+        generated views. These snapshots are projections; the linked Markdown
+        sources remain canonical.
+      </p>
+      <section class="cards" aria-label="Engineering artifacts">
+        <a class="card" href={`${base}model/`}>
+          <span class="label">PRODUCT SNAPSHOT</span>
+          <h2>Product model</h2>
+          <p>
+            Generated from ArcShape’s product model. The source definition lives
+            in the repository.
+          </p>
+        </a>
+        <a class="card" href={`${base}architecture/`}>
+          <span class="label">ARCHITECTURE SNAPSHOT</span>
+          <h2>Architecture documentation</h2>
+          <p>
+            A navigable reader generated from the canonical arc42 Markdown.
+          </p>
+        </a>
+        <a class="card" href={`${base}diagrams/publication-boundaries.html`}>
+          <span class="label">ARCHIFY DIAGRAM</span>
+          <h2>Publication boundaries</h2>
+          <p>
+            Static view of the public and engineering site build and hosting
+            paths, with source and revision provenance.
+          </p>
+        </a>
+        <a class="card" id="e2e-card" href={`${base}e2e/latest/`} hidden>
+          <span class="label">END-TO-END EVIDENCE</span>
+          <h2>Latest E2E run</h2>
+          <p>
+            Allowlisted run summary with commit and result. Raw test artifacts
+            remain private in GitHub Actions.
+          </p>
+        </a>
+      </section>
+      <p class="public">
+        <a href={publicSite}>Discover ArcShape at arcshape.dev ↗</a>
+      </p>
+      <p class="meta">
+        Source revision:
+        <a href={`https://github.com/juangcarmona/arcshape/commit/__SOURCE_SHA__`}
+          >__SOURCE_SHA__</a
+        ><br />Canonical sources:
+        <a
+          href="https://github.com/juangcarmona/arcshape/tree/__SOURCE_SHA__/docs/product/model"
+          >product model</a
+        >
+        ·
+        <a
+          href="https://github.com/juangcarmona/arcshape/tree/__SOURCE_SHA__/docs/architecture"
+          >architecture</a
+        >
+      </p>
+      </section>
+      <footer class="site-footer">
+        <a class="footer-brand" href={publicSite} aria-label="ArcShape — AI driven engineering documentation"><BrandLockup id="site-footer-brand" /></a>
+        <p>
+        ArcShape Engineering Portal · Static publication from GitHub Pages
+        </p>
+      </footer>
+    </main>
+    <script is:inline>
+      if (location.hash.startsWith("#/section/")) {
+        const base = document.body.dataset.base;
+        location.replace(`${base}architecture/${location.hash}`);
+      }
+      const root = document.documentElement;
+      const key = "arcshape-appearance";
+      const media = window.matchMedia("(prefers-color-scheme: dark)");
+      const buttons = document.querySelectorAll("[data-appearance-choice]");
+      function syncAssets(choice) {
+        const dark = choice === "dark" || (choice === "auto" && media.matches);
+        document.querySelectorAll("[data-theme-light][data-theme-dark]").forEach((image) => { image.src = dark ? image.dataset.themeDark : image.dataset.themeLight; });
+      }
+      function setAppearance(choice) {
+        if (choice === "auto") root.removeAttribute("data-appearance"); else root.setAttribute("data-appearance", choice);
+        localStorage.setItem(key, choice); syncAssets(choice);
+        buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.appearanceChoice === choice)));
+      }
+      setAppearance(localStorage.getItem(key) || "auto");
+      media.addEventListener("change", () => { if ((localStorage.getItem(key) || "auto") === "auto") syncAssets("auto"); });
+      buttons.forEach((button) => button.addEventListener("click", () => setAppearance(button.dataset.appearanceChoice)));
+    </script>
+  </body>
+</html>

@@ -11,8 +11,11 @@ test.beforeAll(async () => {
       decodeURIComponent(
         new URL(request.url, "http://localhost").pathname,
       ).replace(/^\/+/, "") || "index.html";
-    const file = resolve("src/public-site", relative);
-    if (!file.startsWith(resolve("src/public-site") + sep)) {
+    const file = resolve(
+      "src/public-site/dist",
+      relative.endsWith("/") ? `${relative}index.html` : relative,
+    );
+    if (!file.startsWith(resolve("src/public-site/dist") + sep)) {
       response.writeHead(403).end();
       return;
     }
@@ -22,6 +25,7 @@ test.beforeAll(async () => {
         ".html": "text/html; charset=utf-8",
         ".css": "text/css; charset=utf-8",
         ".png": "image/png",
+        ".svg": "image/svg+xml",
       };
       response
         .writeHead(200, {
@@ -57,15 +61,15 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "ArcShape home" })).toBeFocused();
   await page.keyboard.press("Tab");
-  await expect(
-    page.getByRole("link", { name: /Engineering portal/ }).first(),
-  ).toBeFocused();
+  await expect(page.getByRole("link", { name: "How it works" })).toBeFocused();
   await expect(
     page.getByRole("navigation", { name: "Main navigation" }),
   ).toBeVisible();
   await expect(page.getByRole("main")).toBeVisible();
   await expect(
-    page.getByRole("img", { name: /ArcShape — Architecture Documentation/ }),
+    page
+      .getByRole("link", { name: "ArcShape home" })
+      .locator("svg.brand-lockup"),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: /engineering portal/i }).first(),
@@ -102,13 +106,27 @@ test("public site supports keyboard use, responsive layout, contrast, and image 
       }),
       images: [...document.images].every(
         (image) =>
-          image.alt.length > 0 && image.complete && image.naturalWidth > 0,
+          (image.alt.length > 0 || Boolean(image.closest("a[aria-label]"))) &&
+          image.complete &&
+          image.naturalWidth > 0,
       ),
     };
   });
   expect(metrics.overflow).toBe(false);
   expect(metrics.contrasts.every((ratio) => ratio >= 4.5)).toBe(true);
   expect(metrics.images).toBe(true);
+  await page.goto(`${origin}/es/`);
+  await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await expect(page.getByRole("main")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tema claro" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tema oscuro" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Tema del sistema" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "View site in en" }),
+  ).toHaveAttribute("href", "/");
+  await page.goto(origin);
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.reload();
   await page.keyboard.press("Tab");

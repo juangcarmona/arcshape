@@ -1,0 +1,13 @@
+{
+  "name": "@arcshape/public-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "astro build",
+    "test": "node scripts/verify-build.mjs",
+    "verify": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "astro": "7.4.1"
+  }
+}

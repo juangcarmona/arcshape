@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "generator": {
+    "name": "Archify",
+    "version": "3.1.0",
+    "repository": "https://github.com/tt-a1i/archify",
+    "commit": "1c2b42d660e4a7571813fb43839c79e3e9ca7720"
+  },
+  "source": {
+    "repository": "https://github.com/juangcarmona/arcshape",
+    "revision": "cf247ae125d61051305e899afb2372c95ae94e72"
+  },
+  "candidate": {
+    "path": ".archify/arcshape-publications/arcshape-publication-boundaries.json",
+    "sha256": "89831c4f6076f162ef90924851789ed1b434e9cdcc48d93085ee66b3b0661d9d"
+  },
+  "artifact": {
+    "path": "diagrams/publication-boundaries.html",
+    "sha256": "b82670015541d1db0f40cc2e2f671476aebe712d8f110bb2225c74acd3548e83"
+  },
+  "licenses": [
+    "diagrams/ARCHIFY-LICENSE.txt",
+    "diagrams/THIRD_PARTY_NOTICES.md"
+  ]
+}

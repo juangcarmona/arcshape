@@ -106,11 +106,15 @@ ${lightBlockWithSectionColors}
 ${darkBlock}
     color-scheme: dark;
   }
+  :root:not([data-appearance='light']) .brand-logo-light { display:none; }
+  :root:not([data-appearance='light']) .brand-logo-dark { display:block; }
 }
 :root[data-appearance='dark'] {
 ${darkBlock}
   color-scheme: dark;
 }
+:root[data-appearance='dark'] .brand-logo-light { display:none; }
+:root[data-appearance='dark'] .brand-logo-dark { display:block; }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html, body { height: 100%; }
@@ -139,16 +143,20 @@ pre code { background: none; border: none; padding: 0; font-size: inherit; }
 
 /* ---- Header ---- */
 header.site {
-  display: flex; align-items: center; gap: 0.75rem; flex: none;
-  padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--line);
+  flex: none; border-bottom: 1px solid var(--line);
   background: var(--raise);
 }
+.header-inner { width:min(1160px,calc(100% - 2.5rem)); min-height:52px; margin:auto; display:flex; align-items:center; gap:.65rem; }
 header.site h1 { display:flex; align-items:center; gap:.5rem; margin:0; min-width:0; font-size:.95rem; white-space:nowrap; }
-.brand-mark { display:grid; place-items:center; width:1.5rem; height:1.5rem; border:1px solid var(--accent); border-radius:3px; color:var(--accent); font:700 .66rem/1 var(--mono); }
+.brand-mark { display:grid; place-items:center; flex:none; width:1.75rem; height:1.75rem; color:var(--accent); }
+.brand-mark svg { display:block; width:100%; height:100%; }
+.brand-logo-dark { display:none; filter:invert(1) hue-rotate(180deg); mix-blend-mode:screen; }
+.brand-title { color:var(--ink); font-size:.96rem; font-weight:650; letter-spacing:-.025em; }
+.brand-caption { color:var(--muted); font-size:.72rem; white-space:nowrap; }
 .project-context { min-width:0; overflow:hidden; color:var(--muted); font-size:.82rem; text-overflow:ellipsis; white-space:nowrap; }
 .revshort {
   font-family: var(--mono); font-size: 0.74rem; color: var(--muted);
-  border: 1px solid var(--line); border-radius: 3px; padding: 0.05rem 0.4rem; white-space: nowrap;
+  border: 1px solid var(--line); border-radius: 3px; padding: 0.12rem 0.4rem; white-space: nowrap;
 }
 .primary-nav { display:flex; align-self:stretch; align-items:stretch; gap:.25rem; margin-left:.5rem; }
 .primary-nav a { display:inline-flex; align-items:center; padding:.25rem .6rem; border-bottom:2px solid transparent; color:var(--muted); font-size:.9rem; }
@@ -238,6 +246,14 @@ figure.diagram {
   margin: 1rem 0; padding: 0.85rem; border: 1px solid var(--line); border-radius: 6px;
   background: #ffffff; color: #183b56; overflow-x: auto; overscroll-behavior-x: contain;
 }
+figure.diagram figcaption {
+  display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; align-items: baseline;
+  margin: 0 0 0.7rem; padding-bottom: 0.55rem; border-bottom: 1px solid #dfe5ee;
+  color: #46566e; font-size: 0.76rem; line-height: 1.5;
+}
+figure.diagram figcaption a { color: #2854d7; text-decoration: underline; text-underline-offset: 0.12em; }
+.diagram-title { color: #17243a; font-weight: 700; }
+.diagram-renderer { font-weight: 650; }
 figure.diagram svg { display: block; width: auto; max-width: min(100%, 72rem); height: auto; margin-inline: auto; }
 .diagram-missing { color: var(--muted); font-style: italic; }
 mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 0.05em; }
@@ -297,11 +313,13 @@ kbd {
   main#main { padding:1rem 1rem 3rem; }
 }
 @media (max-width: 520px) {
-  header.site { flex-wrap: wrap; gap: 0.5rem; }
+  .header-inner { width:calc(100% - 1.5rem); flex-wrap:wrap; gap:.5rem; padding:.5rem 0; }
   header.site h1 { flex:none; }
-  header.site .project-context { order:4; flex:1 0 calc(100% - 2.25rem); margin-left:2rem; }
-  header.site .spacer { display: none; }
-  header.site .appearance { margin-left: auto; }
+  header.site .project-context { order:5; flex:1 0 calc(100% - 2.25rem); margin-left:2.25rem; }
+  header.site .spacer { display:none; }
+  header.site .appearance { margin-left:auto; }
+  header.site .primary-nav { order:6; flex:1 0 100%; overflow-x:auto; margin:0; border-top:1px solid var(--line); }
+  header.site .primary-nav a { min-height:2.5rem; }
 }
 .overview-intro { max-width:72.5rem; margin:0 auto .5rem; }
 .overview-intro h2 { margin:0 0 .25rem; font-size:1.1rem; }
@@ -708,8 +726,18 @@ function stableJson(value) {
  * @param {Array<{number: string, title: string, description: string, html: string}>} input.sections
  * @param {string} input.stackName
  * @param {string|undefined} input.revision
+ * @param {string} input.brandImage ArcShape lockup WebP encoded as base64
  */
-export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
+export function buildSnapshotHtml({
+  readme,
+  sections,
+  stackName,
+  revision,
+  brandImage,
+}) {
+  const brandMark = brandImage
+    ? `<span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><image class="brand-logo-light" href="data:image/webp;base64,${brandImage}" x="-10.8" y="-3.9" width="60" height="60" preserveAspectRatio="none"/><image class="brand-logo-dark" href="data:image/webp;base64,${brandImage}" x="-10.8" y="-3.9" width="60" height="60" preserveAspectRatio="none"/></svg></span>`
+    : '<span class="brand-mark" aria-hidden="true"></span>';
   const revisionShort = revision
     ? `<span class="revshort" title="revision ${esc(revision)}">${esc(revision.slice(0, 7))}</span>`
     : '<span class="revshort" title="Not generated from a Git checkout">no revision</span>';
@@ -744,7 +772,7 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     "<head>",
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-${createHash("sha256").update(`\n${script}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
+    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; script-src 'sha256-${createHash("sha256").update(`\n${script}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
     '<meta name="color-scheme" content="light dark">',
     `<title>ArcShape — ${esc(stackName)} arc42 Architecture Snapshot</title>`,
     `<style>\n${style}\n</style>`,
@@ -752,7 +780,9 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     "<body>",
     '<a class="skip" href="#main">Skip to content</a>',
     '<header class="site">',
-    `<h1><span class="brand-mark" aria-hidden="true">AS</span><span>ArcShape</span></h1>`,
+    '<div class="header-inner">',
+    `<h1>${brandMark}<span class="brand-title">ArcShape</span></h1>`,
+    '<span class="brand-caption">AI driven engineering documentation</span>',
     `<span class="project-context" title="${esc(stackName)} · arc42">${esc(stackName)} · arc42</span>`,
     revisionShort,
     '<nav class="primary-nav" aria-label="Primary navigation"><a href="#/" data-route="#/">Overview</a></nav>',
@@ -765,6 +795,7 @@ export function buildSnapshotHtml({ readme, sections, stackName, revision }) {
     '<button type="button" class="iconbtn" id="ov-find" aria-haspopup="dialog" aria-label="Search (/)" title="Search (/)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.8" cy="6.8" r="4.4"/><path d="m10.2 10.2 3 3"/></svg></button>',
     '<button type="button" class="iconbtn mobile-nav-toggle" id="mobile-nav-toggle" aria-controls="arc42-nav" aria-expanded="false" aria-label="Open sections navigation" title="Open navigation"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>',
     '<button type="button" class="iconbtn" id="keys-open" aria-haspopup="dialog" aria-label="Keyboard shortcuts (?)" title="Keyboard shortcuts (?)">?</button>',
+    "</div>",
     "</header>",
     '<div id="shell">',
     '<aside class="nav" id="arc42-nav" aria-label="arc42 sections">',
