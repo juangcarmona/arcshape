@@ -5,6 +5,8 @@ import { tmpdir } from "node:os";
 import { spawnSync } from "node:child_process";
 import { expect, test } from "@playwright/test";
 
+test.use({ trace: "on" });
+
 const repositoryRoot = resolve(import.meta.dirname, "..");
 const archifySourceRevision = "437bd1153527d1baaaa209377b74d027f58a9d6a";
 const sourceAssets = [
