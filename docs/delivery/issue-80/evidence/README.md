@@ -5,8 +5,8 @@ This bundle records the locally built Death Star architecture example and the au
 ## Revisions and license
 
 - Source example: [`juangcarmona/starwars-deathstar-arc42-documentation`](https://github.com/juangcarmona/starwars-deathstar-arc42-documentation/tree/6a5576bda72de08a217ccdf94461c5eaeea9f8a5), revision `6a5576bda72de08a217ccdf94461c5eaeea9f8a5`.
-- ArcShape implementation revision used to generate the local screenshots: `edf7716a9283aeda498a8985714933f84cb9bd90`.
-- GitHub Actions tested PR head: `ada369a1d55f51e991cc905ae9a0369ffbc60181`; its synthetic merge revision was `817eedbee171c7e90460e76e14d07bdd1876bb7e`.
+- ArcShape implementation revision used to generate the local screenshots: `2c59529a49be017494887fcae376aa5893118cbf`.
+- GitHub Actions tested PR head: `9eeabf34307933ee1e0a9427492a855bcc9e3180`; its synthetic merge revision was `24b8148840b007be20a9b2db8ea006b3dd65da27`.
 - The adapted source material is licensed CC BY-NC 4.0. Attribution, a link to the license, and a modification notice are retained in both locale entry points. The example is fictional fan work and is not affiliated with or endorsed by Lucasfilm Ltd. or Disney. The non-commercial restriction must be considered before any later publication.
 
 The adaptation keeps the overview and all twelve arc42 sections in English and Spanish, along with the referenced artwork. It corrects the runtime-sequence inconsistencies identified in the source and the Spanish overview's English image alternative text. No narrative section was intentionally dropped. The original content was adapted to ArcShape's README, numbered-file, and frontmatter contract.
@@ -50,11 +50,11 @@ The adaptation keeps the overview and all twelve arc42 sections in English and S
 
 ## Automated browser evidence
 
-The [Assurance workflow run](https://github.com/juangcarmona/arcshape/actions/runs/39450320164) tested PR head `ada369a1d55f51e991cc905ae9a0369ffbc60181`. Its `arcshape-e2e-817eedbee171c7e90460e76e14d07bdd1876bb7e` artifact contains the Playwright HTML report, test results, and traces for both showcase scenarios. The workflow reports **7 E2E scenarios passed** and **passive DAST passed**; mutation analysis was skipped because it is scheduled/manual.
+The [Assurance workflow run](https://github.com/juangcarmona/arcshape/actions/runs/39453712336) tested PR head `9eeabf34307933ee1e0a9427492a855bcc9e3180`. Its `arcshape-e2e-24b8148840b007be20a9b2db8ea006b3dd65da27` artifact contains the Playwright HTML report, test results, and traces for both showcase scenarios. The workflow reports **7 E2E scenarios passed** and **passive DAST passed**; mutation analysis was skipped because it is scheduled/manual.
 
 The E2E scenarios build both locales at root and `/arcshape/`, assert all twelve sections, check Mermaid and Archify identity/accessibility/provenance, exercise keyboard interaction, and check narrow layout and offline behavior. The local screenshots above are from the same branch revision. The Archify source, generated document, and candidate manifest are retained alongside the example; E2E verifies the pinned renderer/source revisions and generated-artifact hashes.
 
-The current-head CI quality matrix, Product model, secret scan, dependency audit, CodeQL analysis, and SBOM/license policy are reported in [CI run 39450320134](https://github.com/juangcarmona/arcshape/actions/runs/39450320134), [Security run 39450320166](https://github.com/juangcarmona/arcshape/actions/runs/39450320166), and [CodeQL run 39450320244](https://github.com/juangcarmona/arcshape/actions/runs/39450320244). E2E and passive DAST are advisory contexts under the active ruleset. The separate `Repository conventions` context failed because an earlier commit in the PR history, `f2a6fe433871936c24df208f7d889202bdcaed16`, lacks the required `Refs #80` footer; a later commit adds the implement-skill commitlint preflight, but does not rewrite that historical commit.
+The current-head CI quality matrix, Product model, and Repository conventions checks are reported in [CI run 39453712280](https://github.com/juangcarmona/arcshape/actions/runs/39453712280); security, dependency, SBOM/license, and CodeQL checks are reported in [Security run 39453712445](https://github.com/juangcarmona/arcshape/actions/runs/39453712445) and [CodeQL run 39453712468](https://github.com/juangcarmona/arcshape/actions/runs/39453712468). All required contexts passed on this head. The original Repository conventions failure was fixed by adding the missing `Refs #80` footer to historical commit `f2a6fe433871936c24df208f7d889202bdcaed16` (rewritten as `c15316f7f4fa257dd9bd5d4ed498923a4f1ba943`). The 14-commit range and full source tree were preserved; only that commit message changed.
 
 ## Evidence limits and open review
 

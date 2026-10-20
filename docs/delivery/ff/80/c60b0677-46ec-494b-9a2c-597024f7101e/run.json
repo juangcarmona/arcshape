@@ -37,19 +37,20 @@
     {
       "name": "implement",
       "startedAt": "2026-10-20T14:46:00Z",
-      "endedAt": "2026-10-20T15:44:25Z",
+      "endedAt": "2026-10-20T16:04:37Z",
       "inputCommit": "b2286cb97bb8539451d616df465b49c198657726",
-      "outputCommit": "485dca5a21b0a1aa71a27e01f8b485de995db5da",
+      "outputCommit": "9eeabf34307933ee1e0a9427492a855bcc9e3180",
       "result": "implemented; done gate not passed",
       "evidence": [
         "Issue #80 transitioned proposed -> in-progress.",
-        "Implementation and evidence are committed through 485dca5a21b0a1aa71a27e01f8b485de995db5da.",
+        "Implementation and evidence are committed through 9eeabf34307933ee1e0a9427492a855bcc9e3180.",
         "OpenSpec validation: 5 passed, 0 failed; Product model validation passed.",
-        "Local verification at implementation revision edf7716: 7 Playwright E2E scenarios, 23 Vitest files / 104 tests, format, lint, typecheck, build, product model, secret/dependency/license/SBOM checks passed.",
-        "Current-head CI at 485dca5: all six quality-matrix jobs, Product model, secret scan, dependency audit, SBOM/license policy, CodeQL, E2E, and passive DAST passed; mutation analysis skipped as scheduled/manual.",
-        "Repository conventions failed only for historical commit f2a6fe433871936c24df208f7d889202bdcaed16, which lacks Refs #80. The implement-skill commitlint preflight rejects missing references and accepts the corrected footer; clearing the historical failure requires an authorized branch-history rewrite.",
-        "Evidence README and three inspected screenshots are committed under docs/delivery/issue-80/evidence/; exact-head E2E report and traces are retained in Actions run 39450823125.",
-        "Independent done-gate audit reviewed commit 485dca5 and returned Not Done: maintainer judgment remains open and #78 has not merged, so task 4.13 remains open."
+        "After the history repair, local CI-equivalent checks passed on the unchanged source tree: 23 Vitest files / 104 tests, 7 Playwright E2E scenarios, format, lint, typecheck, build, product model, secret/dependency/license/SBOM checks, and commitlint across all 14 commits.",
+        "Current-head CI at 9eeabf3 passed all six quality-matrix jobs, Product model, Repository conventions, secret scan, dependency audit, SBOM/license policy, CodeQL, E2E, and passive DAST; mutation analysis skipped as scheduled/manual.",
+        "Repository conventions was fixed by adding Refs #80 to historical commit f2a6fe4. Current-head CI run 39453712280 confirms the check now passes.",
+        "The rebase range-diff preserved all 14 commits; only f2a6fe4's message gained its missing footer, and the complete tree is byte-for-byte identical to backup ref backup/docs-80-arc42-showcase-20261020.",
+        "Evidence README and three inspected screenshots are committed under docs/delivery/issue-80/evidence/; exact-head E2E report and traces are retained in Actions run 39453712336.",
+        "Independent done-gate audit found the implementation and evidence present. Maintainer judgment remains open and #78 has not merged, so task 4.13 remains open."
       ]
     }
   ],
@@ -94,15 +95,43 @@
         "docs/delivery/issue-80/evidence/README.md",
         "Actions run 39450823416 (CI), 39450823512 (Security), 39450823444 (CodeQL), and 39450823125 (Assurance)."
       ]
+    },
+    {
+      "reviewerModel": "gpt-6-astra",
+      "kind": "independent-done-gate-audit-after-convention-repair",
+      "reviewedCommit": "9eeabf34307933ee1e0a9427492a855bcc9e3180",
+      "decision": "not-done",
+      "findings": [
+        "The historical commit footer is repaired; current-head Repository conventions and all other required CI contexts pass.",
+        "The complete tree matches the retained backup and all 14 commits are preserved; only the deficient commit message changed.",
+        "Maintainer judgment remains open, and #78 / PR #79 remains unmerged, so task 4.13 still requires revalidation before integration."
+      ],
+      "evidence": [
+        "CI run 39453712280, Security run 39453712445, CodeQL run 39453712468, and Assurance run 39453712336.",
+        "git range-diff and byte-for-byte tree comparison against backup/docs-80-arc42-showcase-20261020."
+      ]
     }
   ],
-  "corrections": [],
-  "stopReason": "Done gate not passed. Repository conventions fails on historical commit f2a6fe433871936c24df208f7d889202bdcaed16, and resolving it requires maintainer authorization to rewrite the pushed PR branch history. Human-owned review remains open, and integration is blocked until issue #78 merges and task 4.13 revalidates the Archify contract. PR #81 remains draft; issue #80 remains status:in-progress.",
+  "corrections": [
+    {
+      "gate": "Repository conventions",
+      "round": 1,
+      "requestedChanges": "Add the required Refs #80 footer to commit f2a6fe4 without changing its tree.",
+      "resultingCommit": "c15316f7f4fa257dd9bd5d4ed498923a4f1ba943",
+      "rerunOutcomes": [
+        "npx --no -- commitlint --from origin/main --to HEAD --verbose: pass.",
+        "GitHub Repository conventions at current PR head: pass (run 39453712280).",
+        "Full current-head CI, Security, CodeQL, and Assurance contexts: pass; mutation analysis skipped by schedule/manual policy.",
+        "git range-diff: all 14 commits preserved; only the target commit message changed. Tree comparison with dated backup: identical."
+      ]
+    }
+  ],
+  "stopReason": "Done gate remains unmet because maintainer-owned judgment is open and issue #78 / PR #79 remains unmerged; task 4.13 requires revalidation against the merged Archify contract before integration. The commit-convention failure is fixed and all current-head checks pass. PR #81 remains draft and issue #80 remains status:in-progress.",
   "pullRequest": {
     "number": 81,
     "url": "https://github.com/juangcarmona/arcshape/pull/81",
     "draft": true,
-    "headSha": "485dca5a21b0a1aa71a27e01f8b485de995db5da"
+    "headSha": "9eeabf34307933ee1e0a9427492a855bcc9e3180"
   },
   "links": {
     "issue": "https://github.com/juangcarmona/arcshape/issues/80",
@@ -112,6 +141,7 @@
     "Executor model variant is not exposed by the active harness. A reviewer model was explicitly selected at user direction; distinctness cannot be independently attested by the harness.",
     "Issue #78 remains open and its pull request #79 remains draft.",
     "The user explicitly directed Fast Forward to proceed despite the unexposed executor-model variant; the limitation remains disclosed and was not treated as attested distinctness.",
-    "PR #81 was not marked ready, no lifecycle transition was made, and integrate/review stages were not run because Done is unmet."
+    "The user authorized fixing PR #81 CI; the exact-value force-with-lease history update changed only the missing footer, with backup ref backup/docs-80-arc42-showcase-20261020 retained.",
+    "PR #81 was not marked ready, no lifecycle transition was made, and integrate/review stages were not run because human review and the #78 dependency remain unmet."
   ]
 }
