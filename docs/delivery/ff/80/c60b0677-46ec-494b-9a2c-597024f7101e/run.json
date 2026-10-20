@@ -24,14 +24,27 @@
     {
       "name": "propose",
       "startedAt": "2026-10-20T14:43:37Z",
-      "endedAt": null,
+      "endedAt": "2026-10-20T14:46:00Z",
       "inputCommit": "8c1e701ae070ba4afe042b84217af92551a35bd0",
-      "outputCommit": null,
-      "result": "review-in-progress",
+      "outputCommit": "b2286cb97bb8539451d616df465b49c198657726",
+      "result": "approved",
       "evidence": [
         "OpenSpec validation: 5 passed, 0 failed.",
         "PR #81 is the existing draft for #80; no duplicate branch or PR created.",
         "Plan pins the unmerged #78 contract to PR #79 head eb4974b8db8b158fa907ceff15c247d198d07cff and requires revalidation before integration."
+      ]
+    }
+    ,
+    {
+      "name": "implement",
+      "startedAt": "2026-10-20T14:46:00Z",
+      "endedAt": null,
+      "inputCommit": "b2286cb97bb8539451d616df465b49c198657726",
+      "outputCommit": null,
+      "result": "in-progress",
+      "evidence": [
+        "Issue #80 transitioned proposed -> in-progress.",
+        "OpenSpec apply status: 0/23 tasks complete; schema spec-driven."
       ]
     }
   ],
@@ -47,6 +60,20 @@
       ],
       "evidence": [
         "Plan review response for #80."
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-astra",
+      "kind": "independent-plan-review",
+      "reviewedCommit": "b2286cb97bb8539451d616df465b49c198657726",
+      "decision": "approve",
+      "findings": [
+        "The work item, proposal, design decision 3, and task 2.2 consistently pin PR #79 contract at eb4974b8db8b158fa907ceff15c247d198d07cff.",
+        "Task 4.13 requires revalidation against merged #78 before #80 integration.",
+        "Bilingual adaptation, licensing, provenance, accessibility, E2E coverage, and evidence scope are sufficiently specified."
+      ],
+      "evidence": [
+        "Final independent plan review of PR #81 head b2286cb97bb8539451d616df465b49c198657726."
       ]
     }
   ],
