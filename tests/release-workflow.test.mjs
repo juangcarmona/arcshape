@@ -35,7 +35,18 @@ describe("Changesets release workflow", () => {
 
   it("publishes only a merged Version Packages commit or explicit recovery dispatch", () => {
     const publish = workflow.jobs["publish-stable"];
+    expect(workflow.jobs["release-mode"].outputs).toEqual({
+      mode: "${{ steps.mode.outputs.mode }}",
+    });
+    expect(publish.needs).toBe("release-mode");
+    expect(publish.if).toContain("needs.release-mode.outputs.mode == 'stable'");
     expect(publish.if).toContain(
+      "startsWith(github.event.head_commit.message, 'chore: Version Packages')",
+    );
+    expect(publish.if).toContain(
+      "startsWith(github.event.head_commit.message, 'Version Packages')",
+    );
+    expect(publish.if).not.toContain(
       "contains(github.event.head_commit.message, 'Version Packages')",
     );
     expect(publish.if).toContain("publish-current-stable");
@@ -64,6 +75,22 @@ describe("Changesets release workflow", () => {
     );
     expect(serializedSteps).toContain("gh release create");
     expect(serializedSteps).toContain("scripts/upload-release-sbom.mjs");
+  });
+
+  it("does not treat a body mention as a Version Packages release subject", () => {
+    const isVersionPackagesSubject = (message) =>
+      message.startsWith("chore: Version Packages") ||
+      message.startsWith("Version Packages");
+
+    expect(
+      isVersionPackagesSubject("chore: Version Packages (#91)\n\nbody"),
+    ).toBe(true);
+    expect(isVersionPackagesSubject("Version Packages\n\nbody")).toBe(true);
+    expect(
+      isVersionPackagesSubject(
+        "chore: adopt release flow (#87)\n\nThe Version Packages flow is documented here.",
+      ),
+    ).toBe(false);
   });
 
   it("keeps GitHub Release creation inside the single publisher workflow", () => {

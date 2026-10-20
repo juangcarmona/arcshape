@@ -25,6 +25,26 @@ concurrency:
 permissions: {}
 
 jobs:
+  # Resolve the release train before a protected publish job is considered.
+  release-mode:
+    name: Determine release mode
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: mode
+        shell: bash
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "${{ github.event.inputs.task }}" = "publish-current-stable" ]; then
+            echo "mode=stable" >> "$GITHUB_OUTPUT"
+          elif [ -f .changeset/pre.json ]; then
+            echo "mode=prerelease" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=stable" >> "$GITHUB_OUTPUT"
+          fi
+
   version-pr:
     name: Maintain Version Packages PR
     if: github.event_name == 'push'
@@ -51,9 +71,10 @@ jobs:
 
   publish-stable:
     name: Publish stable release
+    needs: release-mode
     if: >-
-      (github.event_name == 'push' && contains(github.event.head_commit.message, 'Version Packages')) ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.task == 'publish-current-stable')
+      (github.event_name == 'push' && needs.release-mode.outputs.mode == 'stable' && (startsWith(github.event.head_commit.message, 'chore: Version Packages') || startsWith(github.event.head_commit.message, 'Version Packages'))) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.task == 'publish-current-stable' && needs.release-mode.outputs.mode == 'stable')
     runs-on: ubuntu-latest
     environment:
       name: npm-publish
