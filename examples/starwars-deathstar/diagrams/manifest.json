@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "generator": {
+    "name": "Archify",
+    "version": "3.1.0",
+    "repository": "https://github.com/tt-a1i/archify",
+    "commit": "1c2b42d660e4a7571813fb43839c79e3e9ca7720"
+  },
+  "source": {
+    "repository": "https://github.com/juangcarmona/arcshape",
+    "revision": "2bae49f8546eb020aa48d1e5a4c203a6da0506a2"
+  },
+  "candidate": {
+    "path": "examples/starwars-deathstar/diagrams/death-star-architecture.json",
+    "sha256": "6c292ba5060ee3cfcadc7b444bc984a981a75860db9ada8ec07e18b345a6f592"
+  },
+  "artifact": {
+    "path": "examples/starwars-deathstar/diagrams/death-star-architecture.html",
+    "sha256": "68acf26af968799ce826b56cdba597951a47068b8882fcd081b9d51647f884b2"
+  },
+  "licenses": [
+    "examples/starwars-deathstar/diagrams/ARCHIFY-LICENSE.txt",
+    "examples/starwars-deathstar/diagrams/THIRD_PARTY_NOTICES.md"
+  ]
+}
