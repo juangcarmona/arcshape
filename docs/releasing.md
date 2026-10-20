@@ -16,7 +16,10 @@ remains `arcshape`.
 3. A maintainer reviews and merges `Version Packages`. Merging that reviewed
    commit is the release decision; feature pull requests do not publish
    directly.
-4. The `publish-stable` job runs from the merged commit in the protected
+4. The workflow resolves the release mode first. The `publish-stable` job only
+   accepts a stable-mode commit whose subject starts with `Version Packages`
+   or `chore: Version Packages`; mentioning those words in an ordinary merge
+   body is not sufficient. It runs from the merged commit in the protected
    `npm-publish` environment. It runs the formatting, lint, typecheck, test,
    build, dependency-audit, SBOM, and license-policy checks, then publishes
    `@arcshape/cli` through npm Trusted Publishing with provenance.
@@ -39,9 +42,11 @@ after the package identity and trusted-publishing configuration are approved.
 
 For subsequent releases, configure npm Trusted Publishing for GitHub Actions
 with repository `juangcarmona/arcshape`, workflow filename `publish.yml`, and
-environment `npm-publish`. The GitHub environment must have its required human
-reviewer configured. The workflow uses `GITHUB_TOKEN` for repository evidence
-and OIDC (`id-token: write`) for npm; it does not use a long-lived npm token.
+environment `npm-publish`. The environment must have its required human
+reviewer configured and no tag-only deployment policy: this workflow publishes
+from `main`, like the ProductShape release workflow. The workflow uses
+`GITHUB_TOKEN` for repository evidence and OIDC (`id-token: write`) for npm; it
+does not use a long-lived npm token.
 
 ## Recovery
 
