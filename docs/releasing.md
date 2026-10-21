@@ -17,7 +17,8 @@ remains `arcshape`.
    allows this exact Changesets automation message because it is not an issue
    work item. The action also disables Husky only for its push to the reserved
    `changeset-release/main` automation branch, which intentionally does not use
-   the developer branch-name convention.
+   the developer branch-name convention. The publish job applies the same bypass
+   when pushing its package tag from GitHub's detached checkout.
 3. A maintainer reviews and merges `Version Packages`. Merging that reviewed
    commit is the release decision; feature pull requests do not publish
    directly.

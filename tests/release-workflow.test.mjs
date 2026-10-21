@@ -76,6 +76,9 @@ describe("Changesets release workflow", () => {
     const tagStep = publish.steps.find(
       (step) => step.name === "Synchronize package tag",
     );
+    expect(tagStep.env).toMatchObject({
+      HUSKY: "0",
+    });
     expect(tagStep.run).toContain('git tag "${tag}" "$RELEASE_COMMIT"');
     const releaseStep = publish.steps.find(
       (step) => step.name === "Create or reuse GitHub Release",
