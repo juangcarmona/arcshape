@@ -149,6 +149,7 @@ jobs:
         env:
           PACKAGE_TAG: ${{ steps.release-context.outputs.package_tag }}
           RELEASE_COMMIT: ${{ steps.release-context.outputs.release_commit }}
+          HUSKY: "0"
         run: |
           tag="$PACKAGE_TAG"
           if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
