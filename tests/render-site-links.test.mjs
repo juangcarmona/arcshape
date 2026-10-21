@@ -4,7 +4,7 @@ import { renderMarkdown } from "../packages/cli/src/arc42-site/render.mjs";
 describe("reader site source links", () => {
   it("rewrites repository file and directory references to GitHub", async () => {
     const result = await renderMarkdown(
-      "[CLI](../../packages/cli/src/bin/arcshape.mjs) [product model](../product/model/)",
+      "[CLI](../../../packages/cli/src/bin/arcshape.mjs) [product model](../../product/model/)",
       {
         fileToRoute: new Map(),
         sourceContext: {
@@ -12,7 +12,7 @@ describe("reader site source links", () => {
           repositoryUrl: "https://github.com/example/arcshape",
           ref: "codex/feature",
         },
-        sourceFile: "docs/architecture/04-solution-strategy.md",
+        sourceFile: "docs/architecture/04-solution-strategy/README.md",
       },
     );
 
@@ -26,15 +26,21 @@ describe("reader site source links", () => {
   });
 
   it("keeps architecture navigation links inside the generated site", async () => {
-    const result = await renderMarkdown("[Next](05-building-block-view.md)", {
-      fileToRoute: new Map([["05-building-block-view.md", "#/section/05"]]),
-      sourceContext: {
-        root: process.cwd(),
-        repositoryUrl: "https://github.com/example/arcshape",
-        ref: "main",
+    const result = await renderMarkdown(
+      "[Next](../05-building-block-view/README.md)",
+      {
+        fileToRoute: new Map([
+          ["05-building-block-view/README.md", "#/section/05"],
+        ]),
+        sourceContext: {
+          root: process.cwd(),
+          repositoryUrl: "https://github.com/example/arcshape",
+          ref: "main",
+        },
+        sourceFile: "docs/architecture/04-solution-strategy/README.md",
+        documentPath: "04-solution-strategy/README.md",
       },
-      sourceFile: "docs/architecture/04-solution-strategy.md",
-    });
+    );
     expect(result.html).toContain('href="#/section/05"');
   });
 
@@ -71,7 +77,7 @@ describe("reader site source links", () => {
     "maps the Archify artifact to its %s publication route",
     async (_label, siteBase, expected) => {
       const result = await renderMarkdown(
-        "[Publication boundaries](../../src/engineering-portal/public/diagrams/publication-boundaries.html)",
+        "[Publication boundaries](../../../src/engineering-portal/public/diagrams/publication-boundaries.html)",
         {
           fileToRoute: new Map(),
           sourceContext: {
@@ -79,7 +85,7 @@ describe("reader site source links", () => {
             repositoryUrl: "https://github.com/example/arcshape",
             ref: "main",
           },
-          sourceFile: "docs/architecture/07-deployment-view.md",
+          sourceFile: "docs/architecture/07-deployment-view/README.md",
           siteBase,
         },
       );
@@ -103,7 +109,7 @@ describe("reader site source links", () => {
           repositoryUrl: "https://github.com/example/arcshape",
           ref: "release/2026",
         },
-        sourceFile: "docs/architecture/04-solution-strategy.md",
+        sourceFile: "docs/architecture/04-solution-strategy/README.md",
         sourceRevision: revision,
       },
     );
@@ -111,7 +117,7 @@ describe("reader site source links", () => {
     expect(result.html).toContain("Renderer: Mermaid");
     expect(result.html).toContain("Deployment boundary");
     expect(result.html).toContain(
-      "https://github.com/example/arcshape/blob/release%2F2026/docs/architecture/04-solution-strategy.md",
+      "https://github.com/example/arcshape/blob/release%2F2026/docs/architecture/04-solution-strategy/README.md",
     );
     expect(result.html).toContain(
       `https://github.com/example/arcshape/commit/${revision}`,

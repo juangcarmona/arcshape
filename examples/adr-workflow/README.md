@@ -1,6 +1,6 @@
 # ADR workflow examples
 
-These fixtures exercise the `arc-adr` capability's main decisions. New records use YAML frontmatter for ID, title, status, date, and deciders, follow `ADR-0001-kebab-case-title.md` naming when the repository has no convention, and appear in the canonical `docs/adr/README.md` index. Run `npm test -- --run tests/adr-workflow.test.mjs` to check the examples and the provider-neutral packaged skill.
+These fixtures exercise the `arc-adr` capability's main decisions. New records use YAML frontmatter for ID, title, status, date, and deciders, follow `ADR-0001-kebab-case-title.md` naming when the repository has no convention, and appear in the canonical `docs/architecture/09-architecture-decisions/README.md` index, sorted alphabetically by title. Run `npm test -- --run tests/adr-workflow.test.mjs` to check the examples and the provider-neutral packaged skill.
 
 ## Create a record from a supplied decision
 

@@ -56,8 +56,8 @@ npx arcshape session next
 Copy the canonical Markdown into an Obsidian vault:
 
 ```sh
-npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --include docs/adr --dry-run
-npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --include docs/adr
+npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --include docs/architecture/09-architecture-decisions --dry-run
+npx arcshape sync obsidian --vault ~/Documents/ObsidianVault --include docs/architecture/09-architecture-decisions
 ```
 
 The sync stores a local manifest beside the exported notes, updates copies only while they still match the last ArcShape version, and reports local edits as conflicts.
@@ -69,7 +69,7 @@ CONFLUENCE_EMAIL=you@example.com CONFLUENCE_API_TOKEN=... \
   npx arcshape sync confluence \
   --base-url https://example.atlassian.net/wiki \
   --space-id 12345 --parent-id 123456 --title-prefix MyProject \
-  --include docs/adr --dry-run
+  --include docs/architecture/09-architecture-decisions --dry-run
 ```
 
 Remove `--dry-run` to create or update the pages. ArcShape records a local baseline in `.arcshape/confluence-sync/`; later runs stop on remote edits to managed pages. For a single-page destination, use `--page-id <id>` instead of `--space-id` and `--parent-id`.

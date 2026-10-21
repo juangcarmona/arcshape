@@ -319,9 +319,11 @@ async function collectSupportingDocuments(
 
     const file = `${directory}/${relativePath}`.split(sep).join("/");
     const raw = await readFile(join(sectionRoot, relativePath), "utf8");
+    let body = raw;
     if (/^---\r?\n[\s\S]*?\r?\n---\r?\n/.test(raw)) {
       try {
         const parsed = parseFrontmatter(raw, file);
+        body = parsed.body;
         if (Object.hasOwn(parsed.frontmatter, "arc42-section"))
           problems.push(
             `${file}: supporting documents cannot carry arc42-section; only ${directory}/README.md defines section ${number}`,
@@ -342,7 +344,7 @@ async function collectSupportingDocuments(
         .join("/")}`,
       title: supportingTitle(raw, basename(entry.name, ".md")),
       description: "",
-      body: raw,
+      body,
       section: number,
     });
   }

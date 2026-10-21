@@ -92,7 +92,8 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
     repositoryRoot,
     "docs",
     "architecture",
-    "07-deployment-view.md",
+    "07-deployment-view",
+    "README.md",
   );
   const targetSection = join(
     target,

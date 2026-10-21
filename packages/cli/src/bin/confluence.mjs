@@ -241,12 +241,10 @@ function safePageId(value) {
 }
 
 function isBlankHtml(value) {
-  return (
-    value
-      .replace(/<[^>]*>/g, "")
-      .replace(/&nbsp;|&#160;|\u00a0/gi, "")
-      .trim() === ""
-  );
+  const document = new JSDOM(value).window.document;
+  for (const element of document.querySelectorAll("script,style"))
+    element.remove();
+  return !(document.body?.textContent ?? "").replace(/\u00a0/g, "").trim();
 }
 
 function escapeHtml(value) {

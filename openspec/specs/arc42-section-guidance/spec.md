@@ -89,7 +89,7 @@ The ADR skill SHALL follow the repository's canonical ADR convention and keep ea
 #### Scenario: Create an ADR in a repository with no ADR convention
 
 - **WHEN** a maintainer requests an ADR and the repository has no ADR location or naming convention
-- **THEN** the skill creates `docs/adr/README.md`, uses sequential `ADR-0001-kebab-case-title.md` filenames, and gives every record YAML frontmatter for ID, title, status, date, and deciders
+- **THEN** the skill creates `docs/architecture/09-architecture-decisions/README.md`, uses sequential `ADR-0001-kebab-case-title.md` filenames below section 09, and gives every record YAML frontmatter for ID, title, status, date, and deciders
 
 #### Scenario: Follow an existing ADR convention
 

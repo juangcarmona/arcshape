@@ -48,6 +48,13 @@ describe("architecture section directories", () => {
         title: "Supporting architecture material",
       },
     ]);
+    expect(docs.sections[8].supporting).toMatchObject([
+      {
+        file: "09-architecture-decisions/platform/ADR-0001-use-sqlite.md",
+        route: "#/section/09/platform/ADR-0001-use-sqlite",
+        title: "ADR-0001: Use SQLite for local session state",
+      },
+    ]);
   });
 
   it("validates canonical links and citations, including supporting Markdown", async () => {
@@ -191,6 +198,9 @@ describe("architecture section directories", () => {
     ))
       expect(html).toContain(`href="#/section/${number}"`);
     expect(html).toContain("#/section/01/supporting-document");
+    expect(html).toContain("#/section/09/platform/ADR-0001-use-sqlite");
+    expect(html).toContain("ADR-0001: Use SQLite for local session state");
+    expect(html).not.toContain("status: Proposed");
     expect(html).toContain("Supporting architecture material");
   }, 60_000);
 });
@@ -258,6 +268,22 @@ async function makeFixture({
         (await readFile(support, "utf8")).replace("DIGEST", digest),
       );
     }
+
+    const adrDirectory = join(docsDir, "09-architecture-decisions", "platform");
+    await mkdir(adrDirectory, { recursive: true });
+    await writeFile(
+      join(adrDirectory, "ADR-0001-use-sqlite.md"),
+      '---\ntitle: "ADR-0001: Use SQLite for local session state"\nstatus: Proposed\n---\n# ADR-0001: Use SQLite for local session state\n',
+    );
+    const decisionsReadme = join(
+      docsDir,
+      "09-architecture-decisions",
+      "README.md",
+    );
+    await writeFile(
+      decisionsReadme,
+      `${await readFile(decisionsReadme, "utf8")}\n[ADR-0001](platform/ADR-0001-use-sqlite.md)\n`,
+    );
   }
   return { root, docsDir };
 }
