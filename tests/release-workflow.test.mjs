@@ -26,6 +26,9 @@ describe("Changesets release workflow", () => {
       commit: "chore(release): version packages",
       title: "Version Packages",
     });
+    expect(changesetsStep.env).toMatchObject({
+      HUSKY: "0",
+    });
     expect(JSON.stringify(versionSteps)).not.toMatch(
       /npm publish|changeset publish/,
     );

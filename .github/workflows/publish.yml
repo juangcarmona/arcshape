@@ -68,6 +68,7 @@ jobs:
           title: "Version Packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HUSKY: "0"
 
   publish-stable:
     name: Publish stable release
