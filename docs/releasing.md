@@ -13,12 +13,15 @@ remains `arcshape`.
    `.github/workflows/publish.yml` creates or updates one `Version Packages`
    pull request. That pull request runs `npm run version`, which updates the
    package version, changelog, and lockfile and consumes the pending changesets.
+   The generated commit is `chore(release): version packages`; commitlint
+   allows this exact Changesets automation message because it is not an issue
+   work item.
 3. A maintainer reviews and merges `Version Packages`. Merging that reviewed
    commit is the release decision; feature pull requests do not publish
    directly.
 4. The workflow resolves the release mode first. The `publish-stable` job only
    accepts a stable-mode commit whose subject starts with `Version Packages`
-   or `chore: Version Packages`; mentioning those words in an ordinary merge
+   or `chore(release): version packages`; mentioning those words in an ordinary merge
    body is not sufficient. It runs from the merged commit in the protected
    `npm-publish` environment. It runs the formatting, lint, typecheck, test,
    build, dependency-audit, SBOM, and license-policy checks, then publishes
