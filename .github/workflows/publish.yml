@@ -64,7 +64,7 @@ jobs:
       - uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d # v1
         with:
           version: npm run version
-          commit: "chore: Version Packages"
+          commit: "chore(release): version packages"
           title: "Version Packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -73,7 +73,7 @@ jobs:
     name: Publish stable release
     needs: release-mode
     if: >-
-      (github.event_name == 'push' && needs.release-mode.outputs.mode == 'stable' && (startsWith(github.event.head_commit.message, 'chore: Version Packages') || startsWith(github.event.head_commit.message, 'Version Packages'))) ||
+      (github.event_name == 'push' && needs.release-mode.outputs.mode == 'stable' && (startsWith(github.event.head_commit.message, 'chore(release): version packages') || startsWith(github.event.head_commit.message, 'Version Packages'))) ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.task == 'publish-current-stable' && needs.release-mode.outputs.mode == 'stable')
     runs-on: ubuntu-latest
     environment:

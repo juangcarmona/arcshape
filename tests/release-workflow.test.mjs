@@ -23,7 +23,7 @@ describe("Changesets release workflow", () => {
     );
     expect(changesetsStep.with).toMatchObject({
       version: "npm run version",
-      commit: "chore: Version Packages",
+      commit: "chore(release): version packages",
       title: "Version Packages",
     });
     expect(JSON.stringify(versionSteps)).not.toMatch(
@@ -41,7 +41,7 @@ describe("Changesets release workflow", () => {
     expect(publish.needs).toBe("release-mode");
     expect(publish.if).toContain("needs.release-mode.outputs.mode == 'stable'");
     expect(publish.if).toContain(
-      "startsWith(github.event.head_commit.message, 'chore: Version Packages')",
+      "startsWith(github.event.head_commit.message, 'chore(release): version packages')",
     );
     expect(publish.if).toContain(
       "startsWith(github.event.head_commit.message, 'Version Packages')",
@@ -86,11 +86,11 @@ describe("Changesets release workflow", () => {
 
   it("does not treat a body mention as a Version Packages release subject", () => {
     const isVersionPackagesSubject = (message) =>
-      message.startsWith("chore: Version Packages") ||
+      message.startsWith("chore(release): version packages") ||
       message.startsWith("Version Packages");
 
     expect(
-      isVersionPackagesSubject("chore: Version Packages (#91)\n\nbody"),
+      isVersionPackagesSubject("chore(release): version packages\n\nbody"),
     ).toBe(true);
     expect(isVersionPackagesSubject("Version Packages\n\nbody")).toBe(true);
     expect(
