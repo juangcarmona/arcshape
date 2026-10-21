@@ -5,8 +5,9 @@
  * Usage:
  *   node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]
  *
- * Reads an arc42 documentation folder (README.md + NN-*.md sections with the
- * architecture-docs skill's frontmatter contract) and writes exactly one
+ * Reads an arc42 documentation folder (README.md + twelve NN-slug section
+ * directories, or the legacy flat NN-*.md layout) with the
+ * architecture-docs skill's frontmatter contract and writes exactly one
  * self-contained HTML file: inline styles, inline pre-rendered Mermaid SVGs,
  * inert JSON data, one ES5 router. No external resources; opens from file://.
  * Generation is deterministic and never modifies authored files.
@@ -34,7 +35,7 @@ function usage(code = 1) {
     [
       "Usage: node generate.mjs <docsDir> [--out <file>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]",
       "",
-      "  docsDir   folder containing README.md and NN-*.md arc42 sections",
+      "  docsDir   folder containing README.md and twelve arc42 section directories",
       "  --out     output HTML path (default: <docsDir>/../arc42-snapshot.html)",
       "  --title   page title override (default: derived from docsDir parent folder)",
       "  --source-ref  Git branch, tag, or ref for repository source links (default: current branch)",
@@ -138,18 +139,28 @@ async function main() {
     );
   }
 
-  // Route map: section file names and README.md -> hash routes.
-  const fileToRoute = new Map(
-    docs.sections.map((s) => [s.file, `#/section/${s.number}`]),
-  );
-  fileToRoute.set(docs.readme.file, "#/");
+  // Route map: every authored Markdown file gets a stable reader route.
+  const fileToRoute = new Map([[docs.readme.file, "#/"]]);
+  for (const section of docs.sections) {
+    fileToRoute.set(section.file, `#/section/${section.number}`);
+    for (const supporting of section.supporting)
+      fileToRoute.set(supporting.file, supporting.route);
+  }
 
   // Pre-render every mermaid diagram across all documents in one batch.
-  const readmeMermaid = extractMermaidSources(docs.readme.body);
-  const sectionMermaid = docs.sections.map((s) =>
-    extractMermaidSources(s.body),
+  const documents = [
+    docs.readme,
+    ...docs.sections.flatMap((section) => [section, ...section.supporting]),
+  ];
+  const documentMermaid = new Map(
+    documents.map((document) => [
+      document.file,
+      extractMermaidSources(document.body),
+    ]),
   );
-  const allMermaid = [...readmeMermaid, ...sectionMermaid.flat()];
+  const allMermaid = documents.flatMap((document) =>
+    documentMermaid.get(document.file),
+  );
   process.stdout.write(
     `arc42-snapshot: ${docs.sections.length} sections, ${allMermaid.length} mermaid diagram(s)\n`,
   );
@@ -169,6 +180,7 @@ async function main() {
     sourceContext
       ? relative(sourceContext.root, join(docsDir, file)).split(sep).join("/")
       : undefined;
+  const readmeMermaid = documentMermaid.get(docs.readme.file);
 
   const readmeRendered = await renderMarkdown(docs.readme.body, {
     fileToRoute,
@@ -176,6 +188,7 @@ async function main() {
     title: docs.readme.title,
     sourceContext,
     sourceFile: toSourcePath(docs.readme.file),
+    documentPath: docs.readme.file,
     sourceRevision: revision,
     siteBase: flags["site-base"] ?? "/",
   });
@@ -184,19 +197,41 @@ async function main() {
     const section = docs.sections[i];
     const rendered = await renderMarkdown(section.body, {
       fileToRoute,
-      svgs: take(sectionMermaid[i].length),
+      svgs: take(documentMermaid.get(section.file).length),
       currentRoute: `#/section/${section.number}`,
       title: section.title,
       sourceContext,
       sourceFile: toSourcePath(section.file),
+      documentPath: section.file,
       sourceRevision: revision,
       siteBase: flags["site-base"] ?? "/",
     });
+    const supporting = [];
+    for (const document of section.supporting) {
+      const supportRendered = await renderMarkdown(document.body, {
+        fileToRoute,
+        svgs: take(documentMermaid.get(document.file).length),
+        currentRoute: document.route,
+        title: document.title,
+        sourceContext,
+        sourceFile: toSourcePath(document.file),
+        documentPath: document.file,
+        sourceRevision: revision,
+        siteBase: flags["site-base"] ?? "/",
+      });
+      supporting.push({
+        route: document.route,
+        title: document.title,
+        description: document.description,
+        html: supportRendered.html,
+      });
+    }
     sectionsRendered.push({
       number: section.number,
       title: section.title,
       description: section.description,
       html: rendered.html,
+      supporting,
     });
   }
 

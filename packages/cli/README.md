@@ -13,7 +13,7 @@ npm install --save-dev @arcshape/cli
 npx arcshape init
 ```
 
-`arcshape init` creates `docs/architecture/` with a README and the twelve arc42 sections, then offers detected agent providers and capabilities. Choose `--no-agents` for CLI-only setup. On non-interactive shells, state the choice and confirmation explicitly:
+`arcshape init` creates `docs/architecture/` with a navigation README and twelve `NN-slug/README.md` arc42 sections. Additional Markdown files can live inside their owning section directory and are rendered as supporting material. The legacy flat `NN-slug.md` layout remains readable during migration. Init then offers detected agent providers and capabilities. Choose `--no-agents` for CLI-only setup. On non-interactive shells, state the choice and confirmation explicitly:
 
 ```sh
 npx arcshape init --providers codex,claude --dry-run

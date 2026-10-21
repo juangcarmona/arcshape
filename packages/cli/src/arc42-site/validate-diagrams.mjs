@@ -8,7 +8,11 @@ const docs = await loadDocs(docsDir);
 const problems = [];
 let count = 0;
 
-for (const document of [docs.readme, ...docs.sections]) {
+const documents = [
+  docs.readme,
+  ...docs.sections.flatMap((section) => [section, ...section.supporting]),
+];
+for (const document of documents) {
   const sources = extractMermaidSources(document.body);
   const issues = validateDiagramTitles(sources);
   count += sources.length;

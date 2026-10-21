@@ -40,7 +40,7 @@ Initialization does not inspect source code, make architecture claims, contact a
 
 ### Validate architecture Markdown
 
-`arcshape validate` loads the architecture README and twelve numbered sections and checks the arc42 frontmatter contract. It can print a human-readable summary or machine-readable JSON. Site generation runs the same structural validation before writing HTML.
+`arcshape validate` loads the architecture README and twelve numbered sections. New adopters use one `NN-slug/README.md` directory per section and may add supporting Markdown there; the legacy flat layout remains compatible during migration. The command checks the arc42 frontmatter contract and can print a human-readable summary or machine-readable JSON. Site generation runs the same structural validation before writing HTML.
 
 ### Synchronize with an Obsidian vault
 
@@ -50,7 +50,7 @@ Initialization does not inspect source code, make architecture claims, contact a
 
 ### Build the reader site
 
-`arcshape site build` reads the README and twelve Markdown sections, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes the requested output file (default `docs/architecture-site/index.html`). The GitHub Pages workflow writes its projection to `_site/architecture/index.html` with the exact source revision. It does not modify canonical Markdown.
+`arcshape site build` reads the README, twelve canonical section documents, and any supporting Markdown beneath their section directories, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes the requested output file (default `docs/architecture-site/index.html`). The GitHub Pages workflow writes its projection to `_site/architecture/index.html` with the exact source revision. It does not modify canonical Markdown.
 
 ### Resume an evidence-analysis session
 

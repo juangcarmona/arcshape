@@ -33,11 +33,18 @@ export async function syncConfluencePages(options) {
   const auth = `Basic ${Buffer.from(`${email}:${token}`).toString("base64")}`;
   const docsDir = join(process.cwd(), options.docs ?? "docs/architecture");
   const docs = await loadDocs(docsDir);
-  const sections = docs.sections.map((section) => ({
-    source: toRepoPath(docsDir, section.file),
-    title: `${prefix} — ${section.title}`,
-    body: section.body,
-  }));
+  const sections = docs.sections.flatMap((section) => [
+    {
+      source: toRepoPath(docsDir, section.file),
+      title: `${prefix} — ${section.title}`,
+      body: section.body,
+    },
+    ...section.supporting.map((document) => ({
+      source: toRepoPath(docsDir, document.file),
+      title: `${prefix} — ${section.title} · ${document.title}`,
+      body: document.body,
+    })),
+  ]);
   const includedPages = await loadIncludedPages(options.include ?? []);
   const sectionSources = new Set(sections.map((section) => section.source));
   sections.push(

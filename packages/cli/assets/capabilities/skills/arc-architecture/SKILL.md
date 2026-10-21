@@ -17,7 +17,7 @@ When the shared `architecture-docs` skill is installed, it is the authority for 
 - Keep evidence review bounded. Track sources as reviewed, excluded, pending, or changed; do not claim repository-wide coverage while material evidence remains pending.
 - Never claim a subsystem or behavior is implemented based only on plans, issue text, or generated docs. Cite concrete paths and relevant sections in the working notes.
 - Surface contradictions, gaps, uncertainty, and stale documentation. Ask the maintainer when a decision or intent cannot be inferred safely.
-- Preserve the project's existing architecture documentation conventions. ArcShape's default Markdown location is `docs/architecture/` with the 12 numbered arc42 sections.
+- Preserve the project's existing architecture documentation conventions. ArcShape's canonical new layout is `docs/architecture/README.md` plus twelve `NN-slug/README.md` section documents. Supporting Markdown belongs inside its owning section directory and is rendered as grouped supporting material. The legacy root-level `NN-slug.md` layout remains a supported migration input; do not mix duplicate section numbers.
 - Draft changes for review. Do not declare proposals accepted or silently overwrite a maintainer's authored material.
 - Keep diagrams in Mermaid inside Markdown. Prefer C4 context/container/component views and label relationships with concise meaning.
 

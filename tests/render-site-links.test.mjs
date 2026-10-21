@@ -38,6 +38,28 @@ describe("reader site source links", () => {
     expect(result.html).toContain('href="#/section/05"');
   });
 
+  it("resolves source links from canonical section documents", async () => {
+    const result = await renderMarkdown(
+      "[Constraints](../02-constraints/README.md)",
+      {
+        fileToRoute: new Map(),
+        sourceContext: {
+          root: process.cwd(),
+          repositoryUrl: "https://github.com/example/arcshape",
+          ref: "main",
+        },
+        sourceFile:
+          "packages/cli/assets/architecture/01-introduction-and-goals/README.md",
+        documentPath: "01-introduction-and-goals/README.md",
+      },
+    );
+
+    expect(result.html).toContain(
+      "https://github.com/example/arcshape/blob/main/packages/cli/assets/architecture/02-constraints/README.md",
+    );
+    expect(result.html).not.toContain("xref-dead");
+  });
+
   it.each([
     ["root", "/", 'href="/diagrams/publication-boundaries.html"'],
     [

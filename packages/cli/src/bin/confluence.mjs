@@ -171,6 +171,10 @@ async function renderPage(docs) {
   for (const section of docs.sections) {
     parts.push(`<h2>${escapeHtml(section.title)}</h2>`);
     parts.push(await marked.parse(section.body));
+    for (const document of section.supporting) {
+      parts.push(`<h3>${escapeHtml(document.title)}</h3>`);
+      parts.push(await marked.parse(document.body));
+    }
   }
   const sanitized = DOMPurify.sanitize(parts.join("\n"), {
     ALLOW_DATA_ATTR: false,
