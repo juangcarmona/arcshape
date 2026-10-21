@@ -1,5 +1,5 @@
 # /arcshape:adr
 
-Draft or maintain a Markdown Architecture Decision Record.
+Use the `arc-adr` skill to draft or maintain a Markdown Architecture Decision Record in `docs/architecture/09-architecture-decisions/`.
 
-When the shared `adr` skill is installed, use it for the decision-record workflow and format; use `arcshape-adr` only as its ArcShape standalone equivalent. Ask for the decision when it is not supplied, keep it Proposed unless acceptance is explicit, preserve history, update the canonical index, and present the diff for review.
+The section `README.md` is the canonical, alphabetically ordered index for every ADR. Ask for the decision when it is not supplied, keep it Proposed unless acceptance is explicit, preserve history, allow stable subdirectory grouping, and present the diff for review.

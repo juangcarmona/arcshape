@@ -71,7 +71,8 @@ test("onboards, creates and updates architecture docs, and serves the reader", a
     target,
     "docs",
     "architecture",
-    "01-introduction-and-goals.md",
+    "01-introduction-and-goals",
+    "README.md",
   );
   const authoredMarker = "Verified update journey for the ArcShape reader.";
   await writeFile(
@@ -91,13 +92,15 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
     repositoryRoot,
     "docs",
     "architecture",
-    "07-deployment-view.md",
+    "07-deployment-view",
+    "README.md",
   );
   const targetSection = join(
     target,
     "docs",
     "architecture",
-    "07-deployment-view.md",
+    "07-deployment-view",
+    "README.md",
   );
   await writeFile(targetSection, await readFile(sourceSection, "utf8"));
   await buildSite();

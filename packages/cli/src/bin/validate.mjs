@@ -10,7 +10,7 @@ export async function runValidate(args, runtime = {}) {
       "Usage: arcshape validate [--docs <directory>] [--links] [--citations] [--format text|json]\n\n",
     );
     process.stdout.write(
-      "Validate the README and all twelve Markdown arc42 sections. Use --links to check local links and --citations to verify ProductShape citations when a model is present.\n",
+      "Validate the navigation README, twelve arc42 section documents, and supporting Markdown. Use --links to check local links and --citations to verify ProductShape citations when a model is present.\n",
     );
     return { exitCode: 0 };
   }
@@ -29,12 +29,12 @@ export async function runValidate(args, runtime = {}) {
       : workingDirectory;
   try {
     const docs = await loadDocs(docsDir);
+    const documents = [
+      docs.readme,
+      ...docs.sections.flatMap((section) => [section, ...section.supporting]),
+    ];
     const diagnostics = options.links
-      ? await validateMarkdownLinks(
-          [docs.readme, ...docs.sections],
-          repositoryRoot,
-          docsDir,
-        )
+      ? await validateMarkdownLinks(documents, repositoryRoot, docsDir)
       : [];
     const productCitations = options.citations
       ? await verifyProductCitations({

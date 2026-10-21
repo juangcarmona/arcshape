@@ -22,11 +22,6 @@ beforeEach(async () => {
       recursive: true,
     },
   );
-  await mkdir(join(root, "docs/adr"), { recursive: true });
-  await writeFile(
-    join(root, "docs/adr/ADR-0001.md"),
-    "# ADR 0001\n\nStatus: Proposed\n",
-  );
   process.chdir(root);
   process.env.CONFLUENCE_EMAIL = "docs@example.com";
   process.env.CONFLUENCE_API_TOKEN = "not-a-real-token";
@@ -89,7 +84,7 @@ describe("multi-page Confluence sync", () => {
       spaceId: "space",
       parentId: "parent",
       titlePrefix: "ArcShape",
-      include: ["docs/adr"],
+      include: ["docs/architecture/09-architecture-decisions"],
     };
 
     const preview = await syncConfluencePages({ ...options, dryRun: true });
@@ -151,7 +146,10 @@ describe("multi-page Confluence sync", () => {
       titlePrefix: "ArcShape",
     };
     await syncConfluencePages(options);
-    const source = join(root, "docs/architecture/01-introduction-and-goals.md");
+    const source = join(
+      root,
+      "docs/architecture/01-introduction-and-goals/README.md",
+    );
     const original = await readFile(source, "utf8");
     await writeFile(source, `${original}\nReviewed update.\n`);
 
@@ -160,7 +158,8 @@ describe("multi-page Confluence sync", () => {
     expect(
       preview.outcomes.find(
         (outcome) =>
-          outcome.source === "docs/architecture/01-introduction-and-goals.md",
+          outcome.source ===
+          "docs/architecture/01-introduction-and-goals/README.md",
       ).action,
     ).toBe("update");
 

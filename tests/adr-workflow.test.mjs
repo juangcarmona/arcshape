@@ -15,9 +15,11 @@ describe("ADR workflow examples", () => {
     expect(guide).toContain("Decision is unknown");
 
     const created = await read(
-      "create/expected/docs/adr/ADR-0001-use-sqlite-for-local-session-state.md",
+      "create/expected/docs/architecture/09-architecture-decisions/ADR-0001-use-sqlite-for-local-session-state.md",
     );
-    const createdIndex = await read("create/expected/docs/adr/README.md");
+    const createdIndex = await read(
+      "create/expected/docs/architecture/09-architecture-decisions/README.md",
+    );
     for (const section of [
       "## Context",
       "## Decision",
@@ -39,13 +41,13 @@ describe("ADR workflow examples", () => {
     expect(createdIndex).toContain("ADR-0001");
 
     const superseding = await read(
-      "supersede/expected/docs/adr/ADR-0002-use-sqlite-for-session-state.md",
+      "supersede/expected/docs/architecture/09-architecture-decisions/ADR-0002-use-sqlite-for-session-state.md",
     );
     const supersedingIndex = await read(
-      "supersede/expected/docs/adr/README.md",
+      "supersede/expected/docs/architecture/09-architecture-decisions/README.md",
     );
     const previous = await read(
-      "supersede/current/docs/adr/ADR-0001-use-json-for-session-state.md",
+      "supersede/current/docs/architecture/09-architecture-decisions/ADR-0001-use-json-for-session-state.md",
     );
     expect(superseding).toContain("status: Proposed");
     expect(parseFrontmatter(superseding)).toEqual(
@@ -110,55 +112,61 @@ describe("ADR workflow examples", () => {
       "../../packages/cli/assets/capabilities/skills/arc-adr/references/template.md",
     );
     const repositorySkill = await readFile(
-      join(packageRoot, ".agents/skills/arcshape-adr/SKILL.md"),
+      join(packageRoot, ".agents/skills/arc-adr/SKILL.md"),
       "utf8",
     );
     const claudeSkill = await readFile(
-      join(packageRoot, ".claude/skills/arcshape-adr/SKILL.md"),
+      join(packageRoot, ".claude/skills/arc-adr/SKILL.md"),
       "utf8",
     );
     const repositoryTemplate = await readFile(
-      join(packageRoot, ".agents/skills/arcshape-adr/references/template.md"),
+      join(packageRoot, ".agents/skills/arc-adr/references/template.md"),
       "utf8",
     );
     const claudeTemplate = await readFile(
-      join(packageRoot, ".claude/skills/arcshape-adr/references/template.md"),
+      join(packageRoot, ".claude/skills/arc-adr/references/template.md"),
       "utf8",
     );
     const adrIndex = await readFile(
-      join(packageRoot, "docs/adr/README.md"),
+      join(
+        packageRoot,
+        "docs/architecture/09-architecture-decisions/README.md",
+      ),
       "utf8",
     );
     const sectionNine = await readFile(
-      join(packageRoot, "docs/architecture/09-architecture-decisions.md"),
+      join(
+        packageRoot,
+        "docs/architecture/09-architecture-decisions/README.md",
+      ),
       "utf8",
     );
     expect(skill).toContain("name: arc-adr");
-    expect(skill).toContain("`docs/adr/README.md`");
+    expect(skill).toContain(
+      "`docs/architecture/09-architecture-decisions/README.md`",
+    );
     expect(skill).toContain(
       "Copy [`references/template.md`](references/template.md)",
     );
     expect(skill).toContain("`ADR-0001-kebab-case-title.md`");
     expect(skill).toContain(
-      "Reuse the repository's folder, filename, metadata, status, and index conventions",
+      "A project may group records in stable subdirectories",
     );
     expect(skill).toContain("`id`, `title`, `status`, `date`, and `deciders`");
-    expect(skill).toContain("Update the canonical ADR index");
-    expect(repositorySkill).toContain("`docs/adr/README.md`");
-    expect(claudeSkill).toContain("Update the canonical ADR index");
-    expect(repositorySkill).toContain("name: arcshape-adr");
-    expect(claudeSkill).toContain("name: arcshape-adr");
+    expect(skill).toContain("Update the section index");
+    expect(repositorySkill).toBe(skill);
+    expect(claudeSkill).toBe(skill);
     expect(repositoryTemplate).toContain("## Alternatives considered");
     expect(claudeTemplate).toBe(repositoryTemplate);
-    expect(adrIndex).toContain("No ADR records have been accepted");
-    expect(sectionNine).toContain("[`docs/adr/README.md`](../adr/README.md)");
+    expect(adrIndex).toContain("alphabetical");
+    expect(sectionNine).toContain("canonical Architecture Decision Record");
+    expect(sectionNine).toContain("ADR index");
     expect(skill).toContain("Ask for the decision if it is unknown");
     expect(skill).toContain(
       "Do not mark the old decision superseded until the replacement is accepted",
     );
-    expect(skill).toContain(
-      "Keep proposed decisions out of the current-architecture index",
-    );
+    expect(skill).toContain("sorted alphabetically by ADR title");
+    expect(skill).toContain("every ADR, regardless of status");
     expect(parseFrontmatter(template)).toEqual(
       expect.objectContaining({
         id: "ADR-NNNN",

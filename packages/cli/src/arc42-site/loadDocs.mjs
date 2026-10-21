@@ -5,11 +5,12 @@
  * omits part of the documentation.
  */
 import { readdir, readFile } from "node:fs/promises";
-import { join, basename, dirname } from "node:path";
+import { join, basename, dirname, sep } from "node:path";
 import * as yaml from "js-yaml";
 
 const ALLOWED_KEYS = new Set(["title", "arc42-section", "description"]);
 const SECTION_FILE = /^(\d{2})-(.+)\.md$/;
+const SECTION_DIRECTORY = /^(\d{2})-([a-z0-9]+(?:-[a-z0-9]+)*)$/;
 const SECTION_NUMBERS = Array.from({ length: 12 }, (_, index) =>
   String(index + 1).padStart(2, "0"),
 );
@@ -47,11 +48,14 @@ export function parseFrontmatter(raw, fileName) {
 /**
  * Load and validate an arc42 docs folder.
  *
- * Contract (from the architecture-docs skill):
+ * Contract:
  *  - README.md exists, optionally has title/description, never `arc42-section`.
- *  - Section files are named NN-slug.md with zero-padded numbers.
- *  - Each has exactly the keys: title, arc42-section, description.
- *  - arc42-section values are unique and match the file number.
+ *  - New documentation uses one NN-slug directory per section; its README.md
+ *    carries the section frontmatter contract and other Markdown is supporting
+ *    material owned by that section.
+ *  - The legacy root-level NN-slug.md layout remains supported for migration.
+ *  - Each canonical section has exactly the keys: title, arc42-section,
+ *    description; arc42-section values are unique and match the number.
  *
  * @param {string} docsDir absolute path to the docs/architecture folder
  * @returns {{ readme: object, sections: object[], stackName: string }}
@@ -60,29 +64,37 @@ export async function loadDocs(docsDir) {
   const entries = await readdir(docsDir, { withFileTypes: true });
   const mdFiles = entries
     .filter((entry) => entry.isFile() && /\.md$/i.test(entry.name))
-    .map((e) => e.name)
+    .map((entry) => entry.name)
+    .sort();
+  const directoryNames = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
     .sort();
 
-  const readmeName = mdFiles.find((n) => n.toLowerCase() === "readme.md");
+  const readmeName = mdFiles.find((name) => name.toLowerCase() === "readme.md");
   if (!readmeName) {
     throw new Diagnostic(
       `${docsDir}: no README.md found — the navigation index is required`,
     );
   }
 
-  const sectionFiles = mdFiles.filter((n) => SECTION_FILE.test(n));
-  if (sectionFiles.length === 0) {
-    throw new Diagnostic(`${docsDir}: no NN-*.md section files found`);
-  }
-
   const problems = mdFiles
     .filter((name) => name !== readmeName && !SECTION_FILE.test(name))
     .map(
       (name) =>
-        `${name}: unexpected Markdown file; name an arc42 section NN-slug.md or move supporting material into a subdirectory`,
+        `${name}: unexpected root-level Markdown file; use a section directory for supporting material`,
     );
-  const sections = [];
-  const seenNumbers = new Map();
+  const sectionFiles = mdFiles.filter((name) => SECTION_FILE.test(name));
+  const sectionDirectories = directoryNames.filter((name) =>
+    SECTION_DIRECTORY.test(name),
+  );
+  for (const name of directoryNames) {
+    if (/^\d{2}-/.test(name) && !SECTION_DIRECTORY.test(name)) {
+      problems.push(
+        `${name}: invalid section directory name; use NN-slug with lowercase letters, numbers, and hyphens`,
+      );
+    }
+  }
 
   // --- README: navigation index, never a section itself.
   const readmeRaw = await readFile(join(docsDir, readmeName), "utf8");
@@ -110,53 +122,45 @@ export async function loadDocs(docsDir) {
     }
   }
 
-  // --- Sections.
-  for (const name of sectionFiles) {
-    const number = SECTION_FILE.exec(name)[1];
-    const raw = await readFile(join(docsDir, name), "utf8");
-    let parsed;
-    try {
-      parsed = parseFrontmatter(raw, name);
-    } catch (error) {
-      problems.push(error.message);
-      continue;
-    }
-    const fm = parsed.frontmatter;
-    for (const key of Object.keys(fm)) {
-      if (!ALLOWED_KEYS.has(key)) {
-        problems.push(`${name}: unexpected frontmatter key "${key}"`);
-      }
-    }
-    for (const key of ["title", "arc42-section", "description"]) {
-      if (!(key in fm)) {
-        problems.push(`${name}: missing required frontmatter key "${key}"`);
-      } else if (typeof fm[key] !== "string" || !fm[key].trim()) {
-        problems.push(`${name}: ${key} must be a nonempty string`);
-      }
-    }
+  // --- Canonical section directories and legacy flat section files.
+  const candidates = [
+    ...sectionDirectories.map((name) => ({
+      kind: "directory",
+      name,
+      number: SECTION_DIRECTORY.exec(name)[1],
+    })),
+    ...sectionFiles.map((name) => ({
+      kind: "file",
+      name,
+      number: SECTION_FILE.exec(name)[1],
+    })),
+  ];
+  if (candidates.length === 0) {
+    problems.push(
+      `${docsDir}: no NN-slug section directories or legacy NN-slug.md section files found`,
+    );
+  }
+
+  const sections = [];
+  const seenNumbers = new Map();
+  for (const candidate of candidates) {
+    const { kind, name, number } = candidate;
     if (!SECTION_NUMBERS.includes(number)) {
       problems.push(`${name}: section number must be between 01 and 12`);
-    }
-    if (fm["arc42-section"] !== undefined && fm["arc42-section"] !== number) {
-      problems.push(
-        `${name}: arc42-section "${fm["arc42-section"]}" does not match file number ${number}`,
-      );
     }
     if (seenNumbers.has(number)) {
       problems.push(
         `${name}: duplicate section number ${number} (also ${seenNumbers.get(number)})`,
       );
+      continue;
     }
     seenNumbers.set(number, name);
 
-    sections.push({
-      number,
-      slug: SECTION_FILE.exec(name)[2],
-      file: name,
-      title: String(fm.title ?? name),
-      description: String(fm.description ?? ""),
-      body: parsed.body,
-    });
+    const section =
+      kind === "directory"
+        ? await readSectionDirectory(docsDir, name, number, problems)
+        : await readSectionFile(docsDir, name, number, problems);
+    if (section) sections.push(section);
   }
 
   for (const number of SECTION_NUMBERS) {
@@ -172,7 +176,7 @@ export async function loadDocs(docsDir) {
     throw error;
   }
 
-  sections.sort((a, b) => a.number.localeCompare(b.number));
+  sections.sort((left, right) => left.number.localeCompare(right.number));
 
   // Derive a name from the docsDir's parent (e.g. .../my-project/docs/architecture → "my-project").
   // Falls back to the docsDir folder name itself if there is no meaningful parent.
@@ -193,4 +197,162 @@ export async function loadDocs(docsDir) {
     sections,
     stackName,
   };
+}
+
+async function readSectionDirectory(docsDir, directory, number, problems) {
+  const readmePath = join(docsDir, directory, "README.md");
+  let raw;
+  try {
+    raw = await readFile(readmePath, "utf8");
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      problems.push(
+        `${directory}: missing canonical section README.md; supporting documents cannot define an arc42 section`,
+      );
+      return undefined;
+    }
+    throw error;
+  }
+
+  let parsed;
+  try {
+    parsed = parseFrontmatter(raw, `${directory}/README.md`);
+  } catch (error) {
+    problems.push(error.message);
+    return undefined;
+  }
+  const section = validateSectionFrontmatter(
+    parsed,
+    `${directory}/README.md`,
+    number,
+    problems,
+  );
+  const supporting = await collectSupportingDocuments(
+    join(docsDir, directory),
+    directory,
+    number,
+    problems,
+  );
+  return {
+    ...section,
+    slug: directory.slice(3),
+    file: `${directory}/README.md`,
+    directory,
+    supporting,
+  };
+}
+
+async function readSectionFile(docsDir, name, number, problems) {
+  const raw = await readFile(join(docsDir, name), "utf8");
+  let parsed;
+  try {
+    parsed = parseFrontmatter(raw, name);
+  } catch (error) {
+    problems.push(error.message);
+    return undefined;
+  }
+  const section = validateSectionFrontmatter(parsed, name, number, problems);
+  return {
+    ...section,
+    slug: SECTION_FILE.exec(name)[2],
+    file: name,
+    directory: undefined,
+    supporting: [],
+  };
+}
+
+function validateSectionFrontmatter(parsed, name, number, problems) {
+  const fm = parsed.frontmatter;
+  for (const key of Object.keys(fm)) {
+    if (!ALLOWED_KEYS.has(key))
+      problems.push(`${name}: unexpected frontmatter key "${key}"`);
+  }
+  for (const key of ["title", "arc42-section", "description"]) {
+    if (!(key in fm)) {
+      problems.push(`${name}: missing required frontmatter key "${key}"`);
+    } else if (typeof fm[key] !== "string" || !fm[key].trim()) {
+      problems.push(`${name}: ${key} must be a nonempty string`);
+    }
+  }
+  if (fm["arc42-section"] !== undefined && fm["arc42-section"] !== number) {
+    problems.push(
+      `${name}: arc42-section "${fm["arc42-section"]}" does not match section number ${number}`,
+    );
+  }
+  return {
+    number,
+    title: String(fm.title ?? name),
+    description: String(fm.description ?? ""),
+    body: parsed.body,
+  };
+}
+
+async function collectSupportingDocuments(
+  sectionRoot,
+  directory,
+  number,
+  problems,
+  current = "",
+) {
+  const entries = await readdir(join(sectionRoot, current), {
+    withFileTypes: true,
+  });
+  const documents = [];
+  for (const entry of entries.sort((left, right) =>
+    left.name.localeCompare(right.name),
+  )) {
+    const relativePath = current ? join(current, entry.name) : entry.name;
+    if (entry.isDirectory()) {
+      documents.push(
+        ...(await collectSupportingDocuments(
+          sectionRoot,
+          directory,
+          number,
+          problems,
+          relativePath,
+        )),
+      );
+      continue;
+    }
+    if (!entry.isFile() || !/\.md$/i.test(entry.name)) continue;
+    if (relativePath.split(sep).join("/") === "README.md") continue;
+
+    const file = `${directory}/${relativePath}`.split(sep).join("/");
+    const raw = await readFile(join(sectionRoot, relativePath), "utf8");
+    let body = raw;
+    if (/^---\r?\n[\s\S]*?\r?\n---\r?\n/.test(raw)) {
+      try {
+        const parsed = parseFrontmatter(raw, file);
+        body = parsed.body;
+        if (Object.hasOwn(parsed.frontmatter, "arc42-section"))
+          problems.push(
+            `${file}: supporting documents cannot carry arc42-section; only ${directory}/README.md defines section ${number}`,
+          );
+      } catch (error) {
+        problems.push(error.message);
+      }
+    }
+    documents.push({
+      file,
+      relativeFile: relativePath.split(sep).join("/"),
+      route: `#/section/${number}/${relativePath
+        .split(sep)
+        .join("/")
+        .replace(/\.md$/i, "")
+        .split("/")
+        .map(encodeURIComponent)
+        .join("/")}`,
+      title: supportingTitle(raw, basename(entry.name, ".md")),
+      description: "",
+      body,
+      section: number,
+    });
+  }
+  return documents;
+}
+
+function supportingTitle(raw, fallback) {
+  const body = raw.replace(/^---[\s\S]*?---\s*/, "");
+  const heading = /^#\s+(.+)$/m.exec(body);
+  return heading?.[1]?.trim() || fallback.replace(/[-_]+/g, " ");
 }

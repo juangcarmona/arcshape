@@ -190,6 +190,7 @@ main#main { flex: 1 1 auto; min-width: 0; overflow-y: auto; padding: 1.4rem 2.2r
 .doc { max-width: 78ch; margin: 0 auto; }
 .doc > h2.doc-title { margin: 0 0 0.2rem; font-size: 1.45rem; }
 p.doc-desc { margin: 0 0 1.2rem; color: var(--muted); font-size: 0.9rem; }
+p.doc-owner { margin: 0 0 .7rem; color: var(--muted); font-size: .82rem; }
 
 /* ---- Sidebar ---- */
 aside.nav .nav-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin:0 0 .5rem; }
@@ -213,6 +214,10 @@ aside.nav a[data-category="other"], .prevnext a[data-category="other"] { --categ
 aside.nav .nav-code { display:inline-flex; flex:none; font:600 .75rem/1.2 var(--mono); color:inherit; }
 aside.nav .t { flex:1 1 auto; min-width:0; font-size:.95rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 aside.nav .nav-number { flex:none; color:var(--muted); font: .68rem/1 var(--mono); }
+aside.nav .supporting-nav { list-style:none; margin:0 0 .35rem 2.1rem; padding:0; }
+aside.nav .supporting-nav li { border:0; }
+aside.nav .supporting-nav a { min-height:2rem; padding:.3rem .4rem; border-left-width:1px; font-size:.82rem; color:var(--muted); }
+aside.nav .supporting-nav a::before { content:'↳'; margin-right:.35rem; color:var(--accent); }
 .nav-foot { margin-top: 1rem; padding-top: 0.6rem; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--muted); }
 .nav-foot .prevnext { display: flex; justify-content: space-between; gap: 0.5rem; }
 .nav-foot .prevnext a { font-size: 0.78rem; }
@@ -220,7 +225,7 @@ aside.nav .nav-number { flex:none; color:var(--muted); font: .68rem/1 var(--mono
 .prevnext .nav-icon { display:inline-flex; width:.9rem; height:.9rem; flex:none; margin-top:.15rem; }
 body.nav-collapsed aside.nav { width:4.25rem; padding:.9rem .55rem; }
 body.nav-collapsed aside.nav .nav-heading { justify-content:center; }
-body.nav-collapsed aside.nav h2, body.nav-collapsed aside.nav .nav-title, body.nav-collapsed aside.nav .nav-foot { display:none; }
+body.nav-collapsed aside.nav h2, body.nav-collapsed aside.nav .nav-title, body.nav-collapsed aside.nav .nav-foot, body.nav-collapsed aside.nav .supporting-nav { display:none; }
 body.nav-collapsed aside.nav a { flex-direction:column; gap:.2rem; align-items:center; padding:.5rem .15rem; }
 body.nav-collapsed aside.nav .nav-kind { flex-direction:column; gap:.15rem; min-width:0; padding:.2rem; }
 body.nav-collapsed aside.nav .nav-icon { width:1.2rem; height:1.2rem; }
@@ -391,6 +396,10 @@ const script = String.raw`
     for (var i = 0; i < SECTIONS.length; i += 1) {
       var s = SECTIONS[i];
       push(s.number, '#/section/' + s.number, s.title, s.title + ' ' + s.description + ' ' + (s.html || ''));
+      for (var d = 0; d < (s.supporting || []).length; d += 1) {
+        var supporting = s.supporting[d];
+        push(s.number, supporting.route, supporting.title, supporting.title + ' ' + (supporting.description || '') + ' ' + (supporting.html || ''));
+      }
     }
   }
   function search(query) {
@@ -418,11 +427,20 @@ const script = String.raw`
   }
 
   /* ---------- Views ---------- */
-  function renderDoc(host, title, description, html) {
+  function renderDoc(host, title, description, html, owner) {
     clear(host);
     var article = el('article', 'doc');
     var h = el('h2', 'doc-title', title);
     article.appendChild(h);
+    if (owner) {
+      var ownerLine = el('p', 'doc-owner');
+      ownerLine.appendChild(doc.createTextNode('Supporting material for '));
+      var ownerLink = doc.createElement('a');
+      ownerLink.href = '#/section/' + owner.number;
+      ownerLink.textContent = owner.title;
+      ownerLine.appendChild(ownerLink);
+      article.appendChild(ownerLine);
+    }
     if (description) article.appendChild(el('p', 'doc-desc', description));
     var body = el('div', 'doc-body');
     body.innerHTML = html; /* generator-escaped markdown output only */
@@ -472,7 +490,26 @@ const script = String.raw`
     host.appendChild(legend);
   }
 
-  function showSection(host, number) {
+  function findSupporting(section, route) {
+    if (!section) return null;
+    var documents = section.supporting || [];
+    for (var i = 0; i < documents.length; i += 1) {
+      var document = documents[i];
+      if (route === document.route) return { document: document, anchor: '' };
+    }
+    var candidates = documents.slice().sort(function (left, right) {
+      return right.route.length - left.route.length;
+    });
+    for (var j = 0; j < candidates.length; j += 1) {
+      var candidate = candidates[j];
+      var prefix = candidate.route + '/';
+      if (route.indexOf(prefix) === 0)
+        return { document: candidate, anchor: route.slice(prefix.length) };
+    }
+    return null;
+  }
+
+  function showSection(host, number, supportingMatch) {
     var section = byNumber[number];
     if (!section) {
       clear(host);
@@ -496,7 +533,10 @@ const script = String.raw`
       host.appendChild(box);
       return;
     }
-    renderDoc(host, section.title, section.description, section.html || '');
+    if (supportingMatch) {
+      var document = supportingMatch.document;
+      renderDoc(host, document.title, document.description, document.html || '', section);
+    } else renderDoc(host, section.title, section.description, section.html || '');
   }
 
   /* ---------- Sidebar state ---------- */
@@ -544,11 +584,12 @@ const script = String.raw`
     var hash = location.hash || '#/';
     var host = doc.getElementById('content');
     var route = hash.split('?')[0];
-    var m = /^#\/section\/(\d{2})(?:\/([^/]*))?$/.exec(route);
-    if (m) showSection(host, m[1]);
+    var m = /^#\/section\/(\d{2})(?:\/(.*))?$/.exec(route);
+    var supportingMatch = m ? findSupporting(byNumber[m[1]], route) : null;
+    if (m) showSection(host, m[1], supportingMatch);
     else showOverview(host);
-    syncNav(m ? '#/section/' + m[1] : '#/');
-    var anchor = m ? m[2] : /^#\/([^/]*)$/.exec(route);
+    syncNav(m ? (supportingMatch ? supportingMatch.document.route : '#/section/' + m[1]) : '#/');
+    var anchor = supportingMatch ? supportingMatch.anchor : m ? m[2] || '' : /^#\/([^/]*)$/.exec(route);
     if (!m) anchor = anchor ? anchor[1] : '';
     if (anchor) {
       try {
@@ -723,7 +764,7 @@ function stableJson(value) {
 /**
  * @param {object} input
  * @param {{title: string, description: string, html: string}} input.readme
- * @param {Array<{number: string, title: string, description: string, html: string}>} input.sections
+ * @param {Array<{number: string, title: string, description: string, html: string, supporting: Array}>} input.sections
  * @param {string} input.stackName
  * @param {string|undefined} input.revision
  * @param {string} input.brandImage ArcShape lockup WebP encoded as base64
@@ -743,10 +784,15 @@ export function buildSnapshotHtml({
     : '<span class="revshort" title="Not generated from a Git checkout">no revision</span>';
 
   const navItems = sections
-    .map(
-      (s) =>
-        `        <li><a href="#/section/${s.number}" data-route="#/section/${s.number}" data-category="${sectionCategory(s.number)}"><span class="nav-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 5 5-5 5"/></svg></span><span class="nav-kind"><span class="nav-icon">${sectionIcon(s.number)}</span><span class="nav-code">${SECTION_CODES[Number(s.number) - 1] || "SEC"}</span></span><span class="nav-title t">${esc(s.title)}</span><span class="nav-number">${esc(s.number)}</span></a></li>`,
-    )
+    .map((s) => {
+      const supporting = (s.supporting ?? [])
+        .map(
+          (document) =>
+            `          <li><a href="${esc(document.route)}" data-route="${esc(document.route)}"><span class="nav-title t">${esc(document.title)}</span></a></li>`,
+        )
+        .join("\n");
+      return `        <li><a href="#/section/${s.number}" data-route="#/section/${s.number}" data-category="${sectionCategory(s.number)}"><span class="nav-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 5 5-5 5"/></svg></span><span class="nav-kind"><span class="nav-icon">${sectionIcon(s.number)}</span><span class="nav-code">${SECTION_CODES[Number(s.number) - 1] || "SEC"}</span></span><span class="nav-title t">${esc(s.title)}</span><span class="nav-number">${esc(s.number)}</span></a>${supporting ? `<ol class="supporting-nav">\n${supporting}\n        </ol>` : ""}</li>`;
+    })
     .join("\n");
 
   const data = {
@@ -760,6 +806,7 @@ export function buildSnapshotHtml({
       title: s.title,
       description: s.description,
       html: s.html,
+      supporting: s.supporting ?? [],
       category: sectionCategory(s.number),
       icon: sectionIcon(s.number),
       code: SECTION_CODES[Number(s.number) - 1] || "SEC",

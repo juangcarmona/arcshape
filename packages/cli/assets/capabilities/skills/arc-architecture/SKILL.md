@@ -17,7 +17,8 @@ When the shared `architecture-docs` skill is installed, it is the authority for 
 - Keep evidence review bounded. Track sources as reviewed, excluded, pending, or changed; do not claim repository-wide coverage while material evidence remains pending.
 - Never claim a subsystem or behavior is implemented based only on plans, issue text, or generated docs. Cite concrete paths and relevant sections in the working notes.
 - Surface contradictions, gaps, uncertainty, and stale documentation. Ask the maintainer when a decision or intent cannot be inferred safely.
-- Preserve the project's existing architecture documentation conventions. ArcShape's default Markdown location is `docs/architecture/` with the 12 numbered arc42 sections.
+- Preserve the project's existing architecture documentation conventions. ArcShape's canonical new layout is `docs/architecture/README.md` plus twelve `NN-slug/README.md` section documents. Supporting Markdown belongs inside its owning section directory and is rendered as grouped supporting material. The legacy root-level `NN-slug.md` layout remains a supported migration input; do not mix duplicate section numbers.
+- Section 09 is also the canonical ADR collection: `docs/architecture/09-architecture-decisions/README.md` is its arc42 section document and alphabetical ADR index. ADRs normally live directly below that directory and may be grouped in stable subdirectories; do not create a parallel `docs/adr/` collection.
 - Draft changes for review. Do not declare proposals accepted or silently overwrite a maintainer's authored material.
 - Keep diagrams in Mermaid inside Markdown. Prefer C4 context/container/component views and label relationships with concise meaning.
 
@@ -47,7 +48,7 @@ Apply this section only when the shared `architecture-docs` skill is not install
 
 - Update architecture docs when a change affects the system boundary, major component responsibilities or interfaces, important runtime paths, persistence or data ownership, security or identity, deployment, cross-cutting mechanisms, quality realization, or a significant architectural risk. Otherwise report that no architecture documentation impact was found and why.
 - Keep product intent in its product source, architecture in the arc42 documents, implementation truth in code/configuration/infrastructure, and decision rationale in ADRs. When an architecture claim derives from a ProductShape model, follow its citation instructions and validate citations with the installed ProductShape CLI. Do not invent product requirements or citation machinery.
-- Use `arc-adr` for durable decisions that need rationale, alternatives, or consequences. Keep proposed ADRs out of the current architecture decision index; accepted decisions belong there as a concise decision, ADR link, and affected architecture.
+- Use `arc-adr` for durable decisions that need rationale, alternatives, or consequences. Keep every ADR discoverable from section 09's alphabetical index and record status there; accepted decisions may also be summarized in a separate current-architecture view.
 - Treat legacy architecture prose as migration input. Verify touched claims against current evidence, move them only to their canonical owner, and remove stale or duplicate content rather than preserving it by default.
 - Do not edit architecture solely to satisfy a template. Preserve a repository's established section layout and update only the affected concerns.
 

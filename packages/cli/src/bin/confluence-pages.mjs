@@ -33,11 +33,18 @@ export async function syncConfluencePages(options) {
   const auth = `Basic ${Buffer.from(`${email}:${token}`).toString("base64")}`;
   const docsDir = join(process.cwd(), options.docs ?? "docs/architecture");
   const docs = await loadDocs(docsDir);
-  const sections = docs.sections.map((section) => ({
-    source: toRepoPath(docsDir, section.file),
-    title: `${prefix} — ${section.title}`,
-    body: section.body,
-  }));
+  const sections = docs.sections.flatMap((section) => [
+    ...section.supporting.map((document) => ({
+      source: toRepoPath(docsDir, document.file),
+      title: `${prefix} — ${section.title} · ${document.title}`,
+      body: document.body,
+    })),
+    {
+      source: toRepoPath(docsDir, section.file),
+      title: `${prefix} — ${section.title}`,
+      body: section.body,
+    },
+  ]);
   const includedPages = await loadIncludedPages(options.include ?? []);
   const sectionSources = new Set(sections.map((section) => section.source));
   sections.push(
@@ -113,6 +120,7 @@ export async function syncConfluencePages(options) {
   }
 
   // Publish section pages first so the README index can link to their IDs.
+  const createdSources = new Set();
   for (const page of [...sections, readme]) {
     const html = await renderPage(page, pageBySource, manifest.pages, baseUrl);
     const outcome = await syncPage({
@@ -126,12 +134,44 @@ export async function syncConfluencePages(options) {
       manifestPath,
     });
     outcomes.push(outcome);
+    if (outcome.action === "created") createdSources.add(page.source);
     if (outcome.action === "error" || outcome.action === "conflict") break;
   }
 
-  const failed = outcomes.some(
+  let failed = outcomes.some(
     (item) => item.action === "error" || item.action === "conflict",
   );
+  if (!failed && createdSources.size > 0) {
+    // A newly created page can link to another newly created page. Re-render
+    // after all IDs exist so the first sync is as stable as subsequent ones.
+    for (const page of [...sections, readme]) {
+      const html = await renderPage(
+        page,
+        pageBySource,
+        manifest.pages,
+        baseUrl,
+      );
+      const record = manifest.pages[page.source];
+      if (!record || record.sourceDigest === digest(html)) continue;
+      const outcome = await syncPage({
+        page,
+        html,
+        baseUrl,
+        auth,
+        spaceId,
+        parentId,
+        manifest,
+        manifestPath,
+      });
+      const index = outcomes.findIndex((item) => item.source === page.source);
+      if (outcome.action === "error" || outcome.action === "conflict") {
+        if (index >= 0) outcomes[index] = outcome;
+        else outcomes.push(outcome);
+        failed = true;
+        break;
+      }
+    }
+  }
   printResult(outcomes, failed ? "partial" : "synced");
   return { exitCode: failed ? 1 : 0, outcomes };
 }
@@ -203,7 +243,8 @@ async function syncPage({
   }
 
   try {
-    const remote = await getPage(baseUrl, existing.pageId, auth);
+    const pageId = safePageId(existing.pageId);
+    const remote = await getPage(baseUrl, pageId, auth);
     const currentHtml = remote.body?.storage?.value ?? "";
     const currentDigest = digest(currentHtml);
     if (currentDigest === targetDigest) {
@@ -237,7 +278,7 @@ async function syncPage({
       };
 
     const update = await fetch(
-      endpoint(baseUrl, `/api/v2/pages/${encodeURIComponent(existing.pageId)}`),
+      endpoint(baseUrl, `/api/v2/pages/${encodeURIComponent(pageId)}`),
       {
         method: "PUT",
         headers: {
@@ -427,9 +468,10 @@ function resolvePageLink(source, href, pageBySource) {
 }
 
 async function getPage(baseUrl, pageId, auth) {
+  const safeId = safePageId(pageId);
   const url = endpoint(
     baseUrl,
-    `/api/v2/pages/${encodeURIComponent(pageId)}?body-format=storage`,
+    `/api/v2/pages/${encodeURIComponent(safeId)}?body-format=storage`,
   );
   const response = await fetch(url, {
     headers: { Accept: "application/json", Authorization: auth },
@@ -441,6 +483,14 @@ async function getPage(baseUrl, pageId, auth) {
   if (!page.id || !page.title || !Number.isInteger(page.version?.number))
     throw new Error("Confluence returned an incomplete page response");
   return page;
+}
+
+function safePageId(value) {
+  if (typeof value !== "string" || !/^[a-zA-Z0-9_-]+$/.test(value))
+    throw new Error(
+      "Confluence page IDs may contain only letters, numbers, hyphens, and underscores",
+    );
+  return value;
 }
 
 function endpoint(baseUrl, path) {

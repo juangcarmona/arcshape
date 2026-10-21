@@ -116,7 +116,7 @@ describe("arc42 authoring examples", () => {
       "../../packages/cli/assets/capabilities/skills/arc-architecture/SKILL.md",
     );
     const localSkill = await read(
-      "../../.agents/skills/arcshape-architecture/SKILL.md",
+      "../../.agents/skills/arc-architecture/SKILL.md",
     );
 
     expect(index).toContain("Read only the sections relevant");
@@ -128,8 +128,8 @@ describe("arc42 authoring examples", () => {
       "references/arc42/README.md",
     );
     await expectSourceLink(
-      "../../.agents/skills/arcshape-architecture/SKILL.md",
-      "../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/README.md",
+      "../../.agents/skills/arc-architecture/SKILL.md",
+      "references/arc42/README.md",
     );
 
     for (const [number, slug] of sectionGuidance) {
@@ -147,9 +147,7 @@ describe("arc42 authoring examples", () => {
       await expectGuidanceLink(path, "../SOURCES.md");
     }
     expect(skill).toContain("references/arc42/README.md");
-    expect(localSkill).toContain(
-      "../../../packages/cli/assets/capabilities/skills/arc-architecture/references/arc42/README.md",
-    );
+    expect(localSkill).toBe(skill);
   });
 
   it("preserves the pinned source catalog with metadata and complete local routing", async () => {

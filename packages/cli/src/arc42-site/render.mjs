@@ -237,6 +237,7 @@ function createMarked(
   currentRoute,
   sourceContext,
   sourceFile,
+  documentPath,
   sourceRevision,
   siteBase,
 ) {
@@ -317,8 +318,13 @@ function createMarked(
         } catch {
           return `<span class="xref-dead">${text} <code>${escapeHtml(target)}</code></span>`;
         }
+        const documentKey = documentPath ?? sourceFile ?? "";
+        const resolvedDocumentPath = path
+          ? posix.normalize(posix.join(posix.dirname(documentKey), path))
+          : "";
         const route = path
-          ? fileToRoute.get(posix.normalize(path))
+          ? (fileToRoute.get(resolvedDocumentPath) ??
+            fileToRoute.get(posix.normalize(path)))
           : target.startsWith("#")
             ? currentRoute
             : undefined;
@@ -439,9 +445,10 @@ function githubSourceLink(sourceContext, sourceFile, path, anchor) {
  * @param {string} body markdown source (frontmatter already stripped)
  * @param {object} opts
  * @param {string} opts.title frontmatter title, used to suppress a repeated leading H1
- * @param {Map<string,string>} opts.fileToRoute section file name -> hash route
+ * @param {Map<string,string>} opts.fileToRoute document path -> hash route
  * @param {string[]} opts.svgs pre-rendered mermaid SVGs for this document
  * @param {string} opts.svgClass css class for inline svg wrappers
+ * @param {string} opts.documentPath path relative to the architecture docs root
  */
 export async function renderMarkdown(
   body,
@@ -452,6 +459,7 @@ export async function renderMarkdown(
     title = "",
     sourceContext,
     sourceFile,
+    documentPath,
     sourceRevision,
     siteBase = "/",
   },
@@ -471,6 +479,7 @@ export async function renderMarkdown(
     currentRoute,
     sourceContext,
     sourceFile,
+    documentPath,
     sourceRevision,
     siteBase,
   );

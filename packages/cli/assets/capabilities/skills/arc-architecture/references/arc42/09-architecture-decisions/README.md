@@ -36,7 +36,7 @@ Use these as investigation leads, not automatic proof. Prefer current implementa
 - Document decisions with material structural, quality, dependency, interface, or construction impact.
 - Capture context, decision, rationale/criteria, alternatives, consequences, status, and date when known.
 - Link existing ADRs instead of duplicating them.
-- Follow the repository's ADR conventions and link its canonical ADR index here; when no convention exists, the ADR skill defaults to `docs/adr/README.md`.
+- ArcShape's canonical ADR collection is `docs/architecture/09-architecture-decisions/`; its section `README.md` is the alphabetical navigation index. Link every record from that index, keep records or stable groups below it, and do not create a parallel `docs/adr/` collection.
 - Distinguish historical decisions from current choices; flag reversals or missing rationale.
 
 ## Sources and examples
