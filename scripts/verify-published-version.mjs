@@ -4,6 +4,8 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
+export const PUBLISH_VERIFICATION_ATTEMPTS = 24;
+export const PUBLISH_VERIFICATION_DELAY_MS = 5_000;
 const { name: packageName } = JSON.parse(
   await readFile(
     new URL("../packages/cli/package.json", import.meta.url),
@@ -15,7 +17,7 @@ if (!packageName) throw new Error("package.json must define a package name");
 const version = process.env.PACKAGE_VERSION?.replace(/^v/, "");
 if (!version) throw new Error("PACKAGE_VERSION is required");
 
-for (let attempt = 1; attempt <= 12; attempt += 1) {
+for (let attempt = 1; attempt <= PUBLISH_VERIFICATION_ATTEMPTS; attempt += 1) {
   try {
     const { stdout } = await run("npm", [
       "view",
@@ -29,7 +31,7 @@ for (let attempt = 1; attempt <= 12; attempt += 1) {
   } catch {
     // Registry propagation can lag behind a successful publish.
   }
-  await wait(5_000);
+  await wait(PUBLISH_VERIFICATION_DELAY_MS);
 }
 throw new Error(
   `npm did not report ${packageName}@${version} after publication`,
