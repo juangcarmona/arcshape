@@ -9,26 +9,26 @@
 
 ## 1. Preserve document hierarchy metadata
 
-- [ ] 1.1 Carry each supporting document's existing `relativeFile` into the generated section data and verify the generated JSON retains nested paths without changing stable routes.
-- [ ] 1.2 Extend `tests/section-directories.test.mjs` with a nested fixture and verify recursive loading exposes the expected relative paths, titles, and routes.
+- [x] 1.1 Carry each supporting document's existing `relativeFile` into the generated section data and verify the generated JSON retains nested paths without changing stable routes.
+- [x] 1.2 Extend `tests/section-directories.test.mjs` with a nested fixture and verify recursive loading exposes the expected relative paths, titles, and routes.
 
 ## 2. Build deterministic navigation data and markup
 
-- [ ] 2.1 Add a pure navigation-tree builder and acronym-aware folder-label helper in the reader shell; verify leaves precede folders and natural sorting handles nested README and README-less folders.
-- [ ] 2.2 Render nested folder containers, accessible toggles, child lists, and folder links while preserving the existing flat markup branch; verify generated HTML contains the expected hierarchy and no unescaped path data.
-- [ ] 2.3 Update the reader runtime to synchronize current links, ancestor expansion, `aria-expanded`, and hidden child lists on route changes and toggle activation; verify the generated script remains valid ES5 and the existing search index still sees every supporting page.
+- [x] 2.1 Add a pure navigation-tree builder and acronym-aware folder-label helper in the reader shell; verify leaves precede folders and natural sorting handles nested README and README-less folders.
+- [x] 2.2 Render nested folder containers, accessible toggles, child lists, and folder links while preserving the existing flat markup branch; verify generated HTML contains the expected hierarchy and no unescaped path data.
+- [x] 2.3 Update the reader runtime to synchronize current links, ancestor expansion, `aria-expanded`, and hidden child lists on route changes and toggle activation; verify the generated script remains valid ES5 and the existing search index still sees every supporting page.
 
 ## 3. Add contextual reader evidence
 
-- [ ] 3.1 Render breadcrumbs from the same relative-path metadata, linking only folders with README pages; verify README-less folders remain contextual text and existing section owner links remain valid.
-- [ ] 3.2 Extend `tests/reader-accessibility.test.mjs` with a nested reader fixture and verify direct nested navigation opens ancestors, toggles work with keyboard input, current-page state is exposed, breadcrumbs are correct, and flat sections remain compatible.
-- [ ] 3.3 Run the focused Puppeteer reader tests and inspect the generated reader artifact for hierarchy, focus behavior, mobile layout, and absence of horizontal overflow.
+- [x] 3.1 Render breadcrumbs from the same relative-path metadata, linking only folders with README pages; verify README-less folders remain contextual text and existing section owner links remain valid.
+- [x] 3.2 Extend `tests/reader-accessibility.test.mjs` with a nested reader fixture and verify direct nested navigation opens ancestors, toggles work with keyboard input, current-page state is exposed, breadcrumbs are correct, and flat sections remain compatible.
+- [x] 3.3 Run the focused Puppeteer reader tests and inspect the generated reader artifact for hierarchy, focus behavior, mobile layout, and absence of horizontal overflow.
 
 ## 4. Release and documentation readiness
 
-- [ ] 4.1 Update `docs/architecture/06-runtime-view/README.md` if needed to describe recursive supporting-document navigation and generated-reader breadcrumbs; verify the documentation matches the implemented behavior.
-- [ ] 4.2 Add a patch Changeset for `@arcshape/cli` describing hierarchical supporting-document navigation; verify `npm exec -- changeset status` reports the package bump.
-- [ ] 4.3 Run OpenSpec validation, ProductShape citation verification, formatting, lint, typecheck, tests, build, security audit, package smoke, and `git diff --check`; verify every required deterministic check has an observed exit code.
+- [x] 4.1 Update `docs/architecture/06-runtime-view/README.md` if needed to describe recursive supporting-document navigation and generated-reader breadcrumbs; verify the documentation matches the implemented behavior.
+- [x] 4.2 Add a patch Changeset for `@arcshape/cli` describing hierarchical supporting-document navigation; verify `npm exec -- changeset status` reports the package bump.
+- [x] 4.3 Run OpenSpec validation, ProductShape citation verification, formatting, lint, typecheck, tests, build, security audit, package smoke, and `git diff --check`; verify every required deterministic check has an observed exit code.
 
 ## Workflow follow-up
 

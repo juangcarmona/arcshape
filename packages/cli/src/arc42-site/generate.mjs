@@ -221,6 +221,7 @@ async function main() {
       });
       supporting.push({
         route: document.route,
+        relativeFile: document.relativeFile,
         title: document.title,
         description: document.description,
         html: supportRendered.html,
