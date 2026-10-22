@@ -94,6 +94,123 @@ function sectionIcon(number) {
   return `<svg viewBox="0 0 16 16" aria-hidden="true">${SECTION_ICONS[index] ?? SECTION_ICONS[11]}</svg>`;
 }
 
+const ACRONYMS = new Set(["api", "sql", "adr", "ui", "url", "http", "id"]);
+
+export function humanizeSegment(segment) {
+  return String(segment)
+    .replace(/[-_]+/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => {
+      const lower = word.toLowerCase();
+      return ACRONYMS.has(lower)
+        ? lower.toUpperCase()
+        : lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(" ");
+}
+
+function sortNavigationNodes(nodes) {
+  nodes.sort((left, right) => {
+    const leftFolder = left.kind === "folder";
+    const rightFolder = right.kind === "folder";
+    if (leftFolder !== rightFolder) return leftFolder ? 1 : -1;
+    const leftLabel = leftFolder
+      ? left.label
+      : left.document.title || left.document.relativeFile;
+    const rightLabel = rightFolder
+      ? right.label
+      : right.document.title || right.document.relativeFile;
+    return leftLabel.localeCompare(rightLabel, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    });
+  });
+  for (const node of nodes) {
+    if (node.kind === "folder") sortNavigationNodes(node.children);
+  }
+  return nodes;
+}
+
+export function buildNavigationTree(supporting = []) {
+  const root = { kind: "root", children: [] };
+  const folders = new Map();
+  for (const document of supporting) {
+    const relativeFile = String(document.relativeFile || "").replaceAll(
+      "\\",
+      "/",
+    );
+    const parts = relativeFile.split("/").filter(Boolean);
+    if (parts.length < 2) {
+      root.children.push({ kind: "page", document });
+      continue;
+    }
+
+    let parent = root;
+    const path = [];
+    for (const segment of parts.slice(0, -1)) {
+      path.push(segment);
+      const folderPath = path.join("/");
+      let folder = folders.get(folderPath);
+      if (!folder) {
+        folder = {
+          kind: "folder",
+          path: folderPath,
+          label: humanizeSegment(segment),
+          page: undefined,
+          children: [],
+        };
+        folders.set(folderPath, folder);
+        parent.children.push(folder);
+      }
+      parent = folder;
+    }
+
+    if (parts.at(-1).toLowerCase() === "readme.md") {
+      parent.page = document;
+      parent.label = document.title || parent.label;
+    } else {
+      parent.children.push({ kind: "page", document });
+    }
+  }
+  sortNavigationNodes(root.children);
+  return root.children;
+}
+
+function navigationBreadcrumbs(supporting) {
+  const folderPages = new Map();
+  for (const document of supporting) {
+    const relativeFile = String(document.relativeFile || "").replaceAll(
+      "\\",
+      "/",
+    );
+    if (!relativeFile.toLowerCase().endsWith("/readme.md")) continue;
+    folderPages.set(
+      relativeFile.slice(0, -"/README.md".length).toLowerCase(),
+      document,
+    );
+  }
+
+  return supporting.map((document) => {
+    const relativeFile = String(document.relativeFile || "").replaceAll(
+      "\\",
+      "/",
+    );
+    const parts = relativeFile.split("/").filter(Boolean);
+    const folders = parts.slice(0, -1);
+    const breadcrumbs = [];
+    for (let i = 0; i < folders.length; i += 1) {
+      const path = folders.slice(0, i + 1).join("/");
+      const page = folderPages.get(path.toLowerCase());
+      breadcrumbs.push({
+        label: page?.title || humanizeSegment(folders[i]),
+        route: page?.route,
+      });
+    }
+    return { ...document, breadcrumbs };
+  });
+}
+
 const style = `
 :root {
 ${lightBlockWithSectionColors}
@@ -191,6 +308,12 @@ main#main { flex: 1 1 auto; min-width: 0; overflow-y: auto; padding: 1.4rem 2.2r
 .doc > h2.doc-title { margin: 0 0 0.2rem; font-size: 1.45rem; }
 p.doc-desc { margin: 0 0 1.2rem; color: var(--muted); font-size: 0.9rem; }
 p.doc-owner { margin: 0 0 .7rem; color: var(--muted); font-size: .82rem; }
+.breadcrumbs { margin:0 0 .7rem; color:var(--muted); font-size:.8rem; }
+.breadcrumbs ol { display:flex; flex-wrap:wrap; gap:.2rem .45rem; list-style:none; margin:0; padding:0; }
+.breadcrumbs li { display:inline-flex; align-items:center; gap:.45rem; }
+.breadcrumbs li:not(:last-child)::after { content:'›'; color:var(--line-strong); }
+.breadcrumbs a { color:var(--accent); }
+.breadcrumbs [aria-current='page'] { color:var(--ink); }
 
 /* ---- Sidebar ---- */
 aside.nav .nav-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; margin:0 0 .5rem; }
@@ -218,6 +341,20 @@ aside.nav .supporting-nav { list-style:none; margin:0 0 .35rem 2.1rem; padding:0
 aside.nav .supporting-nav li { border:0; }
 aside.nav .supporting-nav a { min-height:2rem; padding:.3rem .4rem; border-left-width:1px; font-size:.82rem; color:var(--muted); }
 aside.nav .supporting-nav a::before { content:'↳'; margin-right:.35rem; color:var(--accent); }
+aside.nav .supporting-tree { margin-left:1.45rem; }
+aside.nav .supporting-tree li { border:0; }
+aside.nav .nav-folder-row { display:flex; align-items:stretch; min-width:0; }
+aside.nav .nav-folder-row > a { flex:1 1 auto; min-width:0; }
+aside.nav .nav-folder-toggle {
+  display:inline-flex; flex:none; align-items:center; justify-content:center; width:1.5rem;
+  border:0; padding:0; background:transparent; color:var(--muted); cursor:pointer;
+}
+aside.nav .nav-folder-toggle:hover { color:var(--ink); background:var(--raise); }
+aside.nav .nav-folder-toggle svg { width:.75rem; height:.75rem; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .15s ease; }
+aside.nav .nav-folder-toggle[aria-expanded='true'] svg { transform:rotate(90deg); }
+aside.nav .nav-folder > .supporting-nav { margin:.1rem 0 .25rem 1.35rem; padding-left:.55rem; border-left:1px solid var(--line-strong); }
+aside.nav .supporting-tree .t { white-space:normal; overflow:visible; text-overflow:clip; overflow-wrap:anywhere; }
+aside.nav .supporting-tree a::before { content:'↳'; margin-right:.35rem; color:var(--accent); }
 .nav-foot { margin-top: 1rem; padding-top: 0.6rem; border-top: 1px solid var(--line); font-size: 0.78rem; color: var(--muted); }
 .nav-foot .prevnext { display: flex; justify-content: space-between; gap: 0.5rem; }
 .nav-foot .prevnext a { font-size: 0.78rem; }
@@ -225,7 +362,7 @@ aside.nav .supporting-nav a::before { content:'↳'; margin-right:.35rem; color:
 .prevnext .nav-icon { display:inline-flex; width:.9rem; height:.9rem; flex:none; margin-top:.15rem; }
 body.nav-collapsed aside.nav { width:4.25rem; padding:.9rem .55rem; }
 body.nav-collapsed aside.nav .nav-heading { justify-content:center; }
-body.nav-collapsed aside.nav h2, body.nav-collapsed aside.nav .nav-title, body.nav-collapsed aside.nav .nav-foot, body.nav-collapsed aside.nav .supporting-nav { display:none; }
+body.nav-collapsed aside.nav h2, body.nav-collapsed aside.nav .nav-title, body.nav-collapsed aside.nav .nav-foot, body.nav-collapsed aside.nav .supporting-nav, body.nav-collapsed aside.nav .supporting-tree { display:none; }
 body.nav-collapsed aside.nav a { flex-direction:column; gap:.2rem; align-items:center; padding:.5rem .15rem; }
 body.nav-collapsed aside.nav .nav-kind { flex-direction:column; gap:.15rem; min-width:0; padding:.2rem; }
 body.nav-collapsed aside.nav .nav-icon { width:1.2rem; height:1.2rem; }
@@ -427,7 +564,37 @@ const script = String.raw`
   }
 
   /* ---------- Views ---------- */
-  function renderDoc(host, title, description, html, owner) {
+  function renderBreadcrumbs(article, owner, document) {
+    if (!document || !document.breadcrumbs || document.breadcrumbs.length === 0) return;
+    var nav = el('nav', 'breadcrumbs');
+    nav.setAttribute('aria-label', 'Breadcrumb');
+    var list = el('ol');
+    var sectionItem = el('li');
+    var sectionLink = doc.createElement('a');
+    sectionLink.href = '#/section/' + owner.number;
+    sectionLink.textContent = owner.title;
+    sectionItem.appendChild(sectionLink);
+    list.appendChild(sectionItem);
+    for (var i = 0; i < document.breadcrumbs.length; i += 1) {
+      var breadcrumb = document.breadcrumbs[i];
+      var item = el('li');
+      if (breadcrumb.route) {
+        var link = doc.createElement('a');
+        link.href = breadcrumb.route;
+        link.textContent = breadcrumb.label;
+        item.appendChild(link);
+      } else item.appendChild(el('span', null, breadcrumb.label));
+      list.appendChild(item);
+    }
+    var current = el('li');
+    current.setAttribute('aria-current', 'page');
+    current.appendChild(el('span', null, document.title));
+    list.appendChild(current);
+    nav.appendChild(list);
+    article.insertBefore(nav, article.firstChild);
+  }
+
+  function renderDoc(host, title, description, html, owner, document) {
     clear(host);
     var article = el('article', 'doc');
     var h = el('h2', 'doc-title', title);
@@ -440,6 +607,7 @@ const script = String.raw`
       ownerLink.textContent = owner.title;
       ownerLine.appendChild(ownerLink);
       article.appendChild(ownerLine);
+      renderBreadcrumbs(article, owner, document);
     }
     if (description) article.appendChild(el('p', 'doc-desc', description));
     var body = el('div', 'doc-body');
@@ -535,12 +703,36 @@ const script = String.raw`
     }
     if (supportingMatch) {
       var document = supportingMatch.document;
-      renderDoc(host, document.title, document.description, document.html || '', section);
+      renderDoc(host, document.title, document.description, document.html || '', section, document);
     } else renderDoc(host, section.title, section.description, section.html || '');
   }
 
   /* ---------- Sidebar state ---------- */
-  function syncNav(route) {
+  function setFolderOpen(folder, expanded) {
+    var toggle = folder.querySelector('[data-folder-toggle]');
+    var children = toggle ? doc.getElementById(toggle.getAttribute('aria-controls')) : null;
+    if (!toggle || !children) return;
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.setAttribute('aria-label', (expanded ? 'Collapse ' : 'Expand ') + (folder.getAttribute('data-folder-label') || 'folder'));
+    children.hidden = !expanded;
+  }
+
+  function openAncestorFolders(document) {
+    if (!document || !document.relativeFile) return;
+    var parts = document.relativeFile.split('/');
+    var folders = parts.slice(0, -1);
+    var nodes = doc.querySelectorAll('.nav-folder[data-folder-path]');
+    for (var i = 0; i < nodes.length; i += 1) {
+      var path = nodes[i].getAttribute('data-folder-path');
+      var ancestor = false;
+      for (var j = 0; j < folders.length; j += 1) {
+        if (folders.slice(0, j + 1).join('/') === path) { ancestor = true; break; }
+      }
+      if (ancestor) setFolderOpen(nodes[i], true);
+    }
+  }
+
+  function syncNav(route, supportingDocument) {
     var links = doc.querySelectorAll('aside.nav a[data-route]');
     for (var i = 0; i < links.length; i += 1) {
       var current = links[i].getAttribute('data-route') === route;
@@ -577,6 +769,7 @@ const script = String.raw`
     } else {
       set(prev, null); set(next, null);
     }
+    openAncestorFolders(supportingDocument);
   }
 
   /* ---------- Router ---------- */
@@ -588,7 +781,7 @@ const script = String.raw`
     var supportingMatch = m ? findSupporting(byNumber[m[1]], route) : null;
     if (m) showSection(host, m[1], supportingMatch);
     else showOverview(host);
-    syncNav(m ? (supportingMatch ? supportingMatch.document.route : '#/section/' + m[1]) : '#/');
+    syncNav(m ? (supportingMatch ? supportingMatch.document.route : '#/section/' + m[1]) : '#/', supportingMatch ? supportingMatch.document : null);
     var anchor = supportingMatch ? supportingMatch.anchor : m ? m[2] || '' : /^#\/([^/]*)$/.exec(route);
     if (!m) anchor = anchor ? anchor[1] : '';
     if (anchor) {
@@ -739,6 +932,12 @@ const script = String.raw`
   doc.getElementById('nav-close').addEventListener('click', closeMobileNav);
   doc.getElementById('nav-backdrop').addEventListener('click', closeMobileNav);
   doc.querySelector('aside.nav ol').addEventListener('click', function (event) {
+    var toggle = event.target.closest('[data-folder-toggle]');
+    if (toggle) {
+      var folder = toggle.closest('.nav-folder');
+      if (folder) setFolderOpen(folder, toggle.getAttribute('aria-expanded') !== 'true');
+      return;
+    }
     if (event.target.closest('a')) closeMobileNav();
   });
   var findInput = doc.getElementById('find-input');
@@ -769,6 +968,34 @@ function stableJson(value) {
  * @param {string|undefined} input.revision
  * @param {string} input.brandImage ArcShape lockup WebP encoded as base64
  */
+function supportingLink(document) {
+  return `<a href="${esc(document.route)}" data-route="${esc(document.route)}" data-relative-file="${esc(document.relativeFile || "")}"><span class="nav-title t">${esc(document.title)}</span></a>`;
+}
+
+function renderNavigationNodes(nodes, sectionNumber, state) {
+  return nodes
+    .map((node) => {
+      if (node.kind === "page") {
+        return `          <li>${supportingLink(node.document)}</li>`;
+      }
+
+      const label = node.page?.title || node.label;
+      const folderId = `nav-folder-${sectionNumber}-${state.nextFolderId}`;
+      state.nextFolderId += 1;
+      const children = node.children.length
+        ? `<ol id="${folderId}" class="supporting-nav" hidden>\n${renderNavigationNodes(node.children, sectionNumber, state)}\n          </ol>`
+        : "";
+      const toggle = children
+        ? `<button type="button" class="nav-folder-toggle" data-folder-toggle aria-controls="${folderId}" aria-expanded="false" aria-label="Expand ${esc(label)}" title="Expand ${esc(label)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg></button>`
+        : "";
+      const page = node.page
+        ? supportingLink(node.page)
+        : `<span class="nav-title t">${esc(label)}</span>`;
+      return `          <li class="nav-folder" data-folder-path="${esc(node.path)}" data-folder-label="${esc(label)}"><div class="nav-folder-row">${toggle}${page}</div>${children}</li>`;
+    })
+    .join("\n");
+}
+
 export function buildSnapshotHtml({
   readme,
   sections,
@@ -783,15 +1010,26 @@ export function buildSnapshotHtml({
     ? `<span class="revshort" title="revision ${esc(revision)}">${esc(revision.slice(0, 7))}</span>`
     : '<span class="revshort" title="Not generated from a Git checkout">no revision</span>';
 
-  const navItems = sections
+  const preparedSections = sections.map((section) => ({
+    ...section,
+    supporting: navigationBreadcrumbs(section.supporting ?? []),
+  }));
+
+  const navItems = preparedSections
     .map((s) => {
-      const supporting = (s.supporting ?? [])
-        .map(
-          (document) =>
-            `          <li><a href="${esc(document.route)}" data-route="${esc(document.route)}"><span class="nav-title t">${esc(document.title)}</span></a></li>`,
-        )
-        .join("\n");
-      return `        <li><a href="#/section/${s.number}" data-route="#/section/${s.number}" data-category="${sectionCategory(s.number)}"><span class="nav-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 5 5-5 5"/></svg></span><span class="nav-kind"><span class="nav-icon">${sectionIcon(s.number)}</span><span class="nav-code">${SECTION_CODES[Number(s.number) - 1] || "SEC"}</span></span><span class="nav-title t">${esc(s.title)}</span><span class="nav-number">${esc(s.number)}</span></a>${supporting ? `<ol class="supporting-nav">\n${supporting}\n        </ol>` : ""}</li>`;
+      const tree = buildNavigationTree(s.supporting ?? []);
+      const hasFolders = tree.some((node) => node.kind === "folder");
+      const supporting = hasFolders
+        ? `<ol class="supporting-nav supporting-tree">\n${renderNavigationNodes(tree, s.number, { nextFolderId: 0 })}\n        </ol>`
+        : (s.supporting ?? [])
+            .map((document) => `          <li>${supportingLink(document)}</li>`)
+            .join("\n");
+      const supportingMarkup = supporting
+        ? hasFolders
+          ? supporting
+          : `<ol class="supporting-nav">\n${supporting}\n        </ol>`
+        : "";
+      return `        <li><a href="#/section/${s.number}" data-route="#/section/${s.number}" data-category="${sectionCategory(s.number)}"><span class="nav-chevron"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m5 3 5 5-5 5"/></svg></span><span class="nav-kind"><span class="nav-icon">${sectionIcon(s.number)}</span><span class="nav-code">${SECTION_CODES[Number(s.number) - 1] || "SEC"}</span></span><span class="nav-title t">${esc(s.title)}</span><span class="nav-number">${esc(s.number)}</span></a>${supportingMarkup}</li>`;
     })
     .join("\n");
 
@@ -801,7 +1039,7 @@ export function buildSnapshotHtml({
       description: readme.description,
       html: readme.html,
     },
-    sections: sections.map((s) => ({
+    sections: preparedSections.map((s) => ({
       number: s.number,
       title: s.title,
       description: s.description,

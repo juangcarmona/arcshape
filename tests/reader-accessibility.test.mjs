@@ -138,6 +138,64 @@ describe("generated architecture reader", () => {
     await page.close();
   }, 30_000);
 
+  it("renders nested supporting documents with breadcrumbs and route-driven expansion", async () => {
+    const page = await browser.newPage();
+    await page.setContent(createNestedReader());
+    await page.evaluate(() => {
+      location.hash = "#/section/09/decisions/sql/query";
+    });
+    await page.waitForFunction(
+      () =>
+        location.hash === "#/section/09/decisions/sql/query" &&
+        document.querySelector(".doc-title")?.textContent === "Query details",
+    );
+
+    for (const path of ["decisions", "decisions/sql"]) {
+      expect(
+        await page.$eval(
+          `aside.nav .nav-folder[data-folder-path="${path}"] > .nav-folder-row > button`,
+          (button) => button.getAttribute("aria-expanded"),
+        ),
+      ).toBe("true");
+    }
+    expect(
+      await page.$eval('aside.nav a[aria-current="page"]', (link) =>
+        link.getAttribute("data-relative-file"),
+      ),
+    ).toBe("decisions/sql/query.md");
+
+    expect(
+      await page.$eval(".breadcrumbs", (nav) => nav.textContent),
+    ).toContain("DecisionsSQLQuery details");
+    expect(
+      await page.$$eval(".breadcrumbs a", (links) =>
+        links.map((link) => link.getAttribute("href")),
+      ),
+    ).toContain("#/section/09/decisions/README");
+    expect(
+      await page.$$eval(".breadcrumbs a", (links) =>
+        links.map((link) => link.getAttribute("href")),
+      ),
+    ).toContain("#/section/09/decisions/sql/README");
+
+    const toggleSelector =
+      'aside.nav .nav-folder[data-folder-path="decisions/sql"] > .nav-folder-row > button';
+    await page.$eval(toggleSelector, (button) => button.click());
+    expect(
+      await page.$eval(toggleSelector, (button) =>
+        button.getAttribute("aria-expanded"),
+      ),
+    ).toBe("false");
+    await page.focus(toggleSelector);
+    await page.keyboard.press("Enter");
+    expect(
+      await page.$eval(toggleSelector, (button) =>
+        button.getAttribute("aria-expanded"),
+      ),
+    ).toBe("true");
+    await page.close();
+  }, 30_000);
+
   it("keeps semantic landmarks, contrast, and navigation usable on mobile", async () => {
     const page = await browser.newPage();
     await page.setViewport({ width: 375, height: 812 });
@@ -258,6 +316,64 @@ function createReader() {
       html: "<p>ArcShape helps maintainers document software systems.</p>",
     },
     sections,
+    stackName: "ArcShape",
+    revision: "1234567890abcdef",
+  });
+}
+
+function createNestedReader() {
+  const html = createReader();
+  const sectionStart = html.indexOf('<script id="arc42-data"');
+  const dataStart = html.indexOf(">", sectionStart) + 1;
+  const dataEnd = html.indexOf("</script>", dataStart);
+  const data = JSON.parse(html.slice(dataStart, dataEnd));
+  data.sections[8].supporting = [
+    {
+      relativeFile: "decisions/README.md",
+      route: "#/section/09/decisions/README",
+      title: "Decisions",
+      description: "",
+      html: "<p>Decision index.</p>",
+      breadcrumbs: [
+        { label: "Decisions", route: "#/section/09/decisions/README" },
+      ],
+    },
+    {
+      relativeFile: "decisions/sql/README.md",
+      route: "#/section/09/decisions/sql/README",
+      title: "SQL",
+      description: "",
+      html: "<p>SQL decisions.</p>",
+      breadcrumbs: [
+        { label: "Decisions", route: "#/section/09/decisions/README" },
+        { label: "SQL", route: "#/section/09/decisions/sql/README" },
+      ],
+    },
+    {
+      relativeFile: "decisions/sql/query.md",
+      route: "#/section/09/decisions/sql/query",
+      title: "Query details",
+      description: "",
+      html: "<p>Query details.</p>",
+      breadcrumbs: [
+        { label: "Decisions", route: "#/section/09/decisions/README" },
+        { label: "SQL", route: "#/section/09/decisions/sql/README" },
+      ],
+    },
+    {
+      relativeFile: "decisions/api.md",
+      route: "#/section/09/decisions/api",
+      title: "API decision",
+      description: "",
+      html: "<p>API decision.</p>",
+      breadcrumbs: [
+        { label: "Decisions", route: "#/section/09/decisions/README" },
+      ],
+    },
+  ];
+  return buildSnapshotHtml({
+    readme: data.readme,
+    sections: data.sections,
     stackName: "ArcShape",
     revision: "1234567890abcdef",
   });

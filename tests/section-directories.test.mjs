@@ -14,6 +14,10 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import { loadDocs } from "../packages/cli/src/arc42-site/loadDocs.mjs";
+import {
+  buildNavigationTree,
+  humanizeSegment,
+} from "../packages/cli/src/arc42-site/shell.mjs";
 import { runValidate } from "../packages/cli/src/bin/validate.mjs";
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -44,6 +48,7 @@ describe("architecture section directories", () => {
     expect(docs.sections[0].supporting).toMatchObject([
       {
         file: "01-introduction-and-goals/supporting-document.md",
+        relativeFile: "supporting-document.md",
         route: "#/section/01/supporting-document",
         title: "Supporting architecture material",
       },
@@ -55,6 +60,40 @@ describe("architecture section directories", () => {
         title: "ADR-0001: Use SQLite for local session state",
       },
     ]);
+  });
+
+  it("builds a deterministic hierarchy from supporting-document paths", () => {
+    const tree = buildNavigationTree([
+      { relativeFile: "api/10-overview.md", title: "Overview" },
+      { relativeFile: "api/README.md", title: "API" },
+      { relativeFile: "api/sql/2-query.md", title: "Query" },
+      { relativeFile: "api/sql/README.md", title: "SQL" },
+      { relativeFile: "api/adr/1-decision.md", title: "Decision" },
+      { relativeFile: "flat.md", title: "Flat page" },
+    ]);
+
+    expect(humanizeSegment("api-reference")).toBe("API Reference");
+    expect(
+      tree.map((node) =>
+        node.kind === "page" ? node.document.title : node.label,
+      ),
+    ).toEqual(["Flat page", "API"]);
+    expect(tree[1]).toMatchObject({
+      kind: "folder",
+      label: "API",
+      page: { title: "API" },
+    });
+    expect(
+      tree[1].children.map((node) =>
+        node.kind === "page" ? node.document.title : node.label,
+      ),
+    ).toEqual(["Overview", "ADR", "SQL"]);
+    expect(tree[1].children[2]).toMatchObject({
+      kind: "folder",
+      label: "SQL",
+      page: { title: "SQL" },
+      children: [{ kind: "page", document: { title: "Query" } }],
+    });
   });
 
   it("validates canonical links and citations, including supporting Markdown", async () => {
@@ -202,6 +241,11 @@ describe("architecture section directories", () => {
     expect(html).toContain("ADR-0001: Use SQLite for local session state");
     expect(html).not.toContain("status: Proposed");
     expect(html).toContain("Supporting architecture material");
+    expect(html).toContain('data-folder-path="platform"');
+    expect(html).toContain(
+      'data-relative-file="platform/ADR-0001-use-sqlite.md"',
+    );
+    expect(html).toContain('"breadcrumbs":[{"label":"Platform"}');
   }, 60_000);
 });
 
