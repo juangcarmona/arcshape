@@ -90,6 +90,24 @@ describe("Changesets release workflow", () => {
     expect(serializedSteps).toContain("scripts/upload-release-sbom.mjs");
   });
 
+  it("allows npm registry propagation without weakening exact-version verification", async () => {
+    const verifier = await readFile(
+      new URL("../scripts/verify-published-version.mjs", import.meta.url),
+      "utf8",
+    );
+    const attempts = Number(
+      /PUBLISH_VERIFICATION_ATTEMPTS = (\d+)/.exec(verifier)?.[1],
+    );
+    const delay = Number(
+      /PUBLISH_VERIFICATION_DELAY_MS = ([\d_]+)/
+        .exec(verifier)?.[1]
+        .replaceAll("_", ""),
+    );
+
+    expect(attempts * delay).toBeGreaterThanOrEqual(120_000);
+    expect(verifier).toContain("stdout.trim() === version");
+  });
+
   it("does not treat a body mention as a Version Packages release subject", () => {
     const isVersionPackagesSubject = (message) =>
       message.startsWith("chore(release): version packages") ||
