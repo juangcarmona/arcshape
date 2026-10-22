@@ -1,5 +1,11 @@
 # @arcshape/cli
 
+## 0.1.4
+
+### Patch Changes
+
+- 88bc0e8: Render nested supporting architecture documents as collapsible reader navigation with contextual breadcrumbs.
+
 ## 0.1.3
 
 ### Patch Changes
