@@ -28,7 +28,21 @@
       "evidence": ["docs/delivery/issue-105/plan.md"]
     }
   ],
-  "reviews": [],
+  "reviews": [
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewKind": "plan",
+      "reviewedCommit": "59845f0491dc4676867ce4c49d0763ade7227682",
+      "decision": "approve",
+      "findings": "The exact Changesets branch exception preserves strict developer branch validation; removing the 16 unmatched audit exceptions does not waive active High/Critical findings; scope and tests are complete.",
+      "evidence": [
+        "scripts/check-branch-name.mjs",
+        "scripts/check-npm-audit.mjs",
+        "tests/check-npm-audit.test.mjs",
+        "docs/delivery/issue-105/plan.md"
+      ]
+    }
+  ],
   "corrections": [],
   "stopReason": null,
   "pullRequest": null,
