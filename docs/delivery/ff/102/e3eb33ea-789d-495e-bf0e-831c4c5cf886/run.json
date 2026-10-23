@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "runId": "e3eb33ea-789d-495e-bf0e-831c4c5cf886",
+  "workItem": "102",
+  "branch": "fix/102-reader-readability-public-site-header",
+  "startedAt": "2026-10-23T05:19:00Z",
+  "executorModel": "gpt-5",
+  "reviewerModel": "gpt-6-luna",
+  "maxCorrectionRounds": 3,
+  "status": "awaiting-integration",
+  "stages": [
+    {
+      "name": "refine",
+      "startedAt": "2026-10-23T05:18:50Z",
+      "endedAt": "2026-10-23T05:19:19Z",
+      "inputCommit": "7d8a1e928a9b64957ca6d3f5b19946d8b9537390",
+      "outputCommit": "7d8a1e928a9b64957ca6d3f5b19946d8b9537390",
+      "result": "ready",
+      "evidence": [
+        "https://github.com/juangcarmona/arcshape/issues/102",
+        "Definition of Ready dimensions evaluated; missing dependencies and risks recorded"
+      ]
+    },
+    {
+      "name": "propose",
+      "startedAt": "2026-10-23T05:19:20Z",
+      "endedAt": "2026-10-23T05:21:20Z",
+      "inputCommit": "7d8a1e928a9b64957ca6d3f5b19946d8b9537390",
+      "outputCommit": "72c33cd8bab6a50be030c4e00b371fbe20828b59",
+      "result": "request-changes",
+      "evidence": [
+        "openspec/changes/improve-reader-readability-public-site-header/"
+      ]
+    },
+    {
+      "name": "propose-correction",
+      "startedAt": "2026-10-23T05:21:21Z",
+      "endedAt": "2026-10-23T05:22:10Z",
+      "inputCommit": "72c33cd8bab6a50be030c4e00b371fbe20828b59",
+      "outputCommit": "4fec4026a3453cf58158afaaa683e4a374372ff4",
+      "result": "approved",
+      "evidence": [
+        "openspec/changes/improve-reader-readability-public-site-header/"
+      ]
+    },
+    {
+      "name": "implement",
+      "startedAt": "2026-10-23T05:22:11Z",
+      "endedAt": "2026-10-23T05:46:17Z",
+      "inputCommit": "2e7783f4212815812859e9824ab9e6e34435bd0d",
+      "outputCommit": "4760656",
+      "result": "passed",
+      "evidence": [
+        "docs/delivery/issue-102/evidence/README.md",
+        "GITHUB_ACTIONS=true npm run verify: 26 files, 130 tests passed",
+        "GITHUB_ACTIONS=true npm run test:e2e: 7 tests passed",
+        "npm run product:model:check and npm exec -- prodshape validate --format json passed",
+        "npm exec -- openspec validate --all --no-interactive and prodshape citations verify passed",
+        "npm run security:audit passed after dompurify 3.4.17 correction",
+        "synthetic secret scan and runtime SBOM/license policy passed",
+        "GitHub required checks passed at 4760656: six quality jobs, conventions, CodeQL, dependency audit, secrets, SBOM/license, Product model, portal build, DAST, and E2E"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "plan",
+      "reviewedCommit": "72c33cd8bab6a50be030c4e00b371fbe20828b59",
+      "decision": "request-changes",
+      "findings": [
+        "Add explicit public-site lockup comparison, accessible-name and keyboard-focus verification.",
+        "State the human/forge approval gate explicitly before merge."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16734-7fba-7583-ab92-c733733c645e"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "plan",
+      "reviewedCommit": "4fec4026a3453cf58158afaaa683e4a374372ff4",
+      "decision": "approve",
+      "findings": [
+        "Plan covers reader width, portal badge removal, safe public-site link, 0.1.5 Changeset, runtime evidence, and human/forge gates."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "done-gate",
+      "reviewedCommit": "9ff8c904a4537a04543b90bdaa4aa1e17b5df562",
+      "decision": "request-changes",
+      "findings": [
+        "Dependency correction was needed and the local checks were not yet durably recorded against the implementation head.",
+        "Human Done review and forge approval remain separate pre-merge gates."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "done-gate",
+      "reviewedCommit": "77a6c54c74716afc2e1825adebb7b533bcc6d14f",
+      "decision": "request-changes",
+      "findings": [
+        "Required GitHub checks were still pending at the current head; wait for current-head deterministic evidence before Done."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "done-gate",
+      "reviewedCommit": "4760656184268920928af4c5dff899dc6b325f7b",
+      "decision": "approve",
+      "findings": [
+        "Required CI checks pass at the final head; implementation, runtime evidence, and local verification satisfy the technical Done gate.",
+        "Human Done review and forge approval remain separate pre-merge gates."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49",
+        "https://github.com/juangcarmona/arcshape/pull/103/checks"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "done-gate",
+      "reviewedCommit": "0eb90cd87038379a19fb9b2a96f8a9b5095641ab",
+      "decision": "approve",
+      "findings": [
+        "The diff from approved implementation 4760656 contains only Fast Forward handoff records; no source changes.",
+        "Required GitHub checks pass for the final PR head.",
+        "Human Done review and forge approval remain separate pre-merge gates."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49",
+        "https://github.com/juangcarmona/arcshape/pull/103/checks"
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "gate": "propose",
+      "round": 1,
+      "requestedChanges": [
+        "Strengthen runtime/evidence tasks for public-site visual parity, accessible naming, and keyboard focus.",
+        "Document the human/forge approval gate."
+      ],
+      "resultingCommit": "4fec4026a3453cf58158afaaa683e4a374372ff4",
+      "rerun": "approved by gpt-6-luna at 4fec4026a3453cf58158afaaa683e4a374372ff4"
+    },
+    {
+      "gate": "implement",
+      "round": 1,
+      "requestedChanges": [
+        "Clear the dependency audit with a minimal runtime dompurify correction and remove stale advisory exceptions.",
+        "Record the complete deterministic and runtime evidence against the implementation head in the Fast Forward run record."
+      ],
+      "resultingCommit": "8591b5a",
+      "rerun": "Full deterministic lane and runtime checks passed; fresh done-gate audit is pending after the durable evidence update."
+    },
+    {
+      "gate": "implement",
+      "round": 2,
+      "requestedChanges": [
+        "Allow the cross-platform reader browser cleanup hook enough time to close Chromium on Windows runners."
+      ],
+      "resultingCommit": "4760656",
+      "rerun": "Local full verify passed and the complete GitHub required-check matrix passed at the final head; done-gate audit approved."
+    }
+  ],
+  "stopReason": "Awaiting human Done review and forge approval before integration.",
+  "pullRequest": {
+    "number": 103,
+    "url": "https://github.com/juangcarmona/arcshape/pull/103",
+    "draft": false,
+    "head": "0eb90cd"
+  },
+  "links": {
+    "workItem": "https://github.com/juangcarmona/arcshape/issues/102"
+  }
+}

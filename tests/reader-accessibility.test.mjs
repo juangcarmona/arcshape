@@ -44,9 +44,16 @@ afterAll(async () => {
   if (outputDirectory) {
     await rm(outputDirectory, { recursive: true, force: true });
   }
-});
+}, 60_000);
 
 describe("generated architecture reader", () => {
+  it("links the brand to the public site without a redundant header caption", () => {
+    expect(readerHtml).toContain(
+      '<a class="brand-home" href="https://arcshape.dev" target="_blank" rel="noopener noreferrer" aria-label="ArcShape public site">',
+    );
+    expect(readerHtml).not.toContain('class="brand-caption"');
+  });
+
   it("lets readers find answers to the ArcShape dogfood tasks", async () => {
     const tasks = [
       {
