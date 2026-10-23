@@ -13,14 +13,14 @@
 
 ## 2. Focused validation and evidence
 
-- [ ] 2.1 Extend the affected focused tests or validation assertions where needed, then run the relevant reader and engineering-portal checks; verify each command exits 0 and covers the changed paths.
-- [ ] 2.2 Build the engineering portal and generated reader from the current commit, exercise desktop and narrow viewport paths with the existing Playwright harness, verify the brand link's accessible name and keyboard focus visibility, compare the lockup against the public site, and store inspected runtime evidence under `docs/delivery/issue-102/evidence/`.
-- [ ] 2.3 Run `npm exec -- prodshape citations verify --provider openspec` and refresh any affected citation only if a canonical artifact changed; verify the command reports the current proposal, design, and task citations.
+- [x] 2.1 Extend the affected focused tests or validation assertions where needed, then run the relevant reader and engineering-portal checks; verify each command exits 0 and covers the changed paths.
+- [x] 2.2 Build the engineering portal and generated reader from the current commit, exercise desktop and narrow viewport paths with the existing Playwright harness, verify the brand link's accessible name and keyboard focus visibility, compare the lockup against the public site, and store inspected runtime evidence under `docs/delivery/issue-102/evidence/`.
+- [x] 2.3 Run `npm exec -- prodshape citations verify --provider openspec` and refresh any affected citation only if a canonical artifact changed; verify the command reports the current proposal, design, and task citations.
 
 ## 3. Lifecycle verification
 
-- [ ] 3.1 Run the complete CI-like deterministic checks derived from the repository workflows, including format, lint, typecheck, tests, build, product model, OpenSpec, and security checks; record terminal results in the Fast Forward evidence.
-- [ ] 3.2 Reconcile the implementation, release metadata, runtime evidence, and Definition of Done before marking the pull request ready; verify the current commit is the one audited and record that required human/forge approval remains a pre-merge gate.
+- [x] 3.1 Run the complete CI-like deterministic checks derived from the repository workflows, including format, lint, typecheck, tests, build, product model, OpenSpec, and security checks; record terminal results in the Fast Forward evidence.
+- [x] 3.2 Reconcile the implementation, release metadata, runtime evidence, and Definition of Done before marking the pull request ready; verify the current commit is the one audited and record that required human/forge approval remains a pre-merge gate.
 
 ## Workflow follow-up
 
