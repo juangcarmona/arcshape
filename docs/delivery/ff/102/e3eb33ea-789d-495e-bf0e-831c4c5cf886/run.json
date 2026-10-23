@@ -7,7 +7,7 @@
   "executorModel": "gpt-5",
   "reviewerModel": "gpt-6-luna",
   "maxCorrectionRounds": 3,
-  "status": "running",
+  "status": "awaiting-integration",
   "stages": [
     {
       "name": "refine",
@@ -46,9 +46,9 @@
     {
       "name": "implement",
       "startedAt": "2026-10-23T05:22:11Z",
-      "endedAt": "2026-10-23T05:34:54Z",
+      "endedAt": "2026-10-23T05:46:17Z",
       "inputCommit": "2e7783f4212815812859e9824ab9e6e34435bd0d",
-      "outputCommit": "8591b5a",
+      "outputCommit": "4760656",
       "result": "passed",
       "evidence": [
         "docs/delivery/issue-102/evidence/README.md",
@@ -57,7 +57,8 @@
         "npm run product:model:check and npm exec -- prodshape validate --format json passed",
         "npm exec -- openspec validate --all --no-interactive and prodshape citations verify passed",
         "npm run security:audit passed after dompurify 3.4.17 correction",
-        "synthetic secret scan and runtime SBOM/license policy passed"
+        "synthetic secret scan and runtime SBOM/license policy passed",
+        "GitHub required checks passed at 4760656: six quality jobs, conventions, CodeQL, dependency audit, secrets, SBOM/license, Product model, portal build, DAST, and E2E"
       ]
     }
   ],
@@ -99,6 +100,32 @@
       "evidence": [
         "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49"
       ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "done-gate",
+      "reviewedCommit": "77a6c54c74716afc2e1825adebb7b533bcc6d14f",
+      "decision": "request-changes",
+      "findings": [
+        "Required GitHub checks were still pending at the current head; wait for current-head deterministic evidence before Done."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "done-gate",
+      "reviewedCommit": "4760656184268920928af4c5dff899dc6b325f7b",
+      "decision": "approve",
+      "findings": [
+        "Required CI checks pass at the final head; implementation, runtime evidence, and local verification satisfy the technical Done gate.",
+        "Human Done review and forge approval remain separate pre-merge gates."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49",
+        "https://github.com/juangcarmona/arcshape/pull/103/checks"
+      ]
     }
   ],
   "corrections": [
@@ -121,14 +148,23 @@
       ],
       "resultingCommit": "8591b5a",
       "rerun": "Full deterministic lane and runtime checks passed; fresh done-gate audit is pending after the durable evidence update."
+    },
+    {
+      "gate": "implement",
+      "round": 2,
+      "requestedChanges": [
+        "Allow the cross-platform reader browser cleanup hook enough time to close Chromium on Windows runners."
+      ],
+      "resultingCommit": "4760656",
+      "rerun": "Local full verify passed and the complete GitHub required-check matrix passed at the final head; done-gate audit approved."
     }
   ],
-  "stopReason": null,
+  "stopReason": "Awaiting human Done review and forge approval before integration.",
   "pullRequest": {
     "number": 103,
     "url": "https://github.com/juangcarmona/arcshape/pull/103",
     "draft": true,
-    "head": "8591b5a"
+    "head": "4760656"
   },
   "links": {
     "workItem": "https://github.com/juangcarmona/arcshape/issues/102"
