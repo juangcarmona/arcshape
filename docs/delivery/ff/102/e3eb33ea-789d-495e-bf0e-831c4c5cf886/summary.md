@@ -9,3 +9,5 @@
 - Status: `running`
 
 Refine passed the Ready gate after the issue explicitly recorded stakeholder, dependencies, acceptance criteria, quality/test impact, and risks. OpenSpec planning artifacts are being prepared for the proposed implementation.
+
+The independent plan review at commit `72c33cd8bab6a50be030c4e00b371fbe20828b59` returned `request-changes` in round 1. The plan is being corrected to make public-site brand comparison, accessible-name/focus verification, and the human/forge approval gate explicit.

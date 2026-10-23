@@ -24,17 +24,42 @@
     {
       "name": "propose",
       "startedAt": "2026-10-23T05:19:20Z",
-      "endedAt": null,
+      "endedAt": "2026-10-23T05:21:20Z",
       "inputCommit": "7d8a1e928a9b64957ca6d3f5b19946d8b9537390",
-      "outputCommit": null,
-      "result": "running",
+      "outputCommit": "72c33cd8bab6a50be030c4e00b371fbe20828b59",
+      "result": "request-changes",
       "evidence": [
         "openspec/changes/improve-reader-readability-public-site-header/"
       ]
     }
   ],
-  "reviews": [],
-  "corrections": [],
+  "reviews": [
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "plan",
+      "reviewedCommit": "72c33cd8bab6a50be030c4e00b371fbe20828b59",
+      "decision": "request-changes",
+      "findings": [
+        "Add explicit public-site lockup comparison, accessible-name and keyboard-focus verification.",
+        "State the human/forge approval gate explicitly before merge."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16734-7fba-7583-ab92-c733733c645e"
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "gate": "propose",
+      "round": 1,
+      "requestedChanges": [
+        "Strengthen runtime/evidence tasks for public-site visual parity, accessible naming, and keyboard focus.",
+        "Document the human/forge approval gate."
+      ],
+      "resultingCommit": null,
+      "rerun": "pending"
+    }
+  ],
   "stopReason": null,
   "pullRequest": null,
   "links": {
