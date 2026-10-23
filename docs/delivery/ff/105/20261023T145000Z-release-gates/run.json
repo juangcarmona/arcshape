@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "runId": "20261023T145000Z-release-gates",
+  "workItem": 105,
+  "branch": "fix/105-unblock-changesets-release-gates",
+  "startedAt": "2026-10-23T14:50:00Z",
+  "executorModel": "gpt-5",
+  "reviewerModel": "gpt-6.1-sol",
+  "maxCorrectionRounds": 3,
+  "status": "awaiting-integration",
+  "stages": [
+    {
+      "name": "refine",
+      "startedAt": "2026-10-23T14:50:00Z",
+      "endedAt": "2026-10-23T14:56:00Z",
+      "inputCommit": "f6f2262fab88053970c1ae352a1ab23f072944a0",
+      "outputCommit": "f6f2262fab88053970c1ae352a1ab23f072944a0",
+      "result": "ready",
+      "evidence": ["https://github.com/juangcarmona/arcshape/issues/105"]
+    },
+    {
+      "name": "propose",
+      "startedAt": "2026-10-23T14:56:00Z",
+      "endedAt": null,
+      "inputCommit": "f6f2262fab88053970c1ae352a1ab23f072944a0",
+      "outputCommit": null,
+      "result": "planned",
+      "evidence": ["docs/delivery/issue-105/plan.md"]
+    },
+    {
+      "name": "implement",
+      "startedAt": "2026-10-23T16:20:00Z",
+      "endedAt": "2026-10-23T16:43:00Z",
+      "inputCommit": "59845f0491dc4676867ce4c49d0763ade7227682",
+      "outputCommit": "c4e29078fc74019520d5cebf31fedba08e38d892",
+      "result": "done-gate-passed",
+      "evidence": [
+        "npm test (GITHUB_ACTIONS=true): 26 files, 131 tests passed",
+        "npm run format:check",
+        "npm run lint",
+        "npm run typecheck",
+        "npm run build",
+        "npm run security:audit",
+        "npm run product:model:check",
+        "npm exec -- prodshape validate --format json",
+        "npm exec -- openspec validate --all --no-interactive",
+        "https://github.com/juangcarmona/arcshape/actions/runs/39988423251",
+        "https://github.com/juangcarmona/arcshape/actions/runs/39988423344",
+        "https://github.com/juangcarmona/arcshape/actions/runs/39988423341",
+        "https://github.com/juangcarmona/arcshape/runs/120534058490"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewKind": "plan",
+      "reviewedCommit": "59845f0491dc4676867ce4c49d0763ade7227682",
+      "decision": "approve",
+      "findings": "The exact Changesets branch exception preserves strict developer branch validation; removing the 16 unmatched audit exceptions does not waive active High/Critical findings; scope and tests are complete.",
+      "evidence": [
+        "scripts/check-branch-name.mjs",
+        "scripts/check-npm-audit.mjs",
+        "tests/check-npm-audit.test.mjs",
+        "docs/delivery/issue-105/plan.md"
+      ]
+    }
+  ],
+  "corrections": [],
+  "stopReason": "Awaiting required human review before integration.",
+  "pullRequest": "https://github.com/juangcarmona/arcshape/pull/106",
+  "links": {
+    "workItem": "https://github.com/juangcarmona/arcshape/issues/105"
+  }
+}
