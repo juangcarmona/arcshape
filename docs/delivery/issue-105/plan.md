@@ -19,7 +19,7 @@ The v0.1.5 Changesets `Version Packages` pull request cannot pass the repository
 - [x] Remove stale `GHSA-vfj7-8cjw-p6xm` entries from `security/dependency-exceptions.json`.
 - [x] Add or update tests proving the reserved branch is accepted, ordinary invalid branches remain rejected, and unmatched exceptions remain blocking.
 - [x] Document the reserved branch validation exception in `docs/releasing.md`.
-- [ ] Run the full deterministic CI-equivalent checks and verify the current release PR checks.
+- [x] Run the full deterministic CI-equivalent checks and verify the current release PR checks.
 
 ## Test plan
 
