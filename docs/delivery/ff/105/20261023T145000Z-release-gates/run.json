@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "runId": "20261023T145000Z-release-gates",
+  "workItem": 105,
+  "branch": "fix/105-unblock-changesets-release-gates",
+  "startedAt": "2026-10-23T14:50:00Z",
+  "executorModel": "gpt-5",
+  "reviewerModel": "gpt-6.1-sol",
+  "maxCorrectionRounds": 3,
+  "status": "running",
+  "stages": [
+    {
+      "name": "refine",
+      "startedAt": "2026-10-23T14:50:00Z",
+      "endedAt": "2026-10-23T14:56:00Z",
+      "inputCommit": "f6f2262fab88053970c1ae352a1ab23f072944a0",
+      "outputCommit": "f6f2262fab88053970c1ae352a1ab23f072944a0",
+      "result": "ready",
+      "evidence": ["https://github.com/juangcarmona/arcshape/issues/105"]
+    },
+    {
+      "name": "propose",
+      "startedAt": "2026-10-23T14:56:00Z",
+      "endedAt": null,
+      "inputCommit": "f6f2262fab88053970c1ae352a1ab23f072944a0",
+      "outputCommit": null,
+      "result": "planned",
+      "evidence": ["docs/delivery/issue-105/plan.md"]
+    }
+  ],
+  "reviews": [],
+  "corrections": [],
+  "stopReason": null,
+  "pullRequest": null,
+  "links": {
+    "workItem": "https://github.com/juangcarmona/arcshape/issues/105"
+  }
+}
