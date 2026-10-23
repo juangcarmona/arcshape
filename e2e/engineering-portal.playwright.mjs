@@ -125,6 +125,19 @@ test("portal links to revision-stamped model and architecture routes", async ({
   await expect(
     page.getByRole("heading", { name: "Engineering portal" }),
   ).toBeVisible();
+  const publicSiteBrand = page.getByRole("link", {
+    name: "ArcShape public site",
+  });
+  await expect(publicSiteBrand).toHaveAttribute("href", "https://arcshape.dev");
+  await expect(publicSiteBrand).toHaveAttribute("target", "_blank");
+  await expect(publicSiteBrand).toHaveAttribute("rel", "noopener noreferrer");
+  await publicSiteBrand.focus();
+  expect(
+    await publicSiteBrand.evaluate(
+      (element) => getComputedStyle(element).outlineStyle,
+    ),
+  ).toBe("solid");
+  await expect(page.locator(".header-badge")).toHaveCount(0);
   await expect(
     page.getByRole("link", { name: /Product model/ }),
   ).toHaveAttribute("href", "/arcshape/model/");
@@ -151,6 +164,19 @@ test("portal links to revision-stamped model and architecture routes", async ({
   await expect(
     page.getByRole("heading", { name: "Architecture Documentation" }),
   ).toBeVisible();
+  const readerPublicSiteBrand = page.getByRole("link", {
+    name: "ArcShape public site",
+  });
+  await expect(readerPublicSiteBrand).toHaveAttribute(
+    "href",
+    "https://arcshape.dev",
+  );
+  await expect(readerPublicSiteBrand).toHaveAttribute("target", "_blank");
+  await expect(readerPublicSiteBrand).toHaveAttribute(
+    "rel",
+    "noopener noreferrer",
+  );
+  await expect(page.locator(".brand-caption")).toHaveCount(0);
   await page.keyboard.press("Tab");
   const readerFocus = await page.evaluate(() => {
     const active = document.activeElement;

@@ -4,9 +4,9 @@
 
 ## 1. Reader and portal implementation
 
-- [ ] 1.1 Remove `max-width: 78ch` from the generated reader `.doc` rule in `packages/cli/src/arc42-site/shell.mjs`, preserving the remaining layout declarations; verify the exact rule is absent from generated output and existing reader tests still pass.
-- [ ] 1.2 Update `src/engineering-portal/src/pages/index.astro` so the header brand link targets `https://arcshape.dev` with `target="_blank"` and `rel="noopener noreferrer"`, and remove the redundant header badge; compare the rendered lockup with the public-site header treatment, then verify the built portal contains the safe external link and no header badge.
-- [ ] 1.3 Add a patch Changesets entry for `@arcshape/cli`; verify the entry is valid and describes the reader/portal user-visible improvement.
+- [x] 1.1 Remove `max-width: 78ch` from the generated reader `.doc` rule in `packages/cli/src/arc42-site/shell.mjs`, preserving the remaining layout declarations; verify the exact rule is absent from generated output and existing reader tests still pass.
+- [x] 1.2 Update `src/engineering-portal/src/pages/index.astro` so the header brand link targets `https://arcshape.dev` with `target="_blank"` and `rel="noopener noreferrer"`, and remove the redundant header badge; compare the rendered lockup with the public-site header treatment, then verify the built portal contains the safe external link and no header badge.
+- [x] 1.3 Add a patch Changesets entry for `@arcshape/cli`; verify the entry is valid and describes the reader/portal user-visible improvement.
 
 <!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->

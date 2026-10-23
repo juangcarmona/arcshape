@@ -42,6 +42,15 @@
       "evidence": [
         "openspec/changes/improve-reader-readability-public-site-header/"
       ]
+    },
+    {
+      "name": "implement",
+      "startedAt": "2026-10-23T05:22:11Z",
+      "endedAt": null,
+      "inputCommit": "2e7783f4212815812859e9824ab9e6e34435bd0d",
+      "outputCommit": null,
+      "result": "running",
+      "evidence": []
     }
   ],
   "reviews": [

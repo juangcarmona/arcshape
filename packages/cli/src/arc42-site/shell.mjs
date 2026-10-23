@@ -268,8 +268,8 @@ header.site h1 { display:flex; align-items:center; gap:.5rem; margin:0; min-widt
 .brand-mark { display:grid; place-items:center; flex:none; width:1.75rem; height:1.75rem; color:var(--accent); }
 .brand-mark svg { display:block; width:100%; height:100%; }
 .brand-logo-dark { display:none; filter:invert(1) hue-rotate(180deg); mix-blend-mode:screen; }
+.brand-home { display:flex; align-items:center; gap:.5rem; color:inherit; text-decoration:none; }
 .brand-title { color:var(--ink); font-size:.96rem; font-weight:650; letter-spacing:-.025em; }
-.brand-caption { color:var(--muted); font-size:.72rem; white-space:nowrap; }
 .project-context { min-width:0; overflow:hidden; color:var(--muted); font-size:.82rem; text-overflow:ellipsis; white-space:nowrap; }
 .revshort {
   font-family: var(--mono); font-size: 0.74rem; color: var(--muted);
@@ -304,7 +304,7 @@ aside.nav {
   transition:width .18s ease,padding .18s ease;
 }
 main#main { flex: 1 1 auto; min-width: 0; overflow-y: auto; padding: 1.4rem 2.2rem 4rem; scroll-behavior: smooth; }
-.doc { max-width: 78ch; margin: 0 auto; }
+.doc { margin: 0 auto; }
 .doc > h2.doc-title { margin: 0 0 0.2rem; font-size: 1.45rem; }
 p.doc-desc { margin: 0 0 1.2rem; color: var(--muted); font-size: 0.9rem; }
 p.doc-owner { margin: 0 0 .7rem; color: var(--muted); font-size: .82rem; }
@@ -1066,8 +1066,7 @@ export function buildSnapshotHtml({
     '<a class="skip" href="#main">Skip to content</a>',
     '<header class="site">',
     '<div class="header-inner">',
-    `<h1>${brandMark}<span class="brand-title">ArcShape</span></h1>`,
-    '<span class="brand-caption">AI driven engineering documentation</span>',
+    `<h1><a class="brand-home" href="https://arcshape.dev" target="_blank" rel="noopener noreferrer" aria-label="ArcShape public site">${brandMark}<span class="brand-title">ArcShape</span></a></h1>`,
     `<span class="project-context" title="${esc(stackName)} · arc42">${esc(stackName)} · arc42</span>`,
     revisionShort,
     '<nav class="primary-nav" aria-label="Primary navigation"><a href="#/" data-route="#/">Overview</a></nav>',
