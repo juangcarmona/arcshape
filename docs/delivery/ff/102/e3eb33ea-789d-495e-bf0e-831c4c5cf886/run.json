@@ -163,8 +163,8 @@
   "pullRequest": {
     "number": 103,
     "url": "https://github.com/juangcarmona/arcshape/pull/103",
-    "draft": true,
-    "head": "4760656"
+    "draft": false,
+    "head": "5462c74"
   },
   "links": {
     "workItem": "https://github.com/juangcarmona/arcshape/issues/102"
