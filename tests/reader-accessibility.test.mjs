@@ -44,7 +44,7 @@ afterAll(async () => {
   if (outputDirectory) {
     await rm(outputDirectory, { recursive: true, force: true });
   }
-});
+}, 60_000);
 
 describe("generated architecture reader", () => {
   it("links the brand to the public site without a redundant header caption", () => {
