@@ -31,6 +31,17 @@
       "evidence": [
         "openspec/changes/improve-reader-readability-public-site-header/"
       ]
+    },
+    {
+      "name": "propose-correction",
+      "startedAt": "2026-10-23T05:21:21Z",
+      "endedAt": "2026-10-23T05:22:10Z",
+      "inputCommit": "72c33cd8bab6a50be030c4e00b371fbe20828b59",
+      "outputCommit": "4fec4026a3453cf58158afaaa683e4a374372ff4",
+      "result": "approved",
+      "evidence": [
+        "openspec/changes/improve-reader-readability-public-site-header/"
+      ]
     }
   ],
   "reviews": [
@@ -46,6 +57,18 @@
       "evidence": [
         "Independent reviewer agent 01a16734-7fba-7583-ab92-c733733c645e"
       ]
+    },
+    {
+      "reviewerModel": "gpt-6-luna",
+      "kind": "plan",
+      "reviewedCommit": "4fec4026a3453cf58158afaaa683e4a374372ff4",
+      "decision": "approve",
+      "findings": [
+        "Plan covers reader width, portal badge removal, safe public-site link, 0.1.5 Changeset, runtime evidence, and human/forge gates."
+      ],
+      "evidence": [
+        "Independent reviewer agent 01a16735-1caf-7491-a02f-240b31213f49"
+      ]
     }
   ],
   "corrections": [
@@ -56,12 +79,17 @@
         "Strengthen runtime/evidence tasks for public-site visual parity, accessible naming, and keyboard focus.",
         "Document the human/forge approval gate."
       ],
-      "resultingCommit": null,
-      "rerun": "pending"
+      "resultingCommit": "4fec4026a3453cf58158afaaa683e4a374372ff4",
+      "rerun": "approved by gpt-6-luna at 4fec4026a3453cf58158afaaa683e4a374372ff4"
     }
   ],
   "stopReason": null,
-  "pullRequest": null,
+  "pullRequest": {
+    "number": 103,
+    "url": "https://github.com/juangcarmona/arcshape/pull/103",
+    "draft": true,
+    "head": "4fec4026a3453cf58158afaaa683e4a374372ff4"
+  },
   "links": {
     "workItem": "https://github.com/juangcarmona/arcshape/issues/102"
   }
