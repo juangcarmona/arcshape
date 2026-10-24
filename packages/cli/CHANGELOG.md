@@ -1,5 +1,11 @@
 # @arcshape/cli
 
+## 0.1.6
+
+### Patch Changes
+
+- 2bb75cc: Update Puppeteer to remove vulnerable transitive browser dependencies.
+
 ## 0.1.5
 
 ### Patch Changes
