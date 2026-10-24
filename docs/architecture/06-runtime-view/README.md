@@ -13,30 +13,28 @@ description: Runtime behavior and important interactions between building blocks
 ```mermaid
 accTitle: Safe ArcShape initialization flow
 sequenceDiagram
-    actor Maintainer
-    participant CLI as arcshape init
+    participant Maintainer as Maintainer
+    participant CLI as ArcShape CLI
+    participant Package as Installed package
     participant FS as Target repository
-    participant Package as npm package
-    Maintainer->>CLI: init [--target path] [--providers ids | --no-agents]
-    CLI->>Package: Read arc42 templates and selected canonical skills
-    CLI-->>Maintainer: Preview providers, scope, file actions, and conflicts
+    Maintainer->>CLI: Request init
+    CLI->>Package: Load scaffold and selected skills
+    CLI-->>Maintainer: Show scope, actions, and conflicts
     Maintainer->>CLI: Confirm plan
     loop Each planned file action
-        CLI->>FS: Check target path and existing content
+        CLI->>FS: Recheck path and content
         alt File is absent
-            CLI->>FS: Create file exclusively
-        else Target file exists
-            alt Contents match
-                CLI-->>Maintainer: Report unchanged
-            else Contents differ or path is a symlink
-                CLI-->>Maintainer: Report conflict and preserve file
-            end
+            CLI->>FS: Create exclusively
+        else Contents match
+            CLI-->>Maintainer: Keep unchanged
+        else Edited or symlinked
+            CLI-->>Maintainer: Preserve and report conflict
         end
     end
-    CLI-->>Maintainer: Summarize created files and conflicts
+    CLI-->>Maintainer: Report created, unchanged, and preserved files
 ```
 
-Initialization does not inspect source code, make architecture claims, contact an ArcShape service, or launch an agent. It installs the README and twelve arc42 sections and optionally selected `arc-` skills. In non-interactive use, maintainers must specify `--providers <ids>` or `--no-agents`, and `--yes` to confirm writes. Agent lifecycle commands share provider detection, planning, confirmation, and a scoped ownership manifest; edits and untracked files are preserved. The npm package contains all capability files, so installation does not need a marketplace or network access.
+Initialization is preview-first and deliberately boring: it does not inspect source code, make architecture claims, contact an ArcShape service, or launch an agent. It installs the README, twelve arc42 sections, and optionally selected `arc-` skills. The CLI rechecks each destination before writing, creates absent files exclusively, and preserves edited or symlinked paths as conflicts. Agent lifecycle commands use the same planning and ownership-manifest approach.
 
 ### Validate architecture Markdown
 

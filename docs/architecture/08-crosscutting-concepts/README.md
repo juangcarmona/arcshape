@@ -6,9 +6,9 @@ description: Concepts and rules that affect multiple building blocks.
 
 # 8. Cross-cutting concepts
 
-## Domain model
+## Ownership and authority
 
-Product intent, system behavior, quality constraints, and architecture records have separate owners. The ProductShape model states what ArcShape should do; architecture Markdown explains how this repository realizes it.
+Product intent, implementation behavior, quality constraints, and architecture records have separate owners. The ProductShape model states what ArcShape should do; architecture Markdown explains how this repository realizes it. Generated readers and published snapshots are projections, not alternate sources of truth.
 
 <!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:0c2a1bb402fcf272e5ecfe15282e8d15dccd7fb57992a344071757f82cf457a7" -->
 
@@ -20,4 +20,4 @@ Repository setup, validation, site generation, session state, and Obsidian sync 
 
 ## Observability and operations
 
-The CLI reports created, unchanged, updated, orphaned, and conflicting files or pages for sync. Initialization is repeatable and has no persistent service state. Analysis sessions and Confluence sync baselines are stored locally under `.arcshape/`.
+The CLI reports created, unchanged, updated, orphaned, and conflicting files or pages for sync. Initialization is repeatable and has no persistent service state. Analysis sessions, sync baselines, and capability ownership are stored locally under `.arcshape/`.
