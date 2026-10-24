@@ -106,9 +106,8 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
   await buildSite();
 
   const generatedHtml = await readFile(siteFile, "utf8");
-  expect(generatedHtml).toContain(
-    "ArcShape site, documentation, and package deployment paths",
-  );
+  const diagramTitle = "ArcShape publication and adopter deployment boundaries";
+  expect(generatedHtml).toContain(diagramTitle);
   expect(generatedHtml).toMatch(
     /\\u003cfigure class=\\"diagram\\"[\s\S]*?\\u003csvg/,
   );
@@ -123,7 +122,7 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
   await page.goto(`${siteUrl}#/section/07`);
 
   const diagram = page.locator("figure.diagram").filter({
-    hasText: "ArcShape site, documentation, and package deployment paths",
+    hasText: diagramTitle,
   });
   await expect(diagram).toHaveCount(1);
   await expect(diagram).toContainText("Renderer: Mermaid");
