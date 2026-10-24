@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   extractMermaidSources,
+  normalizeMermaidSvg,
   renderMermaid,
 } from "../packages/cli/src/arc42-site/render.mjs";
 
@@ -57,6 +58,14 @@ describe("C4 workflow examples", () => {
     expect(unknown).toContain("must ask which system and external actors");
     expect(unknown).toContain("must not infer");
     expect(unknown).not.toContain("```mermaid");
+  });
+
+  it("keeps Mermaid labels inside the normalized viewport", () => {
+    const normalized = normalizeMermaidSvg(
+      '<svg viewBox="4 4 10 20"><text x="-10">label</text></svg>',
+      0,
+    );
+    expect(normalized).toContain('viewBox="-156 -156 330 340"');
   });
 
   it("ships the portable C4 capability with evidence and rendering rules", async () => {

@@ -22,4 +22,4 @@ description: Known risks, technical debt, and their planned responses.
 - The CLI records evidence and validates arc42 structure; assistant workflows still depend on the selected AI provider to interpret evidence.
 - ADRs and C4 diagrams are Markdown authoring workflows; the static site and external sync currently publish the arc42 architecture directory.
 - The Mermaid renderer adds browser and diagram dependencies that need continued dependency review before public release.
-- The first public npm release and external npm Trusted Publisher/GitHub environment configuration remain outstanding; the versioned release workflow and recovery instructions are committed.
+- Release publication depends on external npm and GitHub environment configuration; the versioned workflow and recovery instructions are committed, but those external settings are not architecture-owned state.

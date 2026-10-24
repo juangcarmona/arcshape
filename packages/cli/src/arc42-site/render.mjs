@@ -88,6 +88,24 @@ export function normalizeMermaidSvg(svg, index) {
   if (root.localName !== "svg" || document.querySelector("parsererror")) {
     throw new Error("Mermaid produced invalid SVG");
   }
+  const viewBox = (root.getAttribute("viewBox") ?? "")
+    .trim()
+    .split(/\s+/)
+    .map(Number);
+  if (viewBox.length === 4 && viewBox.every(Number.isFinite)) {
+    // Mermaid can place labels outside its computed bounds; keep them visible in the reader.
+    const padding = 160;
+    const [x, y, width, height] = viewBox;
+    root.setAttribute(
+      "viewBox",
+      [
+        x - padding,
+        y - padding,
+        width + padding * 2,
+        height + padding * 2,
+      ].join(" "),
+    );
+  }
   const rootId = `mmd-${index}`;
   const idMap = new Map();
   for (const element of [root, ...root.querySelectorAll("[id]")]) {

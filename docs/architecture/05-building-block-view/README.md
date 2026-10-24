@@ -8,43 +8,43 @@ description: The static decomposition of the system into building blocks.
 
 ## Level 1: system
 
-ArcShape is a private npm workspace with a distributable CLI package, separately packaged provider-neutral agent skills, provider adapters, repository setup and evidence-session operations, and a Markdown site renderer. The workspace root owns development dependencies and repository automation. ArcShape has no server or database.
+ArcShape is a private npm workspace whose distributable CLI runs inside an adopter's repository. It combines deterministic repository operations with an optional package of provider-neutral skills and a Markdown reader. The workspace root owns development dependencies and repository automation. ArcShape has no server or database.
 
 ## Level 2: building blocks
 
-| Building block         | Responsibility                                                                                                       | Evidence                                                                                                                                             |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI entry point        | Parses commands and routes initialization, evidence sessions, validation, and site builds.                           | [`packages/cli/src/bin/arcshape.mjs`](../../../packages/cli/src/bin/arcshape.mjs) |
-| CLI modules            | Resolve the target repository and implement setup, capability management, sessions, validation, and documentation sync. | [`packages/cli/src/bin/`](../../../packages/cli/src/bin/) |
-| Architecture templates | Supplies the README and twelve arc42 Markdown sections.                                                              | [`packages/cli/assets/architecture/`](../../../packages/cli/assets/architecture/) |
-| Capability package     | Supplies four provider-neutral Agent Skills and the seven-provider path registry.                                    | [`packages/cli/assets/capabilities/`](../../../packages/cli/assets/capabilities/) |
-| Site renderer          | Validates Markdown metadata, sanitizes rendered HTML, and embeds Mermaid diagrams in one reader page.                | [`packages/cli/src/arc42-site/`](../../../packages/cli/src/arc42-site/) |
-| Product model          | Owns user-facing product intent and constraints.                                                                     | [`docs/product/model/`](../../product/model/)                                                                                                           |
-| Public product site    | ArcShape-owned static marketing content and assets; Cloudflare Pages is configured independently from portal publishing. | [`src/public-site/`](../../../src/public-site/) and [deployment guide](../../pages-deployment.md) |
-| Engineering portal     | Links source-revision-stamped product and architecture projections.                                                   | [`src/engineering-portal/`](../../../src/engineering-portal/) and [Pages workflow](../../../.github/workflows/pages.yml) |
-| Delivery configuration | Defines CI, single-writer Pages publication, and temporary OpenSpec change workflows.                                 | [`.github/workflows/`](../../../.github/workflows/) and [`openspec/`](../../../openspec/)                                                                  |
+| Building block | Responsibility | Evidence |
+| --- | --- | --- |
+| CLI entry point | Parses commands and routes setup, evidence sessions, validation, sync, and site builds. | [`packages/cli/src/bin/arcshape.mjs`](../../../packages/cli/src/bin/arcshape.mjs) |
+| CLI modules | Implement repository setup, capability management, sessions, validation, and documentation sync. | [`packages/cli/src/bin/`](../../../packages/cli/src/bin/) |
+| Architecture templates | Supplies the README and twelve arc42 Markdown sections. | [`packages/cli/assets/architecture/`](../../../packages/cli/assets/architecture/) |
+| Capability package | Supplies provider-neutral skills, provider discovery metadata, and managed-file hashes. | [`packages/cli/assets/capabilities/`](../../../packages/cli/assets/capabilities/) |
+| Site renderer | Validates Markdown metadata, sanitizes HTML, and embeds accessible Mermaid diagrams in one reader page. | [`packages/cli/src/arc42-site/`](../../../packages/cli/src/arc42-site/) |
+| Product and publication surfaces | Remain adjacent repository artifacts: product intent, public site, engineering portal, and delivery workflows. | [`docs/product/model/`](../../product/model/), [`src/`](../../../src/), [`.github/workflows/`](../../../.github/workflows/) |
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:98014c03adfa2316adefc39599fe80d1fce075121947d88b186d31400cffd64b" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:f5d7e3a6b239e2851ee9554633e1a19cddd05a71b703ed1f184ba0d21e4da3f9" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 
 ## C4 container view
 
-The CLI installs canonical Markdown and optional agent skills into the selected repository. Agent providers remain external hosts; ArcShape does not host an AI runtime. The diagram shows the container boundaries and the maintainer's separate deterministic and AI-assisted interactions.
+The CLI installs canonical Markdown and optional agent skills into the selected repository. Agent providers remain external hosts; ArcShape does not host an AI runtime. Local state records evidence sessions, sync baselines, and capability ownership. The diagram separates those responsibilities so the write paths are visible without implying that an agent provider calls an ArcShape server.
 
 ```mermaid
 accTitle: ArcShape containers in a project repository
 C4Container
-    title ArcShape Container View
-    Person(maintainer, "Repository maintainer", "Uses CLI and an assistant")
-    System_Ext(assistant, "Agent provider", "Runs selected installed skills with repository context")
-    System_Boundary(project, "Project repository") {
-        Container(cli, "ArcShape CLI", "Node.js package", "Initializes, validates, and synchronizes Markdown docs")
-        Container(skills, "ArcShape skills", "Markdown files", "Guide AI-assisted analysis and documentation")
-        Container(docs, "Architecture documentation", "Markdown files", "Stores canonical arc42 docs and ADRs")
+    title ArcShape inside an adopter repository
+    UpdateLayoutConfig($c4ShapeInRow="2", $c4BoundaryInRow="1")
+    Person(maintainer, "Repository maintainer", "Runs the CLI and reviews changes")
+    System_Ext(provider, "Selected agent provider", "Runs installed skills with repository context")
+    System_Boundary(project, "Adopter repository") {
+        Container(cli, "ArcShape CLI", "Node.js package", "Plans and performs deterministic repository operations")
+        Container(docs, "Architecture Markdown", "Markdown files", "Canonical arc42 sections and ADRs")
+        Container(skills, "Installed skills", "Markdown files", "Guide evidence review and documentation authoring")
+        Container(state, "Local ArcShape state", "JSON files", "Session, sync, and capability baselines")
     }
-    Rel(maintainer, cli, "Runs deterministic commands")
-    Rel(maintainer, assistant, "Requests documentation work")
-    Rel(assistant, skills, "Follows installed workflow")
-    Rel(assistant, docs, "Proposes reviewed Markdown changes")
+    Rel(maintainer, cli, "Runs commands")
+    Rel(maintainer, docs, "Reviews and edits")
+    Rel(provider, skills, "Discovers and follows")
+    Rel(provider, docs, "Proposes changes")
     Rel(cli, docs, "Reads and writes")
+    Rel(cli, state, "Records baselines")
 ```
