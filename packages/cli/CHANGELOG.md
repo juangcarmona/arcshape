@@ -1,5 +1,11 @@
 # @arcshape/cli
 
+## 0.1.5
+
+### Patch Changes
+
+- f6f2262: Widen generated architecture reader content and link the engineering portal brand to the public ArcShape site.
+
 ## 0.1.4
 
 ### Patch Changes
