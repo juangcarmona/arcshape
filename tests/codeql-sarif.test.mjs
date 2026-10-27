@@ -47,4 +47,43 @@ describe("CodeQL security threshold", () => {
       }).findings,
     ).toEqual([]);
   });
+  it("limits an expiring exception to one rule and path", () => {
+    const path =
+      "packages/cli/assets/archify/renderers/shared/atomic-output.mjs";
+    const race = { ...rule, id: "js/file-system-race" };
+    const resultAt = (uri) => ({
+      ...result,
+      ruleId: race.id,
+      locations: [{ physicalLocation: { artifactLocation: { uri } } }],
+    });
+    const report = {
+      runs: [
+        {
+          tool: { driver: { rules: [race] } },
+          results: [resultAt(path), resultAt("other.mjs")],
+        },
+      ],
+    };
+    const exceptions = {
+      exceptions: [
+        {
+          ruleId: race.id,
+          path,
+          owner: "maintainer",
+          reason: "Reviewed upstream code",
+          expires: "2026-11-26",
+        },
+      ],
+    };
+    const active = highSecurityFindings(report, 7, exceptions, "2026-10-27");
+    expect(active.usedExceptions).toHaveLength(1);
+    expect(active.findings).toEqual([
+      expect.objectContaining({ path: "other.mjs" }),
+    ]);
+    const expired = highSecurityFindings(report, 7, exceptions, "2026-11-27");
+    expect(expired.findings).toHaveLength(2);
+    expect(expired.errors).toContain(
+      `Stale CodeQL exception: ${race.id} at ${path}`,
+    );
+  });
 });
