@@ -4,7 +4,7 @@
   "revision": "208acba8d412335185b2056fedf54b3405df43fb",
   "source": "https://github.com/tt-a1i/archify",
   "license": "MIT",
-  "tailoring": "No embedded fonts or third-party brand vectors. System monospace and generic symbols only. No upstream CLI/updater.",
+  "tailoring": "No embedded fonts or third-party brand vectors. System monospace and generic symbols only. No upstream CLI/updater. Viewer URL-key dictionaries use Map/Set.",
   "files": {
     "LICENSE": {
       "upstreamSha256": "b799ab081703e7821ae5096d2c1abdf14bbdc75e8ea1c4045998c36ed6db9706",
@@ -16,7 +16,7 @@
     },
     "assets/template.html": {
       "upstreamSha256": "4fe243de7448f83d2123e987db5ec2539b662480a6e3ce3c90deb9e0c9ad11ef",
-      "sha256": "d8504f1dc4baf3f82594ef4671bc333c10d87265c3c5a7c191ffc9ab8f4e98b0"
+      "sha256": "2e7ba855b27aac7a7f96c94eb1115fcdc01cb3c59232ac4f90ea88dd17a6ff74"
     },
     "locales/ar.json": {
       "upstreamSha256": "4a8d5c821a16fa94c97b68784481841c323e288d841acd84ac8415c063483a9f",

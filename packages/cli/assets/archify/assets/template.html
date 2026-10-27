@@ -8282,18 +8282,18 @@
           records.push({ key: key, from: relationship.from, to: relationship.to });
         });
 
-        var depths = Object.create(null);
+        var depths = new Map();
         var order = [];
         var queue = [originId];
-        depths[originId] = 0;
+        depths.set(originId, 0);
         for (var cursor = 0; cursor < queue.length; cursor += 1) {
           var current = queue[cursor];
           records.forEach(function (relationship) {
             var next = null;
             if (direction === 'downstream' && relationship.from === current) next = relationship.to;
             else if (direction === 'upstream' && relationship.to === current) next = relationship.from;
-            if (next == null || Object.prototype.hasOwnProperty.call(depths, next)) return;
-            depths[next] = depths[current] + 1;
+            if (next == null || depths.has(next)) return;
+            depths.set(next, depths.get(current) + 1);
             queue.push(next);
           });
         }
@@ -8301,18 +8301,18 @@
 
         var edgeKeys = [];
         records.forEach(function (relationship) {
-          if (Object.prototype.hasOwnProperty.call(depths, relationship.from) &&
-              Object.prototype.hasOwnProperty.call(depths, relationship.to)) edgeKeys.push(relationship.key);
+          if (depths.has(relationship.from) &&
+              depths.has(relationship.to)) edgeKeys.push(relationship.key);
         });
         var maxDepth = order.reduce(function (maximum, id) {
-          return Math.max(maximum, depths[id]);
+          return Math.max(maximum, depths.get(id));
         }, 0);
         return {
           direction: direction,
           originId: originId,
           nodeIds: order,
           edgeKeys: edgeKeys,
-          depths: depths,
+          depths: Object.fromEntries(depths),
           maxDepth: maxDepth
         };
       }
@@ -8448,10 +8448,10 @@
 
         var allNodes = nodes();
         var allEdges = edges();
-        var seenNodeIds = Object.create(null);
+        var seenNodeIds = new Set();
         var seenEdgeKeys = Object.create(null);
-        var nodeIdSet = Object.create(null);
-        var depths = Object.create(null);
+        var nodeIdSet = new Set();
+        var depths = new Map();
         var originNode = null;
         var measuredMaxDepth = 0;
 
@@ -8460,15 +8460,15 @@
           var matches = allNodes.filter(function (node) {
             return node.getAttribute('data-node-id') === id;
           });
-          if (typeof id !== 'string' || !id || seenNodeIds[id] || matches.length !== 1 ||
+          if (typeof id !== 'string' || !id || seenNodeIds.has(id) || matches.length !== 1 ||
               !matches[0].hasAttribute('data-reach-match') ||
               !Number.isInteger(depth) || depth < 0 || depth > activeReachability.maxDepth ||
               (id === originId
                 ? (!matches[0].hasAttribute('data-reach-origin') || depth !== 0)
                 : depth < 1)) return true;
-          seenNodeIds[id] = true;
-          nodeIdSet[id] = true;
-          depths[id] = depth;
+          seenNodeIds.add(id);
+          nodeIdSet.add(id);
+          depths.set(id, depth);
           measuredMaxDepth = Math.max(measuredMaxDepth, depth);
           if (id === originId) originNode = matches[0];
           return false;
@@ -8489,7 +8489,7 @@
           var to = first.getAttribute('data-edge-to');
           var id = first.getAttribute('data-edge-id') || '';
           var labelValue = first.getAttribute('data-edge-label') || '';
-          if (!nodeIdSet[from] || !nodeIdSet[to] || !fragments.every(function (fragment) {
+          if (!nodeIdSet.has(from) || !nodeIdSet.has(to) || !fragments.every(function (fragment) {
             return fragment.getAttribute('data-edge-from') === from &&
               fragment.getAttribute('data-edge-to') === to &&
               (fragment.getAttribute('data-edge-id') || '') === id;
@@ -8501,7 +8501,7 @@
             from: from,
             to: to,
             label: labelValue,
-            depth: Math.max(depths[from], depths[to])
+            depth: Math.max(depths.get(from), depths.get(to))
           });
           return false;
         })) return null;
@@ -8519,7 +8519,7 @@
           direction: reachabilityMode,
           origin: { id: originId, label: nodeLabel(originNode, originId) },
           nodeIds: nodeIds,
-          depths: depths,
+          depths: Object.fromEntries(depths),
           maxDepth: activeReachability.maxDepth,
           edges: edgeRecords
         };
@@ -9540,27 +9540,27 @@
         var preserveLensPlacement = activeIds.length === 1 && normalized.length === 1 && !chip.hidden;
         clear({ updateUrl: false, preserveView: true, preserveLensPlacement: preserveLensPlacement });
         activeIds = normalized;
-        var selected = Object.create(null);
-        var related = Object.create(null);
+        var selected = new Set();
+        var related = new Set();
         var seenEdges = {};
         var matchedEdges = 0;
-        normalized.forEach(function (id) { selected[id] = true; related[id] = true; });
+        normalized.forEach(function (id) { selected.add(id); related.add(id); });
         var selectionMode = options.mode === 'selection' || normalized.length > 1;
 
         edges().forEach(function (edge) {
           var from = edge.getAttribute('data-edge-from');
           var to = edge.getAttribute('data-edge-to');
-          var match = selectionMode ? selected[from] && selected[to] : selected[from] || selected[to];
+          var match = selectionMode ? selected.has(from) && selected.has(to) : selected.has(from) || selected.has(to);
           if (!match) return;
           edge.setAttribute('data-focus-match', '');
-          if (!selectionMode) { related[from] = true; related[to] = true; }
+          if (!selectionMode) { related.add(from); related.add(to); }
           var edgeKey = edge.getAttribute('data-edge-key') || (from + '\u0000' + to + '\u0000' + (edge.getAttribute('data-edge-label') || ''));
           if (!seenEdges[edgeKey]) { seenEdges[edgeKey] = true; matchedEdges += 1; }
         });
         nodeList.forEach(function (node) {
           var nodeId = node.getAttribute('data-node-id');
-          if (related[nodeId]) node.setAttribute('data-focus-match', '');
-          if (selected[nodeId]) {
+          if (related.has(nodeId)) node.setAttribute('data-focus-match', '');
+          if (selected.has(nodeId)) {
             node.setAttribute('data-focus-selected', '');
             node.setAttribute('aria-pressed', 'true');
           }
@@ -9917,10 +9917,10 @@
         overlay.setAttribute('class', 'intent-trace-overlay');
         overlay.setAttribute('data-intent-trace-overlay', '');
         overlay.setAttribute('aria-hidden', 'true');
-        var related = Object.create(null);
+        var related = new Set();
         var seen = {};
         var counts = { out: 0, in: 0, loop: 0 };
-        related[id] = true;
+        related.add(id);
 
         edgeList.forEach(function (edge) {
           var from = edge.getAttribute('data-edge-from');
@@ -9933,8 +9933,8 @@
             seen[key] = true;
             counts[direction] += 1;
           }
-          related[from] = true;
-          related[to] = true;
+          related.add(from);
+          related.add(to);
           edge.setAttribute('data-intent-trace-match', '');
           var wrapper = document.createElementNS(namespace, 'g');
           if (edge.hasAttribute('transform')) wrapper.setAttribute('transform', edge.getAttribute('transform'));
@@ -9946,7 +9946,7 @@
 
         nodeList.forEach(function (node) {
           var nodeId = node.getAttribute('data-node-id');
-          if (related[nodeId]) node.setAttribute('data-intent-trace-match', '');
+          if (related.has(nodeId)) node.setAttribute('data-intent-trace-match', '');
           if (nodeId === id) node.setAttribute('data-intent-trace-selected', '');
         });
         if (overlay.childNodes.length) {
@@ -11319,14 +11319,14 @@
         return true;
       }
       function semanticIds(ids, includeNeighbors) {
-        var seeds = Object.create(null);
-        var wanted = Object.create(null);
-        (ids || []).forEach(function (id) { seeds[id] = true; wanted[id] = true; });
+        var seeds = new Set();
+        var wanted = new Set();
+        (ids || []).forEach(function (id) { seeds.add(id); wanted.add(id); });
         if (includeNeighbors) {
           Array.prototype.forEach.call(svg.querySelectorAll('[data-edge-from][data-edge-to]'), function (edge) {
             var from = edge.getAttribute('data-edge-from');
             var to = edge.getAttribute('data-edge-to');
-            if (seeds[from] || seeds[to]) { wanted[from] = true; wanted[to] = true; }
+            if (seeds.has(from) || seeds.has(to)) { wanted.add(from); wanted.add(to); }
           });
         }
         return wanted;
@@ -11334,7 +11334,7 @@
       function boxesFor(ids, includeNeighbors) {
         var wanted = semanticIds(ids, includeNeighbors);
         return Array.prototype.slice.call(svg.querySelectorAll('[data-node-id]'))
-          .filter(function (node) { return wanted[node.getAttribute('data-node-id')]; })
+          .filter(function (node) { return wanted.has(node.getAttribute('data-node-id')); })
           .map(function (node) {
             try { return node.getBBox(); } catch (_) { return null; }
           })
@@ -12733,14 +12733,14 @@
         if (mode !== 'result' || activeNodeIds.length < 2 || activeEdges.length !== activeNodeIds.length - 1) return null;
         var allNodes = nodes();
         var byId = nodesById();
-        var seenNodeIds = Object.create(null);
+        var seenNodeIds = new Set();
         var seenEdgeKeys = Object.create(null);
         if (startId !== activeNodeIds[0] || endId !== activeNodeIds[activeNodeIds.length - 1] ||
             activeNodeIds.some(function (id) {
-              if (seenNodeIds[id] || allNodes.filter(function (node) {
+              if (seenNodeIds.has(id) || allNodes.filter(function (node) {
                 return node.getAttribute('data-node-id') === id;
               }).length !== 1) return true;
-              seenNodeIds[id] = true;
+              seenNodeIds.add(id);
               return !byId[id];
             }) ||
             activeEdges.some(function (edge, index) {
@@ -12951,14 +12951,14 @@
       }
       function reachableFrom(source) {
         var outgoing = outgoingByNode();
-        var reached = Object.create(null);
+        var reached = new Set();
         var queue = [source];
-        reached[source] = true;
+        reached.add(source);
         for (var cursor = 0; cursor < queue.length; cursor += 1) {
           var links = outgoing[queue[cursor]] || [];
           links.forEach(function (link) {
-            if (reached[link.to]) return;
-            reached[link.to] = true;
+            if (reached.has(link.to)) return;
+            reached.add(link.to);
             queue.push(link.to);
           });
         }
@@ -12966,14 +12966,14 @@
       }
       function hopDistancesFrom(source) {
         var outgoing = outgoingByNode();
-        var distances = Object.create(null);
+        var distances = new Map();
         var queue = [source];
-        distances[source] = 0;
+        distances.set(source, 0);
         for (var cursor = 0; cursor < queue.length; cursor += 1) {
           var links = outgoing[queue[cursor]] || [];
           links.forEach(function (link) {
-            if (Object.prototype.hasOwnProperty.call(distances, link.to)) return;
-            distances[link.to] = distances[queue[cursor]] + 1;
+            if (distances.has(link.to)) return;
+            distances.set(link.to, distances.get(queue[cursor]) + 1);
             queue.push(link.to);
           });
         }
@@ -12982,24 +12982,24 @@
       function shortestDirectedPath(source, target) {
         if (source === target) return null;
         var outgoing = outgoingByNode();
-        var previous = Object.create(null);
+        var previous = new Map();
         var queue = [source];
-        previous[source] = null;
-        for (var cursor = 0; cursor < queue.length && !Object.prototype.hasOwnProperty.call(previous, target); cursor += 1) {
+        previous.set(source, null);
+        for (var cursor = 0; cursor < queue.length && !previous.has(target); cursor += 1) {
           var links = outgoing[queue[cursor]] || [];
           links.some(function (link) {
-            if (Object.prototype.hasOwnProperty.call(previous, link.to)) return false;
-            previous[link.to] = { from: queue[cursor], edge: link.edge };
+            if (previous.has(link.to)) return false;
+            previous.set(link.to, { from: queue[cursor], edge: link.edge });
             queue.push(link.to);
             return link.to === target;
           });
         }
-        if (!Object.prototype.hasOwnProperty.call(previous, target)) return null;
+        if (!previous.has(target)) return null;
         var nodeIds = [target];
         var routeEdges = [];
         var current = target;
         while (current !== source) {
-          var step = previous[current];
+          var step = previous.get(current);
           if (!step) return null;
           routeEdges.unshift(step.edge);
           nodeIds.unshift(step.from);
@@ -13376,14 +13376,14 @@
         var reached = reachableFrom(id);
         byId[id].setAttribute('data-route-start', '');
         byId[id].setAttribute('data-route-match', '');
-        Object.keys(reached).forEach(function (candidateId) {
+        Array.from(reached.keys()).forEach(function (candidateId) {
           if (candidateId !== id && byId[candidateId]) byId[candidateId].setAttribute('data-route-candidate', '');
         });
         svg.setAttribute('data-route-picking', 'target');
         panel.setAttribute('data-state', 'target');
         title.textContent = viewerText('viewer.route.destination', { label: nodeLabel(byId[id], id) });
         renderPath([id]);
-        var count = Math.max(0, Object.keys(reached).length - 1);
+        var count = Math.max(0, Array.from(reached.keys()).length - 1);
         status.textContent = count
           ? viewerCount('viewer.route.destination.count', count)
           : viewerText('viewer.route.noOutgoing');
@@ -13528,10 +13528,10 @@
         }
         if (mode === 'target' && startId && byId[startId]) {
           var distances = hopDistancesFrom(startId);
-          var targetIds = Object.keys(distances).filter(function (id) { return id !== startId && byId[id]; });
+          var targetIds = Array.from(distances.keys()).filter(function (id) { return id !== startId && byId[id]; });
           var targetBadges = Object.create(null);
           targetIds.forEach(function (id) {
-            targetBadges[id] = viewerCount('viewer.route.hop', distances[id]);
+            targetBadges[id] = viewerCount('viewer.route.hop', distances.get(id));
           });
           return {
             kind: 'route-target',
@@ -13891,17 +13891,17 @@
           return (byId[id].getAttribute('data-node-kind') || 'neutral') === kind;
         });
         if (!matches.length) return false;
-        var chosen = Object.create(null);
+        var chosen = new Set();
         matches.forEach(function (id) {
-          chosen[id] = true;
+          chosen.add(id);
           byId[id].setAttribute('data-legend-preview-match', '');
           byId[id].setAttribute('data-legend-preview-selected', '');
         });
         edgeGroups().forEach(function (edge) {
-          if (!chosen[edge.from] && !chosen[edge.to]) return;
+          if (!chosen.has(edge.from) && !chosen.has(edge.to)) return;
           edge.members.forEach(function (member) { member.setAttribute('data-legend-preview-match', ''); });
           [edge.from, edge.to].forEach(function (id) {
-            if (!byId[id] || chosen[id]) return;
+            if (!byId[id] || chosen.has(id)) return;
             byId[id].setAttribute('data-legend-preview-match', '');
             byId[id].setAttribute('data-legend-preview-peer', '');
           });
@@ -14080,10 +14080,10 @@
           return false;
         }
 
-        var chosen = {};
-        selectedKinds.forEach(function (kind) { chosen[kind] = true; });
+        var chosen = new Set();
+        selectedKinds.forEach(function (kind) { chosen.add(kind); });
         Object.keys(byId).forEach(function (id) {
-          if (!chosen[nodeKind[id]]) return;
+          if (!chosen.has(nodeKind[id])) return;
           byId[id].setAttribute('data-lens-match', '');
           byId[id].setAttribute('data-lens-selected', '');
         });
@@ -14118,7 +14118,7 @@
             [edge.from, edge.to].forEach(function (id) {
               if (!byId[id]) return;
               byId[id].setAttribute('data-lens-match', '');
-              if (!chosen[nodeKind[id]]) byId[id].setAttribute('data-lens-peer', '');
+              if (!chosen.has(nodeKind[id])) byId[id].setAttribute('data-lens-peer', '');
             });
           }
         });

@@ -1,6 +1,6 @@
 # Implementation evidence — issue 109
 
-Implementation checkpoint, not Done approval. Screenshots were generated and inspected before committing. Their badge is the planning HEAD `8552f1e`; the rendered source includes the uncommitted implementation recorded alongside this file.
+Implementation checkpoint, not Done approval. Screenshots were generated and inspected before committing. Their badge is the preceding HEAD `e84186e`; the rendered source includes the uncommitted security correction recorded alongside this file. Initial implementation captures preceded `a81e3aa` and remain in that commit's history.
 
 ## Delivered behavior
 
@@ -14,7 +14,7 @@ Linux, Node 22.22.1, npm 9.2.0. Security audit and packed-install SBOM use npm 1
 
 | Check | Observed result |
 | --- | --- |
-| `npm run verify` | Format, lint, typecheck, 142 tests in 27 files and helper build passed. Includes ten native tests and the packed-install smoke test. |
+| `npm run verify` | Format, lint, typecheck, 146 tests in 28 files and helper build passed. Includes eleven native tests, three SAST policy cases and the packed-install smoke test. |
 | Public site verify, `SITE_BASE=/` | Passed build/output tests. |
 | Engineering portal build, `SITE_BASE=/arcshape/` | Passed. |
 | Product model | 37 artifacts; zero errors/warnings. |
@@ -55,6 +55,12 @@ The previous assurance pipeline scanned only the static snapshot, so a pass coul
 Local test-authoring failures concerned fixture frontmatter, ambiguous selectors and reset semantics. Tests were corrected and full suites rerun; no separate process guard is warranted for those one-off mistakes.
 
 The first checkpoint incorrectly described six remaining stale citations as archived. Inspection of the diagnostic paths showed repeated citations in three active documents. All occurrences were refreshed and the full citation report rerun; historical archives were not changed.
+
+CI run 40579469252 on the first implementation head exposed a Windows/Node 22 test race: changing appearance schedules a hash-route replacement, while the test could acquire the still-ready old iframe. The native browser test now explicitly waits for the old element to disconnect before acquiring the replacement; dedicated-view readiness uses the completed handshake. Capture automation also waits for the requested appearance. No timeout increase, retry or skipped assertion was introduced. This deterministic guard would have prevented the detached-frame failure in that run.
+
+CodeQL identified 13 High remote-property-injection findings in the imported template's URL-derived dictionary keys. The reproducible vendor tailoring now uses Map/Set for those collections, preserving plain-data depth snapshots; runtime regression coverage exercises reachability, shortest routes and semantic lenses. No vendor exclusion or security exception was added. This follows the [CodeQL recommendation](https://codeql.github.com/codeql-query-help/javascript/js-remote-property-injection/) to use Map instead of dynamic object properties.
+
+The required severity adapter initially missed those findings because modern SARIF puts query rules under `tool.extensions`, not only `tool.driver`. `scripts/check-codeql-sarif.mjs` now reads both. Its counterfactual run against the downloaded failing SARIF exits 1 and identifies all 13 findings. Three regression cases cover driver rules, extension rules and the lower-severity boundary. The full new-head CodeQL result remains the acceptance evidence for the renderer correction.
 
 ## Outstanding gates
 

@@ -213,6 +213,55 @@ describe("native publication", () => {
 });
 
 describe("native viewer in a browser", () => {
+  it("preserves reachability, routes and semantic lenses with hardened key collections", async () => {
+    const page = await browser.newPage();
+    await page.goto(url + "/diagrams/sequence/index.html");
+    await page.waitForSelector("html[data-ready]");
+    const runtime = page
+      .frames()
+      .find((frame) => frame.url() === "about:srcdoc");
+    const state = await runtime.evaluate(() => {
+      const nodes = [...document.querySelectorAll("svg [data-node-id]")].map(
+        (node) => node.dataset.nodeId,
+      );
+      const focus = window.Archify.focus;
+      focus.set("api", { updateUrl: false, toggle: false });
+      focus.reach("downstream", {
+        updateUrl: false,
+        toggle: false,
+        reveal: false,
+      });
+      const reach = focus.reachability();
+      const snapshot = focus.reachabilitySnapshot();
+      focus.clear({ updateUrl: false });
+      const route = window.Archify.routeProbe;
+      route.begin({ updateUrl: false });
+      route.choose(nodes[0], { updateUrl: false });
+      const context = route.finderContext();
+      route.choose("api", { updateUrl: false });
+      const path = route.result();
+      route.clear({ updateUrl: false });
+      const lens = window.Archify.semanticLens;
+      lens.select("backend", { updateUrl: false });
+      return {
+        reach,
+        snapshot,
+        context,
+        path,
+        kinds: lens.active(),
+        matched: document.querySelectorAll("[data-lens-selected]").length,
+      };
+    });
+    expect(state.reach.nodeIds).toContain("api");
+    expect(state.reach.nodeIds.length).toBeGreaterThan(1);
+    expect(state.snapshot.depths.api).toBe(0);
+    expect(state.context).toBeTruthy();
+    expect(state.path.nodes).toContain("api");
+    expect(state.path.hops).toBeGreaterThan(0);
+    expect(state.kinds).toContain("backend");
+    expect(state.matched).toBeGreaterThan(0);
+    await page.close();
+  });
   it("isolates embedded and dedicated runtimes while preserving focus and theme", async () => {
     const page = await browser.newPage();
     page.setDefaultTimeout(5000);
@@ -254,7 +303,13 @@ describe("native viewer in a browser", () => {
     await page.waitForFunction(() =>
       document.querySelector(".native-open").hash.includes("focus=api"),
     );
+    const previousFrame = await page.$("[data-native-frame]");
     await page.click('[data-appearance-set="dark"]');
+    await page.waitForFunction(
+      (frame) => !frame.isConnected,
+      {},
+      previousFrame,
+    );
     await page.waitForSelector("[data-native-frame][data-ready]");
     const themed = page.frames().find((f) => f.url() === "about:srcdoc");
     await themed.waitForFunction(
@@ -262,7 +317,7 @@ describe("native viewer in a browser", () => {
     );
     const target = await page.$eval(".native-open", (link) => link.href);
     await page.goto(target);
-    await page.waitForSelector("iframe:not([hidden])");
+    await page.waitForSelector("html[data-ready]");
     const dedicated = page.frames().find((f) => f.url() === "about:srcdoc");
     await dedicated.waitForFunction(
       () => window.Archify.focus.active() === "api",

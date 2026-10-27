@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { hardenViewer } from "./harden-archify-viewer.mjs";
 
 const revision = "208acba8d412335185b2056fedf54b3405df43fb";
 const source = resolve(process.argv[2] ?? "");
@@ -75,6 +76,7 @@ for (const file of [...files].sort()) {
       /<style id="archify-fonts">[\s\S]*?<\/style>/,
       '<style id="archify-fonts"></style>',
     );
+    content = hardenViewer(content);
   }
   if (file === "renderers/shared/generated-brand-marks.mjs")
     content =
@@ -97,7 +99,7 @@ await writeFile(
       source: "https://github.com/tt-a1i/archify",
       license: "MIT",
       tailoring:
-        "No embedded fonts or third-party brand vectors. System monospace and generic symbols only. No upstream CLI/updater.",
+        "No embedded fonts or third-party brand vectors. System monospace and generic symbols only. No upstream CLI/updater. Viewer URL-key dictionaries use Map/Set.",
       files: inventory,
     },
     null,

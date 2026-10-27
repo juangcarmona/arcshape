@@ -109,6 +109,7 @@ try {
     await page.screenshot({ path: join(output, "arcshape-dedicated.png") });
     await page.goto(`${siteUrl}#/section/03`);
     await page.click('[data-appearance-set="dark"]');
+    await page.waitForSelector('html[data-appearance="dark"]');
     await page.$eval("figure.native-diagram", (element) =>
       element.scrollIntoView({ block: "center", behavior: "instant" }),
     );
@@ -116,6 +117,7 @@ try {
     await page.screenshot({ path: join(output, "arcshape-native-dark.png") });
     await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 1 });
     await page.click('[data-appearance-set="light"]');
+    await page.waitForSelector('html[data-appearance="light"]');
     await page.$eval("figure.native-diagram", (element) =>
       element.scrollIntoView({ block: "center", behavior: "instant" }),
     );
