@@ -2,6 +2,8 @@
 
 Issue: [#109](https://github.com/juangcarmona/arcshape/issues/109). Base: `c1e38279a6b7276ec4f606177c7e41a99d64c771`.
 
+Draft PR: [#110](https://github.com/juangcarmona/arcshape/pull/110). Refinement artifacts: `11ad591a6bd60b9334a5745b77fbba623d9e18ac`; subsequent evidence bookkeeping does not change the reviewed product draft.
+
 Status: blocked at the human product-approval gate. The issue remains in backlog. A draft PR shares the refinement artifacts; it is not a completed technical proposal or permission to merge. No runtime implementation or release is claimed.
 
 ## Preflight

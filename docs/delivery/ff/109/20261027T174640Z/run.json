@@ -21,8 +21,8 @@
       "name": "refine",
       "startedAt": "2026-10-27T17:46:40Z",
       "inputCommit": "c1e38279a6b7276ec4f606177c7e41a99d64c771",
-      "outputCommit": null,
-      "endedAt": "2026-10-27T17:53:30Z",
+      "outputCommit": "11ad591a6bd60b9334a5745b77fbba623d9e18ac",
+      "endedAt": "2026-10-27T17:54:55Z",
       "result": "blocked-human-product-approval",
       "evidence": [
         "https://github.com/juangcarmona/arcshape/issues/109",
@@ -53,12 +53,12 @@
         "Explicitly prohibit parent-document/storage access and add a hostile-input scenario.",
         "Preserve readable external publication after migration or retain the original diagram."
       ],
-      "resultingCommit": null,
+      "resultingCommit": "11ad591a6bd60b9334a5745b77fbba623d9e18ac",
       "outcomes": "Full local quality command, product baseline/overlay and existing OpenSpec validations passed. Independent re-review approved the draft for human review only."
     }
   ],
   "stopReason": "Human approval of CHG-INTERACTIVE-DIAGRAMS-001 and explicit authorization for application are required before advancing beyond refinement. No substitutable product gate is configured.",
-  "pullRequest": null,
+  "pullRequest": "https://github.com/juangcarmona/arcshape/pull/110",
   "links": {
     "issue": "https://github.com/juangcarmona/arcshape/issues/109",
     "productChange": "docs/product/changes/active/chg-interactive-diagrams-001/change.md"
