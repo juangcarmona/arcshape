@@ -19,7 +19,7 @@
 <!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
 
 - [ ] 2.1 Add native fences to Markdown rendering and the explicit interactive folder mode while preserving snapshot/Mermaid behavior; test mixed order, source immutability, safe output ownership, symlinks and failed builds.
-- [ ] 2.2 Add sandboxed compact embedding, CSP, a validated source-bound bridge, static fallback and dedicated links; test parent access denial, forged messages, theme/focus and blocked network.
+- [ ] 2.2 Add sandboxed compact and dedicated viewers, CSP, a validated source-bound bridge, reachable no-JavaScript markup, startup-failure fallback and dedicated links; test parent/storage/opener denial including direct artifact navigation, forged messages, theme/focus and blocked network.
 - [ ] 2.3 Verify responsive height/width, ordinary wheel versus deliberate pan/zoom, keyboard selection/reset and routing cleanup in browser tests at desktop and 390px.
 - [ ] 2.4 Extend packed-install regression coverage to build both modes and a native fixture without checkout paths; document reproducible commands and supported limitations.
 

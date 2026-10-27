@@ -40,6 +40,11 @@ Existing Mermaid fences and default single-file generation SHALL remain supporte
 - **WHEN** a reader opens the generated default HTML through a local file URL with networking disabled
 - **THEN** both kinds of diagrams are visible without external runtime assets
 
+#### Scenario: Disable JavaScript or fail viewer startup
+
+- **WHEN** JavaScript is disabled in either output mode, or a dedicated viewer fails to start
+- **THEN** reachable static markup shows the diagram instead of depending on the reader's JavaScript router
+
 ### Requirement: Offer compact interactive publication
 
 An explicit folder-publication option SHALL provide interactive diagrams at available content width with bounded responsive height, ordinary document scrolling, and one unobtrusive dedicated-page link without duplicate explanatory wrappers.
@@ -63,7 +68,7 @@ An explicit folder-publication option SHALL provide interactive diagrams at avai
 
 ### Requirement: Isolate interactive diagram execution
 
-Embedded diagram code SHALL be isolated from its parent. Unsafe input and forged messages SHALL have no unauthorized effects.
+Diagram code SHALL be isolated from its parent, opener and shared storage in embedded and dedicated views. Unsafe input and forged messages SHALL have no unauthorized effects.
 <!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
 <!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
 
@@ -76,6 +81,11 @@ Embedded diagram code SHALL be isolated from its parent. Unsafe input and forged
 
 - **WHEN** script in an embedded diagram attempts parent-document or storage access
 - **THEN** browser isolation denies it while supported selection and navigation still work
+
+#### Scenario: Navigate directly to published artifacts
+
+- **WHEN** any generated viewer page is opened directly, including through its dedicated link
+- **THEN** its runtime still executes in an opaque-origin sandbox without shared-storage or opener access; no unsandboxed raw viewer artifact is published
 
 ### Requirement: Publish without development-machine dependencies
 
