@@ -13,7 +13,7 @@ The target has two independent static surfaces:
 
 ArcShape's product model and `docs/architecture` remain canonical. Their HTML outputs are generated projections. ArcShape already pins `@prodshape/cli` as a development-only tool to render its own Product Snapshot; neither deployed site depends on the other product or its site at runtime. No shared site package or cross-product runtime integration is introduced.
 
-<!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:0c2a1bb402fcf272e5ecfe15282e8d15dccd7fb57992a344071757f82cf457a7" -->
+<!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:8d9b3498c0c04f5546618e31fe405629dc9d08183c03d72d4d1af5f50cf182ba" -->
 <!-- pdac:cite id="FR-PRODUCT-DEFINITION-LINKS" digest="sha256:d653de7a070313b78fa267d4419b7f31544e393c3c1ac2721ac0dbc231d92a26" -->
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
 
@@ -77,14 +77,14 @@ Use a least-privilege workflow trigger and permissions. The implementation must 
 
 The current Product Definition prohibits ArcShape-operated data collection; static publication of a minimal, synthetic run result does not add a collection service.
 
-<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:2893462d429a0188eeb937215ceb47a55809d26825d2646d0897cc851d33ce13" -->
+<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
 
 ### 4. Keep product claims within the approved capability model
 
 Keep ArcShape's visual identity and site implementation self-owned while aligning its visual direction with ProductShape. Do not import ProductShape site assets or depend on a shared site package. All product copy remains ArcShape-specific: separate current capabilities from work that is planned or exploratory, and link technical readers to the engineering portal and its source-backed artifacts. The public site is communication about ArcShape; it does not imply the site itself is a hosted ArcShape product service.
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:f5d7e3a6b239e2851ee9554633e1a19cddd05a71b703ed1f184ba0d21e4da3f9" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
 
 ### Alternatives considered

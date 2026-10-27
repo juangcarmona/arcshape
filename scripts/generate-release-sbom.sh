@@ -16,6 +16,7 @@ mkdir -p "$consumer_dir"
 (cd "$consumer_dir" && npm init --yes >/dev/null)
 npm install --prefix "$consumer_dir" --ignore-scripts --no-audit --no-fund "$tarball"
 npm sbom --prefix "$consumer_dir" --sbom-format=cyclonedx --omit=dev > "$output_dir/arcshape-$version-sbom.cdx.json"
+node scripts/add-vendor-sbom.mjs "$output_dir/arcshape-$version-sbom.cdx.json" "$consumer_dir/node_modules/@arcshape/cli/assets/archify/inventory.json"
 
 node - "$output_dir/arcshape-$version-sbom.cdx.json" "@arcshape/cli" "$version" <<'NODE'
 const fs = require("node:fs");

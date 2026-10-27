@@ -6,8 +6,8 @@
 
 ArcShape already authors Mermaid beside arc42 Markdown and publishes sanitized, responsive diagrams in its generated reader, but the public documentation does not yet demonstrate the full authoring-to-publication path consistently. A focused deployment-view example and end-to-end regression coverage will make that existing capability easy to see and keep reliable without introducing a second diagram source.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
-<!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:91f111b3ea40541300039f0b7843433864fd6d6cd379616e415990cfd66c6077" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:b7ab2591c05d0fbd32176878461e9138773da63aa2fe14a2932da341682495b9" -->
 
 ## What Changes
 

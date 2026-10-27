@@ -19,6 +19,9 @@ description: Known risks, technical debt, and their planned responses.
 
 ## Technical debt
 
+- The pinned native viewer depends on upstream DOM and export APIs. Its browser tests and vendor hashes must pass before an update; system-font metrics still require visual inspection. [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md) records the proposed trade-off.
+- The native renderer is trusted package code, not an OS-isolated plugin. Source validation excludes filesystem/network-bearing features, while browser isolation protects readers. The residual build-time dependency risk remains part of security review.
+
 - The CLI records evidence and validates arc42 structure; assistant workflows still depend on the selected AI provider to interpret evidence.
 - ADRs and C4 diagrams are Markdown authoring workflows; the static site and external sync currently publish the arc42 architecture directory.
 - The Mermaid renderer adds browser and diagram dependencies that need continued dependency review before public release.

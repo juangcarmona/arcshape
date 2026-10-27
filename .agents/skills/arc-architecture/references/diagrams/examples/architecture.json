@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Brisa · contexto del sistema",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "backend": {
+          "label": "Sistema"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "viajero",
+      "type": "external",
+      "label": "Viajero",
+      "sublabel": "Busca y reserva",
+      "pos": [
+        40,
+        60
+      ],
+      "size": [
+        170,
+        72
+      ]
+    },
+    {
+      "id": "brisa",
+      "type": "backend",
+      "label": "Brisa",
+      "sublabel": "Sistema de reservas",
+      "pos": [
+        360,
+        60
+      ],
+      "size": [
+        170,
+        72
+      ]
+    },
+    {
+      "id": "pagos",
+      "type": "external",
+      "label": "Pagos",
+      "sublabel": "Proveedor externo",
+      "pos": [
+        700,
+        60
+      ],
+      "size": [
+        170,
+        72
+      ]
+    },
+    {
+      "id": "anfitrion",
+      "type": "external",
+      "label": "Anfitrión",
+      "sublabel": "Gestiona alojamientos",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        170,
+        72
+      ]
+    },
+    {
+      "id": "correo",
+      "type": "external",
+      "label": "Correo",
+      "sublabel": "Proveedor externo",
+      "pos": [
+        360,
+        300
+      ],
+      "size": [
+        170,
+        72
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "viajero-brisa",
+      "from": "viajero",
+      "to": "brisa",
+      "label": "Reserva",
+      "variant": "emphasis"
+    },
+    {
+      "id": "brisa-pagos",
+      "from": "brisa",
+      "to": "pagos",
+      "label": "Autoriza",
+      "variant": "default"
+    },
+    {
+      "id": "anfitrion-brisa",
+      "from": "anfitrion",
+      "to": "brisa",
+      "label": "Publica",
+      "variant": "default"
+    },
+    {
+      "id": "brisa-correo",
+      "from": "brisa",
+      "to": "correo",
+      "label": "Confirma",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "C4 · nivel 1",
+      "items": [
+        "Brisa se muestra como una caja negra.",
+        "Pagos y correo pertenecen a terceros."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Sistema ficticio",
+      "items": [
+        "Las relaciones describen el ejemplo Brisa.",
+        "No representan servicios reales de ArcShape."
+      ]
+    }
+  ]
+}

@@ -11,7 +11,7 @@ Provides a discoverable, accessible hierarchy for supporting architecture docume
 ### Requirement: Represent supporting documents as a hierarchy
 
 The reader SHALL represent supporting Markdown pages according to their authored folder paths. Folder READMEs SHALL be folder pages and other Markdown files SHALL be leaves.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 <!-- pdac:cite id="UC-READ-ARCHITECTURE" digest="sha256:43f7ea1726a9e26689b8741f153ad919563655653584b9cc13bca10885e8b985" -->
 
 #### Scenario: Render nested folders and leaves

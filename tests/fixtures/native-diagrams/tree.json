@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "tree",
+  "meta": {
+    "title": "Descomposición por capacidades",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "nodes": [
+    {
+      "id": "brisa",
+      "label": "Brisa"
+    },
+    {
+      "id": "catalogo",
+      "parent": "brisa",
+      "label": "Catálogo"
+    },
+    {
+      "id": "reservas",
+      "parent": "brisa",
+      "label": "Reservas"
+    },
+    {
+      "id": "operaciones",
+      "parent": "brisa",
+      "label": "Operaciones"
+    },
+    {
+      "id": "buscar",
+      "parent": "catalogo",
+      "label": "Buscar"
+    },
+    {
+      "id": "publicar",
+      "parent": "catalogo",
+      "label": "Publicar"
+    },
+    {
+      "id": "confirmar",
+      "parent": "reservas",
+      "label": "Confirmar"
+    },
+    {
+      "id": "cancelar",
+      "parent": "reservas",
+      "label": "Cancelar"
+    },
+    {
+      "id": "notificar",
+      "parent": "operaciones",
+      "label": "Notificar"
+    },
+    {
+      "id": "observar",
+      "parent": "operaciones",
+      "label": "Observar"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Cómo leer este árbol",
+      "items": [
+        "Las líneas significan pertenencia, no tráfico.",
+        "Cada capacidad tiene exactamente un padre."
+      ]
+    }
+  ]
+}

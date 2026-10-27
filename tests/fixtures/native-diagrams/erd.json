@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "diagram_type": "erd",
+  "meta": {
+    "title": "Modelo relacional de Brisa",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "layout": {
+    "mode": "grid",
+    "gapX": 100,
+    "gapY": 70,
+    "entityW": 240
+  },
+  "entities": [
+    {
+      "id": "viajero",
+      "label": "viajero",
+      "row": 0,
+      "col": 0,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "key": "uk"
+        }
+      ]
+    },
+    {
+      "id": "reserva",
+      "label": "reserva",
+      "row": 0,
+      "col": 1,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "viajero_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "viajero.id"
+        },
+        {
+          "name": "alojamiento_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "alojamiento.id"
+        },
+        {
+          "name": "entrada",
+          "type": "date"
+        },
+        {
+          "name": "salida",
+          "type": "date"
+        },
+        {
+          "name": "estado",
+          "type": "varchar"
+        }
+      ]
+    },
+    {
+      "id": "alojamiento",
+      "label": "alojamiento",
+      "row": 0,
+      "col": 2,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "nombre",
+          "type": "varchar"
+        },
+        {
+          "name": "capacidad",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "reserva-viajero",
+      "from": "reserva",
+      "to": "viajero",
+      "label": "Titular",
+      "fromCardinality": "many",
+      "toCardinality": "one"
+    },
+    {
+      "id": "reserva-alojamiento",
+      "from": "reserva",
+      "to": "alojamiento",
+      "label": "Estancia",
+      "fromCardinality": "many",
+      "toCardinality": "one"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Esquema reducido",
+      "items": [
+        "Se muestran todas las columnas de estas tres tablas ficticias.",
+        "El outbox y la facturación quedan fuera de esta vista."
+      ]
+    }
+  ]
+}

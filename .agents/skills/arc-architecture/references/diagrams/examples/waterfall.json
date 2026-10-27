@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "waterfall",
+  "meta": {
+    "title": "Presupuesto de una petición",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "evidence": "illustrative",
+    "unit": "ms"
+  },
+  "spans": [
+    {
+      "id": "peticion",
+      "name": "POST /reservas",
+      "start": 0,
+      "end": 320,
+      "service": "API"
+    },
+    {
+      "id": "identidad",
+      "name": "Verificar identidad",
+      "start": 0,
+      "end": 35,
+      "parent": "peticion",
+      "service": "API"
+    },
+    {
+      "id": "disponibilidad",
+      "name": "Consultar fechas",
+      "start": 35,
+      "end": 150,
+      "parent": "peticion",
+      "service": "PostgreSQL"
+    },
+    {
+      "id": "precio",
+      "name": "Calcular precio",
+      "start": 35,
+      "end": 100,
+      "parent": "peticion",
+      "service": "API"
+    },
+    {
+      "id": "transaccion",
+      "name": "Reserva + outbox",
+      "start": 150,
+      "end": 290,
+      "parent": "peticion",
+      "service": "PostgreSQL"
+    },
+    {
+      "id": "respuesta",
+      "name": "Preparar respuesta",
+      "start": 290,
+      "end": 320,
+      "parent": "peticion",
+      "service": "API"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Tiempos ilustrativos",
+      "items": [
+        "No son mediciones ni compromisos de rendimiento.",
+        "Precio y disponibilidad se consultan en paralelo."
+      ]
+    }
+  ]
+}

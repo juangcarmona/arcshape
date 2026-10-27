@@ -50,6 +50,36 @@ Initialization is preview-first and deliberately boring: it does not inspect sou
 
 `arcshape site build` reads the README, twelve canonical section documents, and any supporting Markdown beneath their section directories, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes the requested output file (default `docs/architecture-site/index.html`). Supporting Markdown keeps its authored relative paths in the reader: nested folders become collapsible navigation groups, folder `README.md` files provide folder pages, and supporting pages show contextual breadcrumbs. The GitHub Pages workflow writes its projection to `_site/architecture/index.html` with the exact source revision. It does not modify canonical Markdown.
 
+Native fences add one build-time rendering step. The default snapshot embeds their static images; `--format interactive` publishes compact viewers and dedicated pages from the same source. Validation or rendering errors stop publication. An interactive directory is replaced only when its ownership inventory still matches every file. The existing initialization sequence above remains Mermaid because its loops and alternatives carry meaning.
+
+```archify
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": { "title": "Build native architecture diagrams", "visual_preset": "blueprint" },
+  "participants": [
+    { "id": "maintainer", "type": "external", "label": "Maintainer" },
+    { "id": "site", "type": "backend", "label": "Site builder" },
+    { "id": "renderer", "type": "backend", "label": "Native adapter" },
+    { "id": "browser", "type": "frontend", "label": "Build browser" },
+    { "id": "output", "type": "database", "label": "Owned output" }
+  ],
+  "messages": [
+    { "id": "request", "from": "maintainer", "to": "site", "y": 160, "label": "Build interactive site", "variant": "emphasis" },
+    { "id": "validate", "from": "site", "to": "renderer", "y": 220, "label": "Validate native fences" },
+    { "id": "export", "from": "renderer", "to": "browser", "y": 280, "label": "Render HTML and export SVG" },
+    { "id": "images", "from": "browser", "to": "renderer", "y": 340, "label": "Static image", "variant": "dashed" },
+    { "id": "artifacts", "from": "renderer", "to": "site", "y": 400, "label": "Validated render artifacts", "variant": "dashed" },
+    { "id": "publish", "from": "site", "to": "output", "y": 460, "label": "Verify ownership and publish" },
+    { "id": "done", "from": "site", "to": "maintainer", "y": 520, "label": "Report output directory", "variant": "dashed" }
+  ]
+}
+```
+
+The diagram shows the successful path. Malformed input, a rendering failure, or modified output leaves the prior publication in place. The runtime boundary is explained in [cross-cutting concepts](../08-crosscutting-concepts/README.md); the trade-off is recorded in [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md).
+
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
+
 ### Resume an evidence-analysis session
 
 `arcshape session start` inventories safe regular files and assigns stable evidence IDs. `session next` returns one bounded round at a time, starting with documentation, then repository configuration, then implementation and tests. `status`, `next`, and `report` refresh file hashes to identify additions, modifications, and removals. A `mark` operation records a classification and an optional note; changed evidence requires re-reading and explicit acceptance before it can be classified. Leads and questions are stored as supplied by the human or AI workflow.

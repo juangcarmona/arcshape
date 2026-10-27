@@ -15,6 +15,15 @@
     "reviewerObservedAt": "2026-10-27T17:42:57.775Z"
   },
   "maxCorrectionRounds": 3,
+  "executionPolicy": {
+    "userDirection": "Do not launch new agents without explicit agreement; work incrementally in the main session. This did not request stopping existing agents.",
+    "executorCorrection": "Stopping the two running workers was an interpretation error, not a user-requested stop. No implementation code had been written when checked.",
+    "workersStopped": [
+      "01a17e83-cec0-7d72-98a0-dec7d00ec1e2",
+      "01a17e8f-1734-7bb0-8fc3-6b25b491446b"
+    ],
+    "futureIndependentReview": "Ask the maintainer before invoking another agent; do not waive the FF gate"
+  },
   "status": "running",
   "stages": [
     {
@@ -30,9 +39,39 @@
         "verification.md",
         "draft-review.md"
       ]
+    },
+    {
+      "name": "propose",
+      "inputCommit": "b1781b5",
+      "outputCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "result": "approved-independent-plan-review",
+      "evidence": [
+        "plan-review.md"
+      ]
+    },
+    {
+      "name": "implement",
+      "inputCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "result": "implementation-checkpoint-pending-independent-and-human-review",
+      "evidence": [
+        "implementation.md",
+        "screenshots/"
+      ]
     }
   ],
   "reviews": [
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewerSession": "01a17e8a-bee3-76d1-8817-974315c4f8cc",
+      "attestedAt": "2026-10-27T18:06:25.778Z",
+      "kind": "independent-plan-review",
+      "reviewedCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "decision": "approve",
+      "findings": "Dedicated-view isolation and reachable no-JavaScript fallback corrected in round 1. No blocking plan findings remain.",
+      "evidence": [
+        "plan-review.md"
+      ]
+    },
     {
       "reviewerModel": "gpt-6.1-sol",
       "reviewerSession": "01a17e7b-9df3-7741-96b0-bc5786636dd8",
@@ -42,10 +81,22 @@
       "reviewedSnapshot": "sha256:45e2e8f8a7557da980804ec9885c151b0f186fc16e920532863a64381527cfe7",
       "decision": "approve-for-human-review",
       "findings": "Two wording gaps corrected: parent-page isolation and external-publication compatibility. No product, plan or Done approval granted.",
-      "evidence": ["draft-review.md"]
+      "evidence": [
+        "draft-review.md"
+      ]
     }
   ],
   "corrections": [
+    {
+      "gate": "independent-plan-review",
+      "round": 1,
+      "requestedChanges": [
+        "Isolate dedicated viewers including direct navigation",
+        "Expose reachable static markup without JavaScript"
+      ],
+      "resultingCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "outcomes": "Strict OpenSpec validation and independent re-review passed"
+    },
     {
       "gate": "advisory-product-draft-review",
       "round": 1,

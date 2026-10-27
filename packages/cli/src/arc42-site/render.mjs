@@ -258,10 +258,12 @@ function createMarked(
   documentPath,
   sourceRevision,
   siteBase,
+  nativeDiagrams,
 ) {
   const marked = new Marked({ gfm: true });
   const slugger = new GithubSlugger();
   let mermaidCount = 0;
+  let nativeCount = 0;
 
   marked.use({
     renderer: {
@@ -278,6 +280,14 @@ function createMarked(
         return `<h${depth} id="${escapeHtml(id)}">${text}</h${depth}>\n`;
       },
       code({ text, lang }) {
+        if (String(lang).trim().toLowerCase() === "archify") {
+          const diagram = nativeDiagrams[nativeCount++];
+          if (!diagram)
+            throw new Error(
+              "Native diagram count does not match parsed Markdown",
+            );
+          return diagram;
+        }
         if (isMermaid(lang)) {
           const index = mermaidCount++;
           const svg = svgs[index];
@@ -381,7 +391,7 @@ function createMarked(
     },
   });
 
-  return { marked, count: () => mermaidCount };
+  return { marked, count: () => mermaidCount, nativeCount: () => nativeCount };
 }
 
 function githubSourceFileLink(sourceContext, sourceFile) {
@@ -480,6 +490,7 @@ export async function renderMarkdown(
     documentPath,
     sourceRevision,
     siteBase = "/",
+    nativeDiagrams = [],
   },
 ) {
   const diagramSources = extractMermaidSources(body);
@@ -500,13 +511,31 @@ export async function renderMarkdown(
     documentPath,
     sourceRevision,
     siteBase,
+    nativeDiagrams,
   );
   const html = await renderer.marked.parse(stripDuplicateTitle(body, title));
   if (renderer.count() !== svgs.length)
     throw new Error(
       "Unused Mermaid SVGs: Markdown extraction and rendering disagree",
     );
+  if (renderer.nativeCount() !== nativeDiagrams.length)
+    throw new Error(
+      "Unused native diagrams: Markdown extraction and rendering disagree",
+    );
   return { html, mermaidCount: renderer.count() };
+}
+
+export function extractNativeSources(body) {
+  const marked = new Marked({ gfm: true });
+  const sources = [];
+  marked.walkTokens(marked.lexer(body), (token) => {
+    if (
+      token.type === "code" &&
+      String(token.lang).trim().toLowerCase() === "archify"
+    )
+      sources.push(token.text);
+  });
+  return sources;
 }
 
 /**

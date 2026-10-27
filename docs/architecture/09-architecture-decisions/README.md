@@ -14,6 +14,7 @@ Keep this table sorted alphabetically by ADR title. Include every record, regard
 
 | ADR | Status | Date |
 | --- | --- | --- |
+| [Isolate native diagram viewers and retain static snapshots (ADR-0002)](ADR-0002-isolate-native-diagram-viewers.md) | Proposed | 2026-10-27 |
 | [ADR-0001](ADR-0001-colocate-adrs-with-architecture-section-09.md) | Accepted | 2026-10-21 |
 
 Do not create a parallel `docs/adr/` collection or duplicate ADR bodies in this section document.

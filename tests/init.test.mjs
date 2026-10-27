@@ -50,6 +50,7 @@ describe("arcshape init", () => {
       ),
     ).toHaveLength(0);
     expect(await readdir(join(packageRoot, "assets"))).toEqual([
+      "archify",
       "architecture",
       "capabilities",
     ]);

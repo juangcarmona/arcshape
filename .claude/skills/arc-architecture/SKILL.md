@@ -20,7 +20,7 @@ When the shared `architecture-docs` skill is installed, it is the authority for 
 - Preserve the project's existing architecture documentation conventions. ArcShape's canonical new layout is `docs/architecture/README.md` plus twelve `NN-slug/README.md` section documents. Supporting Markdown belongs inside its owning section directory and is rendered as grouped supporting material. The legacy root-level `NN-slug.md` layout remains a supported migration input; do not mix duplicate section numbers.
 - Section 09 is also the canonical ADR collection: `docs/architecture/09-architecture-decisions/README.md` is its arc42 section document and alphabetical ADR index. ADRs normally live directly below that directory and may be grouped in stable subdirectories; do not create a parallel `docs/adr/` collection.
 - Draft changes for review. Do not declare proposals accepted or silently overwrite a maintainer's authored material.
-- Keep diagrams in Mermaid inside Markdown. Prefer C4 context/container/component views and label relationships with concise meaning.
+- Keep diagram source inside canonical Markdown. For new diagrams or an explicitly requested migration, read the [native diagram guide](references/diagrams/README.md). Prefer native diagrams when their semantics fit; preserve Mermaid for unsupported features or an explicit maintainer choice. Prefer C4-style context/container/component views and label relationships with concise meaning.
 
 ## Section-specific arc42 guidance
 
@@ -36,7 +36,7 @@ Each section reference provides its purpose, relevant subsections, evidence to i
 4. Track coverage and changed evidence. Re-read sources ArcShape reports as changed before relying on earlier notes. Continue until the session report distinguishes reviewed, excluded, pending, and changed evidence.
 5. Build a compact evidence map: system boundary, users/external systems, runtime units, interfaces, data stores, deployment, cross-cutting mechanisms, quality goals, risks, and unknowns. Link every material claim to evidence.
 6. Compare the evidence map with the 12 arc42 sections. Keep each fact in one owning section, then propose focused Markdown edits with source references; label inferences and unresolved questions for maintainer review.
-7. Review all internal links and Mermaid syntax, run the applicable ArcShape validation, then build the reader site with `arcshape site build` and inspect the generated output. Treat generated HTML as a review aid; Markdown remains canonical.
+7. Review internal links and diagram source, run the applicable ArcShape validation, then build the reader site with `arcshape site build` and inspect the generated output. For native diagrams, also inspect `--format interactive` output and capture screenshots before committing visual changes. Treat generated HTML as a review aid; Markdown remains canonical.
 
 ## Maintain documentation
 

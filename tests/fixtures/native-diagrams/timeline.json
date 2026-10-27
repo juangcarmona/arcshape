@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "diagram_type": "timeline",
+  "meta": {
+    "title": "Incidente ficticio de notificaciones",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "evidence": "illustrative",
+    "timezone": "Europe/Madrid"
+  },
+  "lanes": [
+    {
+      "id": "sistema",
+      "label": "Sistema"
+    },
+    {
+      "id": "equipo",
+      "label": "Equipo"
+    }
+  ],
+  "events": [
+    {
+      "id": "caida",
+      "at": "2026-10-20T10:00:00+02:00",
+      "title": "Correo caído",
+      "lane": "sistema",
+      "kind": "alert"
+    },
+    {
+      "id": "cola",
+      "at": "2026-10-20T10:05:00+02:00",
+      "title": "Outbox crece",
+      "lane": "sistema",
+      "kind": "alert"
+    },
+    {
+      "id": "revision",
+      "at": "2026-10-20T10:10:00+02:00",
+      "title": "Revisar proveedor",
+      "lane": "equipo",
+      "kind": "action"
+    },
+    {
+      "id": "recuperacion",
+      "at": "2026-10-20T10:20:00+02:00",
+      "title": "Correo recuperado",
+      "lane": "sistema",
+      "kind": "recovery"
+    },
+    {
+      "id": "drenado",
+      "at": "2026-10-20T10:30:00+02:00",
+      "title": "Cola drenada",
+      "lane": "equipo",
+      "kind": "recovery"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Datos inventados",
+      "items": [
+        "Los horarios son ilustrativos.",
+        "La secuencia muestra retraso en avisos, no pérdida de reservas."
+      ]
+    }
+  ]
+}
