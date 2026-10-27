@@ -46,13 +46,14 @@ export async function validateMarkdownLinks(
         problems.push(`${document.file}: link escapes the repository: ${href}`);
         continue;
       }
-      try {
-        await access(resolvedTarget);
-      } catch {
-        problems.push(`${document.file}: missing local target ${href}`);
+      if (!target.hash || !pathname.toLowerCase().endsWith(".md")) {
+        try {
+          await access(resolvedTarget);
+        } catch {
+          problems.push(`${document.file}: missing local target ${href}`);
+        }
         continue;
       }
-      if (!target.hash || !pathname.toLowerCase().endsWith(".md")) continue;
       let fragment;
       try {
         fragment = decodeURIComponent(target.hash.slice(1));

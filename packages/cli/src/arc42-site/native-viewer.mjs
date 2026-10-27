@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { JSDOM } from "jsdom";
 
 export const escapeAttribute = (value) =>
   String(value)
@@ -224,9 +225,12 @@ export function buildNativeViewer(diagram) {
   let runtime = diagram.html
     .replace("</head>", `<style>${compactStyle}</style></head>`)
     .replace("</body>", `<script>${bridge}</script></body>`);
-  const runtimeScripts = [
-    ...runtime.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi),
-  ].map((match) => match[1]);
+  const parsed = new JSDOM(runtime);
+  const runtimeScripts = Array.from(
+    parsed.window.document.scripts,
+    (script) => script.textContent,
+  );
+  parsed.window.close();
   runtime = runtime.replace(
     /<head[^>]*>/i,
     (match) =>

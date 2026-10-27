@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { createReadStream } from "node:fs";
+import { createReadStream, constants } from "node:fs";
 import {
   open,
   lstat,
@@ -319,16 +319,34 @@ async function loadIgnoreRules(root, parent, inheritedRules) {
 
   const absolutePath = join(root, ...ignorePath.split("/"));
   try {
-    const metadata = await lstat(absolutePath);
-    if (!metadata.isFile()) return inheritedRules;
-    const patterns = await readFile(absolutePath, "utf8");
+    const handle = await open(
+      absolutePath,
+      constants.O_RDONLY |
+        (constants.O_NOFOLLOW ?? 0) |
+        (constants.O_NONBLOCK ?? 0),
+    );
+    let patterns;
+    try {
+      const bound = await handle.stat();
+      const current = await lstat(absolutePath);
+      if (
+        !bound.isFile() ||
+        !current.isFile() ||
+        bound.dev !== current.dev ||
+        bound.ino !== current.ino
+      )
+        return inheritedRules;
+      patterns = await handle.readFile("utf8");
+    } finally {
+      await handle.close();
+    }
     if (!patterns.trim()) return inheritedRules;
     return [
       ...inheritedRules,
       { base: parent, matcher: ignore().add(patterns) },
     ];
   } catch (error) {
-    if (error.code === "ENOENT") return inheritedRules;
+    if (["ENOENT", "ELOOP"].includes(error.code)) return inheritedRules;
     throw error;
   }
 }

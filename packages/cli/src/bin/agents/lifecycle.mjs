@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { constants } from "node:fs";
 import {
   lstat,
   mkdir,
@@ -6,7 +7,7 @@ import {
   readFile,
   rename,
   rm,
-  stat,
+  open,
   writeFile,
 } from "node:fs/promises";
 import { homedir } from "node:os";
@@ -458,10 +459,19 @@ async function inspectDestination(root, destination, scope) {
     }
   }
   try {
-    const info = await stat(destination);
-    if (!info.isFile())
-      throw new Error(`Destination is not a regular file: ${destination}`);
-    return { exists: true, hash: hash(await readFile(destination)) };
+    const handle = await open(
+      destination,
+      constants.O_RDONLY |
+        (constants.O_NOFOLLOW ?? 0) |
+        (constants.O_NONBLOCK ?? 0),
+    );
+    try {
+      if (!(await handle.stat()).isFile())
+        throw new Error(`Destination is not a regular file: ${destination}`);
+      return { exists: true, hash: hash(await handle.readFile()) };
+    } finally {
+      await handle.close();
+    }
   } catch (error) {
     if (error.code === "ENOENT") return { exists: false };
     throw error;

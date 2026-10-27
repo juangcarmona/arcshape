@@ -1,4 +1,6 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import fs from "node:fs";
+import { captureRegularFileBinding } from "../packages/cli/assets/archify/renderers/shared/atomic-output.mjs";
 import {
   readFile,
   readdir,
@@ -177,6 +179,32 @@ describe("pinned native renderer", () => {
 });
 
 describe("native publication", () => {
+  it("rejects an upstream file binding swapped between inspection and open", async () => {
+    const target = join(directory, "binding.txt");
+    await writeFile(target, "original");
+    const originalOpen = fs.openSync;
+    let swapped = false;
+    const intercept = vi
+      .spyOn(fs, "openSync")
+      .mockImplementation((path, ...args) => {
+        if (path === target && !swapped) {
+          swapped = true;
+          fs.renameSync(target, target + ".previous");
+          fs.writeFileSync(target, "replacement");
+        }
+        return originalOpen(path, ...args);
+      });
+    try {
+      const result = captureRegularFileBinding(target, {
+        includeContent: true,
+      });
+      expect(swapped).toBe(true);
+      expect(result.status).not.toBe("captured");
+      expect(result.reason.code).toContain("changed-during-inspection");
+    } finally {
+      intercept.mockRestore();
+    }
+  });
   it("replaces only intact owned output and preserves unrelated/modified files", async () => {
     const output = join(directory, "site"),
       docs = join(directory, "docs");

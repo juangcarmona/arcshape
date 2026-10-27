@@ -1,6 +1,6 @@
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdtemp, readFile, writeFile, rm, stat } from "node:fs/promises";
+import { mkdtemp, open, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -167,9 +167,15 @@ export async function renderNativeDiagrams(sources) {
           maxBuffer: 1024 * 1024,
         },
       );
-      if ((await stat(output)).size > 16 * 1024 * 1024)
-        throw new Error("rendered diagram exceeds 16 MiB");
-      const html = await readFile(output, "utf8");
+      const rendered = await open(output, "r");
+      let html;
+      try {
+        if ((await rendered.stat()).size > 16 * 1024 * 1024)
+          throw new Error("rendered diagram exceeds 16 MiB");
+        html = await rendered.readFile("utf8");
+      } finally {
+        await rendered.close();
+      }
       const page = await browser.newPage();
       try {
         page.setDefaultTimeout(15000);

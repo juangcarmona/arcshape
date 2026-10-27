@@ -16,7 +16,7 @@ Linux, Node 22.22.1, npm 9.2.0. Security audit and packed-install SBOM use npm 1
 
 | Check | Observed result |
 | --- | --- |
-| `npm run verify` | Format, lint, typecheck, 146 tests in 28 files and helper build passed. Includes eleven native tests, three SAST policy cases and the packed-install smoke test. |
+| `npm run verify` | Format, lint, typecheck, 147 tests in 28 files and helper build passed. Includes twelve native tests, three SAST policy cases and the packed-install smoke test. |
 | Public site verify, `SITE_BASE=/` | Passed build/output tests. |
 | Engineering portal build, `SITE_BASE=/arcshape/` | Passed. |
 | Product model | 37 artifacts; zero errors/warnings. |
@@ -65,5 +65,9 @@ CodeQL identified 13 High remote-property-injection findings in the imported tem
 The required severity adapter initially missed those findings because modern SARIF puts query rules under `tool.extensions`, not only `tool.driver`. `scripts/check-codeql-sarif.mjs` now reads both. Its counterfactual run against the downloaded failing SARIF exits 1 and identifies all 13 findings. Three regression cases cover driver rules, extension rules and the lower-severity boundary. The full new-head CodeQL result remains the acceptance evidence for the renderer correction.
 
 ## Outstanding gates
+
+The raw SARIF retained by run 40581548174 contains seven additional findings that the GitHub alert view did not display. The CSP script collector now parses HTML rather than matching tags with a regular expression. Native output, capability destination hashing and ignore-file reading use a single opened file handle for metadata and content; Markdown heading validation reads directly without a separate access check. These address five findings, subject to the next full SAST run.
+
+Two reports concern the pinned `renderers/shared/atomic-output.mjs`: `captureRegularFileBinding` deliberately compares path and descriptor device/inode before and after reading and rejects replacement; a regression test injects replacement at the open boundary. The directory-fsync report is in previous-output recovery, not the fresh private staging-output path used by ArcShape. A 30-day exception limited to `js/file-system-race` in this one vendor file has been proposed to the maintainer, not applied. No exception exists in the policy file without that approval.
 
 Independent Done audit; acceptance of ADR-0002 and residual risks; final human review; required CI on the pushed head. No new agent without explicit agreement. No merge or publication is claimed.
