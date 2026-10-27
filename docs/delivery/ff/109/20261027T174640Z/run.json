@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "runId": "20261027T174640Z",
+  "workItem": "109",
+  "branch": "feat/109-interactive-diagrams",
+  "startingCommit": "c1e38279a6b7276ec4f606177c7e41a99d64c771",
+  "startedAt": "2026-10-27T17:46:40Z",
+  "executorModel": "gpt-6-astra",
+  "reviewerModel": "gpt-6.1-sol",
+  "modelAttestation": {
+    "source": "Harness turn_context metadata; not agent self-identification",
+    "executorSession": "01a169ab-7c0f-7461-ae07-994e4042d7ab",
+    "executorObservedAt": "2026-10-27T17:44:58.005Z",
+    "reviewerSession": "01a17e75-4267-7ab3-8680-2d7347f33230",
+    "reviewerObservedAt": "2026-10-27T17:42:57.775Z"
+  },
+  "maxCorrectionRounds": 3,
+  "executionPolicy": {
+    "userDirection": "Do not launch new agents without explicit agreement; work incrementally in the main session. This did not request stopping existing agents.",
+    "executorCorrection": "Stopping the two running workers was an interpretation error, not a user-requested stop. No implementation code had been written when checked.",
+    "workersStopped": [
+      "01a17e83-cec0-7d72-98a0-dec7d00ec1e2",
+      "01a17e8f-1734-7bb0-8fc3-6b25b491446b"
+    ],
+    "futureIndependentReview": "Ask the maintainer before invoking another agent; do not waive the FF gate"
+  },
+  "status": "running",
+  "stages": [
+    {
+      "name": "refine",
+      "startedAt": "2026-10-27T17:46:40Z",
+      "inputCommit": "c1e38279a6b7276ec4f606177c7e41a99d64c771",
+      "outputCommit": "11ad591a6bd60b9334a5745b77fbba623d9e18ac",
+      "endedAt": "2026-10-27T17:54:55Z",
+      "result": "blocked-human-product-approval",
+      "evidence": [
+        "https://github.com/juangcarmona/arcshape/issues/109",
+        "readiness.md",
+        "verification.md",
+        "draft-review.md"
+      ]
+    },
+    {
+      "name": "propose",
+      "inputCommit": "b1781b5",
+      "outputCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "result": "approved-independent-plan-review",
+      "evidence": [
+        "plan-review.md"
+      ]
+    },
+    {
+      "name": "implement",
+      "inputCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "result": "independent-implementation-review-approved-after-correction",
+      "evidence": [
+        "implementation.md",
+        "implementation-review.md",
+        "screenshots/"
+      ]
+    }
+  ],
+  "reviews": [
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewerSession": "01a17f51-e64d-7db3-8999-96586a9ab97a",
+      "kind": "independent-implementation-correction-review",
+      "reviewedCommit": "6dbbd05cd07c875bc69c676821c89f3f0b9e7b8f",
+      "decision": "approve",
+      "findings": "The P2 touch cancellation is resolved; real touch panning at zoom and ordinary article swiping at 100% passed. No new blocking findings. Final integration-head audit remains required.",
+      "evidence": [
+        "implementation-review.md",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40590625228",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40590625289",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40590625105",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40590625129"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewerSession": "01a17f51-e64d-7db3-8999-96586a9ab97a",
+      "kind": "independent-implementation-review",
+      "reviewedCommit": "ccc16ad891b188f809abab725dd3cf404dcb3228",
+      "decision": "request-changes",
+      "findings": "P2: zoomed diagrams lose touch panning after browser pointercancel; add real touch coverage and preserve article swiping at normal zoom.",
+      "evidence": [
+        "implementation-review.md"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewerSession": "01a17e8a-bee3-76d1-8817-974315c4f8cc",
+      "attestedAt": "2026-10-27T18:06:25.778Z",
+      "kind": "independent-plan-review",
+      "reviewedCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "decision": "approve",
+      "findings": "Dedicated-view isolation and reachable no-JavaScript fallback corrected in round 1. No blocking plan findings remain.",
+      "evidence": [
+        "plan-review.md"
+      ]
+    },
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewerSession": "01a17e7b-9df3-7741-96b0-bc5786636dd8",
+      "attestedAt": "2026-10-27T17:49:54.328Z",
+      "kind": "advisory-product-draft-review",
+      "reviewedCommit": null,
+      "reviewedSnapshot": "sha256:45e2e8f8a7557da980804ec9885c151b0f186fc16e920532863a64381527cfe7",
+      "decision": "approve-for-human-review",
+      "findings": "Two wording gaps corrected: parent-page isolation and external-publication compatibility. No product, plan or Done approval granted.",
+      "evidence": [
+        "draft-review.md"
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "gate": "independent-implementation-review",
+      "round": 1,
+      "requestedChanges": [
+        "Keep touch pointer capture active while panning a zoomed diagram.",
+        "Add a real touch regression and preserve outer document swiping at 100% zoom."
+      ],
+      "resultingCommit": "6dbbd05cd07c875bc69c676821c89f3f0b9e7b8f",
+      "outcomes": "The real touch regression reproduced the pointercancel failure before the fix, then passed with conditional touch-action. Full local quality (148 tests), ten browser journeys and all current-head CI/Security/CodeQL/Assurance checks passed; the same independent reviewer approved the correction."
+    },
+    {
+      "gate": "independent-plan-review",
+      "round": 1,
+      "requestedChanges": [
+        "Isolate dedicated viewers including direct navigation",
+        "Expose reachable static markup without JavaScript"
+      ],
+      "resultingCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
+      "outcomes": "Strict OpenSpec validation and independent re-review passed"
+    },
+    {
+      "gate": "advisory-product-draft-review",
+      "round": 1,
+      "requestedChanges": [
+        "Explicitly prohibit parent-document/storage access and add a hostile-input scenario.",
+        "Preserve readable external publication after migration or retain the original diagram."
+      ],
+      "resultingCommit": "11ad591a6bd60b9334a5745b77fbba623d9e18ac",
+      "outcomes": "Full local quality command, product baseline/overlay and existing OpenSpec validations passed. Independent re-review approved the draft for human review only."
+    }
+  ],
+  "stopReason": null,
+  "humanDecision": {
+    "source": "Maintainer chat reply: LGTM",
+    "date": "2026-10-27",
+    "scope": "PR #110 implementation at 8e7785d24900eba15c116e1851beb7cdd9a4788e",
+    "decision": "accepted-by-human"
+  },
+  "resumption": {
+    "productApproval": "product-approval.md",
+    "readiness": "Ready after explicit human product approval and validated application; no other product gaps remain",
+    "reviewerSession": "01a17e83-cec0-7d72-98a0-dec7d00ec1e2"
+  },
+  "pullRequest": "https://github.com/juangcarmona/arcshape/pull/110",
+  "links": {
+    "issue": "https://github.com/juangcarmona/arcshape/issues/109",
+    "productChange": "docs/product/changes/completed/chg-interactive-diagrams-001/change.md"
+  }
+}

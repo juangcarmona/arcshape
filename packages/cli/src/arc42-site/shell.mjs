@@ -9,6 +9,7 @@
  */
 import { escapeHtml as esc } from "./render.mjs";
 import { createHash } from "node:crypto";
+import { nativeReaderStyle, nativeReaderScript } from "./native-viewer.mjs";
 
 /* ------------------------------------------------------------------ */
 /* Design tokens: a calm engineering instrument in two appearances.   */
@@ -1002,7 +1003,9 @@ export function buildSnapshotHtml({
   stackName,
   revision,
   brandImage,
+  interactive = false,
 }) {
+  const pageScript = script + (interactive ? `\n${nativeReaderScript}` : "");
   const brandMark = brandImage
     ? `<span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40"><image class="brand-logo-light" href="data:image/webp;base64,${brandImage}" x="-10.8" y="-3.9" width="60" height="60" preserveAspectRatio="none"/><image class="brand-logo-dark" href="data:image/webp;base64,${brandImage}" x="-10.8" y="-3.9" width="60" height="60" preserveAspectRatio="none"/></svg></span>`
     : '<span class="brand-mark" aria-hidden="true"></span>';
@@ -1057,10 +1060,10 @@ export function buildSnapshotHtml({
     "<head>",
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; script-src 'sha256-${createHash("sha256").update(`\n${script}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
+    `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; ${interactive ? "frame-src 'self'; " : ""}script-src 'sha256-${createHash("sha256").update(`\n${pageScript}\n`).digest("base64")}'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">`,
     '<meta name="color-scheme" content="light dark">',
     `<title>ArcShape — ${esc(stackName)} arc42 Architecture Snapshot</title>`,
-    `<style>\n${style}\n</style>`,
+    `<style>\n${style}\n${nativeReaderStyle}\n</style>`,
     "</head>",
     "<body>",
     '<a class="skip" href="#main">Skip to content</a>',
@@ -1097,6 +1100,7 @@ export function buildSnapshotHtml({
     '<button type="button" id="nav-backdrop" aria-label="Close navigation" hidden></button>',
     '<main id="main">',
     '  <div id="content"></div>',
+    `<noscript><style>.site,.nav,#nav-backdrop{display:none!important}html,body,#shell,#main{height:auto!important;overflow:visible!important}.native-viewport iframe{display:none!important}</style><nav aria-label="Static documents">${[readme, ...preparedSections].map((document, i) => `<a href="#static-${i}">${esc(document.title)}</a> `).join("")}</nav>${[readme, ...preparedSections].map((document, i) => `<article id="static-${i}"><h1>${esc(document.title)}</h1>${document.html}${(document.supporting ?? []).map((s) => `<section><h2>${esc(s.title)}</h2>${s.html}</section>`).join("")}</article>`).join("")}</noscript>`,
     "</main>",
     "</div>",
     '<div class="dlg" id="find" role="dialog" aria-modal="true" aria-labelledby="find-title" hidden>',
@@ -1119,7 +1123,7 @@ export function buildSnapshotHtml({
     "</div>",
     '<p class="toast" id="toast" role="status" aria-live="polite"></p>',
     `<script id="arc42-data" type="application/json">${stableJson(data)}</script>`,
-    `<script>\n${script}\n</script>`,
+    `<script>\n${pageScript}\n</script>`,
     "</body>",
     "</html>",
   ];

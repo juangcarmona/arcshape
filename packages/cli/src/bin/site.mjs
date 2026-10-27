@@ -5,7 +5,7 @@ export async function runSite(args, { packageRoot }) {
   const options = parseOptions(args);
   if (options.help) {
     process.stdout.write(
-      "Usage: arcshape site build [--docs <directory>] [--out <html-file>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]\n\n",
+      "Usage: arcshape site build [--docs <directory>] [--format snapshot|interactive] [--out <html-file|directory>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]\n\n",
     );
     process.stdout.write(
       "Build a self-contained reader site from the canonical architecture Markdown.\n",
@@ -19,10 +19,14 @@ export async function runSite(args, { packageRoot }) {
   const docsDir = resolve(process.cwd(), options.docs ?? "docs/architecture");
   const outFile = resolve(
     process.cwd(),
-    options.out ?? "docs/architecture-site/index.html",
+    options.out ??
+      (options.format === "interactive"
+        ? "docs/architecture-interactive"
+        : "docs/architecture-site/index.html"),
   );
   const generator = join(packageRoot, "src", "arc42-site", "generate.mjs");
   const argv = [generator, docsDir, "--out", outFile];
+  if (options.format) argv.push("--format", options.format);
   if (options.title) argv.push("--title", options.title);
   if (options.sourceRef) argv.push("--source-ref", options.sourceRef);
   if (options.siteBase) argv.push("--site-base", options.siteBase);
@@ -46,14 +50,20 @@ function parseOptions(args) {
     const arg = args[index];
     if (arg === "--help" || arg === "-h") options.help = true;
     else if (
-      ["--docs", "--out", "--title", "--source-ref", "--site-base"].includes(
-        arg,
-      )
+      [
+        "--docs",
+        "--out",
+        "--title",
+        "--source-ref",
+        "--site-base",
+        "--format",
+      ].includes(arg)
     ) {
       const value = args[index + 1];
       if (!value || value.startsWith("--"))
         throw new Error(`${arg} requires a value`);
       if (arg === "--docs") options.docs = value;
+      if (arg === "--format") options.format = value;
       if (arg === "--out") options.out = value;
       if (arg === "--title") options.title = value;
       if (arg === "--source-ref") options.sourceRef = value;

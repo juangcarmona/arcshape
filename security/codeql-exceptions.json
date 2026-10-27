@@ -1,4 +1,12 @@
 {
   "schemaVersion": 1,
-  "exceptions": []
+  "exceptions": [
+    {
+      "ruleId": "js/file-system-race",
+      "path": "packages/cli/assets/archify/renderers/shared/atomic-output.mjs",
+      "owner": "ArcShape maintainer (@juangcarmona)",
+      "reason": "Archify 3.2.0 vendor code: the regular-file read verifies descriptor/path identity before and after reading (including an injected swap regression); directory fsync is only in prior-output recovery, while ArcShape renders to fresh private staging files. Reassess on upstream change or before expiry; see PR #110 security evidence.",
+      "expires": "2026-11-26"
+    }
+  ]
 }

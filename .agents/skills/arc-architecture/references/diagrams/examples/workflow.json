@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "De la solicitud a la confirmación",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "Interacción"
+        },
+        "backend": {
+          "label": "Proceso"
+        },
+        "security": {
+          "label": "Decisión"
+        },
+        "database": {
+          "label": "Persistencia"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "viajero",
+      "label": "Viajero"
+    },
+    {
+      "id": "reservas",
+      "label": "Reservas"
+    },
+    {
+      "id": "excepcion",
+      "label": "Sin disponibilidad",
+      "variant": "exception"
+    }
+  ],
+  "mainPath": [
+    "solicitar",
+    "validar",
+    "guardar",
+    "confirmar"
+  ],
+  "nodes": [
+    {
+      "id": "solicitar",
+      "lane": "viajero",
+      "col": 0,
+      "type": "frontend",
+      "label": "Solicitar",
+      "sublabel": "Fechas elegidas"
+    },
+    {
+      "id": "validar",
+      "lane": "reservas",
+      "col": 1,
+      "type": "security",
+      "label": "Validar",
+      "sublabel": "¿Hay plazas?"
+    },
+    {
+      "id": "guardar",
+      "lane": "reservas",
+      "col": 2,
+      "type": "database",
+      "label": "Confirmar",
+      "sublabel": "Reserva + outbox"
+    },
+    {
+      "id": "confirmar",
+      "lane": "viajero",
+      "col": 3,
+      "type": "frontend",
+      "label": "Ver reserva",
+      "sublabel": "201 confirmada"
+    },
+    {
+      "id": "rechazar",
+      "lane": "excepcion",
+      "col": 1,
+      "type": "backend",
+      "label": "Rechazar",
+      "sublabel": "409 conflicto"
+    },
+    {
+      "id": "alternativa",
+      "lane": "excepcion",
+      "col": 3,
+      "type": "frontend",
+      "label": "Otras fechas",
+      "sublabel": "Nueva solicitud"
+    }
+  ],
+  "edges": [
+    {
+      "id": "solicitar-validar",
+      "from": "solicitar",
+      "to": "validar",
+      "label": "Consulta",
+      "variant": "default"
+    },
+    {
+      "id": "validar-guardar",
+      "from": "validar",
+      "to": "guardar",
+      "label": "Disponible",
+      "variant": "emphasis"
+    },
+    {
+      "id": "guardar-confirmar",
+      "from": "guardar",
+      "to": "confirmar",
+      "label": "COMMIT",
+      "variant": "default"
+    },
+    {
+      "id": "validar-rechazar",
+      "from": "validar",
+      "to": "rechazar",
+      "label": "Ocupado",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "rechazar-alternativa",
+      "from": "rechazar",
+      "to": "alternativa",
+      "label": "Propone",
+      "variant": "default",
+      "role": "branch"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Dos resultados",
+      "items": [
+        "La validación inicial no sustituye la restricción de la base de datos.",
+        "Un conflicto concurrente también termina en 409."
+      ]
+    }
+  ]
+}

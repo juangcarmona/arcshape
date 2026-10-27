@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Confirmar una reserva",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "dashed": {
+          "label": "Trabajo diferido"
+        }
+      }
+    }
+  },
+  "participants": [
+    {
+      "id": "portal",
+      "type": "frontend",
+      "label": "Portal"
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "API"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "PostgreSQL"
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "Worker"
+    },
+    {
+      "id": "mail",
+      "type": "external",
+      "label": "Correo"
+    }
+  ],
+  "messages": [
+    {
+      "id": "request",
+      "from": "portal",
+      "to": "api",
+      "y": 165,
+      "label": "POST /reservas",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save",
+      "from": "api",
+      "to": "db",
+      "y": 215,
+      "label": "Reserva + outbox",
+      "note": "Una sola transacción"
+    },
+    {
+      "id": "commit",
+      "from": "db",
+      "to": "api",
+      "y": 280,
+      "label": "COMMIT",
+      "variant": "return"
+    },
+    {
+      "id": "response",
+      "from": "api",
+      "to": "portal",
+      "y": 325,
+      "label": "201 confirmada",
+      "variant": "return"
+    },
+    {
+      "id": "poll",
+      "from": "worker",
+      "to": "db",
+      "y": 385,
+      "label": "Lee pendientes",
+      "variant": "dashed"
+    },
+    {
+      "id": "event",
+      "from": "db",
+      "to": "worker",
+      "y": 430,
+      "label": "ReservaConfirmada",
+      "variant": "return"
+    },
+    {
+      "id": "notify",
+      "from": "worker",
+      "to": "mail",
+      "y": 480,
+      "label": "Envía confirmación",
+      "variant": "dashed"
+    },
+    {
+      "id": "ack",
+      "from": "mail",
+      "to": "worker",
+      "y": 525,
+      "label": "Aceptado",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Respuesta al viajero",
+      "items": [
+        "El 201 sigue al COMMIT.",
+        "El correo se entrega después, fuera de la petición."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Alcance del ejemplo",
+      "items": [
+        "Se muestra una reserva sin pago previo.",
+        "La rama de autorización de pago no se representa aquí."
+      ]
+    }
+  ]
+}

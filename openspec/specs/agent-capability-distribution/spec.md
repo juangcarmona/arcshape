@@ -12,7 +12,7 @@ Lets repository maintainers install and manage versioned ArcShape agent capabili
 
 ArcShape SHALL package portable Agent Skills and supporting files with stable names and standard skill metadata. Provider adapters SHALL expose the same skills and files without forking workflows.
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:f5d7e3a6b239e2851ee9554633e1a19cddd05a71b703ed1f184ba0d21e4da3f9" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
 
 #### Scenario: Install canonical skills for Codex and shared-path providers
 
@@ -28,7 +28,7 @@ ArcShape SHALL package portable Agent Skills and supporting files with stable na
 
 The CLI SHALL detect providers from local executable and repository-configuration signals. It SHALL report evidence, keep detection separate from selection, and SHALL NOT contact a service or launch an agent during detection.
 <!-- pdac:cite id="UC-MANAGE-AGENT-CAPABILITIES" digest="sha256:adf18d2e641041617408bb55db6b91d2011f3073870ecafa98b454378d446bf1" -->
-<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:2893462d429a0188eeb937215ceb47a55809d26825d2646d0897cc851d33ce13" -->
+<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
 
 #### Scenario: Report positive detection evidence
 
@@ -44,7 +44,7 @@ The CLI SHALL detect providers from local executable and repository-configuratio
 
 `init` SHALL offer CLI-only or provider/capability selection; non-interactive use SHALL require a choice.
 <!-- pdac:cite id="FR-ONBOARD-REPOSITORY" digest="sha256:ad28a7a6a80b8c334af9daa92a36c929b812c654611bebe10aac9b487072ef98" -->
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:6de872f89c5b3753b22a10f604648315d5993dfda359afdc07e161a6ba0cf228" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:e49c7df3dcaf71ce1cde9d9064de4c53c28d54b6cbe3fb7152153fded4fcd8d6" -->
 <!-- pdac:cite id="UC-ONBOARD-REPOSITORY" digest="sha256:ac5e91032100634e83b8d426343000decfc67811e30c00f6a9838e67305dce01" -->
 
 #### Scenario: Initialize deterministic CLI only

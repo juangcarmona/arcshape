@@ -26,6 +26,8 @@ ArcShape publishes two independent static surfaces. The public marketing site is
 
 ## Development
 
+Architecture documentation can mix Mermaid and native diagrams. Use `arcshape site build --format interactive --out docs/architecture-interactive` for compact interactive diagrams with dedicated pages, or keep the default single-file snapshot. See [diagram authoring and migration](docs/diagrams.md).
+
 Use Node.js 22 or newer and npm:
 
 ```sh

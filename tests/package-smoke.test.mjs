@@ -6,6 +6,7 @@ import {
   readFile,
   rm,
   writeFile,
+  realpath,
 } from "node:fs/promises";
 import { promisify } from "node:util";
 import { tmpdir } from "node:os";
@@ -32,7 +33,9 @@ describe("packed ArcShape package", () => {
   it.skipIf(process.platform === "win32")(
     "installs a packed npm tarball and initializes without overwriting authored files",
     async () => {
-      const sandbox = await mkdtemp(join(tmpdir(), "arcshape-package-smoke-"));
+      const sandbox = await realpath(
+        await mkdtemp(join(tmpdir(), "arcshape-package-smoke-")),
+      );
       temporaryDirectories.push(sandbox);
       const tarballDirectory = join(sandbox, "tarball");
       const repository = join(sandbox, "consumer-repository");
@@ -71,8 +74,10 @@ describe("packed ArcShape package", () => {
       expect(packageMetadata.name).toBe(packageJson.name);
       expect(packageMetadata.version).toBe(packageJson.version);
       const packageFileList = packageMetadata.files.map(({ path }) => path);
-      expect(packageFileList.length).toBeLessThan(300);
-      expect(packageMetadata.unpackedSize).toBeLessThan(800_000);
+      // The offline renderer subset is intentionally bundled; keep an explicit size budget.
+      expect(packageFileList.length).toBeLessThan(350);
+      expect(packageMetadata.unpackedSize).toBeLessThan(4_500_000);
+      expect(packageFileList).toContain("assets/archify/inventory.json");
       expect(packageFileList).toContain("assets/capabilities/providers.json");
       expect(packageFileList).toContain("assets/architecture/README.md");
       expect(packageFileList).toContain(
@@ -287,6 +292,58 @@ describe("packed ArcShape package", () => {
       expect(repeated.stdout).toContain("unchanged");
 
       const authored = "Maintainer-authored architecture index\n";
+      const nativeSource = await readFile(
+        new URL("./fixtures/native-diagrams/sequence.json", import.meta.url),
+        "utf8",
+      );
+      const runtimePath = join(
+        repository,
+        "docs/architecture/06-runtime-view/README.md",
+      );
+      const runtimeMarkdown =
+        (await readFile(runtimePath, "utf8")) +
+        "\n```archify\n" +
+        nativeSource +
+        "\n```\n";
+      await writeFile(runtimePath, runtimeMarkdown);
+      for (const format of ["snapshot", "interactive"]) {
+        const out = join(
+          repository,
+          format === "snapshot" ? "snapshot.html" : "interactive",
+        );
+        const built = await runNpm(
+          [
+            "exec",
+            "--offline",
+            "--",
+            "arcshape",
+            "site",
+            "build",
+            "--format",
+            format,
+            "--out",
+            out,
+          ],
+          { cwd: repository, timeout: 60000 },
+        );
+        expect(built.exitCode, built.stderr).toBe(0);
+        expect(await readFile(runtimePath, "utf8")).toBe(runtimeMarkdown);
+        expect(
+          await readFile(
+            format === "snapshot" ? out : join(out, "index.html"),
+            "utf8",
+          ),
+        ).toContain("Confirmar una reserva");
+      }
+      expect(
+        await readFile(
+          join(
+            repository,
+            ".agents/skills/arc-architecture/references/diagrams/examples/sequence.json",
+          ),
+          "utf8",
+        ),
+      ).toBe(nativeSource);
       const architectureReadme = join(
         repository,
         "docs/architecture/README.md",

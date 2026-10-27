@@ -80,7 +80,7 @@ jobs:
           PREVIEW_DIR: ${{ runner.temp }}/arcshape-preview
         run: |
           mkdir -p "$PREVIEW_DIR"
-          node packages/cli/src/bin/arcshape.mjs site build --out "$PREVIEW_DIR/index.html" --source-ref "$GITHUB_SHA"
+          node packages/cli/src/bin/arcshape.mjs site build --format interactive --out "$PREVIEW_DIR" --source-ref "$GITHUB_SHA"
       - name: Verify the severity policy rejects a synthetic High finding
         run: node scripts/check-zap-report.mjs --self-test
       - name: Serve the same-run preview on loopback
@@ -105,6 +105,13 @@ jobs:
             zap-baseline.py -t http://127.0.0.1:8765 -I -m 1 \
               -J zap-report.json -r zap-report.html -w zap-report.md
           node scripts/check-zap-report.mjs "$RUNNER_TEMP/arcshape-zap/zap-report.json"
+          native_diagram=$(node -e 'process.stdout.write(require("node:fs").readdirSync(process.env.RUNNER_TEMP + "/arcshape-preview/diagrams").sort()[0])')
+          docker run --rm --network host \
+            --volume "$RUNNER_TEMP/arcshape-zap:/zap/wrk/:rw" \
+            ghcr.io/zaproxy/zaproxy:2.17.0@sha256:5ccfff9a411743ab2615136a2edd7416bec9ce41572fa94e935df38c14adb2b6 \
+            zap-baseline.py -t "http://127.0.0.1:8765/diagrams/$native_diagram/index.html" -I -m 1 \
+              -J native-report.json -r native-report.html -w native-report.md
+          node scripts/check-zap-report.mjs "$RUNNER_TEMP/arcshape-zap/native-report.json"
           printf '%s\n' "$GITHUB_SHA" > "$RUNNER_TEMP/arcshape-zap/source-commit.txt"
       - name: Stop the preview server
         if: always()

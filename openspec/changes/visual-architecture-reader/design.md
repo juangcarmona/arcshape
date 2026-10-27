@@ -6,14 +6,14 @@
 
 `docs/architecture` is the canonical Markdown source. The reader generator loads its README and twelve arc42 sections, extracts fenced Mermaid blocks, renders them at build time through the pinned Mermaid CLI and Puppeteer, sanitizes SVG, then embeds the SVG in a self-contained HTML reader. The generated reader has responsive diagram styling and section routes. The existing context, building-block, and runtime views demonstrate C4 and sequence diagrams in sections 03, 05, and 06.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 
 `arcshape validate` checks the arc42 document structure and optional links/citations; it does not parse Mermaid. `arcshape site build` is the actual diagram validation path: it rejects a missing `accTitle`, then Mermaid CLI parsing/rendering fails the build for invalid syntax, before the generated HTML is written. The Pages workflow builds the reader for pull requests and publishes the generated output from `main`.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 
 The product model already describes Markdown arc42 authoring, C4 diagram workflows, a generated reader, and reader comprehension. The existing `arc42-section-guidance` capability covers the twelve arc42 sections. This change is documentation and test coverage for behavior already present, so it introduces no product requirement and uses `skip_specs: true`.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
-<!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:91f111b3ea40541300039f0b7843433864fd6d6cd379616e415990cfd66c6077" -->
+<!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:b7ab2591c05d0fbd32176878461e9138773da63aa2fe14a2932da341682495b9" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
 <!-- pdac:cite id="CON-ARC42-FRAMEWORK" digest="sha256:11948980ab0be21b0a7a61b2bc2d428ec4adeb5b73d808aa3d7df1b6b8329e79" -->
 

@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "diagram_type": "class",
+  "meta": {
+    "title": "Contrato de persistencia",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "layout": {
+    "mode": "grid",
+    "gapX": 110,
+    "gapY": 100
+  },
+  "types": [
+    {
+      "id": "servicio",
+      "label": "ConfirmarReserva",
+      "kind": "class",
+      "row": 0,
+      "col": 0,
+      "methods": [
+        {
+          "name": "ejecutar",
+          "parameters": "solicitud",
+          "returns": "Reserva"
+        }
+      ]
+    },
+    {
+      "id": "puerto",
+      "label": "Reservas",
+      "kind": "interface",
+      "row": 0,
+      "col": 1,
+      "methods": [
+        {
+          "name": "guardar",
+          "parameters": "reserva",
+          "returns": "void",
+          "abstract": true
+        }
+      ]
+    },
+    {
+      "id": "adaptador",
+      "label": "ReservasPostgres",
+      "kind": "class",
+      "row": 1,
+      "col": 1,
+      "methods": [
+        {
+          "name": "guardar",
+          "parameters": "reserva",
+          "returns": "void"
+        }
+      ]
+    },
+    {
+      "id": "reserva",
+      "label": "Reserva",
+      "kind": "class",
+      "row": 1,
+      "col": 0,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "UUID"
+        },
+        {
+          "name": "estado",
+          "type": "Estado"
+        }
+      ],
+      "methods": [
+        {
+          "name": "confirmar",
+          "returns": "void"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "usa",
+      "from": "servicio",
+      "to": "puerto",
+      "kind": "dependency",
+      "label": "Usa"
+    },
+    {
+      "id": "implementa",
+      "from": "adaptador",
+      "to": "puerto",
+      "kind": "realization"
+    },
+    {
+      "id": "crea",
+      "from": "servicio",
+      "to": "reserva",
+      "kind": "dependency",
+      "label": "Crea"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Detalle selectivo",
+      "items": [
+        "El servicio depende del contrato de persistencia.",
+        "Se omiten miembros que no explican esa decisión."
+      ]
+    }
+  ]
+}

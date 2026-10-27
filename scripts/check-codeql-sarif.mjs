@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readdir, readFile } from "node:fs/promises";
-import { isAbsolute, join, relative, resolve } from "node:path";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 function normalizePath(uri) {
@@ -11,7 +11,9 @@ function normalizePath(uri) {
   return relative(
     process.cwd(),
     isAbsolute(filePath) ? filePath : resolve(filePath),
-  );
+  )
+    .split(sep)
+    .join("/");
 }
 
 function isValidException(exception, today) {
@@ -60,7 +62,9 @@ export function highSecurityFindings(
 
   for (const run of document.runs ?? []) {
     const rules = new Map(
-      (run.tool?.driver?.rules ?? []).map((rule) => [rule.id, rule]),
+      [run.tool?.driver, ...(run.tool?.extensions ?? [])]
+        .flatMap((component) => component?.rules ?? [])
+        .map((rule) => [rule.id, rule]),
     );
     for (const result of run.results ?? []) {
       const rule = rules.get(result.ruleId);

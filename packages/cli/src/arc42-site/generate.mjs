@@ -17,14 +17,25 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
+import { createHash } from "node:crypto";
 import { resolve, join, dirname, relative, sep } from "node:path";
 import { loadDocs, Diagnostic } from "./loadDocs.mjs";
 import {
   renderMarkdown,
   extractMermaidSources,
+  extractNativeSources,
   renderMermaid,
 } from "./render.mjs";
 import { buildSnapshotHtml } from "./shell.mjs";
+import {
+  parseNativeDiagram,
+  renderNativeDiagrams,
+} from "./native-diagrams.mjs";
+import { nativeFigure, buildNativeViewer } from "./native-viewer.mjs";
+import {
+  checkPublicationTarget,
+  publishDirectory,
+} from "./publish-directory.mjs";
 
 const run = promisify(execFile);
 const generatedMarker =
@@ -51,6 +62,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (
+      arg === "--format" ||
       arg === "--out" ||
       arg === "--title" ||
       arg === "--source-ref" ||
@@ -117,6 +129,10 @@ async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2));
   if (positional.length !== 1) usage(1);
   const docsDir = resolve(positional[0]);
+  const format = flags.format ?? "snapshot";
+  if (!["snapshot", "interactive"].includes(format))
+    throw new Diagnostic("--format must be snapshot or interactive");
+  const interactive = format === "interactive";
 
   let docs;
   try {
@@ -132,8 +148,12 @@ async function main() {
   const stackName = flags.title ?? docs.stackName;
   const outFile = flags.out
     ? resolve(flags.out)
-    : join(dirname(docsDir), "arc42-snapshot.html");
-  if (!/\.html?$/i.test(outFile)) {
+    : join(
+        dirname(docsDir),
+        interactive ? "arc42-interactive" : "arc42-snapshot.html",
+      );
+  if (interactive) await checkPublicationTarget(outFile, docsDir);
+  if (!interactive && !/\.html?$/i.test(outFile)) {
     throw new Diagnostic(
       "--out must name an .html or .htm file; authored Markdown is never an output target",
     );
@@ -152,6 +172,55 @@ async function main() {
     docs.readme,
     ...docs.sections.flatMap((section) => [section, ...section.supporting]),
   ];
+  const nativeSources = new Map(
+    documents.map((document) => [
+      document.file,
+      extractNativeSources(document.body),
+    ]),
+  );
+  for (const [file, sources] of nativeSources)
+    sources.forEach((source, i) =>
+      parseNativeDiagram(source, {
+        location: `${file}: archify fence ${i + 1}`,
+      }),
+    );
+  const nativeResults = await renderNativeDiagrams(
+    [...nativeSources.values()].flat(),
+  );
+  const nativeByDocument = new Map();
+  const generatedFiles = new Map();
+  let nativeCursor = 0;
+  for (const document of documents) {
+    const figures = nativeSources.get(document.file).map((_, i) => {
+      const diagram = nativeResults[nativeCursor++];
+      diagram.id = createHash("sha256")
+        .update(`${document.file}:${i}`)
+        .digest("hex")
+        .slice(0, 20);
+      if (interactive) {
+        generatedFiles.set(
+          `diagrams/${diagram.id}/index.html`,
+          buildNativeViewer(diagram),
+        );
+        generatedFiles.set(`diagrams/${diagram.id}/diagram.svg`, diagram.svg);
+        generatedFiles.set(
+          `diagrams/${diagram.id}/source.json`,
+          JSON.stringify(
+            {
+              document: document.file,
+              fence: i + 1,
+              hash: diagram.hash,
+              renderer: "Archify 3.2.0",
+            },
+            null,
+            2,
+          ) + "\n",
+        );
+      }
+      return nativeFigure(diagram, interactive);
+    });
+    nativeByDocument.set(document.file, figures);
+  }
   const documentMermaid = new Map(
     documents.map((document) => [
       document.file,
@@ -183,6 +252,7 @@ async function main() {
   const readmeMermaid = documentMermaid.get(docs.readme.file);
 
   const readmeRendered = await renderMarkdown(docs.readme.body, {
+    nativeDiagrams: nativeByDocument.get(docs.readme.file),
     fileToRoute,
     svgs: take(readmeMermaid.length),
     title: docs.readme.title,
@@ -196,6 +266,7 @@ async function main() {
   for (let i = 0; i < docs.sections.length; i += 1) {
     const section = docs.sections[i];
     const rendered = await renderMarkdown(section.body, {
+      nativeDiagrams: nativeByDocument.get(section.file),
       fileToRoute,
       svgs: take(documentMermaid.get(section.file).length),
       currentRoute: `#/section/${section.number}`,
@@ -209,6 +280,7 @@ async function main() {
     const supporting = [];
     for (const document of section.supporting) {
       const supportRendered = await renderMarkdown(document.body, {
+        nativeDiagrams: nativeByDocument.get(document.file),
         fileToRoute,
         svgs: take(documentMermaid.get(document.file).length),
         currentRoute: document.route,
@@ -237,6 +309,7 @@ async function main() {
   }
 
   const html = `${generatedMarker}\n${buildSnapshotHtml({
+    interactive,
     readme: {
       title: docs.readme.title,
       description: docs.readme.description,
@@ -249,6 +322,15 @@ async function main() {
       await readFile(new URL("./arcshape-lockup.webp", import.meta.url))
     ).toString("base64"),
   })}`;
+
+  if (interactive) {
+    generatedFiles.set("index.html", html);
+    await publishDirectory(outFile, docsDir, generatedFiles);
+    process.stdout.write(
+      `arc42-snapshot: interactive site written to ${outFile}\n`,
+    );
+    return;
+  }
 
   await mkdir(dirname(outFile), { recursive: true });
   try {

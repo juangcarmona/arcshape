@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "De reservas a estadísticas",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "stages": [
+    {
+      "label": "Origen"
+    },
+    {
+      "label": "Privacidad"
+    },
+    {
+      "label": "Almacén"
+    },
+    {
+      "label": "Consumo"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "outbox",
+      "type": "database",
+      "label": "Outbox",
+      "sublabel": "Reservas",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "minimizar",
+      "type": "security",
+      "label": "Minimizar",
+      "sublabel": "Quita identidad",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "metricas",
+      "type": "database",
+      "label": "Métricas",
+      "sublabel": "Por día y zona",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "panel",
+      "type": "frontend",
+      "label": "Panel",
+      "sublabel": "Ocupación",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "retencion",
+      "type": "backend",
+      "label": "Retención",
+      "sublabel": "Borra antiguos",
+      "stage": 2,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "id": "outbox-minimizar",
+      "from": "outbox",
+      "to": "minimizar",
+      "label": "Eventos",
+      "variant": "dashed"
+    },
+    {
+      "id": "minimizar-metricas",
+      "from": "minimizar",
+      "to": "metricas",
+      "label": "Agregados",
+      "variant": "security"
+    },
+    {
+      "id": "metricas-panel",
+      "from": "metricas",
+      "to": "panel",
+      "label": "Totales",
+      "variant": "default"
+    },
+    {
+      "id": "metricas-retencion",
+      "from": "metricas",
+      "to": "retencion",
+      "label": "Caducados",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Datos mínimos",
+      "items": [
+        "El panel recibe totales, no nombres ni correos.",
+        "El flujo es una decisión ficticia del ejemplo."
+      ]
+    }
+  ]
+}

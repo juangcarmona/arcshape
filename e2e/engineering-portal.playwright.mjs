@@ -50,8 +50,10 @@ test.beforeAll(async () => {
       "packages/cli/src/bin/arcshape.mjs",
       "site",
       "build",
+      "--format",
+      "interactive",
       "--out",
-      join(output, "architecture/index.html"),
+      join(output, "architecture"),
       "--title",
       "ArcShape",
       "--source-ref",
@@ -189,6 +191,15 @@ test("portal links to revision-stamped model and architecture routes", async ({
   });
   expect(readerFocus.visible).toBe(true);
   expect(readerFocus.outline).toBe("solid");
+  await page.goto(`${origin}architecture/#/section/03`);
+  await page.locator("figure[data-native-diagram]").scrollIntoViewIfNeeded();
+  await expect(
+    page.locator("iframe[data-native-frame][data-ready]"),
+  ).toHaveCount(1);
+  const dedicated = await page.locator(".native-open").getAttribute("href");
+  expect(dedicated).toContain("/arcshape/architecture/diagrams/");
+  await page.goto(dedicated);
+  await expect(page.locator("html[data-ready]")).toHaveCount(1);
   await page.goto(`${origin}diagrams/publication-boundaries.html`);
   await expect(page).toHaveTitle(/ArcShape Publications Diagram/);
   expect(

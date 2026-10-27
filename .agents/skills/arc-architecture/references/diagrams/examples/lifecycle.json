@@ -1,0 +1,96 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Ciclo de vida de una reserva",
+    "locale": "es",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "mainPath": [
+    "solicitada",
+    "retenida",
+    "confirmada",
+    "completada"
+  ],
+  "states": [
+    {
+      "id": "solicitada",
+      "type": "start",
+      "label": "Solicitada"
+    },
+    {
+      "id": "retenida",
+      "type": "waiting",
+      "label": "Retenida",
+      "sublabel": "Espera autorización"
+    },
+    {
+      "id": "confirmada",
+      "type": "active",
+      "label": "Confirmada"
+    },
+    {
+      "id": "completada",
+      "type": "success",
+      "label": "Completada"
+    },
+    {
+      "id": "caducada",
+      "type": "neutral",
+      "label": "Caducada"
+    },
+    {
+      "id": "cancelada",
+      "type": "failure",
+      "label": "Cancelada"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "solicitada-retenida",
+      "from": "solicitada",
+      "to": "retenida",
+      "label": "Hay plazas",
+      "variant": "default"
+    },
+    {
+      "id": "retenida-confirmada",
+      "from": "retenida",
+      "to": "confirmada",
+      "label": "Autorizada",
+      "variant": "emphasis"
+    },
+    {
+      "id": "confirmada-completada",
+      "from": "confirmada",
+      "to": "completada",
+      "label": "Estancia",
+      "variant": "default"
+    },
+    {
+      "id": "retenida-caducada",
+      "from": "retenida",
+      "to": "caducada",
+      "label": "Plazo agotado",
+      "variant": "default"
+    },
+    {
+      "id": "confirmada-cancelada",
+      "from": "confirmada",
+      "to": "cancelada",
+      "label": "Cancelación",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Variante con pago previo",
+      "items": [
+        "La retención libera plazas al caducar.",
+        "Una reserva confirmada puede cancelarse según la política ficticia."
+      ]
+    }
+  ]
+}

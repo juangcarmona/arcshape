@@ -40,7 +40,7 @@ The full active ArcShape model was reviewed before drafting. This change does no
 
 - `FR-ASSISTED-WORKFLOWS` grounds public descriptions of ArcShape's assisted architecture-documentation capabilities.
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:f5d7e3a6b239e2851ee9554633e1a19cddd05a71b703ed1f184ba0d21e4da3f9" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
 
 - `FR-ARC42-DOCUMENTATION` and `CON-ARC42-FRAMEWORK` ground the canonical Markdown and arc42 source of the Architecture Snapshot.
 
@@ -49,7 +49,7 @@ The full active ArcShape model was reviewed before drafting. This change does no
 
 - `FR-READER-VIEW`, `TERM-ARCHITECTURE-DOCUMENTATION`, `TERM-ARCHITECTURE-VIEW`, and `QR-READER-COMPREHENSION` ground the architecture reader's derived, navigable, non-technical-reader-facing presentation.
 
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 <!-- pdac:cite id="TERM-ARCHITECTURE-DOCUMENTATION" digest="sha256:086bafc90ef2104f0e8b2ebaca54bcdaffb16a7b5ffef374b0ef5e38111bf4ad" -->
 <!-- pdac:cite id="TERM-ARCHITECTURE-VIEW" digest="sha256:3e258fedf716972d2e2905974920be0bd4e9e44fb5f074b6fb5fc00925f36b45" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
@@ -57,8 +57,8 @@ The full active ArcShape model was reviewed before drafting. This change does no
 - `FR-PRODUCT-DEFINITION-LINKS` and `BR-PRODUCT-DEFINITION-AUTHORITY` ground the Product Snapshot's links to the active model without making its generated HTML canonical. `CON-NO-ARCSHAPE-DATA-COLLECTION` constrains publication to static content and reviewed synthetic E2E output, without an ArcShape-operated data-collection service.
 
 <!-- pdac:cite id="FR-PRODUCT-DEFINITION-LINKS" digest="sha256:d653de7a070313b78fa267d4419b7f31544e393c3c1ac2721ac0dbc231d92a26" -->
-<!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:0c2a1bb402fcf272e5ecfe15282e8d15dccd7fb57992a344071757f82cf457a7" -->
-<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:2893462d429a0188eeb937215ceb47a55809d26825d2646d0897cc851d33ce13" -->
+<!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:8d9b3498c0c04f5546618e31fe405629dc9d08183c03d72d4d1af5f50cf182ba" -->
+<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
 
 Structural impact was widened from each cited artifact. Neighboring actors, terms, journeys, and use cases were checked, including repository onboarding, architecture authoring and maintenance, ADRs, C4 diagrams, reverse engineering, synchronization, and reading/publishing flows. These remain unchanged because this work adds repository-operated public presentation and does not alter adopter workflows or product behavior. The marketing site itself is project communications, not a new ArcShape-hosted service or product capability; no Product Definition drift or Product Change is required.
 
