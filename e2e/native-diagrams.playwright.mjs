@@ -55,6 +55,86 @@ test.afterAll(async () => {
   if (directory) await rm(directory, { recursive: true, force: true });
 });
 
+async function swipeTouch(page, x, y, dx, dy) {
+  const cdp = await page.context().newCDPSession(page);
+  try {
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ x, y, id: 1 }],
+    });
+    for (let step = 1; step <= 6; step++) {
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [
+          { x: x + (dx * step) / 6, y: y + (dy * step) / 6, id: 1 },
+        ],
+      });
+      await page.waitForTimeout(16);
+    }
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchEnd",
+      touchPoints: [],
+    });
+  } finally {
+    await cdp.detach();
+  }
+}
+
+test("touch pans a zoomed diagram and scrolls the article at normal zoom", async ({
+  browser,
+}, info) => {
+  const context = await browser.newContext({
+    hasTouch: true,
+    isMobile: true,
+    viewport: { width: 390, height: 844 },
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto(url);
+    const figure = page.locator("figure[data-native-diagram]");
+    await expect(figure.locator("iframe[data-ready]")).toHaveCount(1);
+    const runtime = page
+      .frames()
+      .find((frame) => frame.url() === "about:srcdoc");
+    const container = runtime.locator(".diagram-container");
+    const svg = container.locator(":scope > svg");
+    for (let i = 0; i < 3; i++)
+      await runtime.locator('[data-view="in"]').click();
+    await expect(container).toHaveClass(/is-pannable/);
+    await container.evaluate((element) => {
+      window.__arcshapePointerCancels = 0;
+      element.addEventListener(
+        "pointercancel",
+        () => window.__arcshapePointerCancels++,
+      );
+    });
+    const beforePan = await svg.evaluate((element) => element.style.transform);
+    const bounds = await container.boundingBox();
+    await swipeTouch(page, bounds.x + 8, bounds.y + 160, 100, 50);
+    expect(await runtime.evaluate(() => window.__arcshapePointerCancels)).toBe(
+      0,
+    );
+    expect(await svg.evaluate((element) => element.style.transform)).not.toBe(
+      beforePan,
+    );
+    await page.screenshot({ path: info.outputPath("native-touch-pan.png") });
+
+    await runtime.locator('[data-view="reset"]').click();
+    await expect(container).not.toHaveClass(/is-pannable/);
+    await figure.scrollIntoViewIfNeeded();
+    const beforeScroll = await page
+      .locator("#main")
+      .evaluate((main) => main.scrollTop);
+    const resetBounds = await container.boundingBox();
+    await swipeTouch(page, resetBounds.x + 8, resetBounds.y + 200, 0, -140);
+    await expect
+      .poll(() => page.locator("#main").evaluate((main) => main.scrollTop))
+      .toBeGreaterThan(beforeScroll);
+  } finally {
+    await context.close();
+  }
+});
+
 test("interactive diagrams work under a subpath, keep scrolling in the reader and fit narrow screens", async ({
   page,
   context,

@@ -14,6 +14,7 @@ function policy(scripts, frames = "'none'") {
   return `default-src 'none'; script-src ${scripts.map(hash).join(" ")}; style-src 'unsafe-inline'; img-src data: blob:; frame-src ${frames}; base-uri 'none'; form-action 'none'; connect-src 'none'; object-src 'none'`;
 }
 const compactStyle = `html[data-arcshape-compact],html[data-arcshape-compact] body{height:100%!important;min-height:0!important;overflow:hidden!important}
+.diagram-container.is-pannable{touch-action:none!important}
 html[data-arcshape-compact] body{padding:0!important;background-image:none!important}
 html[data-arcshape-compact] :is(.header,.toolbar,.cards,.guided-views){display:none!important}
 html[data-arcshape-compact] .container{height:100%!important;width:100%!important;max-width:none!important;gap:0!important}

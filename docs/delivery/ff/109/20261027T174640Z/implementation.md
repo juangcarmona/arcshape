@@ -16,7 +16,7 @@ Linux, Node 22.22.1, npm 9.2.0. Security audit and packed-install SBOM use npm 1
 
 | Check | Observed result |
 | --- | --- |
-| `npm run verify` | Format, lint, typecheck, 147 tests in 28 files and helper build passed. Includes twelve native tests, three SAST policy cases and the packed-install smoke test. |
+| `npm run verify` | Format, lint, typecheck, 148 tests in 28 files and helper build passed. Includes twelve native tests, four SAST policy cases and the packed-install smoke test. |
 | Public site verify, `SITE_BASE=/` | Passed build/output tests. |
 | Engineering portal build, `SITE_BASE=/arcshape/` | Passed. |
 | Product model | 37 artifacts; zero errors/warnings. |
@@ -28,7 +28,7 @@ Linux, Node 22.22.1, npm 9.2.0. Security audit and packed-install SBOM use npm 1
 | Packed CycloneDX/license policy | 248 components including MIT vendor subset; passed with five pre-existing exact-version exceptions, no policy relaxation. |
 | ZAP reader and direct viewer scans | Both severity adapters passed; each report has zero High, four Medium, six Low and three Informational categories. |
 
-The final full browser suite passed all nine journeys in 1.7 minutes, including both native journeys, pointer panning and routing cleanup. Both final quality and browser commands exited 0.
+The corrected full browser suite passed all ten journeys, including the new real touch-pan/document-swipe regression, pointer panning and routing cleanup. Both final quality and browser commands exited 0.
 
 Browser coverage includes keyboard focus/reset, zoom, document-wheel scrolling, subpath hosting, theme/focus links, no opener, SVG download, 390px layout, invalid-source rollback, no overwrite on reinitialization, parent/storage denial, source-bound messages, disabled-script and failed-frame fallbacks, and CSP network blocking.
 
@@ -39,6 +39,7 @@ Windows/macOS, Node 24, secret scan and CodeQL are not implied by local results.
 - [Embedded containers](screenshots/arcshape-building-blocks.png): article-width diagram, six nodes and repository boundary; bounded viewport with zoom controls and one link.
 - [Dedicated viewer](screenshots/arcshape-dedicated.png): retained CLI focus, semantic relationship panel and Blueprint navigation.
 - [390px layout](screenshots/arcshape-native-narrow.png): no width overflow or inner vertical scrolling. Overview labels are small; use explicit zoom/pan or the dedicated page for detail.
+- [390px touch pan](screenshots/arcshape-native-touch.png): inspected after a real touch drag at 175% zoom, before committing the correction.
 
 Context, embedded focus and dark appearance were also inspected. Reproduce via the repository's `capture-evidence.mjs` against the separate interactive preview.
 
