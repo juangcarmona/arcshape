@@ -24,7 +24,7 @@
     ],
     "futureIndependentReview": "Ask the maintainer before invoking another agent; do not waive the FF gate"
   },
-  "status": "running",
+  "status": "complete",
   "stages": [
     {
       "name": "refine",
@@ -45,9 +45,7 @@
       "inputCommit": "b1781b5",
       "outputCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
       "result": "approved-independent-plan-review",
-      "evidence": [
-        "plan-review.md"
-      ]
+      "evidence": ["plan-review.md"]
     },
     {
       "name": "implement",
@@ -58,9 +56,43 @@
         "implementation-review.md",
         "screenshots/"
       ]
+    },
+    {
+      "name": "integrate",
+      "inputCommit": "077fb7c239cd70ac7b8aa95568592aeaa0c5ad4d",
+      "outputCommit": "1289709683beda15f1899893bfc47f52a7a50d69",
+      "result": "merged-after-human-and-independent-final-head-approval",
+      "evidence": [
+        "https://github.com/juangcarmona/arcshape/pull/110",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40591684965",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40591685091",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40591684852"
+      ]
+    },
+    {
+      "name": "review",
+      "inputCommit": "1289709683beda15f1899893bfc47f52a7a50d69",
+      "result": "post-merge-finding-corrected-and-retrospective-recorded",
+      "evidence": [
+        "docs/reviews/issue-109.md",
+        "https://github.com/juangcarmona/arcshape/issues/112",
+        "https://github.com/juangcarmona/arcshape/pull/113",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40600915271",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40600915302",
+        "https://github.com/juangcarmona/arcshape/actions/runs/40600915285"
+      ]
     }
   ],
   "reviews": [
+    {
+      "reviewerModel": "gpt-6.1-sol",
+      "reviewerSession": "01a17f51-e64d-7db3-8999-96586a9ab97a",
+      "kind": "independent-final-head-done-audit",
+      "reviewedCommit": "077fb7c239cd70ac7b8aa95568592aeaa0c5ad4d",
+      "decision": "approve",
+      "findings": "No blocking findings; synchronized and archived spec preserves approved intent and exact-head CI, Security, CodeQL and Assurance passed. Known DAST Medium findings and the scoped CodeQL exception remain disclosed.",
+      "evidence": ["https://github.com/juangcarmona/arcshape/pull/110"]
+    },
     {
       "reviewerModel": "gpt-6.1-sol",
       "reviewerSession": "01a17f51-e64d-7db3-8999-96586a9ab97a",
@@ -83,9 +115,7 @@
       "reviewedCommit": "ccc16ad891b188f809abab725dd3cf404dcb3228",
       "decision": "request-changes",
       "findings": "P2: zoomed diagrams lose touch panning after browser pointercancel; add real touch coverage and preserve article swiping at normal zoom.",
-      "evidence": [
-        "implementation-review.md"
-      ]
+      "evidence": ["implementation-review.md"]
     },
     {
       "reviewerModel": "gpt-6.1-sol",
@@ -95,9 +125,7 @@
       "reviewedCommit": "8552f1eb4a3fca6ef1b139cc183c4767a78118ec",
       "decision": "approve",
       "findings": "Dedicated-view isolation and reachable no-JavaScript fallback corrected in round 1. No blocking plan findings remain.",
-      "evidence": [
-        "plan-review.md"
-      ]
+      "evidence": ["plan-review.md"]
     },
     {
       "reviewerModel": "gpt-6.1-sol",
@@ -108,9 +136,7 @@
       "reviewedSnapshot": "sha256:45e2e8f8a7557da980804ec9885c151b0f186fc16e920532863a64381527cfe7",
       "decision": "approve-for-human-review",
       "findings": "Two wording gaps corrected: parent-page isolation and external-publication compatibility. No product, plan or Done approval granted.",
-      "evidence": [
-        "draft-review.md"
-      ]
+      "evidence": ["draft-review.md"]
     }
   ],
   "corrections": [
@@ -146,6 +172,21 @@
     }
   ],
   "stopReason": null,
+  "completedAt": "2026-10-27T23:20:02Z",
+  "postMerge": {
+    "initialCodeQL": "failure on 1289709683beda15f1899893bfc47f52a7a50d69; three High URL-key findings, run 40592434545",
+    "followUpIssue": "https://github.com/juangcarmona/arcshape/issues/112",
+    "followUpPullRequest": "https://github.com/juangcarmona/arcshape/pull/113",
+    "correctedMainCommit": "f0c781982337a72ccadeea35e6cd0b7d9d9ec564",
+    "correctedMainChecks": [
+      "CI 40600915302 success",
+      "Security 40600915304 success",
+      "CodeQL 40600915271 success; alerts 76-78 fixed",
+      "Assurance 40600915285 success",
+      "Portal 40600915296 success",
+      "Release 40600915315 success; stable publish skipped"
+    ]
+  },
   "humanDecision": {
     "source": "Maintainer chat reply: LGTM",
     "date": "2026-10-27",
