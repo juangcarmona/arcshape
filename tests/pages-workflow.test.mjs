@@ -77,6 +77,9 @@ describe("GitHub Pages engineering portal workflow", () => {
     expect(
       steps.find(({ name }) => name === "Record source revision").run,
     ).toContain("git rev-parse HEAD");
+    expect(
+      steps.find(({ name }) => name === "Generate Architecture Snapshot").run,
+    ).toContain("--format interactive --out _site/architecture");
     expect(steps.find(({ name }) => name === "Upload Pages artifact").if).toBe(
       "github.event_name != 'pull_request'",
     );

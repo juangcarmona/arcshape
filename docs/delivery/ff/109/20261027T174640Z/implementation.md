@@ -8,6 +8,8 @@ Ten pinned native families render from Markdown JSON. The default single-file sn
 
 Packaged skills include authoring examples and opt-in migration guidance. Install/update does not authorize conversion. Input limits, schema/relationship validation, render deadlines, network-blocked export, sandbox/CSP isolation and owned-output publication are implemented.
 
+The engineering-portal build explicitly opts ArcShape's own architecture into interactive folder output. Its browser journey opens an embedded native diagram and its dedicated page under `/arcshape/architecture/`; default CLI snapshots remain unchanged. This configures the reviewed artifact, not an immediate production deployment.
+
 ## Verification
 
 Linux, Node 22.22.1, npm 9.2.0. Security audit and packed-install SBOM use npm 10.9.9, matching security CI. Browser commands use the repository's existing `GITHUB_ACTIONS=true` launch configuration.
