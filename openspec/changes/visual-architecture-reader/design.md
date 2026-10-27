@@ -9,7 +9,7 @@
 <!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 
 `arcshape validate` checks the arc42 document structure and optional links/citations; it does not parse Mermaid. `arcshape site build` is the actual diagram validation path: it rejects a missing `accTitle`, then Mermaid CLI parsing/rendering fails the build for invalid syntax, before the generated HTML is written. The Pages workflow builds the reader for pull requests and publishes the generated output from `main`.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 
 The product model already describes Markdown arc42 authoring, C4 diagram workflows, a generated reader, and reader comprehension. The existing `arc42-section-guidance` capability covers the twelve arc42 sections. This change is documentation and test coverage for behavior already present, so it introduces no product requirement and uses `skip_specs: true`.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->

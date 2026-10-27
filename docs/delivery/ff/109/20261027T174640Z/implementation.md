@@ -21,7 +21,7 @@ Linux, Node 22.22.1, npm 9.2.0. Security audit and packed-install SBOM use npm 1
 | OpenSpec validate all | 9 items passed. |
 | ArcShape validation | 12 sections; no diagnostics. |
 | Architecture citations | Current; no stale/tampered/unresolved references. |
-| OpenSpec citations | All 29 current documents classified; zero errors. Six archived stale citations remain historical warnings. |
+| OpenSpec citations | All 29 current documents classified; 218 current citations, zero errors/warnings. |
 | Dependency audit | No unexcepted High/Critical vulnerabilities. |
 | Packed CycloneDX/license policy | 248 components including MIT vendor subset; passed with five pre-existing exact-version exceptions, no policy relaxation. |
 | ZAP reader and direct viewer scans | Both severity adapters passed; each report has zero High, four Medium, six Low and three Informational categories. |
@@ -53,6 +53,8 @@ Context, embedded focus and dark appearance were also inspected. Reproduce via t
 The previous assurance pipeline scanned only the static snapshot, so a pass could miss the executable viewer. The single guard owner is `.github/workflows/assurance.yml`: it now builds interactive output and scans both the reader and a directly navigated viewer. Counterfactual: snapshot-only output cannot supply the now-required native path/report. No lifecycle-policy relaxation was made.
 
 Local test-authoring failures concerned fixture frontmatter, ambiguous selectors and reset semantics. Tests were corrected and full suites rerun; no separate process guard is warranted for those one-off mistakes.
+
+The first checkpoint incorrectly described six remaining stale citations as archived. Inspection of the diagnostic paths showed repeated citations in three active documents. All occurrences were refreshed and the full citation report rerun; historical archives were not changed.
 
 ## Outstanding gates
 

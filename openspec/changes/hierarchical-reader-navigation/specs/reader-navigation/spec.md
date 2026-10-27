@@ -32,7 +32,7 @@ The reader SHALL represent supporting Markdown pages according to their authored
 ### Requirement: Control folder expansion accessibly
 
 Folders with children SHALL expose keyboard-operable toggles with accurate accessible state. Direct nested routes SHALL reveal all ancestors needed to show the current page.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 <!-- pdac:cite id="UC-READ-ARCHITECTURE" digest="sha256:43f7ea1726a9e26689b8741f153ad919563655653584b9cc13bca10885e8b985" -->
 
 #### Scenario: Toggle a folder with keyboard input
@@ -48,7 +48,7 @@ Folders with children SHALL expose keyboard-operable toggles with accurate acces
 ### Requirement: Show contextual breadcrumbs
 
 Supporting pages SHALL show a breadcrumb trail for their folder path. A folder step SHALL link only when that folder has a README page.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 <!-- pdac:cite id="UC-READ-ARCHITECTURE" digest="sha256:43f7ea1726a9e26689b8741f153ad919563655653584b9cc13bca10885e8b985" -->
 
 #### Scenario: Link breadcrumb folders with README pages
@@ -64,7 +64,7 @@ Supporting pages SHALL show a breadcrumb trail for their folder path. A folder s
 ### Requirement: Preserve flat navigation compatibility
 
 Sections with only flat supporting files SHALL retain their existing visual hierarchy, stable routes, search results, section navigation, and self-contained generated HTML behavior.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ae4d1900d393961a43dad9de295517ecf6f9c595830cc4cbca72f0369c5d33e7" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
 <!-- pdac:cite id="UC-PUBLISH-ARCHITECTURE-VIEW" digest="sha256:9ce6cd65b911aeec3601b986283f966a0232a1c59a3534f975fff4c3abddea9c" -->
 
 #### Scenario: Render a flat section as before
