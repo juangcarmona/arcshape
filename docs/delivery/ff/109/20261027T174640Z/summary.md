@@ -1,12 +1,12 @@
 # Interactive diagrams — FF 20261027T174640Z
 
-Issue [#109](https://github.com/juangcarmona/arcshape/issues/109), draft PR [#110](https://github.com/juangcarmona/arcshape/pull/110), branch `feat/109-interactive-diagrams`.
+Issue [#109](https://github.com/juangcarmona/arcshape/issues/109), ready PR [#110](https://github.com/juangcarmona/arcshape/pull/110), branch `feat/109-interactive-diagrams`.
 
 The maintainer approved the product change; it was applied to the canonical model. The independent technical-plan review approved `8552f1e` after one correction round. See [product approval](product-approval.md) and [plan review](plan-review.md). These approvals do not cover the final implementation.
 
 Implementation includes ten native families, compact isolated viewers and dedicated pages, static snapshots, unchanged Mermaid support, packaged authoring guidance and representative ArcShape documentation. [Implementation evidence](implementation.md) records checks, screenshots and limitations.
 
-The issue remains in progress and the PR remains draft. Independent Done audit and final human judgement are outstanding. Required CI must report on the implementation head; no release, integration or retrospective is claimed. The executor is working alone at the user's request. Permission for one independent final reviewer was requested separately; no additional agents were launched.
+The maintainer said “LGTM” for the implementation. On head `8e7785d`, every required check and Assurance passed, including the six OS/Node quality jobs and CodeQL with one rule/file-scoped Archify exception expiring 2026-11-26. The PR is ready for review, and the issue remains in progress. An independent Done audit by a distinct model is still required by Fast Forward; no new agent was launched because the maintainer asked for prior agreement. This run is blocked at that gate. No merge, release or retrospective is claimed.
 
 The Brisa preview at port 4179 is unchanged. A separate CLI-generated review site is served at http://192.168.0.3:4180/ (same LAN/VPN).
 
