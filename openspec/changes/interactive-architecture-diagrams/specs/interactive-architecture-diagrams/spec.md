@@ -63,7 +63,7 @@ An explicit folder-publication option SHALL provide interactive diagrams at avai
 
 ### Requirement: Isolate interactive diagram execution
 
-Diagram code SHALL NOT directly read or modify the parent document or its storage. Hostile source and forged integration messages SHALL NOT execute arbitrary script, escape output paths, trigger network requests or navigate the parent without reader action.
+Embedded diagram code SHALL be isolated from its parent. Unsafe input and forged messages SHALL have no unauthorized effects.
 <!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
 <!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
 
@@ -79,15 +79,13 @@ Diagram code SHALL NOT directly read or modify the parent document or its storag
 
 ### Requirement: Publish without development-machine dependencies
 
-The installed npm package SHALL contain the supported renderers, assets, authoring references and attribution. Folder output SHALL work under a root or subpath without a backend, CDN, ArcShape service or development checkout.
+The installed npm package SHALL contain renderers, assets, authoring references and attribution for portable folder output.
 <!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:e49c7df3dcaf71ce1cde9d9064de4c53c28d54b6cbe3fb7152153fded4fcd8d6" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
-<!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
-
 #### Scenario: Generate from a clean packed installation
 
 - **WHEN** the package is installed into an unrelated temporary repository
-- **THEN** supported fixtures generate without the ArcShape source checkout or optional renderer downloads
+- **THEN** supported fixtures generate without the ArcShape source checkout or optional renderer downloads, and output works at root or subpath without a backend, CDN or ArcShape service
 
 ### Requirement: Support readable native families
 
@@ -107,16 +105,25 @@ Native diagrams SHALL cover C4-style context, containers and components, sequenc
 
 ### Requirement: Assist reviewable authoring and migration
 
-Packaged skills SHALL select a supported representation from evidence, respect explicit engine choices, validate and inspect renders, and present source changes and visual evidence for maintainer review. Unsupported semantics SHALL remain Mermaid; migration SHALL require an explicit request.
+Skills SHALL provide evidence-grounded, validated and visually inspected diagram proposals for human review.
 <!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
 <!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:2721d6d68d994addd06a0b270bef3fad3efc21639c97c63ba3c43005c788070e" -->
+
+#### Scenario: Respect maintainer intent
+
+- **WHEN** the assistant authors a diagram
+- **THEN** it respects explicit engine choices and approved product intent, keeps unsupported semantics in Mermaid, and presents source changes and visual evidence for review
+
+### Requirement: Preserve documentation during opt-in migration
+
+Migration SHALL require an explicit request and preserve readable documentation and approved product intent.
 <!-- pdac:cite id="BR-PRODUCT-DEFINITION-AUTHORITY" digest="sha256:8d9b3498c0c04f5546618e31fe405629dc9d08183c03d72d4d1af5f50cf182ba" -->
+<!-- pdac:cite id="FR-EXTERNAL-DOCS-INTEGRATIONS" digest="sha256:f929081da500e66834eb9a2e1dd6c4ef16dd6a066168d275b49cee6989c37616" -->
 
 #### Scenario: Preserve existing external publication
 
 - **WHEN** a proposed conversion cannot preserve a readable representation in the maintainer's configured external documentation targets
 - **THEN** the original diagram remains unchanged and the limitation is reported before conversion
-<!-- pdac:cite id="FR-EXTERNAL-DOCS-INTEGRATIONS" digest="sha256:f929081da500e66834eb9a2e1dd6c4ef16dd6a066168d275b49cee6989c37616" -->
 
 #### Scenario: Update ArcShape without requesting migration
 
