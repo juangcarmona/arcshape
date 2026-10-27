@@ -188,11 +188,10 @@ function wrapperRuntime() {
         else {
           const url = new URL(location.href);
           url.searchParams.set("theme", message.theme);
-          url.hash = message.selection
-            ? new URLSearchParams({
-                [message.selection.kind]: message.selection.id,
-              }).toString()
-            : "";
+          const hash = new URLSearchParams();
+          if (message.selection)
+            hash.set(message.selection.kind, message.selection.id);
+          url.hash = hash.toString();
           history.replaceState(null, "", url);
         }
       } else if (
@@ -255,6 +254,11 @@ function readerRuntime() {
   const content = document.getElementById("content");
   const frames = new Map();
   const selections = new Map();
+  function selectionHash(selection) {
+    const params = new URLSearchParams();
+    if (selection) params.set(selection.kind, selection.id);
+    return params.toString();
+  }
   const theme = () =>
     document.documentElement.dataset.appearance ||
     (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
@@ -277,9 +281,7 @@ function readerRuntime() {
       const url = new URL(link.href);
       url.searchParams.set("theme", theme());
       const selection = selections.get(frame.getAttribute("src")) ?? null;
-      url.hash = selection
-        ? new URLSearchParams({ [selection.kind]: selection.id }).toString()
-        : "";
+      url.hash = selectionHash(selection);
       link.href = url.href;
       frame.contentWindow?.postMessage(
         { v: 1, type: "configure", theme: theme(), selection },
@@ -322,7 +324,7 @@ function readerRuntime() {
       const link = frame.closest("figure").querySelector("a"),
         url = new URL(link.href);
       selections.set(frame.getAttribute("src"), s);
-      url.hash = s ? new URLSearchParams({ [s.kind]: s.id }).toString() : "";
+      url.hash = selectionHash(s);
       link.href = url.href;
     }
   });
