@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { readdir, readFile } from "node:fs/promises";
-import { isAbsolute, join, relative, resolve } from "node:path";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 function normalizePath(uri) {
@@ -11,7 +11,9 @@ function normalizePath(uri) {
   return relative(
     process.cwd(),
     isAbsolute(filePath) ? filePath : resolve(filePath),
-  );
+  )
+    .split(sep)
+    .join("/");
 }
 
 function isValidException(exception, today) {
