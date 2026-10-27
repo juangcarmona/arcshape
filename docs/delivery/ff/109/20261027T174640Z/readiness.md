@@ -1,6 +1,6 @@
 # Ready assessment — issue 109
 
-The problem and requested experience are captured in [issue #109](https://github.com/juangcarmona/arcshape/issues/109). The proposed product definition is [CHG-INTERACTIVE-DIAGRAMS-001](../../../../product/changes/active/chg-interactive-diagrams-001/change.md).
+The problem and requested experience are captured in [issue #109](https://github.com/juangcarmona/arcshape/issues/109). The applied product definition is [CHG-INTERACTIVE-DIAGRAMS-001](../../../../product/changes/completed/chg-interactive-diagrams-001/change.md).
 
 | Definition of Ready dimension | Assessment |
 | --- | --- |
@@ -20,6 +20,8 @@ The problem and requested experience are captured in [issue #109](https://github
 | Intake triage | Met: raw request is now an outcome-oriented issue with observable draft acceptance criteria. |
 
 ## Verdict
+
+Resumed verdict: Ready. The maintainer explicitly approved the product draft and continuation in the conversation, recorded in [product-approval.md](product-approval.md). The approved overlay was applied with ProductShape and all 37 resulting artifacts validate. Acceptance criteria and the product-rules dimension are now met; priority remains N/A. Technical packaging/isolation decisions belong to proposal. No external adopter migration or production publication has been added to scope. The following paragraphs preserve the original checkpoint, not the resumed state.
 
 Not Ready to advance this FF run: human product approval is outstanding. The issue remains `status:backlog`; no `proposed` or implementation transition has fired. A draft PR shares refinement artifacts only and must not be treated as the `propose` stage or as permission to merge the delivery item.
 

@@ -2,7 +2,7 @@
 id: CHG-INTERACTIVE-DIAGRAMS-001
 type: product-change
 title: Interactive architecture diagrams with assisted authoring and Mermaid compatibility
-status: draft
+status: applied
 base-revision: 'c1e38279a6b7276ec4f606177c7e41a99d64c771'
 operations:
   add:
@@ -46,7 +46,7 @@ Diagram authoring and maintenance; C4 communication; architecture reader publica
 
 ## Open Questions
 
-None. Approval of this draft is still required. Detailed source syntax, command flags, renderer packaging, isolation design, and numeric layout limits belong to technical proposal, not product intent.
+None. Detailed source syntax, command flags, renderer packaging, isolation design, and numeric layout limits belong to technical proposal, not product intent.
 
 ## Product Acceptance
 
