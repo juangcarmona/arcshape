@@ -104,7 +104,7 @@ describe("Changesets release workflow", () => {
         .replaceAll("_", ""),
     );
 
-    expect(attempts * delay).toBeGreaterThanOrEqual(120_000);
+    expect(attempts * delay).toBeGreaterThanOrEqual(300_000);
     expect(verifier).toContain("stdout.trim() === version");
   });
 

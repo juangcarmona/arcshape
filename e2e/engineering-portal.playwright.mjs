@@ -258,3 +258,17 @@ test("portal links to revision-stamped model and architecture routes", async ({
     ),
   ).toBe(true);
 });
+
+test("engineering diagram gallery opens an English full-screen diagram", async ({
+  page,
+}) => {
+  await page.goto(`${origin}architecture/#/section/08/diagram-gallery`);
+  const diagrams = page.locator("figure[data-native-diagram]");
+  await expect(diagrams).toHaveCount(10);
+  const sequence = diagrams.nth(5);
+  await sequence.scrollIntoViewIfNeeded();
+  const dedicated = await sequence.locator(".native-open").getAttribute("href");
+  await page.goto(dedicated);
+  await expect(page).toHaveTitle("Confirm a booking");
+  await expect(page.locator("html[data-ready]")).toHaveCount(1);
+});

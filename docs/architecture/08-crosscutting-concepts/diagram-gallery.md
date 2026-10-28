@@ -14,15 +14,15 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "Brisa · contexto del sistema",
-    "locale": "es",
+    "title": "Brisa · system context",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint",
     "legend": {
       "mode": "auto",
       "entries": {
         "backend": {
-          "label": "Sistema"
+          "label": "System"
         }
       }
     }
@@ -31,8 +31,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "viajero",
       "type": "external",
-      "label": "Viajero",
-      "sublabel": "Busca y reserva",
+      "label": "Traveler",
+      "sublabel": "Searches and books",
       "pos": [
         40,
         60
@@ -46,7 +46,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "brisa",
       "type": "backend",
       "label": "Brisa",
-      "sublabel": "Sistema de reservas",
+      "sublabel": "Booking system",
       "pos": [
         360,
         60
@@ -59,8 +59,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "pagos",
       "type": "external",
-      "label": "Pagos",
-      "sublabel": "Proveedor externo",
+      "label": "Payments",
+      "sublabel": "External provider",
       "pos": [
         700,
         60
@@ -73,8 +73,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "anfitrion",
       "type": "external",
-      "label": "Anfitrión",
-      "sublabel": "Gestiona alojamientos",
+      "label": "Host",
+      "sublabel": "Manages properties",
       "pos": [
         40,
         300
@@ -87,8 +87,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "correo",
       "type": "external",
-      "label": "Correo",
-      "sublabel": "Proveedor externo",
+      "label": "Email",
+      "sublabel": "External provider",
       "pos": [
         360,
         300
@@ -104,46 +104,46 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "viajero-brisa",
       "from": "viajero",
       "to": "brisa",
-      "label": "Reserva",
+      "label": "Books",
       "variant": "emphasis"
     },
     {
       "id": "brisa-pagos",
       "from": "brisa",
       "to": "pagos",
-      "label": "Autoriza",
+      "label": "Authorizes",
       "variant": "default"
     },
     {
       "id": "anfitrion-brisa",
       "from": "anfitrion",
       "to": "brisa",
-      "label": "Publica",
+      "label": "Lists properties",
       "variant": "default"
     },
     {
       "id": "brisa-correo",
       "from": "brisa",
       "to": "correo",
-      "label": "Confirma",
+      "label": "Sends confirmation",
       "variant": "dashed"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "C4 · nivel 1",
+      "title": "C4 · level 1",
       "items": [
-        "Brisa se muestra como una caja negra.",
-        "Pagos y correo pertenecen a terceros."
+        "Brisa is shown as a black box.",
+        "Payments and email are third-party services."
       ]
     },
     {
       "dot": "cyan",
-      "title": "Sistema ficticio",
+      "title": "Fictional system",
       "items": [
-        "Las relaciones describen el ejemplo Brisa.",
-        "No representan servicios reales de ArcShape."
+        "These relationships describe the Brisa example.",
+        "They do not represent real ArcShape services."
       ]
     }
   ]
@@ -157,8 +157,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "class",
   "meta": {
-    "title": "Contrato de persistencia",
-    "locale": "es",
+    "title": "Persistence contract",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint"
   },
@@ -170,28 +170,28 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "types": [
     {
       "id": "servicio",
-      "label": "ConfirmarReserva",
+      "label": "ConfirmBooking",
       "kind": "class",
       "row": 0,
       "col": 0,
       "methods": [
         {
-          "name": "ejecutar",
-          "parameters": "solicitud",
-          "returns": "Reserva"
+          "name": "execute",
+          "parameters": "request",
+          "returns": "Booking"
         }
       ]
     },
     {
       "id": "puerto",
-      "label": "Reservas",
+      "label": "Bookings",
       "kind": "interface",
       "row": 0,
       "col": 1,
       "methods": [
         {
-          "name": "guardar",
-          "parameters": "reserva",
+          "name": "save",
+          "parameters": "booking",
           "returns": "void",
           "abstract": true
         }
@@ -199,21 +199,21 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     },
     {
       "id": "adaptador",
-      "label": "ReservasPostgres",
+      "label": "PostgresBookings",
       "kind": "class",
       "row": 1,
       "col": 1,
       "methods": [
         {
-          "name": "guardar",
-          "parameters": "reserva",
+          "name": "save",
+          "parameters": "booking",
           "returns": "void"
         }
       ]
     },
     {
       "id": "reserva",
-      "label": "Reserva",
+      "label": "Booking",
       "kind": "class",
       "row": 1,
       "col": 0,
@@ -223,13 +223,13 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
           "type": "UUID"
         },
         {
-          "name": "estado",
-          "type": "Estado"
+          "name": "status",
+          "type": "Status"
         }
       ],
       "methods": [
         {
-          "name": "confirmar",
+          "name": "confirm",
           "returns": "void"
         }
       ]
@@ -241,7 +241,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "servicio",
       "to": "puerto",
       "kind": "dependency",
-      "label": "Usa"
+      "label": "Uses"
     },
     {
       "id": "implementa",
@@ -254,16 +254,16 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "servicio",
       "to": "reserva",
       "kind": "dependency",
-      "label": "Crea"
+      "label": "Creates"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Detalle selectivo",
+      "title": "Selective detail",
       "items": [
-        "El servicio depende del contrato de persistencia.",
-        "Se omiten miembros que no explican esa decisión."
+        "The service depends on the persistence contract.",
+        "Members unrelated to that decision are omitted."
       ]
     }
   ]
@@ -277,23 +277,23 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "dataflow",
   "meta": {
-    "title": "De reservas a estadísticas",
-    "locale": "es",
+    "title": "From bookings to statistics",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint"
   },
   "stages": [
     {
-      "label": "Origen"
+      "label": "Source"
     },
     {
-      "label": "Privacidad"
+      "label": "Privacy"
     },
     {
-      "label": "Almacén"
+      "label": "Storage"
     },
     {
-      "label": "Consumo"
+      "label": "Consumption"
     }
   ],
   "nodes": [
@@ -301,23 +301,23 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "outbox",
       "type": "database",
       "label": "Outbox",
-      "sublabel": "Reservas",
+      "sublabel": "Bookings",
       "stage": 0,
       "row": 0
     },
     {
       "id": "minimizar",
       "type": "security",
-      "label": "Minimizar",
-      "sublabel": "Quita identidad",
+      "label": "Minimize",
+      "sublabel": "Removes identity",
       "stage": 1,
       "row": 0
     },
     {
       "id": "metricas",
       "type": "database",
-      "label": "Métricas",
-      "sublabel": "Por día y zona",
+      "label": "Metrics",
+      "sublabel": "By day and area",
       "stage": 2,
       "row": 0
     },
@@ -325,15 +325,15 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "panel",
       "type": "frontend",
       "label": "Panel",
-      "sublabel": "Ocupación",
+      "sublabel": "Occupancy",
       "stage": 3,
       "row": 0
     },
     {
       "id": "retencion",
       "type": "backend",
-      "label": "Retención",
-      "sublabel": "Borra antiguos",
+      "label": "Retention",
+      "sublabel": "Deletes old data",
       "stage": 2,
       "row": 2
     }
@@ -343,38 +343,38 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "outbox-minimizar",
       "from": "outbox",
       "to": "minimizar",
-      "label": "Eventos",
+      "label": "Events",
       "variant": "dashed"
     },
     {
       "id": "minimizar-metricas",
       "from": "minimizar",
       "to": "metricas",
-      "label": "Agregados",
+      "label": "Aggregates",
       "variant": "security"
     },
     {
       "id": "metricas-panel",
       "from": "metricas",
       "to": "panel",
-      "label": "Totales",
+      "label": "Totals",
       "variant": "default"
     },
     {
       "id": "metricas-retencion",
       "from": "metricas",
       "to": "retencion",
-      "label": "Caducados",
+      "label": "Expired data",
       "variant": "default"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Datos mínimos",
+      "title": "Minimal data",
       "items": [
-        "El panel recibe totales, no nombres ni correos.",
-        "El flujo es una decisión ficticia del ejemplo."
+        "The dashboard receives totals, not names or email addresses.",
+        "This flow is a fictional decision in the example."
       ]
     }
   ]
@@ -388,8 +388,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "erd",
   "meta": {
-    "title": "Modelo relacional de Brisa",
-    "locale": "es",
+    "title": "Brisa relational model",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint"
   },
@@ -401,8 +401,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   },
   "entities": [
     {
-      "id": "viajero",
-      "label": "viajero",
+      "id": "traveler",
+      "label": "traveler",
       "row": 0,
       "col": 0,
       "attributes": [
@@ -419,8 +419,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       ]
     },
     {
-      "id": "reserva",
-      "label": "reserva",
+      "id": "booking",
+      "label": "booking",
       "row": 0,
       "col": 1,
       "attributes": [
@@ -430,34 +430,34 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
           "key": "pk"
         },
         {
-          "name": "viajero_id",
+          "name": "traveler_id",
           "type": "uuid",
           "key": "fk",
-          "references": "viajero.id"
+          "references": "traveler.id"
         },
         {
-          "name": "alojamiento_id",
+          "name": "property_id",
           "type": "uuid",
           "key": "fk",
-          "references": "alojamiento.id"
+          "references": "property.id"
         },
         {
-          "name": "entrada",
+          "name": "check_in",
           "type": "date"
         },
         {
-          "name": "salida",
+          "name": "check_out",
           "type": "date"
         },
         {
-          "name": "estado",
+          "name": "status",
           "type": "varchar"
         }
       ]
     },
     {
-      "id": "alojamiento",
-      "label": "alojamiento",
+      "id": "property",
+      "label": "property",
       "row": 0,
       "col": 2,
       "attributes": [
@@ -467,11 +467,11 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
           "key": "pk"
         },
         {
-          "name": "nombre",
+          "name": "name",
           "type": "varchar"
         },
         {
-          "name": "capacidad",
+          "name": "capacity",
           "type": "integer"
         }
       ]
@@ -479,18 +479,18 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   ],
   "relationships": [
     {
-      "id": "reserva-viajero",
-      "from": "reserva",
-      "to": "viajero",
-      "label": "Titular",
+      "id": "booking-traveler",
+      "from": "booking",
+      "to": "traveler",
+      "label": "Traveler",
       "fromCardinality": "many",
       "toCardinality": "one"
     },
     {
-      "id": "reserva-alojamiento",
-      "from": "reserva",
-      "to": "alojamiento",
-      "label": "Estancia",
+      "id": "booking-property",
+      "from": "booking",
+      "to": "property",
+      "label": "Stay",
       "fromCardinality": "many",
       "toCardinality": "one"
     }
@@ -498,10 +498,10 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "cards": [
     {
       "dot": "cyan",
-      "title": "Esquema reducido",
+      "title": "Reduced schema",
       "items": [
-        "Se muestran todas las columnas de estas tres tablas ficticias.",
-        "El outbox y la facturación quedan fuera de esta vista."
+        "All columns of these three fictional tables are shown.",
+        "The outbox and billing are outside this view."
       ]
     }
   ]
@@ -515,8 +515,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 3,
   "diagram_type": "lifecycle",
   "meta": {
-    "title": "Ciclo de vida de una reserva",
-    "locale": "es",
+    "title": "Booking lifecycle",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint"
   },
@@ -530,33 +530,33 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "solicitada",
       "type": "start",
-      "label": "Solicitada"
+      "label": "Requested"
     },
     {
       "id": "retenida",
       "type": "waiting",
-      "label": "Retenida",
-      "sublabel": "Espera autorización"
+      "label": "Held",
+      "sublabel": "Awaiting authorization"
     },
     {
       "id": "confirmada",
       "type": "active",
-      "label": "Confirmada"
+      "label": "Confirmed"
     },
     {
       "id": "completada",
       "type": "success",
-      "label": "Completada"
+      "label": "Completed"
     },
     {
       "id": "caducada",
       "type": "neutral",
-      "label": "Caducada"
+      "label": "Expired"
     },
     {
       "id": "cancelada",
       "type": "failure",
-      "label": "Cancelada"
+      "label": "Cancelled"
     }
   ],
   "transitions": [
@@ -564,45 +564,45 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "solicitada-retenida",
       "from": "solicitada",
       "to": "retenida",
-      "label": "Hay plazas",
+      "label": "Space available",
       "variant": "default"
     },
     {
       "id": "retenida-confirmada",
       "from": "retenida",
       "to": "confirmada",
-      "label": "Autorizada",
+      "label": "Authorized",
       "variant": "emphasis"
     },
     {
       "id": "confirmada-completada",
       "from": "confirmada",
       "to": "completada",
-      "label": "Estancia",
+      "label": "Stay",
       "variant": "default"
     },
     {
       "id": "retenida-caducada",
       "from": "retenida",
       "to": "caducada",
-      "label": "Plazo agotado",
+      "label": "Hold expired",
       "variant": "default"
     },
     {
       "id": "confirmada-cancelada",
       "from": "confirmada",
       "to": "cancelada",
-      "label": "Cancelación",
+      "label": "Cancellation",
       "variant": "default"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Variante con pago previo",
+      "title": "Prepayment variant",
       "items": [
-        "La retención libera plazas al caducar.",
-        "Una reserva confirmada puede cancelarse según la política ficticia."
+        "An expired hold releases the space.",
+        "A confirmed booking may be cancelled under the fictional policy."
       ]
     }
   ]
@@ -616,15 +616,15 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "sequence",
   "meta": {
-    "title": "Confirmar una reserva",
-    "locale": "es",
+    "title": "Confirm a booking",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint",
     "legend": {
       "mode": "auto",
       "entries": {
         "dashed": {
-          "label": "Trabajo diferido"
+          "label": "Deferred work"
         }
       }
     }
@@ -653,7 +653,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "mail",
       "type": "external",
-      "label": "Correo"
+      "label": "Email"
     }
   ],
   "messages": [
@@ -662,7 +662,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "portal",
       "to": "api",
       "y": 165,
-      "label": "POST /reservas",
+      "label": "POST /bookings",
       "variant": "emphasis"
     },
     {
@@ -670,8 +670,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "api",
       "to": "db",
       "y": 215,
-      "label": "Reserva + outbox",
-      "note": "Una sola transacción"
+      "label": "Booking + outbox",
+      "note": "One transaction"
     },
     {
       "id": "commit",
@@ -686,7 +686,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "api",
       "to": "portal",
       "y": 325,
-      "label": "201 confirmada",
+      "label": "201 confirmed",
       "variant": "return"
     },
     {
@@ -694,7 +694,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "worker",
       "to": "db",
       "y": 385,
-      "label": "Lee pendientes",
+      "label": "Reads pending",
       "variant": "dashed"
     },
     {
@@ -702,7 +702,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "db",
       "to": "worker",
       "y": 430,
-      "label": "ReservaConfirmada",
+      "label": "BookingConfirmed",
       "variant": "return"
     },
     {
@@ -710,7 +710,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "worker",
       "to": "mail",
       "y": 480,
-      "label": "Envía confirmación",
+      "label": "Sends confirmation",
       "variant": "dashed"
     },
     {
@@ -718,25 +718,25 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "from": "mail",
       "to": "worker",
       "y": 525,
-      "label": "Aceptado",
+      "label": "Accepted",
       "variant": "return"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Respuesta al viajero",
+      "title": "Response to traveler",
       "items": [
-        "El 201 sigue al COMMIT.",
-        "El correo se entrega después, fuera de la petición."
+        "The 201 response follows the COMMIT.",
+        "Email is delivered later, outside the request."
       ]
     },
     {
       "dot": "cyan",
-      "title": "Alcance del ejemplo",
+      "title": "Example scope",
       "items": [
-        "Se muestra una reserva sin pago previo.",
-        "La rama de autorización de pago no se representa aquí."
+        "This booking does not require prepayment.",
+        "The payment authorization path is not shown here."
       ]
     }
   ]
@@ -750,8 +750,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "timeline",
   "meta": {
-    "title": "Incidente ficticio de notificaciones",
-    "locale": "es",
+    "title": "Fictional notification incident",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint",
     "evidence": "illustrative",
@@ -760,46 +760,46 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "lanes": [
     {
       "id": "sistema",
-      "label": "Sistema"
+      "label": "System"
     },
     {
       "id": "equipo",
-      "label": "Equipo"
+      "label": "Team"
     }
   ],
   "events": [
     {
       "id": "caida",
       "at": "2026-10-20T10:00:00+02:00",
-      "title": "Correo caído",
+      "title": "Email unavailable",
       "lane": "sistema",
       "kind": "alert"
     },
     {
       "id": "cola",
       "at": "2026-10-20T10:05:00+02:00",
-      "title": "Outbox crece",
+      "title": "Outbox backlog grows",
       "lane": "sistema",
       "kind": "alert"
     },
     {
       "id": "revision",
       "at": "2026-10-20T10:10:00+02:00",
-      "title": "Revisar proveedor",
+      "title": "Check provider",
       "lane": "equipo",
       "kind": "action"
     },
     {
       "id": "recuperacion",
       "at": "2026-10-20T10:20:00+02:00",
-      "title": "Correo recuperado",
+      "title": "Email service restored",
       "lane": "sistema",
       "kind": "recovery"
     },
     {
       "id": "drenado",
       "at": "2026-10-20T10:30:00+02:00",
-      "title": "Cola drenada",
+      "title": "Backlog drained",
       "lane": "equipo",
       "kind": "recovery"
     }
@@ -807,10 +807,10 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "cards": [
     {
       "dot": "cyan",
-      "title": "Datos inventados",
+      "title": "Illustrative data",
       "items": [
-        "Los horarios son ilustrativos.",
-        "La secuencia muestra retraso en avisos, no pérdida de reservas."
+        "The timestamps are illustrative.",
+        "The sequence shows delayed notifications, not lost bookings."
       ]
     }
   ]
@@ -824,8 +824,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "tree",
   "meta": {
-    "title": "Descomposición por capacidades",
-    "locale": "es",
+    "title": "Capability decomposition",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint"
   },
@@ -837,56 +837,56 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     {
       "id": "catalogo",
       "parent": "brisa",
-      "label": "Catálogo"
+      "label": "Catalog"
     },
     {
       "id": "reservas",
       "parent": "brisa",
-      "label": "Reservas"
+      "label": "Bookings"
     },
     {
       "id": "operaciones",
       "parent": "brisa",
-      "label": "Operaciones"
+      "label": "Operations"
     },
     {
       "id": "buscar",
       "parent": "catalogo",
-      "label": "Buscar"
+      "label": "Search"
     },
     {
       "id": "publicar",
       "parent": "catalogo",
-      "label": "Publicar"
+      "label": "List property"
     },
     {
       "id": "confirmar",
       "parent": "reservas",
-      "label": "Confirmar"
+      "label": "Confirm"
     },
     {
       "id": "cancelar",
       "parent": "reservas",
-      "label": "Cancelar"
+      "label": "Cancel"
     },
     {
       "id": "notificar",
       "parent": "operaciones",
-      "label": "Notificar"
+      "label": "Notify"
     },
     {
       "id": "observar",
       "parent": "operaciones",
-      "label": "Observar"
+      "label": "Monitor"
     }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Cómo leer este árbol",
+      "title": "How to read this tree",
       "items": [
-        "Las líneas significan pertenencia, no tráfico.",
-        "Cada capacidad tiene exactamente un padre."
+        "Lines show ownership, not traffic.",
+        "Each capability has exactly one parent."
       ]
     }
   ]
@@ -900,8 +900,8 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 1,
   "diagram_type": "waterfall",
   "meta": {
-    "title": "Presupuesto de una petición",
-    "locale": "es",
+    "title": "Request time budget",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint",
     "evidence": "illustrative",
@@ -910,14 +910,14 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "spans": [
     {
       "id": "peticion",
-      "name": "POST /reservas",
+      "name": "POST /bookings",
       "start": 0,
       "end": 320,
       "service": "API"
     },
     {
       "id": "identidad",
-      "name": "Verificar identidad",
+      "name": "Verify identity",
       "start": 0,
       "end": 35,
       "parent": "peticion",
@@ -925,7 +925,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     },
     {
       "id": "disponibilidad",
-      "name": "Consultar fechas",
+      "name": "Check availability",
       "start": 35,
       "end": 150,
       "parent": "peticion",
@@ -933,7 +933,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     },
     {
       "id": "precio",
-      "name": "Calcular precio",
+      "name": "Calculate price",
       "start": 35,
       "end": 100,
       "parent": "peticion",
@@ -941,7 +941,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     },
     {
       "id": "transaccion",
-      "name": "Reserva + outbox",
+      "name": "Booking + outbox",
       "start": 150,
       "end": 290,
       "parent": "peticion",
@@ -949,7 +949,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
     },
     {
       "id": "respuesta",
-      "name": "Preparar respuesta",
+      "name": "Prepare response",
       "start": 290,
       "end": 320,
       "parent": "peticion",
@@ -959,10 +959,10 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "cards": [
     {
       "dot": "cyan",
-      "title": "Tiempos ilustrativos",
+      "title": "Illustrative timings",
       "items": [
-        "No son mediciones ni compromisos de rendimiento.",
-        "Precio y disponibilidad se consultan en paralelo."
+        "These are not measurements or performance commitments.",
+        "Price and availability are calculated in parallel."
       ]
     }
   ]
@@ -976,24 +976,24 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "De la solicitud a la confirmación",
-    "locale": "es",
+    "title": "From request to confirmation",
+    "locale": "en",
     "quality_profile": "showcase",
     "visual_preset": "blueprint",
     "legend": {
       "mode": "auto",
       "entries": {
         "frontend": {
-          "label": "Interacción"
+          "label": "Interaction"
         },
         "backend": {
-          "label": "Proceso"
+          "label": "Process"
         },
         "security": {
-          "label": "Decisión"
+          "label": "Decision"
         },
         "database": {
-          "label": "Persistencia"
+          "label": "Persistence"
         }
       }
     }
@@ -1001,15 +1001,15 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "lanes": [
     {
       "id": "viajero",
-      "label": "Viajero"
+      "label": "Traveler"
     },
     {
       "id": "reservas",
-      "label": "Reservas"
+      "label": "Bookings"
     },
     {
       "id": "excepcion",
-      "label": "Sin disponibilidad",
+      "label": "No availability",
       "variant": "exception"
     }
   ],
@@ -1025,48 +1025,48 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "lane": "viajero",
       "col": 0,
       "type": "frontend",
-      "label": "Solicitar",
-      "sublabel": "Fechas elegidas"
+      "label": "Request",
+      "sublabel": "Selected dates"
     },
     {
       "id": "validar",
       "lane": "reservas",
       "col": 1,
       "type": "security",
-      "label": "Validar",
-      "sublabel": "¿Hay plazas?"
+      "label": "Check",
+      "sublabel": "Space available?"
     },
     {
       "id": "guardar",
       "lane": "reservas",
       "col": 2,
       "type": "database",
-      "label": "Confirmar",
-      "sublabel": "Reserva + outbox"
+      "label": "Confirm",
+      "sublabel": "Booking + outbox"
     },
     {
       "id": "confirmar",
       "lane": "viajero",
       "col": 3,
       "type": "frontend",
-      "label": "Ver reserva",
-      "sublabel": "201 confirmada"
+      "label": "View booking",
+      "sublabel": "201 confirmed"
     },
     {
       "id": "rechazar",
       "lane": "excepcion",
       "col": 1,
       "type": "backend",
-      "label": "Rechazar",
-      "sublabel": "409 conflicto"
+      "label": "Reject",
+      "sublabel": "409 conflict"
     },
     {
       "id": "alternativa",
       "lane": "excepcion",
       "col": 3,
       "type": "frontend",
-      "label": "Otras fechas",
-      "sublabel": "Nueva solicitud"
+      "label": "Other dates",
+      "sublabel": "New request"
     }
   ],
   "edges": [
@@ -1074,14 +1074,14 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "solicitar-validar",
       "from": "solicitar",
       "to": "validar",
-      "label": "Consulta",
+      "label": "Checks",
       "variant": "default"
     },
     {
       "id": "validar-guardar",
       "from": "validar",
       "to": "guardar",
-      "label": "Disponible",
+      "label": "Available",
       "variant": "emphasis"
     },
     {
@@ -1095,7 +1095,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "validar-rechazar",
       "from": "validar",
       "to": "rechazar",
-      "label": "Ocupado",
+      "label": "Unavailable",
       "variant": "security",
       "role": "error"
     },
@@ -1103,7 +1103,7 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
       "id": "rechazar-alternativa",
       "from": "rechazar",
       "to": "alternativa",
-      "label": "Propone",
+      "label": "Suggests",
       "variant": "default",
       "role": "branch"
     }
@@ -1111,10 +1111,10 @@ These examples describe the fictional Brisa reservation system, not ArcShape ser
   "cards": [
     {
       "dot": "cyan",
-      "title": "Dos resultados",
+      "title": "Two outcomes",
       "items": [
-        "La validación inicial no sustituye la restricción de la base de datos.",
-        "Un conflicto concurrente también termina en 409."
+        "The initial check does not replace the database constraint.",
+        "A concurrent conflict also returns 409."
       ]
     }
   ]
