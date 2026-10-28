@@ -1,5 +1,11 @@
 # @arcshape/cli
 
+## 0.2.0
+
+### Minor Changes
+
+- 1289709: Add native diagram fences, compact interactive publication and dedicated diagram pages while preserving Mermaid and self-contained snapshots. Ship evidence-grounded authoring and opt-in migration guidance for the supported diagram families.
+
 ## 0.1.6
 
 ### Patch Changes
