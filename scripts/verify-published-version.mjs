@@ -4,7 +4,8 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
-export const PUBLISH_VERIFICATION_ATTEMPTS = 24;
+// npm visibility lagged by over two minutes during the 0.2.0 publication.
+export const PUBLISH_VERIFICATION_ATTEMPTS = 60;
 export const PUBLISH_VERIFICATION_DELAY_MS = 5_000;
 const { name: packageName } = JSON.parse(
   await readFile(
