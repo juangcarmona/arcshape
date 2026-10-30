@@ -1,4 +1,4 @@
-import { it, expect } from "vitest";
+import { it, expect, describe, beforeEach, afterEach } from "vitest";
 import {
   readFile,
   mkdtemp,
@@ -68,9 +68,10 @@ it("preserves sequence notes and semantic graph attributes, cardinalities and ti
   expect(await get("timeline")).toContain("2026-10-20T10:00:00+02:00");
 });
 
-it("generates, checks and safely regenerates coordinated bundles without duplicate navigation", async () => {
-  const root = await mkdtemp(join(tmpdir(), "arcshape-bundle-"));
-  try {
+describe("coordinated bundles", () => {
+  let root, section, dir, source, json, svg, md;
+  beforeEach(async () => {
+    root = await mkdtemp(join(tmpdir(), "arcshape-bundle-"));
     await writeFile(join(root, "README.md"), "# Architecture\n");
     for (let i = 1; i <= 12; i++) {
       const number = String(i).padStart(2, "0"),
@@ -81,25 +82,32 @@ it("generates, checks and safely regenerates coordinated bundles without duplica
         `---\ntitle: Section ${number}\narc42-section: "${number}"\ndescription: Test section\n---\n\n# Section ${number}\n`,
       );
     }
-    const section = join(root, "06-section"),
-      dir = join(section, "diagrams");
+    section = join(root, "06-section");
+    dir = join(section, "diagrams");
     await mkdir(dir);
-    const source = await readFile(
+    source = await readFile(
       new URL(
         "../docs/architecture/08-crosscutting-concepts/diagrams/sequence.archify.json",
         import.meta.url,
       ),
       "utf8",
     );
-    const json = join(dir, "sequence.archify.json"),
-      svg = join(dir, "sequence.svg"),
-      md = join(dir, "sequence.md");
+    json = join(dir, "sequence.archify.json");
+    svg = join(dir, "sequence.svg");
+    md = join(dir, "sequence.md");
     await writeFile(json, source);
     await writeFile(
       join(section, "README.md"),
       (await readFile(join(section, "README.md"), "utf8")) +
         "\n![Booking](./diagrams/sequence.svg)\n<!-- arcshape-diagram-source: ./diagrams/sequence.archify.json -->\n",
     );
+  });
+  afterEach(async () => {
+    await rm(root, { recursive: true, force: true });
+  });
+
+  // Each journey has its own fixture and bounded browser work; do not share mutations.
+  it("retains SVG-only compatibility for native features without Mermaid export", async () => {
     const segmented = JSON.parse(source);
     segmented.segments = [{ from: 130, to: 250, label: "Phase" }];
     await writeFile(json, JSON.stringify(segmented));
@@ -107,18 +115,21 @@ it("generates, checks and safely regenerates coordinated bundles without duplica
     await generatePreviews(root, { bundles: false, check: true });
     await expect(readFile(md, "utf8")).rejects.toThrow();
     await expect(generatePreviews(root)).rejects.toThrow(/sequence segments/);
-    await rm(svg);
-    await writeFile(json, source);
+  }, 60000);
+
+  it("generates and checks bundles without duplicate navigation", async () => {
     expect(await generatePreviews(root)).toBe(1);
     expect(await generatePreviews(root, { check: true })).toBe(1);
-    const originalSvg = await readFile(svg, "utf8"),
-      originalMd = await readFile(md, "utf8");
     expect((await loadDocs(root)).sections[5].supporting).toHaveLength(0);
     await writeFile(
       join(dir, "explanation.md"),
       "# Authored supporting text\n",
     );
     expect((await loadDocs(root)).sections[5].supporting).toHaveLength(1);
+  }, 60000);
+
+  it("detects stale bundles and safely regenerates both companions", async () => {
+    await generatePreviews(root);
     await writeFile(
       json,
       source.replace("Confirm a booking", "Updated booking"),
@@ -128,29 +139,30 @@ it("generates, checks and safely regenerates coordinated bundles without duplica
     );
     await generatePreviews(root);
     expect(await readFile(md, "utf8")).toContain("Updated booking");
-    const updatedMd = await readFile(md, "utf8"),
-      updatedSvg = await readFile(svg, "utf8");
+  }, 60000);
+
+  it("refuses modified outputs and dangling symlink targets", async () => {
+    await generatePreviews(root);
+    const originalMd = await readFile(md, "utf8"),
+      originalSvg = await readFile(svg, "utf8");
     await writeFile(
       md,
-      updatedMd.replace("Updated booking", "Edited companion"),
+      originalMd.replace("Confirm a booking", "Edited companion"),
     );
     await expect(generatePreviews(root)).rejects.toThrow(/modified Markdown/);
-    expect(await readFile(svg, "utf8")).toBe(updatedSvg);
-    await writeFile(md, updatedMd);
-    await writeFile(svg, updatedSvg + "<!-- edited -->\n");
+    expect(await readFile(svg, "utf8")).toBe(originalSvg);
+    await writeFile(md, originalMd);
+    await writeFile(svg, originalSvg + "<!-- edited -->\n");
     await expect(generatePreviews(root)).rejects.toThrow(
       /modified generated SVG/,
     );
     await writeFile(svg, originalSvg);
     await writeFile(md, originalMd);
-    await writeFile(json, source);
     await generatePreviews(root, { check: true });
     if (process.platform !== "win32") {
       await rm(md);
       await symlink(root + "-outside.md", md);
       await expect(generatePreviews(root)).rejects.toThrow();
     }
-  } finally {
-    await rm(root, { recursive: true, force: true });
-  }
-}, 60000);
+  }, 60000);
+});
