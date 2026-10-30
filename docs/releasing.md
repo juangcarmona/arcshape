@@ -38,6 +38,12 @@ remains `arcshape`.
    version-matched SBOM. GitHub Release creation is an evidence step in this
    workflow; it does not trigger another publisher.
 
+GitHub Release notes prepend the matching package changelog entry to GitHub's
+generated change summary. Put adopter upgrade steps and copyable migration
+prompts in the pending changeset so they reach both the package changelog and
+the release notes. Internal development hostnames and private-network preview
+links do not belong in public release notes or pull request descriptions.
+
 Only the protected CI job publishes the package. Do not manually bump the
 package version, create release tags, or publish from a developer workstation
 for a normal release.

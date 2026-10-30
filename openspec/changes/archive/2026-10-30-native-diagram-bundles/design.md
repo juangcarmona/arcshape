@@ -7,7 +7,7 @@ The existing image/source pair already supports SVG in Markdown and a native wid
 
 ## Goals / Non-Goals
 
-Migrate every current architecture diagram into a local diagrams directory and publish the same rich reader on Bastion. Keep legacy sources usable. Do not invent universal lossless native/Mermaid conversion.
+Migrate every current architecture diagram into a local diagrams directory and publish the same rich reader in the local development preview. Keep legacy sources usable. Do not invent universal lossless native/Mermaid conversion.
 
 ## Decisions
 

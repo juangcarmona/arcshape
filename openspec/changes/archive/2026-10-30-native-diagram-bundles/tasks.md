@@ -17,7 +17,7 @@
 
 ## 3. Runtime evidence
 
-- [x] 3.1 Run deterministic and browser checks, rebuild the live Bastion site, inspect desktop/mobile screenshots and report exact bundle counts and reachable URLs before any commit.
+- [x] 3.1 Run deterministic and browser checks, rebuild the local development site, inspect desktop/mobile screenshots and report exact bundle counts and review access before any commit.
 
 ## Workflow follow-up
 

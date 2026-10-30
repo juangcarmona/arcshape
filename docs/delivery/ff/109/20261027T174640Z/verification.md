@@ -19,7 +19,7 @@ Checks were derived from the current `ci.yml`, `assurance.yml`, `security.yml`, 
 
 Test-change relevance: `not-applicable(no testable code changed)`. The test suite is regression evidence, not evidence that the proposed interactive feature exists.
 
-The first local `npm run verify` exited 1 because Chromium could not start its sandbox on Bastion. No application fix was needed: the repository's existing `GITHUB_ACTIONS=true` browser configuration was used for the full rerun, which passed all 130 tests in 25 files and the build. After the product-review correction, the full command passed again with 132 tests in 26 files; the preceding build had emitted additional helper tests into ignored build output. The failing first attempt is not hidden or counted as passing.
+The first local `npm run verify` exited 1 because Chromium could not start its sandbox on the development host. No application fix was needed: the repository's existing `GITHUB_ACTIONS=true` browser configuration was used for the full rerun, which passed all 130 tests in 25 files and the build. After the product-review correction, the full command passed again with 132 tests in 26 files; the preceding build had emitted additional helper tests into ignored build output. The failing first attempt is not hidden or counted as passing.
 
 ## Remaining verification
 
@@ -29,4 +29,4 @@ The live rules query confirmed required contexts for six Quality matrix jobs, Pr
 
 ## Visual evidence boundary
 
-No visual content changed, so there are no new screenshot claims. The approved prototype remains separately served on Bastion and was checked as active with an HTTP 200 response. Its existing screenshots do not prove future package integration. Implementation must provide current rendered screenshots before visual changes are committed.
+No visual content changed, so there are no new screenshot claims. The approved prototype remains separately served on the development host and was checked as active with an HTTP 200 response. Its existing screenshots do not prove future package integration. Implementation must provide current rendered screenshots before visual changes are committed.

@@ -2,7 +2,9 @@
 
 ## Current delivery: native bundles
 
-CHG-NATIVE-DIAGRAM-BUNDLES is applied. The explicit migration now has 15 complete JSON/SVG/fenced-Mermaid-Markdown bundles (45 files) across sections 03, 05, 06, 07 and 08. Main architecture pages use SVG/native-source pairs; the live Bastion reader displays native widgets in all five views. Packaged and provider authoring guidance defaults to bundles while retaining existing Mermaid compatibility.
+The maintainer accepted the native diagram presentation. See [the CI/release follow-up](ci-followup.md) for upgrade instructions, public documentation cleanup and the ZAP false-positive correction; current-head CI remains a separate integration requirement.
+
+CHG-NATIVE-DIAGRAM-BUNDLES is applied. The explicit migration now has 15 complete JSON/SVG/fenced-Mermaid-Markdown bundles (45 files) across sections 03, 05, 06, 07 and 08. Main architecture pages use SVG/native-source pairs; the local development reader displays native widgets in all five views. Packaged and provider authoring guidance defaults to bundles while retaining existing Mermaid compatibility.
 
 Full local verification passed 197 tests across 32 files and all 14 browser E2E journeys. Explicit checking passed all 15 bundles. Product/model validation and current citations passed; OpenSpec is synchronized and archived at `openspec/changes/archive/2026-10-30-native-diagram-bundles`. Screenshots were inspected before commit. See [bundle migration](bundle-migration.md) and its hashed inventory for exact scope, proof and limitations. Human review, merge, production deployment and npm publication remain separate and are not claimed.
 
@@ -14,7 +16,7 @@ The new OpenSpec slice is archived at `openspec/changes/archive/2026-10-30-merma
 
 Final local verification: `TMPDIR=/var/tmp GITHUB_ACTIONS=true npm run verify` passed 185 tests across 31 files plus formatting, lint, typecheck and build. The complete Playwright suite passed all 14 journeys in 3.2 minutes, including a converted simple sequence and an unsupported-fragment fallback. Clean packed installation and both publication formats are covered by the unit/integration suite. Product checks passed for 37 accepted artifacts; current OpenSpec and architecture citations have no stale, tampered or unresolved records. OpenSpec reports requirement-length warnings but no errors. Dependency audit passed without unexcepted High/Critical vulnerabilities. Remote matrix, secrets, CodeQL, SBOM/license and DAST still require the updated PR's own CI evidence.
 
-The eight screenshots under [native-publication](evidence/native-publication/) were captured and visually inspected before this follow-up commit, using the working tree based on `56120df`; the displayed revision is that base, not an assertion of clean final-head evidence. They show context, containers, selection, a dedicated view, light/dark, mobile, sequence and overview. Wide mobile diagrams need zoom or the dedicated page for detail. The LAN preview remains http://192.168.0.3:4180/ and is not production.
+The eight screenshots under [native-publication](evidence/native-publication/) were captured and visually inspected before this follow-up commit, using the working tree based on `56120df`; the displayed revision is that base, not an assertion of clean final-head evidence. They show context, containers, selection, a dedicated view, light/dark, mobile, sequence and overview. Wide mobile diagrams need zoom or the dedicated page for detail. The local preview is not production.
 
 Product approval does not approve the implementation PR, architecture acceptance, merge or release. Finish the current-head CI review, obtain maintainer approval of PR #118, then follow the reviewed Changesets Version Packages and protected npm-publish flow. No npm publication or production deployment is claimed here.
 
@@ -48,7 +50,7 @@ Product model checks passed for 37 accepted artifacts. OpenSpec validation passe
 
 The PNGs in [evidence](evidence/) were captured and inspected before the implementation commit, from the working tree based on `820e6a2` (not a clean final-head build): context and containers in light mode, sequence, context in dark mode, context on a 390px mobile viewport, and the separate Archify Blueprint page. The main figures remain Mermaid; no native viewer replaces them. Wide mobile diagrams still need the separate zoomable page for detailed reading.
 
-The LAN preview is served at http://192.168.0.3:4180/ for the maintainer on the same network. It is a development preview, not production.
+The maintainer reviewed a locally served development preview, not production.
 
 ## Next
 

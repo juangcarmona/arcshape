@@ -10,6 +10,6 @@ The maintainer said “LGTM” for the implementation and authorized one indepen
 
 Post-merge CodeQL exposed three additional High URL-key findings on `1289709`, despite the green PR analysis. [Issue #112](https://github.com/juangcarmona/arcshape/issues/112) and [PR #113](https://github.com/juangcarmona/arcshape/pull/113) corrected them in `f0c7819`; CodeQL, CI, Security, Assurance and the portal then passed on that main commit, and alerts 76–78 are fixed. The scoped Archify CodeQL exception remains unchanged and expires 2026-11-26. The [retrospective](../../../../reviews/issue-109.md) records the lesson. A Version Packages PR is open; stable npm publication was skipped.
 
-The Brisa preview at port 4179 is unchanged. A separate CLI-generated review site is served at http://192.168.0.3:4180/ (same LAN/VPN).
+The original prototype is unchanged. A separate CLI-generated review site was served locally for the maintainer.
 
 Historical refinement findings remain in the dated evidence files. The base was `c1e38279a6b7276ec4f606177c7e41a99d64c771`; the branch was zero commits behind fetched main at implementation verification.

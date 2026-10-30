@@ -10,7 +10,7 @@ Issue #117's maintainer approved CHG-NATIVE-DIAGRAM-BUNDLES and clarified that M
 - Generate and verify JSON/SVG/Markdown diagram bundles through the packaged CLI.
 - Keep canonical native JSON editable; derive SVG and supported Mermaid semantic projections with provenance and overwrite guards.
 - Exclude generated companion-only Markdown from duplicate reader navigation.
-- Explicitly migrate the architecture diagrams, including deployment and initialization, and rebuild the Bastion preview.
+- Explicitly migrate the architecture diagrams, including deployment and initialization, and rebuild the local development preview.
 
 ## Capabilities
 

@@ -46,6 +46,6 @@ Native renderer coverage is broader than Mermaid conversion coverage. Do not adv
 
 ## Verification and continuation
 
-Read [progress](progress.md) and the latest selected OpenSpec slice for actual results. Use current scripts/workflows, not cached commands. This host uses `TMPDIR=/var/tmp` because /tmp is out of inodes. The LAN/VPN preview is http://192.168.0.3:4180/.
+Read [progress](progress.md) and the latest selected OpenSpec slice for actual results. Use current scripts/workflows, not cached commands. Verification used `TMPDIR=/var/tmp` because the default temporary directory lacked available inodes. Preview reproduction instructions are in [bundle migration](bundle-migration.md).
 
 Continue sequentially without subagents. Human product approval is recorded; implementation review, merge acceptance and protected release approval remain separate gates.

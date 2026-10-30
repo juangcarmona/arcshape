@@ -1,4 +1,4 @@
-# Native bundle migration on Bastion
+# Native bundle migration
 
 The maintainer approved CHG-NATIVE-DIAGRAM-BUNDLES and explicitly selected standard `.md` companions with fenced Mermaid. ProductShape applied the five model modifications. Work stayed on `feat/117-mermaid-first-diagrams`, without subagents. Merge and publication remain pending human review.
 
@@ -29,7 +29,7 @@ Mermaid sequence exports retain ordered messages and notes. Other supported fami
 
 ## Runtime and screenshots
 
-The development reader is served at http://192.168.0.3:4180/ for the same LAN/VPN. Direct review routes include [runtime](http://192.168.0.3:4180/index.html#/section/06), [deployment](http://192.168.0.3:4180/index.html#/section/07) and [gallery](http://192.168.0.3:4180/index.html#/section/08/diagram-gallery).
+The generated development reader was reviewed locally. To reproduce it, run `arcshape site build --format interactive --out <preview-directory>` and serve that directory with a static HTTP server. Review routes are `index.html#/section/06` (runtime), `index.html#/section/07` (deployment) and `index.html#/section/08/diagram-gallery` (gallery). Internal hostnames and network addresses are not public review links.
 
 Screenshots in [evidence/bundles](evidence/bundles/) were captured and inspected before commit from a working tree based on `95195af`. The displayed revision identifies that base, not a clean final-head claim. Desktop, mobile, light/dark, selection and full-page views are included. A first tall deployment layout was rejected visually and replaced with a compact layout; native label validation also caught and prevented publishing an overflowing report label.
 
