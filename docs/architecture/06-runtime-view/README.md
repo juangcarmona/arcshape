@@ -50,7 +50,7 @@ Initialization is preview-first and deliberately boring: it does not inspect sou
 
 `arcshape site build` reads the README, twelve canonical section documents, and any supporting Markdown beneath their section directories, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes the requested output file (default `docs/architecture-site/index.html`). Supporting Markdown keeps its authored relative paths in the reader: nested folders become collapsible navigation groups, folder `README.md` files provide folder pages, and supporting pages show contextual breadcrumbs. The GitHub Pages workflow writes its projection to `_site/architecture/index.html` with the exact source revision. It does not modify canonical Markdown.
 
-Native fences add one build-time rendering step. The default snapshot embeds their static images; `--format interactive` publishes compact viewers and dedicated pages from the same source. Validation or rendering errors stop publication. An interactive directory is replaced only when its ownership inventory still matches every file. Sequence diagrams remain Mermaid because ordered messages and fragments are outside the initial enhancement subset.
+Native fences add one build-time rendering step. The default snapshot embeds their static images; `--format interactive` publishes compact viewers and dedicated pages from the same source. Validation or rendering errors stop publication. An interactive directory is replaced only when its ownership inventory still matches every file. Simple sequences convert to native diagrams; sequences with unsupported fragments retain their complete Mermaid representation.
 
 ```mermaid
 sequenceDiagram
@@ -71,10 +71,10 @@ sequenceDiagram
 
 The diagram shows the successful path. Malformed input, a rendering failure, or modified output leaves the prior publication in place. The runtime boundary is explained in [cross-cutting concepts](../08-crosscutting-concepts/README.md); the trade-off is recorded in [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md).
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:12b15427336f47eb5c3b12d7ecec43ccb7c6a7b050ca207321f9d0321ab327fe" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
 
-The builder first resolves local sidecars and parses Mermaid. Every Mermaid fence uses the Mermaid renderer in the main document. Compatible flows also become native input in memory for separate deep-dive pages; unsupported diagrams receive no Archify link. Native outputs are rendered once, paired previews are checked for freshness, and only then is the complete site published. The source files remain unchanged.
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:a712817e0391105d373a939d0cae074861cb3afe8ae6cfd6180cb18cc07cb943" -->
+The builder first resolves local sidecars and parses Mermaid. Supported flows and simple sequences become native input in memory, replacing only the generated representation. Unsupported diagrams retain Mermaid without an unavailable native link. Native outputs are rendered once, paired previews are checked for freshness, and only then is the complete site published. The source files remain unchanged.
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
 
 ### Resume an evidence-analysis session
 

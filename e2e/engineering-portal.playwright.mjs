@@ -192,11 +192,13 @@ test("portal links to revision-stamped model and architecture routes", async ({
   expect(readerFocus.visible).toBe(true);
   expect(readerFocus.outline).toBe("solid");
   await page.goto(`${origin}architecture/#/section/03`);
-  await page.locator("figure.diagram").scrollIntoViewIfNeeded();
-  await expect(page.locator("figure.diagram svg")).toHaveCount(1);
-  await expect(page.locator("figure.diagram iframe")).toHaveCount(0);
+  await page.locator("figure[data-native-diagram]").scrollIntoViewIfNeeded();
+  await expect(page.locator("figure.diagram")).toHaveCount(0);
+  await expect(page.locator("figure[data-native-diagram] iframe")).toHaveCount(
+    1,
+  );
   const dedicated = await page
-    .locator(".archify-deep-dive")
+    .locator("figure[data-native-diagram] .native-open")
     .getAttribute("href");
   expect(dedicated).toContain("/arcshape/architecture/diagrams/");
   await page.goto(dedicated);

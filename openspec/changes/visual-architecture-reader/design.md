@@ -6,10 +6,10 @@
 
 `docs/architecture` is the canonical Markdown source. The reader generator loads its README and twelve arc42 sections, extracts fenced Mermaid blocks, renders them at build time through the pinned Mermaid CLI and Puppeteer, sanitizes SVG, then embeds the SVG in a self-contained HTML reader. The generated reader has responsive diagram styling and section routes. The existing context, building-block, and runtime views demonstrate C4 and sequence diagrams in sections 03, 05, and 06.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
 
 `arcshape validate` checks the arc42 document structure and optional links/citations; it does not parse Mermaid. `arcshape site build` is the actual diagram validation path: it rejects a missing `accTitle`, then Mermaid CLI parsing/rendering fails the build for invalid syntax, before the generated HTML is written. The Pages workflow builds the reader for pull requests and publishes the generated output from `main`.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
 
 The product model already describes Markdown arc42 authoring, C4 diagram workflows, a generated reader, and reader comprehension. The existing `arc42-section-guidance` capability covers the twelve arc42 sections. This change is documentation and test coverage for behavior already present, so it introduces no product requirement and uses `skip_specs: true`.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->

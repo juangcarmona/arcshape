@@ -16,27 +16,25 @@ export async function prepareDiagrams(document, docsDir, deepDiveMode) {
       () => `\n\n\`\`\`archify\n${reference.source.trimEnd()}\n\`\`\`\n\n`,
     );
   }
-  const deepDives = [];
-  if (deepDiveMode === "off") return { body, origins, deepDives };
+  if (deepDiveMode === "off") return { body, origins };
   const marked = new Marked({ gfm: true });
-  const blocks = [];
-  marked.walkTokens(marked.lexer(body), (token) => {
-    if (
-      token.type === "code" &&
-      String(token.lang).split(/\s/)[0] === "mermaid"
-    )
-      blocks.push(token);
-  });
+  const tokens = marked.lexer(body);
+  // Nested Markdown remains Mermaid; replace only actual top-level fence tokens.
+  const blocks = tokens.filter(
+    (token) =>
+      token.type === "code" && String(token.lang).split(/\s/)[0] === "mermaid",
+  );
   for (const [index, token] of blocks.entries()) {
     const location = `${document.file}: Mermaid diagram ${index + 1}`;
     const result = await convertMermaid(token.text, { location });
     if (result.status === "unsupported") {
       process.stderr.write(
-        `${location}: no Archify deep dive (${result.reason})\n`,
+        `${location}: retaining Mermaid (${result.reason})\n`,
       );
       continue;
     }
-    deepDives.push({ index, mermaid: token.text, source: result.source });
+    origins.set(result.source.trimEnd(), { mermaid: token.text });
+    token.raw = `\n\n\`\`\`archify\n${result.source.trimEnd()}\n\`\`\`\n\n`;
   }
-  return { body, origins, deepDives };
+  return { body: tokens.map((token) => token.raw).join(""), origins };
 }

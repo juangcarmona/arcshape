@@ -353,7 +353,7 @@ describe("packed ArcShape package", () => {
             format === "snapshot" ? out : join(out, "index.html"),
             "utf8",
           ),
-        ).toContain("Renderer: Mermaid");
+        ).toContain("native-diagram");
       }
       expect(
         await readFile(

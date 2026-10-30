@@ -5,7 +5,7 @@ export async function runSite(args, { packageRoot }) {
   const options = parseOptions(args);
   if (options.help) {
     process.stdout.write(
-      "Usage: arcshape site build [--docs <directory>] [--format snapshot|interactive] [--archify-deep-dives auto|off] [--out <html-file|directory>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]\n       arcshape site previews [--docs <directory>] [--check]\n\n",
+      "Usage: arcshape site build [--docs <directory>] [--format snapshot|interactive] [--diagram-engine auto|mermaid] [--out <html-file|directory>] [--title <name>] [--source-ref <ref>] [--site-base </path/>]\n       arcshape site previews [--docs <directory>] [--check]\n\n",
     );
     process.stdout.write(
       "Build a self-contained reader site from the canonical architecture Markdown.\n",
@@ -40,6 +40,8 @@ export async function runSite(args, { packageRoot }) {
   const argv = [generator, docsDir, "--out", outFile];
   if (options.format) argv.push("--format", options.format);
   if (options.deepDives) argv.push("--archify-deep-dives", options.deepDives);
+  if (options.diagramEngine)
+    argv.push("--diagram-engine", options.diagramEngine);
   if (options.title) argv.push("--title", options.title);
   if (options.sourceRef) argv.push("--source-ref", options.sourceRef);
   if (options.siteBase) argv.push("--site-base", options.siteBase);
@@ -72,6 +74,7 @@ function parseOptions(args) {
         "--site-base",
         "--format",
         "--archify-deep-dives",
+        "--diagram-engine",
       ].includes(arg)
     ) {
       const value = args[index + 1];
@@ -80,6 +83,7 @@ function parseOptions(args) {
       if (arg === "--docs") options.docs = value;
       if (arg === "--format") options.format = value;
       if (arg === "--archify-deep-dives") options.deepDives = value;
+      if (arg === "--diagram-engine") options.diagramEngine = value;
       if (arg === "--out") options.out = value;
       if (arg === "--title") options.title = value;
       if (arg === "--source-ref") options.sourceRef = value;

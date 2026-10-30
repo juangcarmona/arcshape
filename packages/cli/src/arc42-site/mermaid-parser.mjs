@@ -4,6 +4,7 @@ import { JSDOM } from "jsdom";
 const dom = new JSDOM("");
 globalThis.window = dom.window;
 globalThis.document = dom.window.document;
+globalThis.Option = dom.window.Option;
 try {
   const { default: mermaid } = await import("mermaid");
   mermaid.initialize({ startOnLoad: false, securityLevel: "strict" });
@@ -15,6 +16,17 @@ try {
   const db = diagram.db;
   parentPort.postMessage({
     type: diagram.type,
+    title,
+    ...(diagram.type === "sequence"
+      ? {
+          actors: [...db.getActors().entries()],
+          messages: db.getMessages(),
+          boxes: db.getBoxes(),
+          created: [...db.getCreatedActors().keys()],
+          destroyed: [...db.getDestroyedActors().keys()],
+          numbered: db.showSequenceNumbers(),
+        }
+      : {}),
     ...(/^flowchart/.test(diagram.type)
       ? {
           vertices: [...db.getVertices().values()],

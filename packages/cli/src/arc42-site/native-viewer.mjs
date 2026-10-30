@@ -263,11 +263,6 @@ function readerRuntime() {
     document.documentElement.dataset.appearance ||
     (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   function sync() {
-    for (const link of content.querySelectorAll(".archify-deep-dive")) {
-      const url = new URL(link.href);
-      url.searchParams.set("theme", theme());
-      link.href = url.href;
-    }
     for (const [frame, observer] of frames)
       if (!frame.isConnected) {
         observer.disconnect();

@@ -5,7 +5,7 @@
 ## Context
 
 The reader generator loads supporting Markdown recursively and already assigns stable routes, but `generate.mjs` currently drops `relativeFile` before passing documents to `buildSnapshotHtml`. `shell.mjs` therefore receives a flat array and emits one supporting list for each section. The current generated page has an ES5 hash router, inline styles, inert JSON data, and no external runtime resources.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
 <!-- pdac:cite id="UC-PUBLISH-ARCHITECTURE-VIEW" digest="sha256:9ce6cd65b911aeec3601b986283f966a0232a1c59a3534f975fff4c3abddea9c" -->
 
 The authored section-directory layout and its recursive supporting-document scan remain the source of truth. The change is confined to the generated reader projection and its tests; it does not add a persistence layer, route migration, or external dependency.

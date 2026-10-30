@@ -5,6 +5,38 @@ const flow = (direction = "LR") =>
   `flowchart ${direction}\naccTitle: Reservation flow\nA[Request] -->|yes| B{Available}\nB --> A`;
 
 describe("Mermaid-native semantic conversion", () => {
+  it("preserves simple sequence participants, aliases and message order", async () => {
+    const { status, source } = await convertMermaid(
+      "sequenceDiagram\naccTitle: Request and reply\nparticipant A as Client\nparticipant B as Service\nA->>B: Request\nB-->>A: Reply",
+    );
+    expect(status).toBe("converted");
+    const data = JSON.parse(source);
+    expect(data.diagram_type).toBe("sequence");
+    expect(data.participants.map(({ id, label }) => [id, label])).toEqual([
+      ["A", "Client"],
+      ["B", "Service"],
+    ]);
+    expect(data.messages).toMatchObject([
+      { from: "A", to: "B", label: "Request", y: 170 },
+      { from: "B", to: "A", label: "Reply", y: 240, variant: "return" },
+    ]);
+  });
+  it.each([
+    "A->>A: Self call",
+    "A-)B: Async",
+    "Note over A,B: Details",
+    "A->>+B: Activate\nB-->>-A: Return",
+    "autonumber\nA->>B: Numbered",
+    "loop Retry\nA->>B: Request\nend",
+    "actor C\nC->>B: Request",
+    "box Boundary\nparticipant C\nend\nA->>B: Request",
+  ])("retains unsupported sequence semantics: %s", async (body) => {
+    expect(
+      await convertMermaid(
+        `sequenceDiagram\naccTitle: Unsupported\nparticipant A\nparticipant B\n${body}`,
+      ),
+    ).toMatchObject({ status: "unsupported", reason: expect.any(String) });
+  });
   it("preserves identities, labels, directed cycles and decision meaning", async () => {
     const result = await convertMermaid(flow());
     expect(result.status).toBe("converted");

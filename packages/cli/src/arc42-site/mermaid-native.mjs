@@ -44,6 +44,87 @@ const plain = (text) =>
   !/[<>\r\n]|(?:https?:|data:|javascript:|file:)|#(?:\w+);/i.test(text);
 const identifier = (id) => /^[a-zA-Z][a-zA-Z0-9_-]*$/.test(id);
 
+function convertSequence(diagram, location) {
+  const unsupported = (reason) => ({ status: "unsupported", reason });
+  const { actors, messages } = diagram;
+  if (
+    actors.length < 2 ||
+    actors.length > 12 ||
+    !messages.length ||
+    messages.length > 100 ||
+    diagram.boxes.length ||
+    diagram.created.length ||
+    diagram.destroyed.length ||
+    diagram.numbered
+  )
+    return unsupported(
+      "sequence limits, boxes, creation/destruction or numbering",
+    );
+  for (const [id, actor] of actors)
+    if (
+      !identifier(id) ||
+      !plain(actor.description) ||
+      actor.type !== "participant" ||
+      actor.wrap ||
+      actor.rectData ||
+      Object.keys(actor.links).length ||
+      Object.keys(actor.properties).length
+    )
+      return unsupported("sequence participant notation, label or metadata");
+  const ids = new Set(actors.map(([id]) => id));
+  for (const message of messages)
+    if (
+      ![0, 1].includes(message.type) ||
+      !ids.has(message.from) ||
+      !ids.has(message.to) ||
+      message.from === message.to ||
+      !plain(message.message) ||
+      message.activate ||
+      message.wrap ||
+      message.centralConnection
+    )
+      return unsupported(
+        "sequence fragments, notes, activations or arrow notation",
+      );
+  const data = {
+    schema_version: 1,
+    diagram_type: "sequence",
+    meta: {
+      title: diagram.title,
+      locale: "en",
+      visual_preset: "blueprint",
+      quality_profile: "showcase",
+      viewBox: [
+        Math.max(640, actors.length * 220 + 100),
+        Math.max(480, messages.length * 70 + 240),
+      ],
+      legend: {
+        mode: "auto",
+        entries: {
+          default: { label: "Solid message" },
+          return: { label: "Dashed message" },
+        },
+      },
+    },
+    participants: actors.map(([id, actor]) => ({
+      id,
+      type: "backend",
+      icon: "none",
+      label: actor.description,
+    })),
+    messages: messages.map((message, index) => ({
+      id: `message-${index}`,
+      from: message.from,
+      to: message.to,
+      y: 170 + index * 70,
+      label: message.message,
+      ...(message.type === 1 ? { variant: "return" } : {}),
+    })),
+  };
+  parseNativeDiagram(JSON.stringify(data), { location });
+  return { status: "converted", source: JSON.stringify(data) };
+}
+
 /** A rejected conversion is not a rejected Mermaid diagram. Exceptions are errors. */
 export async function convertMermaid(
   source,
@@ -60,6 +141,8 @@ export async function convertMermaid(
     });
   }
   const unsupported = (reason) => ({ status: "unsupported", reason });
+  if (/%%\{|^---/m.test(source)) return unsupported("configuration directives");
+  if (diagram.type === "sequence") return convertSequence(diagram, location);
   if (!/^flowchart/.test(diagram.type))
     return unsupported(`diagram family ${diagram.type}`);
   const { vertices, edges, groups } = diagram;

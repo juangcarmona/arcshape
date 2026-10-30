@@ -26,7 +26,7 @@ ArcShape publishes two independent static surfaces. The public marketing site is
 
 ## Development
 
-Author diagrams as Mermaid in Markdown; the generated web view keeps Mermaid and links compatible diagrams to separate Archify deep dives. Native-only diagrams use local JSON with generated SVG previews, and existing native fences remain supported. Use `arcshape site build --format interactive --out docs/architecture-interactive` for compact interactive diagrams with dedicated pages, or keep the default single-file snapshot. See [diagram authoring and migration](docs/diagrams.md).
+Author diagrams as Mermaid in Markdown; the generated web view presents native diagrams for compatible sources and retains Mermaid for unsupported constructs. Native-only diagrams use local JSON with generated SVG previews, and existing native fences remain supported. Use `arcshape site build --format interactive --out docs/architecture-interactive` for compact interactive diagrams with dedicated pages, or keep the default single-file snapshot. See [diagram authoring and migration](docs/diagrams.md).
 
 Use Node.js 22 or newer and npm:
 

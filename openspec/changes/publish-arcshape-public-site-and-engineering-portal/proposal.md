@@ -40,7 +40,7 @@ The full active ArcShape model was reviewed before drafting. This change does no
 
 - `FR-ASSISTED-WORKFLOWS` grounds public descriptions of ArcShape's assisted architecture-documentation capabilities.
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:7ced0abebbb528485c8fe92cdc6ce20d9e0c53a7e0b60d4fe3678d2cc29bd640" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
 
 - `FR-ARC42-DOCUMENTATION` and `CON-ARC42-FRAMEWORK` ground the canonical Markdown and arc42 source of the Architecture Snapshot.
 
@@ -49,7 +49,7 @@ The full active ArcShape model was reviewed before drafting. This change does no
 
 - `FR-READER-VIEW`, `TERM-ARCHITECTURE-DOCUMENTATION`, `TERM-ARCHITECTURE-VIEW`, and `QR-READER-COMPREHENSION` ground the architecture reader's derived, navigable, non-technical-reader-facing presentation.
 
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
 <!-- pdac:cite id="TERM-ARCHITECTURE-DOCUMENTATION" digest="sha256:086bafc90ef2104f0e8b2ebaca54bcdaffb16a7b5ffef374b0ef5e38111bf4ad" -->
 <!-- pdac:cite id="TERM-ARCHITECTURE-VIEW" digest="sha256:3e258fedf716972d2e2905974920be0bd4e9e44fb5f074b6fb5fc00925f36b45" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->

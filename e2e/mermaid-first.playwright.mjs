@@ -20,6 +20,8 @@ const flow =
   'flowchart LR\n  accTitle: Reservation flow\n  Traveler[Traveler] -->|Request| API["API\nHTTP endpoint"]\n  API -->|Check| Available{Available}\n  Available -->|Retry| Traveler';
 const sequence =
   "sequenceDiagram\n  accTitle: Reservation sequence\n  participant Client\n  participant API\n  alt Available\n    Client->>API: Reserve\n  else Unavailable\n    API-->>Client: Conflict\n  end";
+const simpleSequence =
+  "sequenceDiagram\naccTitle: Simple request\nparticipant Client\nparticipant API\nClient->>API: Reserve\nAPI-->>Client: Confirmed";
 let directory, output, snapshot, forced, server, url, section, source, sidecar;
 const cli = (args) =>
   execFile(
@@ -55,6 +57,8 @@ test.beforeAll(async () => {
     flow +
     "\n```\n\n## Unsupported sequence\n\n```mermaid\n" +
     sequence +
+    "\n```\n\n## Simple sequence\n\n```mermaid\n" +
+    simpleSequence +
     "\n```\n\n## Native-only example\n\n![Confirm a booking](./diagrams/sequence.svg)\n<!-- arcshape-diagram-source: ./diagrams/sequence.json -->\n\n" +
     "More architecture context.\n\n".repeat(60);
   await writeFile(section, source);
@@ -67,8 +71,8 @@ test.beforeAll(async () => {
     "build",
     "--format",
     "interactive",
-    "--archify-deep-dives",
-    "off",
+    "--diagram-engine",
+    "mermaid",
     "--out",
     forced,
   ]);
@@ -95,21 +99,21 @@ test.afterAll(async () => {
   if (directory) await rm(directory, { recursive: true, force: true });
 });
 
-test("keeps Mermaid in the article and opens a separate interactive Archify deep dive", async ({
+test("publishes native diagrams from Mermaid and preserves the original source", async ({
   page,
   context,
 }, info) => {
   await page.goto(url);
-  const primary = page.locator("figure.diagram").first();
-  await expect(page.locator("figure.diagram svg")).toHaveCount(2);
-  await expect(primary.locator("iframe")).toHaveCount(0);
-  await expect(page.locator("figure[data-native-diagram]")).toHaveCount(1);
+  const primary = page.locator("figure[data-native-diagram]").first();
+  await expect(page.locator("figure.diagram svg")).toHaveCount(1);
+  await expect(primary.locator("iframe")).toHaveCount(1);
+  await expect(page.locator("figure[data-native-diagram]")).toHaveCount(3);
   await expect(page.locator(".diagram-source")).toHaveCount(0);
-  await expect(page.locator(".archify-deep-dive")).toHaveCount(1);
+  await expect(page.locator(".archify-deep-dive")).toHaveCount(0);
   await primary.scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath("mermaid-light.png") });
   const popupPromise = context.waitForEvent("page");
-  await primary.getByRole("link", { name: "Deep dive with Archify" }).click();
+  await primary.getByRole("link", { name: "Open full screen" }).click();
   const popup = await popupPromise;
   await popup.waitForSelector("html[data-ready]");
   expect(await popup.evaluate(() => window.opener)).toBe(null);
@@ -152,6 +156,9 @@ test("retains static offline diagrams and honors explicit Mermaid rendering", as
   ).toBeVisible();
   await expect(
     page.getByRole("img", { name: "Confirm a booking" }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("img", { name: "Simple request" }).first(),
   ).toBeVisible();
   await context.close();
   const html = await readFile(join(forced, "index.html"), "utf8");

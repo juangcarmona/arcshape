@@ -1,5 +1,19 @@
 # Issue #117 execution
 
+## Latest direction: native publication from Mermaid
+
+The maintainer explicitly approved CHG-MERMAID-NATIVE-PUBLICATION and its application after reviewing the earlier PR. ProductShape applied five modified artifacts and completed that change. This replaces the Mermaid-primary/deep-dive-only direction recorded below: compatible Mermaid now becomes native input in memory, native SVG in snapshots and native widgets plus dedicated pages in folder output. The authored Markdown remains Mermaid. Unsupported diagrams remain complete Mermaid; `--diagram-engine mermaid` selects Mermaid-only publication. The native-only gallery and legacy sources remain supported.
+
+The new OpenSpec slice is archived at `openspec/changes/archive/2026-10-30-mermaid-native-publication`. Its four tasks are complete and its delta is synchronized into the existing main capability. The proposed ADR and AI guidance describe the same direction. No subagents were launched.
+
+Final local verification: `TMPDIR=/var/tmp GITHUB_ACTIONS=true npm run verify` passed 185 tests across 31 files plus formatting, lint, typecheck and build. The complete Playwright suite passed all 14 journeys in 3.2 minutes, including a converted simple sequence and an unsupported-fragment fallback. Clean packed installation and both publication formats are covered by the unit/integration suite. Product checks passed for 37 accepted artifacts; current OpenSpec and architecture citations have no stale, tampered or unresolved records. OpenSpec reports requirement-length warnings but no errors. Dependency audit passed without unexcepted High/Critical vulnerabilities. Remote matrix, secrets, CodeQL, SBOM/license and DAST still require the updated PR's own CI evidence.
+
+The eight screenshots under [native-publication](evidence/native-publication/) were captured and visually inspected before this follow-up commit, using the working tree based on `56120df`; the displayed revision is that base, not an assertion of clean final-head evidence. They show context, containers, selection, a dedicated view, light/dark, mobile, sequence and overview. Wide mobile diagrams need zoom or the dedicated page for detail. The LAN preview remains http://192.168.0.3:4180/ and is not production.
+
+Product approval does not approve the implementation PR, architecture acceptance, merge or release. Finish the current-head CI review, obtain maintainer approval of PR #118, then follow the reviewed Changesets Version Packages and protected npm-publish flow. No npm publication or production deployment is claimed here.
+
+## Earlier delivery record
+
 Branch: `feat/117-mermaid-first-diagrams`. Base: `39cc95b`. Work proceeded in one session without subagents.
 
 ## Decisions and evidence

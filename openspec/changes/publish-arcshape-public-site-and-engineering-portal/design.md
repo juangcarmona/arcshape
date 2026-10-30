@@ -83,8 +83,8 @@ The current Product Definition prohibits ArcShape-operated data collection; stat
 
 Keep ArcShape's visual identity and site implementation self-owned while aligning its visual direction with ProductShape. Do not import ProductShape site assets or depend on a shared site package. All product copy remains ArcShape-specific: separate current capabilities from work that is planned or exploratory, and link technical readers to the engineering portal and its source-backed artifacts. The public site is communication about ArcShape; it does not imply the site itself is a hosted ArcShape product service.
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:7ced0abebbb528485c8fe92cdc6ce20d9e0c53a7e0b60d4fe3678d2cc29bd640" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
 
 ### Alternatives considered

@@ -89,8 +89,30 @@ it("keeps sources unchanged and preserves duplicate Mermaid occurrences in order
   const before = document.body;
   const result = await prepareDiagrams(document, root, "auto");
   expect(document.body).toBe(before);
-  expect(result.body).toBe(before);
-  expect(result.deepDives.map((d) => d.index)).toEqual([0, 1]);
+  expect(result.body.match(/```archify/g)).toHaveLength(2);
+  expect(result.body).not.toContain("```mermaid");
+  expect([...result.origins.values()][0].mermaid).toContain("Price $&");
   expect(result.body).toContain("Price $&");
   expect(result.body).toContain("Between");
 }, 15000);
+
+it("leaves Mermaid unchanged when native publication is disabled", async () => {
+  const body =
+    "```mermaid\nflowchart LR\naccTitle: Flow\nA[Start] --> B[End]\n```";
+  expect(
+    (await prepareDiagrams({ file: "README.md", body }, root, "off")).body,
+  ).toBe(body);
+});
+
+it("does not replace literal fence examples before a real diagram", async () => {
+  const fence =
+    "```mermaid\nflowchart LR\naccTitle: Flow\nA[Start] --> B[End]\n```\n";
+  const literal = "````markdown\n" + fence + "````\n\n";
+  const { body } = await prepareDiagrams(
+    { file: "README.md", body: literal + fence },
+    root,
+    "auto",
+  );
+  expect(body).toContain(literal);
+  expect(body.match(/```archify/g)).toHaveLength(1);
+});

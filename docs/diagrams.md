@@ -1,10 +1,12 @@
 # Diagrams in architecture documentation
 
-Write standard `mermaid` fences with an `accTitle` by default. Mermaid-capable Markdown readers display the diagram directly. The generated web documentation renders Mermaid too. Interactive folder builds can additionally generate a separate Archify Blueprint page, linked below a compatible diagram as “Deep dive with Archify ↗”. The link opens another tab; the main page keeps the original Mermaid diagram.
+Write standard `mermaid` fences with an `accTitle` by default. Mermaid-capable Markdown readers display the authored diagram. ArcShape automatically publishes a native representation wherever faithful conversion is supported: SVG in a self-contained HTML snapshot, or a compact interactive widget with a full-page link in a folder site. Unsupported diagrams remain fully rendered with Mermaid. Generation never rewrites authored Markdown.
 
-Archify deep-dive coverage includes text rectangle/rounded/decision nodes, directed normal/dashed/thick edges, labels, cycles, TB/TD/LR/BT/RL orientation and representable subgraph boundaries. Native decision nodes use a tagged card rather than an exact diamond. Styling, click/configuration directives, HTML/Markdown labels, self-loops and other shapes/families retain Mermaid. Deep-dive conversion is bounded to 100 nodes, 200 edges, 20 boundaries and 90-character plain label lines; quoted two-line labels keep title and detail. Sequences, including fragments, keep Mermaid. Use `--archify-deep-dives off` to skip optional pages. Invalid sources or renderer failures stop the build; valid unsupported syntax simply has no Archify deep-dive link.
+Automatic native conversion coverage includes text rectangle/rounded/decision nodes, directed normal/dashed/thick edges, labels, cycles, TB/TD/LR/BT/RL orientation and representable subgraph boundaries. Native decision nodes use a tagged card rather than an exact diamond. Styling, click/configuration directives, HTML/Markdown labels, self-loops and other shapes/families retain Mermaid. Flowchart conversion is bounded to 100 nodes, 200 edges, 20 boundaries and 90-character plain label lines; quoted two-line labels keep title and detail. Simple sequences support 2–12 plain participants (including aliases), up to 100 ordered messages, and solid/dashed filled-arrow messages (`->>` / `-->>`). Labels are plain text up to 90 characters. Actors, notes, fragments, activations, boxes, self-calls, numbering, asynchronous/open/cross arrows and creation/destruction remain complete Mermaid diagrams. Participant colors are presentation, not inferred architecture roles. Use `--diagram-engine mermaid` to retain Mermaid rendering throughout (the earlier `--archify-deep-dives off` is also accepted). Invalid sources or renderer failures stop the build; valid unsupported syntax uses Mermaid with a located diagnostic.
 
 Existing `archify` JSON fences remain supported. For new native-only diagrams, keep JSON in a local sidecar and show its generated SVG in Markdown:
+
+Automatic conversion applies to top-level Mermaid fences. Diagrams nested inside lists or blockquotes retain Mermaid; fenced Markdown examples remain literal examples.
 
 ```markdown
 ![System context](./diagrams/context.svg)
@@ -42,7 +44,7 @@ For example: “Create a C4-style container view of this repository as Mermaid. 
 
 Native families are architecture (context/container/component), sequence, workflow/activity, lifecycle, dataflow, ERD, class, tree, timeline and waterfall. This is not every Mermaid construct. Keep Mermaid when notation or semantics do not fit. Package and skill updates do not convert existing documents automatically.
 
-Obsidian and Confluence do not acquire a native viewer through this feature. Keep an existing Mermaid diagram if your configured publication workflow cannot preserve a readable native representation. Archify deep-dive generation is a build-time operation; it does not migrate sources or add image uploads.
+Obsidian and Confluence do not acquire a native viewer through this feature. Keep an existing Mermaid diagram if your configured publication workflow cannot preserve a readable native representation. Native conversion is a build-time operation; it does not migrate sources or add image uploads.
 
 ## Source limits
 

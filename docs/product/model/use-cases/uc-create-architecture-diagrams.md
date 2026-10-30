@@ -32,7 +32,7 @@ Repository evidence and any existing diagram sources are available. The maintain
 2. The assistant examines repository evidence and relevant approved product intent, identifies elements and relationships, and records unresolved assumptions.
 3. The assistant selects a supported representation that preserves the required meaning, respecting explicit maintainer choices.
 4. The assistant authors one standard Mermaid source within the canonical Markdown documentation by default and invokes deterministic validation and rendering. For native-only capabilities, it authors a local JSON sidecar and generates the linked SVG preview in Markdown.
-5. The assistant verifies that the main documentation still renders Mermaid and compatible Archify exploration opens on a separate page, then inspects the rendered diagram for readable labels, relationships, layout and interaction, and presents the source changes and visual evidence.
+5. The assistant verifies that Markdown retains its canonical Mermaid source and generated documentation presents a native diagram wherever supported: a static native SVG in self-contained HTML, or a compact interactive native diagram with a dedicated page in folder output. It checks that unsupported semantics remain fully represented by Mermaid, inspects readable labels, relationships, layout and interaction, and presents the source changes and visual evidence.
 6. The maintainer reviews the proposal and decides what to accept.
 
 ## Alternative Flows
