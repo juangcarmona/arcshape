@@ -304,8 +304,22 @@ describe("packed ArcShape package", () => {
         (await readFile(runtimePath, "utf8")) +
         "\n```archify\n" +
         nativeSource +
-        "\n```\n";
+        "\n```\n\n```mermaid\nflowchart LR\naccTitle: Packed consumer flow\nA[Start] --> B[Done]\n```\n\n" +
+        "![Native preview](./diagrams/native.svg)\n<!-- arcshape-diagram-source: ./diagrams/native.json -->\n";
       await writeFile(runtimePath, runtimeMarkdown);
+      const previewDirectory = join(
+        repository,
+        "docs/architecture/06-runtime-view/diagrams",
+      );
+      await mkdir(previewDirectory);
+      await writeFile(join(previewDirectory, "native.json"), nativeSource);
+      for (const extra of [[], ["--check"]]) {
+        const previews = await runNpm(
+          ["exec", "--offline", "--", "arcshape", "site", "previews", ...extra],
+          { cwd: repository, timeout: 60000 },
+        );
+        expect(previews.exitCode, previews.stderr).toBe(0);
+      }
       for (const format of ["snapshot", "interactive"]) {
         const out = join(
           repository,
@@ -334,6 +348,12 @@ describe("packed ArcShape package", () => {
             "utf8",
           ),
         ).toContain("Confirmar una reserva");
+        expect(
+          await readFile(
+            format === "snapshot" ? out : join(out, "index.html"),
+            "utf8",
+          ),
+        ).toContain("Renderer: Mermaid");
       }
       expect(
         await readFile(

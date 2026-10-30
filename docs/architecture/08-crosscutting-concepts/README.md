@@ -20,13 +20,13 @@ Repository setup, validation, site generation, session state, and Obsidian sync 
 
 ## Diagram execution and publication
 
-Native diagram JSON stays in canonical Markdown. The adapter validates the pinned family schema and rejects resource-bearing inputs before rendering. The package contains a minimal Archify subset with file hashes and attribution; the build browser blocks network requests and exports a sanitized static SVG. This is trusted local build execution, not a sandbox for third-party renderer plugins.
+Standard Mermaid stays in canonical Markdown; native-only JSON lives beside a paired SVG preview. Legacy JSON fences remain supported. The builder parses Mermaid in a bounded worker thread with an isolated DOM, classifies the whole diagram and uses Dagre plus the native architecture renderer for separate supported deep-dive pages. The main document always renders Mermaid; valid unsupported syntax has no deep-dive link; malformed input and renderer failures stop the build. Preview references are confined to the real documentation root, and builds verify freshness without writing source files. The adapter validates the pinned family schema and rejects resource-bearing inputs before rendering. The package contains a minimal Archify subset with file hashes and attribution; the build browser blocks network requests and exports a sanitized static SVG. This is trusted local build execution, not a sandbox for third-party renderer plugins.
 
 Interactive pages execute the viewer in `sandbox="allow-scripts"` iframes, without same-origin access. Dedicated pages keep the same boundary by assigning inert viewer data to a sandboxed `srcdoc` frame. Both wrappers validate message source windows and bounded message shapes; they accept no arbitrary URLs or DOM commands. CSP restricts scripts to generated hashes and blocks network connections. Static images remain available without JavaScript.
 
 Publication stages the entire directory before replacing intact ArcShape-owned output. Its file-hash manifest detects modified or unrelated files; output cannot overlap the authored documentation or traverse symlinks. Snapshot generation retains the existing single-file contract. See [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md) and the [fictional family gallery](diagram-gallery.md).
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:12b15427336f47eb5c3b12d7ecec43ccb7c6a7b050ca207321f9d0321ab327fe" -->
 
 ## Observability and operations
 

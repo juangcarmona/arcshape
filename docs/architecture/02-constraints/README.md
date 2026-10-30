@@ -13,7 +13,7 @@ description: Technical, organizational, and convention constraints that shape th
 - Agent workflows use portable Agent Skills with provider adapters. Codex, Cursor, Windsurf/Cascade, Gemini CLI, OpenCode, and GitHub Copilot share `.agents/skills/`; Claude Code uses `.claude/skills/`.
 - Provider compatibility follows each provider's documented discovery paths; ArcShape does not claim runtime testing inside provider applications.
 
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:e49c7df3dcaf71ce1cde9d9064de4c53c28d54b6cbe3fb7152153fded4fcd8d6" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:a712817e0391105d373a939d0cae074861cb3afe8ae6cfd6180cb18cc07cb943" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 
 ## Organizational constraints

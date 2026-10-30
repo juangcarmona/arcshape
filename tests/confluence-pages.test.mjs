@@ -89,8 +89,8 @@ describe("multi-page Confluence sync", () => {
 
     const preview = await syncConfluencePages({ ...options, dryRun: true });
     expect(preview.exitCode).toBe(0);
-    // Index, twelve sections, two ADRs and the diagram gallery.
-    expect(preview.outcomes).toHaveLength(16);
+    // Index, twelve sections, three ADRs and the diagram gallery.
+    expect(preview.outcomes).toHaveLength(17);
     expect(
       preview.outcomes.every((outcome) => outcome.action === "create"),
     ).toBe(true);
@@ -100,8 +100,8 @@ describe("multi-page Confluence sync", () => {
     expect(created.exitCode).toBe(0);
     expect(
       created.outcomes.filter((outcome) => outcome.action === "created"),
-    ).toHaveLength(16);
-    expect(pages.size).toBe(16);
+    ).toHaveLength(17);
+    expect(pages.size).toBe(17);
     const index = [...pages.values()].find(
       (page) => page.title === "ArcShape — Architecture Documentation",
     );
@@ -115,7 +115,7 @@ describe("multi-page Confluence sync", () => {
         "utf8",
       ),
     );
-    expect(Object.keys(manifest.pages)).toHaveLength(16);
+    expect(Object.keys(manifest.pages)).toHaveLength(17);
     const repeated = await syncConfluencePages({ ...options, dryRun: true });
     expect(repeated.exitCode).toBe(0);
     expect(

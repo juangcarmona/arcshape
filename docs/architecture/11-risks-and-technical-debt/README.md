@@ -19,6 +19,9 @@ description: Known risks, technical debt, and their planned responses.
 
 ## Technical debt
 
+- Mermaid parser/database and Dagre layout APIs are pinned integration dependencies. Semantic fixtures protect labels, directions, cycles and boundary membership; unsupported constructs must remain Mermaid. Native sidecars need committed previews and an explicit freshness check. [ADR-0003](../09-architecture-decisions/ADR-0003-enhance-mermaid-with-native-diagrams.md) records the proposed trade-off.
+
+
 - The pinned native viewer depends on upstream DOM and export APIs. Its browser tests and vendor hashes must pass before an update; system-font metrics still require visual inspection. [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md) records the proposed trade-off.
 - The native renderer is trusted package code, not an OS-isolated plugin. Source validation excludes filesystem/network-bearing features, while browser isolation protects readers. The residual build-time dependency risk remains part of security review.
 

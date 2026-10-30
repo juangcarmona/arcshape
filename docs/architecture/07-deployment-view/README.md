@@ -33,8 +33,8 @@ The source repository produces three independent kinds of output: the public pro
 The companion [Archify publication-boundaries diagram](../../../src/engineering-portal/public/diagrams/publication-boundaries.html) is a standalone static artifact generated from the reviewed candidate at `.archify/arcshape-publications/arcshape-publication-boundaries.json`.
 
 ```mermaid
-accTitle: ArcShape publication and adopter deployment boundaries
 %%{init: {"flowchart": {"padding": 40, "nodeSpacing": 50, "rankSpacing": 60}}}%%
+    accTitle: ArcShape publication and adopter deployment boundaries
 flowchart TB
     subgraph governance[Project governance]
         direction LR

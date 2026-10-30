@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "diagram_type": "erd",
+  "meta": {
+    "title": "Brisa relational model",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "layout": {
+    "mode": "grid",
+    "gapX": 100,
+    "gapY": 70,
+    "entityW": 240
+  },
+  "entities": [
+    {
+      "id": "traveler",
+      "label": "traveler",
+      "row": 0,
+      "col": 0,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "email",
+          "type": "varchar",
+          "key": "uk"
+        }
+      ]
+    },
+    {
+      "id": "booking",
+      "label": "booking",
+      "row": 0,
+      "col": 1,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "traveler_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "traveler.id"
+        },
+        {
+          "name": "property_id",
+          "type": "uuid",
+          "key": "fk",
+          "references": "property.id"
+        },
+        {
+          "name": "check_in",
+          "type": "date"
+        },
+        {
+          "name": "check_out",
+          "type": "date"
+        },
+        {
+          "name": "status",
+          "type": "varchar"
+        }
+      ]
+    },
+    {
+      "id": "property",
+      "label": "property",
+      "row": 0,
+      "col": 2,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "key": "pk"
+        },
+        {
+          "name": "name",
+          "type": "varchar"
+        },
+        {
+          "name": "capacity",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "booking-traveler",
+      "from": "booking",
+      "to": "traveler",
+      "label": "Traveler",
+      "fromCardinality": "many",
+      "toCardinality": "one"
+    },
+    {
+      "id": "booking-property",
+      "from": "booking",
+      "to": "property",
+      "label": "Stay",
+      "fromCardinality": "many",
+      "toCardinality": "one"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Reduced schema",
+      "items": [
+        "All columns of these three fictional tables are shown.",
+        "The outbox and billing are outside this view."
+      ]
+    }
+  ]
+}

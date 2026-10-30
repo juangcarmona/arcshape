@@ -43,4 +43,4 @@ The CLI owns setup, validation, bookkeeping, and rendering. Skills guide investi
 | Agent providers       | Discover and run selected ArcShape skills using repository context. |
 | Architecture reader   | Understand the system through a navigable, self-contained view.     |
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:7ced0abebbb528485c8fe92cdc6ce20d9e0c53a7e0b60d4fe3678d2cc29bd640" -->

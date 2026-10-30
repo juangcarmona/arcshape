@@ -1,6 +1,23 @@
-# Authoring native diagrams
+# Authoring readable diagrams
 
-Read this guide when creating a diagram or when the maintainer explicitly requests conversion. Keep the only editable diagram source in an `archify` JSON fence in its owning arc42 Markdown document. Use the adjacent family example as a starting point; replace its fictional Brisa content with repository evidence. Do not imply that proposed systems already exist.
+Author standard `mermaid` fences in the owning arc42 Markdown document by default, with an `accTitle`. The main reader always renders Mermaid. Interactive folder builds add a separate Blueprint deep-dive page for compatible flowcharts, linked with “Deep dive with Archify ↗”; unsupported diagrams stay Mermaid without an unavailable link. Use repository evidence for nodes and relationships, and identify assumptions.
+
+## Archify deep-dive coverage
+
+Flowcharts support TB/TD/LR/BT/RL, text rectangles and rounded nodes, decision nodes, directed normal/dashed/thick relationships, labels, cycles and representable subgraph boundaries. Native decisions use a tagged card instead of an exact diamond outline. Styling, click/configuration directives, HTML/Markdown labels, self-loops, boundary endpoints and other shapes remain Mermaid. Quoted two-line labels become a title and detail line. Labels are bounded plain text (up to 90 characters per line for enhancement); conversion is limited to 100 nodes, 200 edges and 20 boundaries. Sequence fragments, C4-specific DSL and other families remain Mermaid. A family existing in Archify does not imply its Mermaid syntax is convertible.
+
+Use `arcshape site build --archify-deep-dives off` to skip optional deep-dive generation. Snapshot builds keep Mermaid and do not generate separate pages. Invalid source and renderer errors must be corrected; they are not unsupported-feature fallback.
+
+## Native-only features
+
+Keep one local JSON sidecar and a generated SVG in Markdown, with this adjacent pair:
+
+```markdown
+![System context](./diagrams/context.svg)
+<!-- arcshape-diagram-source: ./diagrams/context.archify.json -->
+```
+
+After editing JSON, run `arcshape site previews` and `arcshape site previews --check`. Builds check freshness and never rewrite source files. Reference paths must stay inside the documentation root; external resources and symlink escape are rejected. Use the adjacent family example as a starting point and replace its fictional Brisa content with evidence. Existing `archify` fences remain supported for compatibility; new native-only diagrams use the readable preview path.
 
 | Question | Native family / example |
 | --- | --- |
@@ -32,4 +49,4 @@ Honor explicit engine choices. Use Mermaid for unsupported families, strict nota
 
 Updating ArcShape or its skills does not authorize rewriting documents. On an explicit migration request, inspect current diagrams and configured Obsidian/Confluence or other publication targets first. Convert only diagrams whose actors, boundaries, labels, cardinalities, ordering and exceptions can be preserved. If a target cannot receive a demonstrated readable representation, leave the original Mermaid unchanged and report the limitation before conversion. Native interactivity and automatic image upload to those tools are not provided by this release.
 
-There is no automatic universal converter and no second authored Mermaid copy required. The build generates both static and interactive representations from the native fence, without an LLM call.
+Separate deep dives use the installed parser and layout engine, without an LLM call. They never replace the Mermaid diagram in the main reader. Keep one editable source; never maintain Mermaid and JSON versions of the same diagram by hand.

@@ -40,7 +40,7 @@ The full active ArcShape model was reviewed before drafting. This change does no
 
 - `FR-ASSISTED-WORKFLOWS` grounds public descriptions of ArcShape's assisted architecture-documentation capabilities.
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:7ced0abebbb528485c8fe92cdc6ce20d9e0c53a7e0b60d4fe3678d2cc29bd640" -->
 
 - `FR-ARC42-DOCUMENTATION` and `CON-ARC42-FRAMEWORK` ground the canonical Markdown and arc42 source of the Architecture Snapshot.
 

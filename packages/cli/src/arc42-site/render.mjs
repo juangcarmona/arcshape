@@ -259,6 +259,7 @@ function createMarked(
   sourceRevision,
   siteBase,
   nativeDiagrams,
+  mermaidLinks,
 ) {
   const marked = new Marked({ gfm: true });
   const slugger = new GithubSlugger();
@@ -325,7 +326,10 @@ function createMarked(
               ? `<a href="${escapeHtml(revisionHref)}" rel="noopener noreferrer">${escapeHtml(sourceRevision)}</a>`
               : escapeHtml(sourceRevision)
             : "unavailable";
-          return `<figure class="diagram"><figcaption id="${diagramId}" class="diagram-caption"><span class="diagram-title">${escapeHtml(title)}</span><span class="diagram-renderer">Renderer: Mermaid</span><span>Source Markdown: ${source}</span><span>Source revision: ${revision}</span></figcaption>${labelledSvg}</figure>`;
+          const deepDive = mermaidLinks[index]
+            ? `<a class="native-open archify-deep-dive" href="${escapeHtml(mermaidLinks[index])}" target="_blank" rel="noopener noreferrer">Deep dive with Archify ↗</a>`
+            : "";
+          return `<figure class="diagram"><figcaption id="${diagramId}" class="diagram-caption"><span class="diagram-title">${escapeHtml(title)}</span><span class="diagram-renderer">Renderer: Mermaid</span><span>Source Markdown: ${source}</span><span>Source revision: ${revision}</span></figcaption>${labelledSvg}${deepDive}</figure>`;
         }
         const escaped = escapeHtml(text);
         return `<pre><code${lang ? ` class="language-${escapeHtml(lang)}"` : ""}>${escaped}</code></pre>\n`;
@@ -491,6 +495,7 @@ export async function renderMarkdown(
     sourceRevision,
     siteBase = "/",
     nativeDiagrams = [],
+    mermaidLinks = [],
   },
 ) {
   const diagramSources = extractMermaidSources(body);
@@ -512,6 +517,7 @@ export async function renderMarkdown(
     sourceRevision,
     siteBase,
     nativeDiagrams,
+    mermaidLinks,
   );
   const html = await renderer.marked.parse(stripDuplicateTitle(body, title));
   if (renderer.count() !== svgs.length)

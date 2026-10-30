@@ -1,0 +1,147 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "From request to confirmation",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "Interaction"
+        },
+        "backend": {
+          "label": "Process"
+        },
+        "security": {
+          "label": "Decision"
+        },
+        "database": {
+          "label": "Persistence"
+        }
+      }
+    }
+  },
+  "lanes": [
+    {
+      "id": "viajero",
+      "label": "Traveler"
+    },
+    {
+      "id": "reservas",
+      "label": "Bookings"
+    },
+    {
+      "id": "excepcion",
+      "label": "No availability",
+      "variant": "exception"
+    }
+  ],
+  "mainPath": [
+    "solicitar",
+    "validar",
+    "guardar",
+    "confirmar"
+  ],
+  "nodes": [
+    {
+      "id": "solicitar",
+      "lane": "viajero",
+      "col": 0,
+      "type": "frontend",
+      "label": "Request",
+      "sublabel": "Selected dates"
+    },
+    {
+      "id": "validar",
+      "lane": "reservas",
+      "col": 1,
+      "type": "security",
+      "label": "Check",
+      "sublabel": "Space available?"
+    },
+    {
+      "id": "guardar",
+      "lane": "reservas",
+      "col": 2,
+      "type": "database",
+      "label": "Confirm",
+      "sublabel": "Booking + outbox"
+    },
+    {
+      "id": "confirmar",
+      "lane": "viajero",
+      "col": 3,
+      "type": "frontend",
+      "label": "View booking",
+      "sublabel": "201 confirmed"
+    },
+    {
+      "id": "rechazar",
+      "lane": "excepcion",
+      "col": 1,
+      "type": "backend",
+      "label": "Reject",
+      "sublabel": "409 conflict"
+    },
+    {
+      "id": "alternativa",
+      "lane": "excepcion",
+      "col": 3,
+      "type": "frontend",
+      "label": "Other dates",
+      "sublabel": "New request"
+    }
+  ],
+  "edges": [
+    {
+      "id": "solicitar-validar",
+      "from": "solicitar",
+      "to": "validar",
+      "label": "Checks",
+      "variant": "default"
+    },
+    {
+      "id": "validar-guardar",
+      "from": "validar",
+      "to": "guardar",
+      "label": "Available",
+      "variant": "emphasis"
+    },
+    {
+      "id": "guardar-confirmar",
+      "from": "guardar",
+      "to": "confirmar",
+      "label": "COMMIT",
+      "variant": "default"
+    },
+    {
+      "id": "validar-rechazar",
+      "from": "validar",
+      "to": "rechazar",
+      "label": "Unavailable",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "rechazar-alternativa",
+      "from": "rechazar",
+      "to": "alternativa",
+      "label": "Suggests",
+      "variant": "default",
+      "role": "branch"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Two outcomes",
+      "items": [
+        "The initial check does not replace the database constraint.",
+        "A concurrent conflict also returns 409."
+      ]
+    }
+  ]
+}
