@@ -172,7 +172,8 @@ jobs:
           if gh release view "$GITHUB_TAG" >/dev/null 2>&1; then
             echo "GitHub Release ${GITHUB_TAG} already exists."
           else
-            gh release create "$GITHUB_TAG" --target "$RELEASE_COMMIT" --title "ArcShape ${version}" --generate-notes
+            node scripts/release-notes.mjs > "$RUNNER_TEMP/arcshape-release-notes.md"
+            gh release create "$GITHUB_TAG" --target "$RELEASE_COMMIT" --title "ArcShape ${version}" --notes-file "$RUNNER_TEMP/arcshape-release-notes.md" --generate-notes
           fi
           git fetch --tags --force origin
           RELEASE_TAG="$GITHUB_TAG" RELEASE_COMMIT="$RELEASE_COMMIT" node scripts/verify-release-version.mjs

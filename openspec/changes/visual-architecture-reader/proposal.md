@@ -6,7 +6,7 @@
 
 ArcShape already authors Mermaid beside arc42 Markdown and publishes sanitized, responsive diagrams in its generated reader, but the public documentation does not yet demonstrate the full authoring-to-publication path consistently. A focused deployment-view example and end-to-end regression coverage will make that existing capability easy to see and keep reliable without introducing a second diagram source.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:b7ab2591c05d0fbd32176878461e9138773da63aa2fe14a2932da341682495b9" -->
 
 ## What Changes
@@ -33,7 +33,7 @@ None. This proposal changes an example and regression coverage for existing beha
 - Existing pipeline only: Mermaid CLI, Puppeteer, SVG sanitization, standalone HTML generation, and GitHub Pages build/deploy workflow. No dependency or public CLI change is proposed.
 - Product artifacts considered: `FR-ARC42-DOCUMENTATION`, `FR-READER-VIEW`, `FR-C4-DIAGRAM-WORKFLOWS`, `QR-READER-COMPREHENSION`, and `CON-ARC42-FRAMEWORK`.
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:6e4b3f1fd8bc5fbd90932b62aab255fe5d75aac85a6761c80e3734eed8ec5d26" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:b7ab2591c05d0fbd32176878461e9138773da63aa2fe14a2932da341682495b9" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
 <!-- pdac:cite id="CON-ARC42-FRAMEWORK" digest="sha256:11948980ab0be21b0a7a61b2bc2d428ec4adeb5b73d808aa3d7df1b6b8329e79" -->

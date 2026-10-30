@@ -132,9 +132,11 @@ export function sanitizeNativeSvg(svg) {
   }
 }
 
-export async function renderNativeDiagrams(sources) {
+export async function renderNativeDiagrams(sources, { locations = [] } = {}) {
   const diagrams = sources.map((source, i) =>
-    parseNativeDiagram(source, { location: `archify diagram ${i + 1}` }),
+    parseNativeDiagram(source, {
+      location: locations[i] ?? `archify diagram ${i + 1}`,
+    }),
   );
   if (!diagrams.length) return [];
   const staging = await mkdtemp(join(tmpdir(), "arcshape-native-"));
@@ -166,7 +168,12 @@ export async function renderNativeDiagrams(sources) {
           timeout: 30000,
           maxBuffer: 1024 * 1024,
         },
-      );
+      ).catch((error) => {
+        throw new Error(
+          `${locations[i] ?? `archify diagram ${i + 1}`}: native rendering failed: ${error.stderr || error.message}`,
+          { cause: error },
+        );
+      });
       const rendered = await open(output, "r");
       let html;
       try {

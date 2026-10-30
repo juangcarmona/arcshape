@@ -27,7 +27,7 @@ ArcShape SHALL provide guidance for all twelve standard arc42 sections and relev
 ### Requirement: Select only task-relevant section references
 
 The architecture skill SHALL direct the assistant to relevant section and subsection references without requiring all detailed guidance in context at once.
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
 <!-- pdac:cite id="FR-ARC42-DOCUMENTATION" digest="sha256:117f2350fcf47272cc487a079adde4f2e245aeab1539cbcd92b608996731ce7a" -->
 
 #### Scenario: Work on one section or subsection

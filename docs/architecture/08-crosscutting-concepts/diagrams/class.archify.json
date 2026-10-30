@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "diagram_type": "class",
+  "meta": {
+    "title": "Persistence contract",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "layout": {
+    "mode": "grid",
+    "gapX": 110,
+    "gapY": 100
+  },
+  "types": [
+    {
+      "id": "servicio",
+      "label": "ConfirmBooking",
+      "kind": "class",
+      "row": 0,
+      "col": 0,
+      "methods": [
+        {
+          "name": "execute",
+          "parameters": "request",
+          "returns": "Booking"
+        }
+      ]
+    },
+    {
+      "id": "puerto",
+      "label": "Bookings",
+      "kind": "interface",
+      "row": 0,
+      "col": 1,
+      "methods": [
+        {
+          "name": "save",
+          "parameters": "booking",
+          "returns": "void",
+          "abstract": true
+        }
+      ]
+    },
+    {
+      "id": "adaptador",
+      "label": "PostgresBookings",
+      "kind": "class",
+      "row": 1,
+      "col": 1,
+      "methods": [
+        {
+          "name": "save",
+          "parameters": "booking",
+          "returns": "void"
+        }
+      ]
+    },
+    {
+      "id": "reserva",
+      "label": "Booking",
+      "kind": "class",
+      "row": 1,
+      "col": 0,
+      "attributes": [
+        {
+          "name": "id",
+          "type": "UUID"
+        },
+        {
+          "name": "status",
+          "type": "Status"
+        }
+      ],
+      "methods": [
+        {
+          "name": "confirm",
+          "returns": "void"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "usa",
+      "from": "servicio",
+      "to": "puerto",
+      "kind": "dependency",
+      "label": "Uses"
+    },
+    {
+      "id": "implementa",
+      "from": "adaptador",
+      "to": "puerto",
+      "kind": "realization"
+    },
+    {
+      "id": "crea",
+      "from": "servicio",
+      "to": "reserva",
+      "kind": "dependency",
+      "label": "Creates"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Selective detail",
+      "items": [
+        "The service depends on the persistence contract.",
+        "Members unrelated to that decision are omitted."
+      ]
+    }
+  ]
+}

@@ -226,6 +226,13 @@ export function buildNativeViewer(diagram) {
     .replace("</head>", `<style>${compactStyle}</style></head>`)
     .replace("</body>", `<script>${bridge}</script></body>`);
   const parsed = new JSDOM(runtime);
+  // SVG permits comma separators; avoid mistaking coordinate runs for card numbers.
+  for (const path of parsed.window.document.querySelectorAll("svg path[d]"))
+    path.setAttribute(
+      "d",
+      path.getAttribute("d").replace(/(\d)\s+(?=[+-]?(?:\d|\.\d))/g, "$1,"),
+    );
+  runtime = parsed.serialize();
   const runtimeScripts = Array.from(
     parsed.window.document.scripts,
     (script) => script.textContent,

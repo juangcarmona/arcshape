@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "From bookings to statistics",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "stages": [
+    {
+      "label": "Source"
+    },
+    {
+      "label": "Privacy"
+    },
+    {
+      "label": "Storage"
+    },
+    {
+      "label": "Consumption"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "outbox",
+      "type": "database",
+      "label": "Outbox",
+      "sublabel": "Bookings",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "minimizar",
+      "type": "security",
+      "label": "Minimize",
+      "sublabel": "Removes identity",
+      "stage": 1,
+      "row": 0
+    },
+    {
+      "id": "metricas",
+      "type": "database",
+      "label": "Metrics",
+      "sublabel": "By day and area",
+      "stage": 2,
+      "row": 0
+    },
+    {
+      "id": "panel",
+      "type": "frontend",
+      "label": "Panel",
+      "sublabel": "Occupancy",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "retencion",
+      "type": "backend",
+      "label": "Retention",
+      "sublabel": "Deletes old data",
+      "stage": 2,
+      "row": 2
+    }
+  ],
+  "flows": [
+    {
+      "id": "outbox-minimizar",
+      "from": "outbox",
+      "to": "minimizar",
+      "label": "Events",
+      "variant": "dashed"
+    },
+    {
+      "id": "minimizar-metricas",
+      "from": "minimizar",
+      "to": "metricas",
+      "label": "Aggregates",
+      "variant": "security"
+    },
+    {
+      "id": "metricas-panel",
+      "from": "metricas",
+      "to": "panel",
+      "label": "Totals",
+      "variant": "default"
+    },
+    {
+      "id": "metricas-retencion",
+      "from": "metricas",
+      "to": "retencion",
+      "label": "Expired data",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Minimal data",
+      "items": [
+        "The dashboard receives totals, not names or email addresses.",
+        "This flow is a fictional decision in the example."
+      ]
+    }
+  ]
+}

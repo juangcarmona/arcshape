@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Build native architecture diagrams",
+    "locale": "en",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1200,
+      730
+    ],
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "default": {
+          "label": "Solid message"
+        },
+        "return": {
+          "label": "Dashed message"
+        }
+      }
+    }
+  },
+  "participants": [
+    {
+      "id": "maintainer",
+      "type": "backend",
+      "icon": "none",
+      "label": "Maintainer"
+    },
+    {
+      "id": "site",
+      "type": "backend",
+      "icon": "none",
+      "label": "Site builder"
+    },
+    {
+      "id": "renderer",
+      "type": "backend",
+      "icon": "none",
+      "label": "Native adapter"
+    },
+    {
+      "id": "browser",
+      "type": "backend",
+      "icon": "none",
+      "label": "Build browser"
+    },
+    {
+      "id": "output",
+      "type": "backend",
+      "icon": "none",
+      "label": "Owned output"
+    }
+  ],
+  "messages": [
+    {
+      "id": "message-0",
+      "from": "maintainer",
+      "to": "site",
+      "y": 170,
+      "label": "Build interactive site"
+    },
+    {
+      "id": "message-1",
+      "from": "site",
+      "to": "renderer",
+      "y": 240,
+      "label": "Classify Mermaid and validate sources"
+    },
+    {
+      "id": "message-2",
+      "from": "renderer",
+      "to": "browser",
+      "y": 310,
+      "label": "Render HTML and export SVG"
+    },
+    {
+      "id": "message-3",
+      "from": "browser",
+      "to": "renderer",
+      "y": 380,
+      "label": "Static image",
+      "variant": "return"
+    },
+    {
+      "id": "message-4",
+      "from": "renderer",
+      "to": "site",
+      "y": 450,
+      "label": "Validated render artifacts",
+      "variant": "return"
+    },
+    {
+      "id": "message-5",
+      "from": "site",
+      "to": "output",
+      "y": 520,
+      "label": "Verify ownership and publish"
+    },
+    {
+      "id": "message-6",
+      "from": "site",
+      "to": "maintainer",
+      "y": 590,
+      "label": "Report output directory",
+      "variant": "return"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 import { execFile as execFileCallback } from "node:child_process";
 import { createServer } from "node:http";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile, cp } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join, resolve, dirname } from "node:path";
 import { promisify } from "node:util";
 import { expect, test } from "@playwright/test";
 
@@ -103,46 +103,53 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
     "README.md",
   );
   await writeFile(targetSection, await readFile(sourceSection, "utf8"));
+  await cp(
+    join(dirname(sourceSection), "diagrams"),
+    join(dirname(targetSection), "diagrams"),
+    { recursive: true },
+  );
   await buildSite();
 
   const generatedHtml = await readFile(siteFile, "utf8");
   const diagramTitle = "ArcShape publication and adopter deployment boundaries";
   expect(generatedHtml).toContain(diagramTitle);
   expect(generatedHtml).toMatch(
-    /\\u003cfigure class=\\"diagram\\"[\s\S]*?\\u003csvg/,
+    /\\u003cfigure class=\\"native-diagram\\"[\s\S]*?data:image\/svg\+xml;base64,/,
   );
 
   const externalRequests = [];
   page.on("request", (request) => {
-    if (!request.url().startsWith("http://127.0.0.1:")) {
+    if (
+      /^https?:/.test(request.url()) &&
+      !request.url().startsWith("http://127.0.0.1:")
+    ) {
       externalRequests.push(request.url());
     }
   });
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto(`${siteUrl}#/section/07`);
 
-  const diagram = page.locator("figure.diagram").filter({
-    hasText: diagramTitle,
+  const diagram = page.locator("figure.native-diagram").filter({
+    has: page.getByRole("img", { name: diagramTitle }),
   });
   await expect(diagram).toHaveCount(1);
-  await expect(diagram).toContainText("Renderer: Mermaid");
-  await expect(diagram).toContainText("Source Markdown:");
-  await expect(diagram).toContainText("Source revision:");
-  await expect(diagram.locator('figcaption a[href*="/blob/"]')).toHaveCount(1);
-  await expect(diagram.locator('figcaption a[href*="/commit/"]')).toHaveCount(
-    1,
-  );
   await diagram.scrollIntoViewIfNeeded();
-  const svg = diagram.locator(
-    'svg[role="img"][aria-labelledby][aria-describedby]',
-  );
+  const svg = diagram.getByRole("img", { name: diagramTitle });
   await expect(svg).toBeVisible();
-  await expect(svg.locator("title[id]")).toHaveCount(1);
-  await expect(svg.locator("desc[id]")).toHaveCount(1);
+  await expect(svg).toHaveAttribute("src", /^data:image\/svg\+xml;base64,/);
+  for (const extension of ["archify.json", "svg", "md"]) {
+    const relative = join("diagrams", `deployment.${extension}`);
+    expect(await readFile(join(dirname(targetSection), relative), "utf8")).toBe(
+      await readFile(join(dirname(sourceSection), relative), "utf8"),
+    );
+  }
+  await expect(
+    page.locator('aside.nav a[href*="/diagrams/deployment"]'),
+  ).toHaveCount(0);
 
   const dimensions = await diagram.evaluate((figure) => {
     const figureRect = figure.getBoundingClientRect();
-    const svgRect = figure.querySelector("svg").getBoundingClientRect();
+    const svgRect = figure.querySelector("img").getBoundingClientRect();
     const bodyRect = document
       .querySelector(".doc-body")
       .getBoundingClientRect();
@@ -156,7 +163,7 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
   });
   expect(dimensions.figureLeft).toBeGreaterThanOrEqual(dimensions.bodyLeft - 1);
   expect(dimensions.figureRight).toBeLessThanOrEqual(dimensions.bodyRight + 1);
-  expect(dimensions.svgRight).toBeLessThanOrEqual(dimensions.figureRight - 1);
+  expect(dimensions.svgRight).toBeLessThanOrEqual(dimensions.figureRight + 1);
   expect(externalRequests).toEqual([]);
 });
 

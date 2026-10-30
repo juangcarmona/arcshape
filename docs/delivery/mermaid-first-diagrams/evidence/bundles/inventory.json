@@ -1,0 +1,293 @@
+{
+  "baseCommit": "95195af",
+  "state": "uncommitted migration reviewed before commit",
+  "bundleCount": 15,
+  "fileCount": 45,
+  "bundles": [
+    {
+      "section": "03-context-and-scope",
+      "name": "context",
+      "title": "ArcShape system context",
+      "files": [
+        {
+          "path": "docs/architecture/03-context-and-scope/diagrams/context.archify.json",
+          "sha256": "d114883cd6a9f21fde8f4de45a0bfe0de615cf1cd7f57ec3dd78741a5935ba66"
+        },
+        {
+          "path": "docs/architecture/03-context-and-scope/diagrams/context.svg",
+          "sha256": "91b486e22104bc027b4dc5f36f510142750d5222d3c267e753d353a30aa410a4"
+        },
+        {
+          "path": "docs/architecture/03-context-and-scope/diagrams/context.md",
+          "sha256": "63cd4fcf9123f1c54968ebb1d856ec923b4ae2dacd08479e8ea2cbc375ebfce5"
+        }
+      ]
+    },
+    {
+      "section": "05-building-block-view",
+      "name": "containers",
+      "title": "ArcShape containers in a project repository",
+      "files": [
+        {
+          "path": "docs/architecture/05-building-block-view/diagrams/containers.archify.json",
+          "sha256": "26f36dbc5cd5abd7474e8039b561e42ff9ca135c38d73dbc2cea84bf9a279472"
+        },
+        {
+          "path": "docs/architecture/05-building-block-view/diagrams/containers.svg",
+          "sha256": "e718580e33f5bd607a5426bea606b9ac5e977a64fb6eec7a1bb14adb5bc95381"
+        },
+        {
+          "path": "docs/architecture/05-building-block-view/diagrams/containers.md",
+          "sha256": "e6223d6e38966e991a3eccbda867819472817569d1aa904ebe9f01963124e3ca"
+        }
+      ]
+    },
+    {
+      "section": "06-runtime-view",
+      "name": "initialization",
+      "title": "Safe ArcShape initialization flow",
+      "files": [
+        {
+          "path": "docs/architecture/06-runtime-view/diagrams/initialization.archify.json",
+          "sha256": "bf83689be0293faf1546cfcf30fdd155b693557c00e9210884252e21bbd5214e"
+        },
+        {
+          "path": "docs/architecture/06-runtime-view/diagrams/initialization.svg",
+          "sha256": "3b643d8aace725c7b3062b35db773f70a015b558d9c0681fff1e7e5114905f9a"
+        },
+        {
+          "path": "docs/architecture/06-runtime-view/diagrams/initialization.md",
+          "sha256": "98b12585b715e304f7e73df5e1b19ac058577a2fe7ec8e665b30a85310eb7615"
+        }
+      ]
+    },
+    {
+      "section": "06-runtime-view",
+      "name": "reader-build",
+      "title": "Build native architecture diagrams",
+      "files": [
+        {
+          "path": "docs/architecture/06-runtime-view/diagrams/reader-build.archify.json",
+          "sha256": "ffa2ce382f59af6758aa757722f065d97e915faa277d4b001a0430878eba9706"
+        },
+        {
+          "path": "docs/architecture/06-runtime-view/diagrams/reader-build.svg",
+          "sha256": "bcc1d2913cb6471367282203fd5ddddd42fd6456f6d62bc812556d74e7dd4e9d"
+        },
+        {
+          "path": "docs/architecture/06-runtime-view/diagrams/reader-build.md",
+          "sha256": "5fcf44130f8914e7bf29e936923f74294b211db05623d8486641eb764c9f5199"
+        }
+      ]
+    },
+    {
+      "section": "07-deployment-view",
+      "name": "deployment",
+      "title": "ArcShape publication and adopter deployment boundaries",
+      "files": [
+        {
+          "path": "docs/architecture/07-deployment-view/diagrams/deployment.archify.json",
+          "sha256": "7dc098235072ed50cbf116177a895c66c67fe8a876db455f7191e85ccc9bbbd2"
+        },
+        {
+          "path": "docs/architecture/07-deployment-view/diagrams/deployment.svg",
+          "sha256": "def2052e0e8f24f82bc71110bb4f2ace4a869df14ecc71ee38d6dab39230de6e"
+        },
+        {
+          "path": "docs/architecture/07-deployment-view/diagrams/deployment.md",
+          "sha256": "ce79c79d530e07de08fa890c3c8849106aed6bc3b5bad5fd1b329cb627b277b5"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "architecture",
+      "title": "Brisa · system context",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/architecture.archify.json",
+          "sha256": "b9b278babfa93302920892571bbdf96ccea186a523586263e8dc05ad82079a83"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/architecture.svg",
+          "sha256": "6797276e86c81ae64226d6d921999677dd6157b64eb22584c38338c6032a5d5c"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/architecture.md",
+          "sha256": "2b0efb23ded7520fb0ed798f19f7fcfc61c0fca19aabcbbd921999ac49f307b7"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "class",
+      "title": "Persistence contract",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/class.archify.json",
+          "sha256": "80bdc80b06ce1d4d64258078fd97490c8dd9f5dbdc0261b714eb91f823b7c466"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/class.svg",
+          "sha256": "0264edbb0737b54d34bc9a0a5d3165aa94c45b7fc33ef6b80e755c1a7fead957"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/class.md",
+          "sha256": "a92205769c0286c9e1ed454330caace65df79bbf65acd3c659d177732f8f14e4"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "dataflow",
+      "title": "From bookings to statistics",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/dataflow.archify.json",
+          "sha256": "ab3b28ae2725602f5e11938771ba9ba33b58491f215f4232d179f78bcd07f786"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/dataflow.svg",
+          "sha256": "284e2e0ca866fd0211ae68492defff6a3426c3431fdb08f3473e17cd6b2f90ce"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/dataflow.md",
+          "sha256": "943736972d62664f72033dab2d2432530f862ae35e2d95ca6781b49a95f7df59"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "erd",
+      "title": "Brisa relational model",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/erd.archify.json",
+          "sha256": "065e2fd69f6be67337e80e1e9fd6403de2dd83b93386b852a74bceb8c284418d"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/erd.svg",
+          "sha256": "59d1e43b161ebbffcbde511335f98c963759852e7e6468cc954eef065b6d75ac"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/erd.md",
+          "sha256": "2b69c792b1a28fcfe8d832d03308c6d7c6bbcce1e2030ec74b1071cd8c50e9c9"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "lifecycle",
+      "title": "Booking lifecycle",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/lifecycle.archify.json",
+          "sha256": "8b7b4045ff4196d319fdbbcdc71b51a52b84354c9de2c16fef272e39e7a4cec8"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/lifecycle.svg",
+          "sha256": "ee0b5b2cf4475c3f0e29d164f085f36da134bed2d4f64703dcf2012c3c77051c"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/lifecycle.md",
+          "sha256": "073f1bcf8622c4428d5e9e58f96d504167ed52874c7dd5421e390e3565c6142e"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "sequence",
+      "title": "Confirm a booking",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/sequence.archify.json",
+          "sha256": "ae7d2ad1273a91590cc8fa6941c97eb3855a5c9585862d72389cec9f9d06fdc8"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/sequence.svg",
+          "sha256": "db759bfe9e81b1c1a15a6069e23f9f99315ed85e1a1850db744fadfcdd64a574"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/sequence.md",
+          "sha256": "7b6a4f27fa9762005a85353ad0d545bdbbb9ee895ea1c1e942596e626da3b8f3"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "timeline",
+      "title": "Fictional notification incident",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/timeline.archify.json",
+          "sha256": "d6e1a8d8078353ac88673d6a3a640b8db566da4bd812b25a3a6eb5b0f5986ce4"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/timeline.svg",
+          "sha256": "c57738f4f8b382314f7648316860320adc54913d343fe324832256d4e8f95dcc"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/timeline.md",
+          "sha256": "0802b7589757fd522ecaab99e9f4cd711d1ddce19b53774cbc21946f87502956"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "tree",
+      "title": "Capability decomposition",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/tree.archify.json",
+          "sha256": "5eeb2127d0797544f3787b82035bf7048319b7685ff72e7ce6f8049eabf9e013"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/tree.svg",
+          "sha256": "5904aa0db07a285e1436b6b275b5ab44e8031aedd6c3abc1dc0beb9fb64005f8"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/tree.md",
+          "sha256": "001c3a3cd81db421009a142840d35876f9dac4124ce5c29f0849d476eeb88ed4"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "waterfall",
+      "title": "Request time budget",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/waterfall.archify.json",
+          "sha256": "f64f697eeef2e933cd7ea352223a8644619a057c4a0f303e49ee2ef644d91e7b"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/waterfall.svg",
+          "sha256": "1a90f3309ea9a763e68b8ccbb61481879563c18c5a2be6a3ad52699938154c5f"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/waterfall.md",
+          "sha256": "06b7a066565a7602926d712a5e5f85eee6f58a708b362d0435ec197d484cee64"
+        }
+      ]
+    },
+    {
+      "section": "08-crosscutting-concepts",
+      "name": "workflow",
+      "title": "From request to confirmation",
+      "files": [
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/workflow.archify.json",
+          "sha256": "a95b3908a5b35887f69007579ffa399cbe530ec99dff74f1d2ee42e4ef8ac0a0"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/workflow.svg",
+          "sha256": "d2b4d76efdd1749b0bd1a8bffa25d93ea7e91bf5b1479b4971c54cfd806e7ae0"
+        },
+        {
+          "path": "docs/architecture/08-crosscutting-concepts/diagrams/workflow.md",
+          "sha256": "e9e5083b9586788ca5cb0b13ba70e487de817773b079ce7521f112722323e35b"
+        }
+      ]
+    }
+  ]
+}

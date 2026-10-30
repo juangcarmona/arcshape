@@ -115,7 +115,7 @@ test.beforeAll(async () => {
 });
 
 test.afterAll(async () => {
-  await new Promise((resolveClose) => server?.close(resolveClose));
+  if (server) await new Promise((resolveClose) => server.close(resolveClose));
   if (output) await rm(output, { recursive: true, force: true });
 });
 
@@ -193,10 +193,13 @@ test("portal links to revision-stamped model and architecture routes", async ({
   expect(readerFocus.outline).toBe("solid");
   await page.goto(`${origin}architecture/#/section/03`);
   await page.locator("figure[data-native-diagram]").scrollIntoViewIfNeeded();
-  await expect(
-    page.locator("iframe[data-native-frame][data-ready]"),
-  ).toHaveCount(1);
-  const dedicated = await page.locator(".native-open").getAttribute("href");
+  await expect(page.locator("figure.diagram")).toHaveCount(0);
+  await expect(page.locator("figure[data-native-diagram] iframe")).toHaveCount(
+    1,
+  );
+  const dedicated = await page
+    .locator("figure[data-native-diagram] .native-open")
+    .getAttribute("href");
   expect(dedicated).toContain("/arcshape/architecture/diagrams/");
   await page.goto(dedicated);
   await expect(page.locator("html[data-ready]")).toHaveCount(1);

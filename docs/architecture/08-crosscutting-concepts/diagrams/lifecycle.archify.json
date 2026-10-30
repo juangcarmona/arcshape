@@ -1,0 +1,96 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Booking lifecycle",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "mainPath": [
+    "solicitada",
+    "retenida",
+    "confirmada",
+    "completada"
+  ],
+  "states": [
+    {
+      "id": "solicitada",
+      "type": "start",
+      "label": "Requested"
+    },
+    {
+      "id": "retenida",
+      "type": "waiting",
+      "label": "Held",
+      "sublabel": "Awaiting authorization"
+    },
+    {
+      "id": "confirmada",
+      "type": "active",
+      "label": "Confirmed"
+    },
+    {
+      "id": "completada",
+      "type": "success",
+      "label": "Completed"
+    },
+    {
+      "id": "caducada",
+      "type": "neutral",
+      "label": "Expired"
+    },
+    {
+      "id": "cancelada",
+      "type": "failure",
+      "label": "Cancelled"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "solicitada-retenida",
+      "from": "solicitada",
+      "to": "retenida",
+      "label": "Space available",
+      "variant": "default"
+    },
+    {
+      "id": "retenida-confirmada",
+      "from": "retenida",
+      "to": "confirmada",
+      "label": "Authorized",
+      "variant": "emphasis"
+    },
+    {
+      "id": "confirmada-completada",
+      "from": "confirmada",
+      "to": "completada",
+      "label": "Stay",
+      "variant": "default"
+    },
+    {
+      "id": "retenida-caducada",
+      "from": "retenida",
+      "to": "caducada",
+      "label": "Hold expired",
+      "variant": "default"
+    },
+    {
+      "id": "confirmada-cancelada",
+      "from": "confirmada",
+      "to": "cancelada",
+      "label": "Cancellation",
+      "variant": "default"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Prepayment variant",
+      "items": [
+        "An expired hold releases the space.",
+        "A confirmed booking may be cancelled under the fictional policy."
+      ]
+    }
+  ]
+}

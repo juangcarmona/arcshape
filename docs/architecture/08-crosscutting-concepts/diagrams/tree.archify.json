@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "diagram_type": "tree",
+  "meta": {
+    "title": "Capability decomposition",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint"
+  },
+  "nodes": [
+    {
+      "id": "brisa",
+      "label": "Brisa"
+    },
+    {
+      "id": "catalogo",
+      "parent": "brisa",
+      "label": "Catalog"
+    },
+    {
+      "id": "reservas",
+      "parent": "brisa",
+      "label": "Bookings"
+    },
+    {
+      "id": "operaciones",
+      "parent": "brisa",
+      "label": "Operations"
+    },
+    {
+      "id": "buscar",
+      "parent": "catalogo",
+      "label": "Search"
+    },
+    {
+      "id": "publicar",
+      "parent": "catalogo",
+      "label": "List property"
+    },
+    {
+      "id": "confirmar",
+      "parent": "reservas",
+      "label": "Confirm"
+    },
+    {
+      "id": "cancelar",
+      "parent": "reservas",
+      "label": "Cancel"
+    },
+    {
+      "id": "notificar",
+      "parent": "operaciones",
+      "label": "Notify"
+    },
+    {
+      "id": "observar",
+      "parent": "operaciones",
+      "label": "Monitor"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "How to read this tree",
+      "items": [
+        "Lines show ownership, not traffic.",
+        "Each capability has exactly one parent."
+      ]
+    }
+  ]
+}

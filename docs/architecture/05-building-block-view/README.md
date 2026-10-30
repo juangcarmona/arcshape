@@ -22,36 +22,17 @@ ArcShape is a private npm workspace whose distributable CLI runs inside an adopt
 | Native diagram adapter | Validates bounded JSON, invokes the pinned renderer, exports static SVG and isolates the browser viewer. | [`native-diagrams.mjs`](../../../packages/cli/src/arc42-site/native-diagrams.mjs), [`native-viewer.mjs`](../../../packages/cli/src/arc42-site/native-viewer.mjs) |
 | Product and publication surfaces | Remain adjacent repository artifacts: product intent, public site, engineering portal, and delivery workflows. | [`docs/product/model/`](../../product/model/), [`src/`](../../../src/), [`.github/workflows/`](../../../.github/workflows/) |
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:a1b8909b36e850b9ac1a2e5639f89749b039875f2fbe9c648167ed174edb8a89" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 ## C4 container view
 
 The CLI installs canonical Markdown and optional agent skills into the selected repository. Agent providers remain external hosts; ArcShape does not host an AI runtime. Local state records evidence sessions, sync baselines, and capability ownership. The diagram separates those responsibilities so the write paths are visible without implying that an agent provider calls an ArcShape server.
 
-```archify
-{
-  "schema_version": 1,
-  "diagram_type": "architecture",
-  "meta": { "title": "ArcShape containers in a project repository", "visual_preset": "blueprint" },
-  "components": [
-    { "id": "maintainer", "type": "external", "icon": "person", "label": "Maintainer", "pos": [40, 60], "size": [210, 80] },
-    { "id": "provider", "type": "external", "label": "Agent provider", "sublabel": "External host", "pos": [40, 400], "size": [210, 80] },
-    { "id": "cli", "type": "backend", "label": "ArcShape CLI", "sublabel": "Node.js package", "pos": [480, 60], "size": [210, 80] },
-    { "id": "docs", "type": "database", "label": "Architecture Markdown", "sublabel": "Canonical arc42 and ADRs", "pos": [480, 230], "size": [270, 80] },
-    { "id": "skills", "type": "database", "label": "Installed skills", "sublabel": "Evidence and authoring", "pos": [480, 400], "size": [240, 80] },
-    { "id": "state", "type": "database", "label": "Local ArcShape state", "sublabel": "Session and sync baselines", "pos": [960, 60], "size": [280, 80] }
-  ],
-  "connections": [
-    { "id": "run", "from": "maintainer", "to": "cli", "label": "Runs commands", "variant": "emphasis" },
-    { "id": "review", "from": "maintainer", "to": "docs", "fromSide": "right", "toSide": "left", "via": [[340,100],[340,270]], "label": "Reviews and edits", "labelAt": [340, 205] },
-    { "id": "discover", "from": "provider", "to": "skills", "label": "Discovers and follows" },
-    { "id": "propose", "from": "provider", "to": "docs", "fromSide": "right", "toSide": "left", "via": [[380,440],[380,270]], "label": "Proposes changes", "labelAt": [340, 350], "variant": "dashed" },
-    { "id": "documents", "from": "cli", "to": "docs", "fromSide": "bottom", "toSide": "top", "label": "Reads and writes", "labelAt": [690, 190] },
-    { "id": "baselines", "from": "cli", "to": "state", "label": "Records baselines" }
-  ],
-  "boundaries": [{ "kind": "region", "label": "Adopter repository", "wraps": ["cli", "docs", "skills", "state"], "pad": 30 }]
-}
-```
+![ArcShape containers in a project repository](./diagrams/containers.svg)
+<!-- arcshape-diagram-source: ./diagrams/containers.archify.json -->
+
+The reader build owns native-bundle resolution and the compatibility path for existing Mermaid sources. Its parser worker isolates Mermaid's DOM setup from the reader's sanitizer; the deterministic layout adapter passes validated data into the existing native renderer. These build-time modules do not add a runtime service.
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->

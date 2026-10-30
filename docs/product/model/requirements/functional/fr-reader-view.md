@@ -18,9 +18,9 @@ uses-terms:
 
 ## Requirement
 
-ArcShape must generate a static web-based view of Markdown arc42 architecture documentation in the repository, intended to be understandable to technical and non-technical readers. Markdown remains the canonical source, and the repository maintainer chooses where to host the generated view.
+ArcShape must generate a static web-based view of Markdown arc42 architecture documentation in the repository, intended to be understandable to technical and non-technical readers. Markdown remains the canonical narrative, referring to native bundles whose JSON is the canonical diagram source; existing Mermaid-authored documents remain supported. The repository maintainer chooses where to host the generated view.
 
-The existing self-contained HTML reader remains supported, including local-file use and its static Mermaid behavior. An explicit folder-publication option adds native interactive diagrams within sections and dedicated diagram pages. Both outputs derive from the same canonical Markdown and diagram sources; generating either output must not modify authored files. The folder site is statically hostable under a maintainer-selected path without a backend, runtime CDN, or ArcShape-operated service. Native diagrams have readable static representations in self-contained output; full interactive behavior is provided by the folder site.
+The existing self-contained HTML reader remains supported, including local-file use and native static SVGs. Standard Markdown images display bundle SVGs directly in ordinary Markdown readers. Interactive folder publication resolves their paired native JSON and uses the compact native widget in the same position, with a dedicated page. Existing Mermaid documents retain supported native enhancement and complete Mermaid fallback. Both outputs derive from the same canonical Markdown and diagram sources; generating either output must not modify authored files. The folder site is statically hostable under a maintainer-selected path without a backend, runtime CDN, or ArcShape-operated service. Native diagrams have readable static representations in self-contained output; full interactive behavior is provided by the folder site.
 
 ## Rationale
 

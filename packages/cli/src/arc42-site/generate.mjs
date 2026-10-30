@@ -26,6 +26,8 @@ import {
   extractNativeSources,
   renderMermaid,
 } from "./render.mjs";
+import { prepareDiagrams } from "./prepare-diagrams.mjs";
+import { checkPreview } from "./native-previews.mjs";
 import { buildSnapshotHtml } from "./shell.mjs";
 import {
   parseNativeDiagram,
@@ -63,6 +65,8 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (
       arg === "--format" ||
+      arg === "--archify-deep-dives" ||
+      arg === "--diagram-engine" ||
       arg === "--out" ||
       arg === "--title" ||
       arg === "--source-ref" ||
@@ -133,6 +137,13 @@ async function main() {
   if (!["snapshot", "interactive"].includes(format))
     throw new Diagnostic("--format must be snapshot or interactive");
   const interactive = format === "interactive";
+  const deepDiveMode = flags["archify-deep-dives"] ?? "auto";
+  if (!["auto", "off"].includes(deepDiveMode))
+    throw new Diagnostic("--archify-deep-dives must be auto or off");
+  const diagramEngine =
+    flags["diagram-engine"] ?? (deepDiveMode === "off" ? "mermaid" : "auto");
+  if (!["auto", "mermaid"].includes(diagramEngine))
+    throw new Diagnostic("--diagram-engine must be auto or mermaid");
 
   let docs;
   try {
@@ -172,6 +183,16 @@ async function main() {
     docs.readme,
     ...docs.sections.flatMap((section) => [section, ...section.supporting]),
   ];
+  const origins = new Map();
+  for (const document of documents) {
+    const prepared = await prepareDiagrams(
+      document,
+      docsDir,
+      diagramEngine === "mermaid" ? "off" : "auto",
+    );
+    document.body = prepared.body;
+    origins.set(document.file, prepared.origins);
+  }
   const nativeSources = new Map(
     documents.map((document) => [
       document.file,
@@ -186,13 +207,21 @@ async function main() {
     );
   const nativeResults = await renderNativeDiagrams(
     [...nativeSources.values()].flat(),
+    {
+      locations: [...nativeSources.entries()].flatMap(([file, sources]) =>
+        sources.map((_, i) => `${file}: diagram ${i + 1}`),
+      ),
+    },
   );
   const nativeByDocument = new Map();
   const generatedFiles = new Map();
   let nativeCursor = 0;
   for (const document of documents) {
-    const figures = nativeSources.get(document.file).map((_, i) => {
+    const figures = [];
+    for (const [i, source] of nativeSources.get(document.file).entries()) {
       const diagram = nativeResults[nativeCursor++];
+      const origin = origins.get(document.file).get(source);
+      if (origin?.reference) await checkPreview(origin.reference, diagram);
       diagram.id = createHash("sha256")
         .update(`${document.file}:${i}`)
         .digest("hex")
@@ -203,8 +232,24 @@ async function main() {
           buildNativeViewer(diagram),
         );
         generatedFiles.set(`diagrams/${diagram.id}/diagram.svg`, diagram.svg);
+        if (origin?.mermaid)
+          generatedFiles.set(
+            `diagrams/${diagram.id}/source.md`,
+            "```mermaid\n" + origin.mermaid + "\n```\n",
+          );
+        if (origin?.reference) {
+          try {
+            generatedFiles.set(
+              `diagrams/${diagram.id}/source.md`,
+              await readFile(origin.reference.companionPath, "utf8"),
+            );
+          } catch (error) {
+            if (error.code !== "ENOENT") throw error;
+          }
+        }
+        generatedFiles.set(`diagrams/${diagram.id}/source.json`, source + "\n");
         generatedFiles.set(
-          `diagrams/${diagram.id}/source.json`,
+          `diagrams/${diagram.id}/provenance.json`,
           JSON.stringify(
             {
               document: document.file,
@@ -217,8 +262,8 @@ async function main() {
           ) + "\n",
         );
       }
-      return nativeFigure(diagram, interactive);
-    });
+      figures.push(nativeFigure(diagram, interactive));
+    }
     nativeByDocument.set(document.file, figures);
   }
   const documentMermaid = new Map(

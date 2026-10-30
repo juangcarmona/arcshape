@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "diagram_type": "timeline",
+  "meta": {
+    "title": "Fictional notification incident",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "evidence": "illustrative",
+    "timezone": "Europe/Madrid"
+  },
+  "lanes": [
+    {
+      "id": "sistema",
+      "label": "System"
+    },
+    {
+      "id": "equipo",
+      "label": "Team"
+    }
+  ],
+  "events": [
+    {
+      "id": "caida",
+      "at": "2026-10-20T10:00:00+02:00",
+      "title": "Email unavailable",
+      "lane": "sistema",
+      "kind": "alert"
+    },
+    {
+      "id": "cola",
+      "at": "2026-10-20T10:05:00+02:00",
+      "title": "Outbox backlog grows",
+      "lane": "sistema",
+      "kind": "alert"
+    },
+    {
+      "id": "revision",
+      "at": "2026-10-20T10:10:00+02:00",
+      "title": "Check provider",
+      "lane": "equipo",
+      "kind": "action"
+    },
+    {
+      "id": "recuperacion",
+      "at": "2026-10-20T10:20:00+02:00",
+      "title": "Email service restored",
+      "lane": "sistema",
+      "kind": "recovery"
+    },
+    {
+      "id": "drenado",
+      "at": "2026-10-20T10:30:00+02:00",
+      "title": "Backlog drained",
+      "lane": "equipo",
+      "kind": "recovery"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Illustrative data",
+      "items": [
+        "The timestamps are illustrative.",
+        "The sequence shows delayed notifications, not lost bookings."
+      ]
+    }
+  ]
+}

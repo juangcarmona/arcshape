@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { load } from "js-yaml";
 import { describe, expect, it } from "vitest";
+import { releaseNotes } from "../scripts/release-notes.mjs";
 
 const workflow = load(
   await readFile(
@@ -10,6 +11,27 @@ const workflow = load(
 );
 
 describe("Changesets release workflow", () => {
+  it("publishes only the matching changelog entry, including upgrade instructions", () => {
+    const prompt = "```text\nMigrate the diagrams after review.\n```";
+    const changelog = `# Package\n\n## 1.2.0\n\n### Minor Changes\n\n${prompt}\n\n## 1.1.0\n\nOld release\n`;
+    expect(releaseNotes(changelog, "1.2.0")).toBe(
+      `### Minor Changes\n\n${prompt}\n`,
+    );
+    expect(() => releaseNotes(changelog, "1.3.0")).toThrow(
+      "No changelog entry",
+    );
+    expect(() => releaseNotes("## 1.2.0\n\n## 1.1.0\nOld", "1.2.0")).toThrow(
+      "Empty changelog entry",
+    );
+    const step = workflow.jobs["publish-stable"].steps.find(
+      ({ name }) => name === "Create or reuse GitHub Release",
+    );
+    expect(step.run).toContain("node scripts/release-notes.mjs");
+    expect(step.run).toContain(
+      '--notes-file "$RUNNER_TEMP/arcshape-release-notes.md"',
+    );
+    expect(step.run).toContain("--generate-notes");
+  });
   it("runs version PR maintenance on main pushes and never publishes from that job", () => {
     expect(workflow.on.push.branches).toContain("main");
     expect(workflow.jobs["version-pr"].if).toBe("github.event_name == 'push'");

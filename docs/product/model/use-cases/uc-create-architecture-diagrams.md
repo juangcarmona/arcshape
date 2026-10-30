@@ -31,16 +31,18 @@ Repository evidence and any existing diagram sources are available. The maintain
 1. The maintainer identifies the architectural question and any preferred diagram family or engine.
 2. The assistant examines repository evidence and relevant approved product intent, identifies elements and relationships, and records unresolved assumptions.
 3. The assistant selects a supported representation that preserves the required meaning, respecting explicit maintainer choices.
-4. The assistant authors one editable diagram source within the canonical Markdown documentation and invokes deterministic validation and rendering.
-5. The assistant inspects the rendered diagram for readable labels, relationships, layout and interaction, and presents the source changes and visual evidence.
+4. The assistant authors the canonical native JSON in the owning diagrams directory, invokes deterministic validation, SVG rendering and supported Mermaid export, and references the SVG with its native source in Markdown. It identifies companions as derived artifacts and checks their freshness. When a native diagram or faithful Mermaid export is unavailable, it reports that limitation and preserves the supported representation without fabricating missing semantics.
+5. The assistant verifies the Markdown SVG, supported Mermaid companion and generated native presentation: static SVG in self-contained HTML, or the compact native widget and dedicated page in folder output. It compares their meaning, inspects readable labels, relationships, layout and interaction, and presents the proposed bundle, Markdown changes, limitations and visual evidence.
 6. The maintainer reviews the proposal and decides what to accept.
 
 ## Alternative Flows
 
 - C4 requests retain the context, container, component or code perspective described by UC-CREATE-C4-DIAGRAMS; they need not reproduce C4's exact visual notation.
-- When the native renderer cannot express required semantics, the assistant explains the limitation and proposes Mermaid. Explicit engine choices are respected; incompatible requests are reported for maintainer resolution.
+- When the native renderer cannot express required semantics, the diagram remains Mermaid. Valid unsupported constructs are rendered by Mermaid; invalid sources and conversion failures produce actionable errors. Explicit engine choices are respected; incompatible requests are reported for maintainer resolution.
 - During migration, the assistant compares meaning before and after conversion. Diagrams that cannot be faithfully converted remain unchanged Mermaid. Partial migration and mixed-engine documents are supported.
 - Without enough evidence, the assistant records gaps and requests context rather than inventing architecture.
+
+- A maintainer can explicitly regenerate and check bundle representations before publishing; updating ArcShape or building a site never rewrites authored sources or migrates existing documents.
 
 ## Failure Conditions
 

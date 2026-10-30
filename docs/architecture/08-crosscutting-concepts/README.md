@@ -20,13 +20,13 @@ Repository setup, validation, site generation, session state, and Obsidian sync 
 
 ## Diagram execution and publication
 
-Native diagram JSON stays in canonical Markdown. The adapter validates the pinned family schema and rejects resource-bearing inputs before rendering. The package contains a minimal Archify subset with file hashes and attribution; the build browser blocks network requests and exports a sanitized static SVG. This is trusted local build execution, not a sandbox for third-party renderer plugins.
+Native diagrams use one canonical JSON source with generated SVG and fenced Mermaid Markdown companions. The document's image/source pair displays SVG in Markdown and resolves to the native viewer in interactive publication. Explicit generation validates Mermaid syntax and records source/content hashes; publication checks freshness without rewriting assets. Generated companions do not become duplicate reader pages. Existing Mermaid sources remain supported through the bounded parser/layout adapter. References are confined to the real documentation root; symlink targets and modified generated output are rejected. Native rendering still uses the pinned schema, network-blocked build browser, sanitized SVG and isolated runtime.
 
 Interactive pages execute the viewer in `sandbox="allow-scripts"` iframes, without same-origin access. Dedicated pages keep the same boundary by assigning inert viewer data to a sandboxed `srcdoc` frame. Both wrappers validate message source windows and bounded message shapes; they accept no arbitrary URLs or DOM commands. CSP restricts scripts to generated hashes and blocks network connections. Static images remain available without JavaScript.
 
 Publication stages the entire directory before replacing intact ArcShape-owned output. Its file-hash manifest detects modified or unrelated files; output cannot overlap the authored documentation or traverse symlinks. Snapshot generation retains the existing single-file contract. See [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md) and the [fictional family gallery](diagram-gallery.md).
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:744316a85793d16f4d84c1930dbee76498085952c190bb31ddf652723869c784" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 ## Observability and operations
 

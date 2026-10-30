@@ -35,6 +35,7 @@ import {
   checkPublicationTarget,
 } from "../packages/cli/src/arc42-site/publish-directory.mjs";
 import { getPuppeteerLaunchOptions } from "../packages/cli/src/arc42-site/browser-options.mjs";
+import { convertMermaid } from "../packages/cli/src/arc42-site/mermaid-native.mjs";
 
 const fixture = (type) =>
   readFile(
@@ -94,6 +95,20 @@ afterAll(async () => {
 });
 
 describe("pinned native renderer", () => {
+  it("renders converted decision cycles in all orientations and nested boundaries without layout collisions", async () => {
+    const sources = [];
+    for (const direction of ["LR", "RL", "TB", "BT"]) {
+      const result = await convertMermaid(
+        `flowchart ${direction}\naccTitle: Decision cycle ${direction}\nTraveler[Traveler] -->|Request| API[API]\nAPI -->|Check| Available{Available}\nAvailable -->|Retry| Traveler`,
+      );
+      sources.push(result.source);
+    }
+    const nested = await convertMermaid(
+      "flowchart LR\naccTitle: Nested system\nsubgraph system[System]\nsubgraph internal[Components]\nA[API] --> B[Worker]\nend\nend",
+    );
+    sources.push(nested.source);
+    expect(await renderNativeDiagrams(sources)).toHaveLength(5);
+  }, 60000);
   it("renders all ten families with static images and deterministic output", async () => {
     expect(results.map((r) => r.type)).toEqual(nativeTypes);
     for (const result of results) {

@@ -9,8 +9,21 @@ it("publishes the engineering diagram gallery in English", async () => {
     ),
     "utf8",
   );
-  const diagrams = [...gallery.matchAll(/```archify\n([\s\S]*?)\n```/g)].map(
-    ([, source]) => JSON.parse(source),
+  const references = [
+    ...gallery.matchAll(/<!-- arcshape-diagram-source: (.+?) -->/g),
+  ];
+  const diagrams = await Promise.all(
+    references.map(async ([, path]) =>
+      JSON.parse(
+        await readFile(
+          new URL(
+            "../docs/architecture/08-crosscutting-concepts/" + path,
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      ),
+    ),
   );
   expect(diagrams).toHaveLength(10);
   expect(diagrams.every((diagram) => diagram.meta.locale === "en")).toBe(true);

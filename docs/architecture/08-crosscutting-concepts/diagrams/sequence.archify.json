@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Confirm a booking",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "visual_preset": "blueprint",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "dashed": {
+          "label": "Deferred work"
+        }
+      }
+    }
+  },
+  "participants": [
+    {
+      "id": "portal",
+      "type": "frontend",
+      "label": "Portal"
+    },
+    {
+      "id": "api",
+      "type": "backend",
+      "label": "API"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "PostgreSQL"
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "Worker"
+    },
+    {
+      "id": "mail",
+      "type": "external",
+      "label": "Email"
+    }
+  ],
+  "messages": [
+    {
+      "id": "request",
+      "from": "portal",
+      "to": "api",
+      "y": 165,
+      "label": "POST /bookings",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save",
+      "from": "api",
+      "to": "db",
+      "y": 215,
+      "label": "Booking + outbox",
+      "note": "One transaction"
+    },
+    {
+      "id": "commit",
+      "from": "db",
+      "to": "api",
+      "y": 280,
+      "label": "COMMIT",
+      "variant": "return"
+    },
+    {
+      "id": "response",
+      "from": "api",
+      "to": "portal",
+      "y": 325,
+      "label": "201 confirmed",
+      "variant": "return"
+    },
+    {
+      "id": "poll",
+      "from": "worker",
+      "to": "db",
+      "y": 385,
+      "label": "Reads pending",
+      "variant": "dashed"
+    },
+    {
+      "id": "event",
+      "from": "db",
+      "to": "worker",
+      "y": 430,
+      "label": "BookingConfirmed",
+      "variant": "return"
+    },
+    {
+      "id": "notify",
+      "from": "worker",
+      "to": "mail",
+      "y": 480,
+      "label": "Sends confirmation",
+      "variant": "dashed"
+    },
+    {
+      "id": "ack",
+      "from": "mail",
+      "to": "worker",
+      "y": 525,
+      "label": "Accepted",
+      "variant": "return"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Response to traveler",
+      "items": [
+        "The 201 response follows the COMMIT.",
+        "Email is delivered later, outside the request."
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Example scope",
+      "items": [
+        "This booking does not require prepayment.",
+        "The payment authorization path is not shown here."
+      ]
+    }
+  ]
+}

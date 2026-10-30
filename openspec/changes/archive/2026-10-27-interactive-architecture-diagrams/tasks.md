@@ -40,7 +40,7 @@
 
 ## 4. Integrated acceptance
 
-- [x] 4.1 Run the full applicable local quality/product/OpenSpec lanes and real browser journeys, inspect the new screenshots, and serve a separate Bastion LAN review build.
+- [x] 4.1 Run the full applicable local quality/product/OpenSpec lanes and real browser journeys, inspect the new screenshots, and serve a separate local review build.
 - [x] 4.2 Exercise malformed/hostile native output through the assurance fixture and passive DAST; inspect required CI, SBOM/license, CodeQL and Assurance outcomes on the final candidate.
 - [x] 4.3 Obtain an independent Done audit against plan, diff and current evidence; resolve findings within the FF bounds and report outstanding human-owned judgement separately.
 

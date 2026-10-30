@@ -84,4 +84,4 @@ Record the renderer/source/isolation trade-off in proposed ADR-0002 and update t
 
 ## Migration Plan
 
-Update package and selected skills without touching authored files. Build legacy docs as a regression. Convert selected ArcShape examples with evidence and before/after meaning review; render screenshot evidence before committing visual changes. Publish a review build on Bastion, then verify a clean packed install and all applicable CI/Assurance checks. Rollback is a normal source revert plus a rebuild of owned generated output; external adopter conversion remains explicitly opt-in.
+Update package and selected skills without touching authored files. Build legacy docs as a regression. Convert selected ArcShape examples with evidence and before/after meaning review; render screenshot evidence before committing visual changes. Serve a local review build, then verify a clean packed install and all applicable CI/Assurance checks. Rollback is a normal source revert plus a rebuild of owned generated output; external adopter conversion remains explicitly opt-in.
