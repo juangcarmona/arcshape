@@ -32,7 +32,7 @@ The reader HTML is assembled by `packages/cli/src/arc42-site/shell.mjs`; its `.d
 
 The reader-width decision supports the active architecture-view and comprehension intent without changing its product requirement.
 
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
 
 ## Risks / Trade-offs

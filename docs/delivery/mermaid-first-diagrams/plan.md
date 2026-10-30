@@ -1,8 +1,12 @@
-# Mermaid sources with native ArcShape publication
+# Diagram delivery record
 
 Date: 2026-10-30. Issue: [#117](https://github.com/juangcarmona/arcshape/issues/117). Branch: `feat/117-mermaid-first-diagrams`. PR: [#118](https://github.com/juangcarmona/arcshape/pull/118).
 
-## Current product decision
+## Current implementation
+
+The maintainer subsequently approved CHG-NATIVE-DIAGRAM-BUNDLES and standard fenced Mermaid `.md` companions. That contract is applied: 15 canonical architecture/gallery bundles now contain JSON, SVG and Markdown. See [bundle migration](bundle-migration.md) for the current inventory, runtime proof and verification. The `native-diagram-bundles` slice is synchronized and archived; review remains pending. The Mermaid compatibility path below remains supported, but it is no longer the default authoring contract.
+
+## Previous product decision and plan
 
 The maintainer approved and applied [CHG-MERMAID-NATIVE-PUBLICATION](../../product/changes/completed/chg-mermaid-native-publication/change.md). Author standard Mermaid in Markdown. Generate native diagrams in the reader wherever the entire diagram can be converted faithfully; retain full Mermaid otherwise. This replaces the earlier Mermaid-primary/deep-dive-only decision. The earlier execution record remains in progress.md and the archived first delivery slice.
 

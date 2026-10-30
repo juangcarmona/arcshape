@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ArcShape system context",
+    "locale": "en",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "maintainer",
+      "type": "external",
+      "label": "Maintainer",
+      "sublabel": "Runs and reviews · External",
+      "pos": [
+        90,
+        180
+      ],
+      "size": [
+        202,
+        90
+      ]
+    },
+    {
+      "id": "arcshape",
+      "type": "backend",
+      "label": "ArcShape CLI",
+      "sublabel": "Local commands",
+      "pos": [
+        567,
+        180
+      ],
+      "size": [
+        180,
+        90
+      ]
+    },
+    {
+      "id": "repository",
+      "type": "external",
+      "label": "Adopter repository",
+      "sublabel": "Markdown and local state · External",
+      "pos": [
+        1043,
+        90
+      ],
+      "size": [
+        250,
+        90
+      ]
+    },
+    {
+      "id": "destinations",
+      "type": "external",
+      "label": "Obsidian / Confluence",
+      "sublabel": "Optional destinations · External",
+      "pos": [
+        1052,
+        270
+      ],
+      "size": [
+        232,
+        90
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "edge-0",
+      "from": "maintainer",
+      "to": "arcshape",
+      "label": "Runs commands",
+      "variant": "emphasis"
+    },
+    {
+      "id": "edge-1",
+      "from": "arcshape",
+      "to": "repository",
+      "label": "Reads and writes"
+    },
+    {
+      "id": "edge-2",
+      "from": "arcshape",
+      "to": "destinations",
+      "label": "Explicit sync",
+      "variant": "dashed"
+    }
+  ],
+  "boundaries": []
+}

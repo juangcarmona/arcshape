@@ -3,7 +3,7 @@ import { graphlib } from "dagre-d3-es";
 import { layout } from "dagre-d3-es/src/dagre/index.js";
 import { parseNativeDiagram } from "./native-diagrams.mjs";
 
-function parseMermaid(source) {
+export function parseMermaid(source) {
   // A fresh JS realm binds Mermaid's DOMPurify without changing the reader DOM.
   return new Promise((resolve, reject) => {
     const worker = new Worker(

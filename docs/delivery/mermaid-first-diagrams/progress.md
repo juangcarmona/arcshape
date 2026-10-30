@@ -1,6 +1,12 @@
 # Issue #117 execution
 
-## Latest direction: native publication from Mermaid
+## Current delivery: native bundles
+
+CHG-NATIVE-DIAGRAM-BUNDLES is applied. The explicit migration now has 15 complete JSON/SVG/fenced-Mermaid-Markdown bundles (45 files) across sections 03, 05, 06, 07 and 08. Main architecture pages use SVG/native-source pairs; the live Bastion reader displays native widgets in all five views. Packaged and provider authoring guidance defaults to bundles while retaining existing Mermaid compatibility.
+
+Full local verification passed 197 tests across 32 files and all 14 browser E2E journeys. Explicit checking passed all 15 bundles. Product/model validation and current citations passed; OpenSpec is synchronized and archived at `openspec/changes/archive/2026-10-30-native-diagram-bundles`. Screenshots were inspected before commit. See [bundle migration](bundle-migration.md) and its hashed inventory for exact scope, proof and limitations. Human review, merge, production deployment and npm publication remain separate and are not claimed.
+
+## Previous direction: native publication from Mermaid
 
 The maintainer explicitly approved CHG-MERMAID-NATIVE-PUBLICATION and its application after reviewing the earlier PR. ProductShape applied five modified artifacts and completed that change. This replaces the Mermaid-primary/deep-dive-only direction recorded below: compatible Mermaid now becomes native input in memory, native SVG in snapshots and native widgets plus dedicated pages in folder output. The authored Markdown remains Mermaid. Unsupported diagrams remain complete Mermaid; `--diagram-engine mermaid` selects Mermaid-only publication. The native-only gallery and legacy sources remain supported.
 

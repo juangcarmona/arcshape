@@ -234,11 +234,22 @@ async function main() {
         generatedFiles.set(`diagrams/${diagram.id}/diagram.svg`, diagram.svg);
         if (origin?.mermaid)
           generatedFiles.set(
-            `diagrams/${diagram.id}/source.mmd`,
-            origin.mermaid + "\n",
+            `diagrams/${diagram.id}/source.md`,
+            "```mermaid\n" + origin.mermaid + "\n```\n",
           );
+        if (origin?.reference) {
+          try {
+            generatedFiles.set(
+              `diagrams/${diagram.id}/source.md`,
+              await readFile(origin.reference.companionPath, "utf8"),
+            );
+          } catch (error) {
+            if (error.code !== "ENOENT") throw error;
+          }
+        }
+        generatedFiles.set(`diagrams/${diagram.id}/source.json`, source + "\n");
         generatedFiles.set(
-          `diagrams/${diagram.id}/source.json`,
+          `diagrams/${diagram.id}/provenance.json`,
           JSON.stringify(
             {
               document: document.file,

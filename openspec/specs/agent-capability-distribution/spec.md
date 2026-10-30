@@ -12,7 +12,7 @@ Lets repository maintainers install and manage versioned ArcShape agent capabili
 
 ArcShape SHALL package portable Agent Skills and supporting files with stable names and standard skill metadata. Provider adapters SHALL expose the same skills and files without forking workflows.
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
 
 #### Scenario: Install canonical skills for Codex and shared-path providers
 
@@ -44,7 +44,7 @@ The CLI SHALL detect providers from local executable and repository-configuratio
 
 `init` SHALL offer CLI-only or provider/capability selection; non-interactive use SHALL require a choice.
 <!-- pdac:cite id="FR-ONBOARD-REPOSITORY" digest="sha256:ad28a7a6a80b8c334af9daa92a36c929b812c654611bebe10aac9b487072ef98" -->
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
 <!-- pdac:cite id="UC-ONBOARD-REPOSITORY" digest="sha256:ac5e91032100634e83b8d426343000decfc67811e30c00f6a9838e67305dce01" -->
 
 #### Scenario: Initialize deterministic CLI only

@@ -10,31 +10,10 @@ description: Runtime behavior and important interactions between building blocks
 
 ### Initialize a repository
 
-```mermaid
-sequenceDiagram
-    accTitle: Safe ArcShape initialization flow
-    participant Maintainer as Maintainer
-    participant CLI as ArcShape CLI
-    participant Package as Installed package
-    participant FS as Target repository
-    Maintainer->>CLI: Request init
-    CLI->>Package: Load scaffold and selected skills
-    CLI-->>Maintainer: Show scope, actions, and conflicts
-    Maintainer->>CLI: Confirm plan
-    loop Each planned file action
-        CLI->>FS: Recheck path and content
-        alt File is absent
-            CLI->>FS: Create exclusively
-        else Contents match
-            CLI-->>Maintainer: Keep unchanged
-        else Edited or symlinked
-            CLI-->>Maintainer: Preserve and report conflict
-        end
-    end
-    CLI-->>Maintainer: Report created, unchanged, and preserved files
-```
+![Safe ArcShape initialization flow](./diagrams/initialization.svg)
+<!-- arcshape-diagram-source: ./diagrams/initialization.archify.json -->
 
-Initialization is preview-first and deliberately boring: it does not inspect source code, make architecture claims, contact an ArcShape service, or launch an agent. It installs the README, twelve arc42 sections, and optionally selected `arc-` skills. The CLI rechecks each destination before writing, creates absent files exclusively, and preserves edited or symlinked paths as conflicts. Agent lifecycle commands use the same planning and ownership-manifest approach.
+The initialization activity view makes the per-file loop and its three mutually exclusive outcomes explicit. Initialization is preview-first and deliberately boring: it does not inspect source code, make architecture claims, contact an ArcShape service, or launch an agent. It installs the README, twelve arc42 sections, and optionally selected `arc-` skills. The CLI rechecks each destination before writing, creates absent files exclusively, and preserves edited or symlinked paths as conflicts. Agent lifecycle commands use the same planning and ownership-manifest approach.
 
 ### Validate architecture Markdown
 
@@ -50,31 +29,17 @@ Initialization is preview-first and deliberately boring: it does not inspect sou
 
 `arcshape site build` reads the README, twelve canonical section documents, and any supporting Markdown beneath their section directories, validates their frontmatter and filenames, converts Markdown to sanitized HTML, pre-renders accessible Mermaid diagrams, and writes the requested output file (default `docs/architecture-site/index.html`). Supporting Markdown keeps its authored relative paths in the reader: nested folders become collapsible navigation groups, folder `README.md` files provide folder pages, and supporting pages show contextual breadcrumbs. The GitHub Pages workflow writes its projection to `_site/architecture/index.html` with the exact source revision. It does not modify canonical Markdown.
 
-Native fences add one build-time rendering step. The default snapshot embeds their static images; `--format interactive` publishes compact viewers and dedicated pages from the same source. Validation or rendering errors stop publication. An interactive directory is replaced only when its ownership inventory still matches every file. Simple sequences convert to native diagrams; sequences with unsupported fragments retain their complete Mermaid representation.
+Native fences add one build-time rendering step. The default snapshot embeds their static images; `--format interactive` publishes compact viewers and dedicated pages from the same source. Validation or rendering errors stop publication. An interactive directory is replaced only when its ownership inventory still matches every file. The canonical diagrams below use native bundles; existing Mermaid sources remain supported, with whole-diagram fallback for unsupported conversion semantics.
 
-```mermaid
-sequenceDiagram
-  accTitle: Build native architecture diagrams
-  participant maintainer as Maintainer
-  participant site as Site builder
-  participant renderer as Native adapter
-  participant browser as Build browser
-  participant output as Owned output
-  maintainer->>site: Build interactive site
-  site->>renderer: Classify Mermaid and validate sources
-  renderer->>browser: Render HTML and export SVG
-  browser-->>renderer: Static image
-  renderer-->>site: Validated render artifacts
-  site->>output: Verify ownership and publish
-  site-->>maintainer: Report output directory
-```
+![Build native architecture diagrams](./diagrams/reader-build.svg)
+<!-- arcshape-diagram-source: ./diagrams/reader-build.archify.json -->
 
 The diagram shows the successful path. Malformed input, a rendering failure, or modified output leaves the prior publication in place. The runtime boundary is explained in [cross-cutting concepts](../08-crosscutting-concepts/README.md); the trade-off is recorded in [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md).
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
-The builder first resolves local sidecars and parses Mermaid. Supported flows and simple sequences become native input in memory, replacing only the generated representation. Unsupported diagrams retain Mermaid without an unavailable native link. Native outputs are rendered once, paired previews are checked for freshness, and only then is the complete site published. The source files remain unchanged.
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
+The builder resolves native bundle references, checks generated SVG and Mermaid Markdown against their canonical JSON, and creates the static or isolated interactive representation. Existing Mermaid fences retain their bounded compatibility conversion. Generated companion-only Markdown is excluded from duplicate navigation. Only after validation succeeds is the complete site published; authored files remain unchanged.
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
 
 ### Resume an evidence-analysis session
 

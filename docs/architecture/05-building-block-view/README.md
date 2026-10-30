@@ -22,39 +22,17 @@ ArcShape is a private npm workspace whose distributable CLI runs inside an adopt
 | Native diagram adapter | Validates bounded JSON, invokes the pinned renderer, exports static SVG and isolates the browser viewer. | [`native-diagrams.mjs`](../../../packages/cli/src/arc42-site/native-diagrams.mjs), [`native-viewer.mjs`](../../../packages/cli/src/arc42-site/native-viewer.mjs) |
 | Product and publication surfaces | Remain adjacent repository artifacts: product intent, public site, engineering portal, and delivery workflows. | [`docs/product/model/`](../../product/model/), [`src/`](../../../src/), [`.github/workflows/`](../../../.github/workflows/) |
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 ## C4 container view
 
 The CLI installs canonical Markdown and optional agent skills into the selected repository. Agent providers remain external hosts; ArcShape does not host an AI runtime. Local state records evidence sessions, sync baselines, and capability ownership. The diagram separates those responsibilities so the write paths are visible without implying that an agent provider calls an ArcShape server.
 
-```mermaid
-flowchart LR
-  accTitle: ArcShape containers in a project repository
-  maintainer["Maintainer
-External"]
-  provider["Agent provider
-External host · External"]
-  subgraph boundary0["Adopter repository"]
-    cli["ArcShape CLI
-Node.js package"]
-    docs["Architecture Markdown
-Canonical arc42 and ADRs"]
-    skills["Installed skills
-Evidence and authoring"]
-    state["Local ArcShape state
-Session and sync baselines"]
-  end
-  maintainer ==>|"Runs commands"| cli
-  maintainer -->|"Reviews and edits"| docs
-  provider -->|"Discovers and follows"| skills
-  provider -.->|"Proposes changes"| docs
-  cli -->|"Reads and writes"| docs
-  cli -->|"Records baselines"| state
-```
+![ArcShape containers in a project repository](./diagrams/containers.svg)
+<!-- arcshape-diagram-source: ./diagrams/containers.archify.json -->
 
-The reader build owns Mermaid-to-native conversion eligibility and native preview resolution. Its parser worker isolates Mermaid's DOM setup from the reader's sanitizer; the deterministic layout adapter passes validated data into the existing native renderer. These build-time modules do not add a runtime service.
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
+The reader build owns native-bundle resolution and the compatibility path for existing Mermaid sources. Its parser worker isolates Mermaid's DOM setup from the reader's sanitizer; the deterministic layout adapter passes validated data into the existing native renderer. These build-time modules do not add a runtime service.
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->

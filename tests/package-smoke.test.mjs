@@ -315,11 +315,22 @@ describe("packed ArcShape package", () => {
       await writeFile(join(previewDirectory, "native.json"), nativeSource);
       for (const extra of [[], ["--check"]]) {
         const previews = await runNpm(
-          ["exec", "--offline", "--", "arcshape", "site", "previews", ...extra],
+          [
+            "exec",
+            "--offline",
+            "--",
+            "arcshape",
+            "site",
+            extra.length ? "previews" : "diagrams",
+            ...extra,
+          ],
           { cwd: repository, timeout: 60000 },
         );
         expect(previews.exitCode, previews.stderr).toBe(0);
       }
+      expect(
+        await readFile(join(previewDirectory, "native.md"), "utf8"),
+      ).toMatch(/^```mermaid\n/);
       for (const format of ["snapshot", "interactive"]) {
         const out = join(
           repository,

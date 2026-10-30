@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ArcShape publication and adopter deployment boundaries",
+    "locale": "en",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "maintainer",
+      "type": "external",
+      "label": "Maintainer",
+      "pos": [
+        540,
+        40
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "architecture",
+      "type": "backend",
+      "label": "Canonical architecture Markdown",
+      "pos": [
+        50,
+        200
+      ],
+      "size": [
+        220,
+        80
+      ],
+      "icon": "none",
+      "tag": "Markdown files"
+    },
+    {
+      "id": "product",
+      "type": "backend",
+      "label": "Public product site source",
+      "pos": [
+        430,
+        200
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "package",
+      "type": "backend",
+      "label": "CLI package source",
+      "pos": [
+        830,
+        200
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "pages",
+      "type": "backend",
+      "label": "Build portal",
+      "pos": [
+        50,
+        380
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "release",
+      "type": "backend",
+      "label": "Verify release",
+      "pos": [
+        580,
+        380
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "gate",
+      "type": "security",
+      "label": "Protected publish gate",
+      "tag": "Decision",
+      "pos": [
+        900,
+        380
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "portal",
+      "type": "cloud",
+      "label": "GitHub Pages portal",
+      "pos": [
+        50,
+        560
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "publicsite",
+      "type": "cloud",
+      "label": "Cloudflare Pages site",
+      "pos": [
+        430,
+        560
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "registry",
+      "type": "external",
+      "label": "npm registry",
+      "pos": [
+        900,
+        560
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "localcli",
+      "type": "backend",
+      "label": "Local ArcShape CLI",
+      "pos": [
+        900,
+        770
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "docs",
+      "type": "backend",
+      "label": "Architecture Markdown",
+      "pos": [
+        600,
+        770
+      ],
+      "size": [
+        220,
+        80
+      ],
+      "icon": "none",
+      "tag": "Markdown files"
+    },
+    {
+      "id": "reader",
+      "type": "backend",
+      "label": "Self-contained reader",
+      "pos": [
+        300,
+        770
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "destination",
+      "type": "external",
+      "label": "Optional host or docs destination",
+      "pos": [
+        10,
+        770
+      ],
+      "size": [
+        220,
+        80
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "edge-0",
+      "from": "maintainer",
+      "to": "architecture",
+      "label": "authors and reviews"
+    },
+    {
+      "id": "edge-1",
+      "from": "maintainer",
+      "to": "product",
+      "label": "maintains"
+    },
+    {
+      "id": "edge-2",
+      "from": "maintainer",
+      "to": "package",
+      "label": "releases"
+    },
+    {
+      "id": "edge-3",
+      "from": "architecture",
+      "to": "pages"
+    },
+    {
+      "id": "edge-4",
+      "from": "pages",
+      "to": "portal"
+    },
+    {
+      "id": "edge-5",
+      "from": "product",
+      "to": "publicsite"
+    },
+    {
+      "id": "edge-6",
+      "from": "package",
+      "to": "release"
+    },
+    {
+      "id": "edge-7",
+      "from": "release",
+      "to": "gate"
+    },
+    {
+      "id": "edge-8",
+      "from": "gate",
+      "to": "registry"
+    },
+    {
+      "id": "edge-9",
+      "from": "registry",
+      "to": "localcli",
+      "label": "install"
+    },
+    {
+      "id": "edge-10",
+      "from": "localcli",
+      "to": "docs",
+      "label": "init, validate, sync"
+    },
+    {
+      "id": "edge-11",
+      "from": "docs",
+      "to": "reader",
+      "label": "site build"
+    },
+    {
+      "id": "edge-12",
+      "from": "reader",
+      "to": "destination",
+      "label": "optional publication"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Project governance",
+      "wraps": [
+        "maintainer"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "ArcShape source repository",
+      "wraps": [
+        "architecture",
+        "product",
+        "package"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "GitHub Actions",
+      "wraps": [
+        "pages",
+        "release",
+        "gate"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "Published artifacts",
+      "wraps": [
+        "portal",
+        "publicsite",
+        "registry"
+      ],
+      "pad": 30
+    },
+    {
+      "kind": "region",
+      "label": "Adopter-controlled repository",
+      "wraps": [
+        "localcli",
+        "docs",
+        "reader"
+      ],
+      "pad": 30
+    }
+  ]
+}

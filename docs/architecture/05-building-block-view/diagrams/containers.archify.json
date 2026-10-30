@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ArcShape containers in a project repository",
+    "locale": "en",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "maintainer",
+      "type": "external",
+      "label": "Maintainer",
+      "sublabel": "External",
+      "pos": [
+        90,
+        560
+      ],
+      "size": [
+        180,
+        90
+      ]
+    },
+    {
+      "id": "provider",
+      "type": "external",
+      "label": "Agent provider",
+      "sublabel": "External host · External",
+      "pos": [
+        625,
+        90
+      ],
+      "size": [
+        184,
+        90
+      ]
+    },
+    {
+      "id": "cli",
+      "type": "backend",
+      "label": "ArcShape CLI",
+      "sublabel": "Node.js package",
+      "pos": [
+        627,
+        560
+      ],
+      "size": [
+        180,
+        90
+      ]
+    },
+    {
+      "id": "docs",
+      "type": "backend",
+      "label": "Architecture Markdown",
+      "sublabel": "Canonical arc42 and ADRs",
+      "pos": [
+        1142.5,
+        492
+      ],
+      "size": [
+        191,
+        90
+      ],
+      "icon": "none",
+      "tag": "Markdown files"
+    },
+    {
+      "id": "skills",
+      "type": "backend",
+      "label": "Installed skills",
+      "sublabel": "Evidence and authoring",
+      "pos": [
+        1148,
+        290
+      ],
+      "size": [
+        180,
+        90
+      ]
+    },
+    {
+      "id": "state",
+      "type": "backend",
+      "label": "Local ArcShape state",
+      "sublabel": "Session and sync baselines",
+      "pos": [
+        1140,
+        672
+      ],
+      "size": [
+        196,
+        90
+      ],
+      "icon": "none",
+      "tag": "JSON files"
+    }
+  ],
+  "connections": [
+    {
+      "id": "edge-0",
+      "from": "maintainer",
+      "to": "cli",
+      "label": "Runs commands",
+      "variant": "emphasis"
+    },
+    {
+      "id": "edge-1",
+      "from": "maintainer",
+      "to": "docs",
+      "label": "Reviews and edits"
+    },
+    {
+      "id": "edge-2",
+      "from": "provider",
+      "to": "skills",
+      "label": "Discovers and follows"
+    },
+    {
+      "id": "edge-3",
+      "from": "provider",
+      "to": "docs",
+      "label": "Proposes changes",
+      "variant": "dashed"
+    },
+    {
+      "id": "edge-4",
+      "from": "cli",
+      "to": "docs",
+      "label": "Reads and writes"
+    },
+    {
+      "id": "edge-5",
+      "from": "cli",
+      "to": "state",
+      "label": "Records baselines"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Adopter repository",
+      "wraps": [
+        "cli",
+        "docs",
+        "skills",
+        "state"
+      ],
+      "pad": 30
+    }
+  ]
+}

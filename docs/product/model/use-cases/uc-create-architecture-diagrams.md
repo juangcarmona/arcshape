@@ -31,8 +31,8 @@ Repository evidence and any existing diagram sources are available. The maintain
 1. The maintainer identifies the architectural question and any preferred diagram family or engine.
 2. The assistant examines repository evidence and relevant approved product intent, identifies elements and relationships, and records unresolved assumptions.
 3. The assistant selects a supported representation that preserves the required meaning, respecting explicit maintainer choices.
-4. The assistant authors one standard Mermaid source within the canonical Markdown documentation by default and invokes deterministic validation and rendering. For native-only capabilities, it authors a local JSON sidecar and generates the linked SVG preview in Markdown.
-5. The assistant verifies that Markdown retains its canonical Mermaid source and generated documentation presents a native diagram wherever supported: a static native SVG in self-contained HTML, or a compact interactive native diagram with a dedicated page in folder output. It checks that unsupported semantics remain fully represented by Mermaid, inspects readable labels, relationships, layout and interaction, and presents the source changes and visual evidence.
+4. The assistant authors the canonical native JSON in the owning diagrams directory, invokes deterministic validation, SVG rendering and supported Mermaid export, and references the SVG with its native source in Markdown. It identifies companions as derived artifacts and checks their freshness. When a native diagram or faithful Mermaid export is unavailable, it reports that limitation and preserves the supported representation without fabricating missing semantics.
+5. The assistant verifies the Markdown SVG, supported Mermaid companion and generated native presentation: static SVG in self-contained HTML, or the compact native widget and dedicated page in folder output. It compares their meaning, inspects readable labels, relationships, layout and interaction, and presents the proposed bundle, Markdown changes, limitations and visual evidence.
 6. The maintainer reviews the proposal and decides what to accept.
 
 ## Alternative Flows
@@ -42,7 +42,7 @@ Repository evidence and any existing diagram sources are available. The maintain
 - During migration, the assistant compares meaning before and after conversion. Diagrams that cannot be faithfully converted remain unchanged Mermaid. Partial migration and mixed-engine documents are supported.
 - Without enough evidence, the assistant records gaps and requests context rather than inventing architecture.
 
-- A maintainer can explicitly generate native-only previews and check their freshness before publishing; updating ArcShape or building a site never rewrites authored sources.
+- A maintainer can explicitly regenerate and check bundle representations before publishing; updating ArcShape or building a site never rewrites authored sources or migrates existing documents.
 
 ## Failure Conditions
 

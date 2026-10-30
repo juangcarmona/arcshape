@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Safe ArcShape initialization flow",
+    "locale": "en",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "request",
+      "type": "backend",
+      "label": "Maintainer requests init",
+      "pos": [
+        40,
+        70
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "load",
+      "type": "backend",
+      "label": "CLI loads scaffold and selected skills",
+      "pos": [
+        350,
+        70
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "preview",
+      "type": "backend",
+      "label": "Show scope, actions and conflicts",
+      "pos": [
+        660,
+        70
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "confirm",
+      "type": "backend",
+      "label": "Maintainer confirms plan",
+      "pos": [
+        970,
+        70
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "next",
+      "type": "security",
+      "label": "More planned file actions?",
+      "tag": "Decision",
+      "pos": [
+        970,
+        290
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "check",
+      "type": "security",
+      "label": "Recheck path and contents",
+      "tag": "Decision",
+      "pos": [
+        660,
+        290
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "create",
+      "type": "backend",
+      "label": "Create exclusively",
+      "pos": [
+        40,
+        510
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "keep",
+      "type": "backend",
+      "label": "Keep unchanged",
+      "pos": [
+        350,
+        510
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "preserve",
+      "type": "backend",
+      "label": "Preserve and report conflict",
+      "pos": [
+        660,
+        510
+      ],
+      "size": [
+        260,
+        90
+      ]
+    },
+    {
+      "id": "report",
+      "type": "backend",
+      "label": "Report created, unchanged and preserved files",
+      "pos": [
+        970,
+        510
+      ],
+      "size": [
+        340,
+        90
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "edge-0",
+      "from": "request",
+      "to": "load"
+    },
+    {
+      "id": "edge-1",
+      "from": "load",
+      "to": "preview"
+    },
+    {
+      "id": "edge-2",
+      "from": "preview",
+      "to": "confirm"
+    },
+    {
+      "id": "edge-3",
+      "from": "confirm",
+      "to": "next"
+    },
+    {
+      "id": "edge-4",
+      "from": "next",
+      "to": "check",
+      "label": "Yes"
+    },
+    {
+      "id": "edge-5",
+      "from": "check",
+      "to": "create",
+      "label": "Absent"
+    },
+    {
+      "id": "edge-6",
+      "from": "check",
+      "to": "keep",
+      "label": "Matching contents"
+    },
+    {
+      "id": "edge-7",
+      "from": "check",
+      "to": "preserve",
+      "label": "Edited or symlinked"
+    },
+    {
+      "id": "edge-8",
+      "from": "create",
+      "to": "next"
+    },
+    {
+      "id": "edge-9",
+      "from": "keep",
+      "to": "next"
+    },
+    {
+      "id": "edge-10",
+      "from": "preserve",
+      "to": "next"
+    },
+    {
+      "id": "edge-11",
+      "from": "next",
+      "to": "report",
+      "label": "No"
+    }
+  ],
+  "boundaries": []
+}

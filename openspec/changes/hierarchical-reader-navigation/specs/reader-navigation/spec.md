@@ -11,7 +11,7 @@ Provides a discoverable, accessible hierarchy for supporting architecture docume
 ### Requirement: Represent supporting documents as a hierarchy
 
 The reader SHALL represent supporting Markdown pages according to their authored folder paths. Folder READMEs SHALL be folder pages and other Markdown files SHALL be leaves.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="UC-READ-ARCHITECTURE" digest="sha256:43f7ea1726a9e26689b8741f153ad919563655653584b9cc13bca10885e8b985" -->
 
 #### Scenario: Render nested folders and leaves
@@ -32,7 +32,7 @@ The reader SHALL represent supporting Markdown pages according to their authored
 ### Requirement: Control folder expansion accessibly
 
 Folders with children SHALL expose keyboard-operable toggles with accurate accessible state. Direct nested routes SHALL reveal all ancestors needed to show the current page.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="UC-READ-ARCHITECTURE" digest="sha256:43f7ea1726a9e26689b8741f153ad919563655653584b9cc13bca10885e8b985" -->
 
 #### Scenario: Toggle a folder with keyboard input
@@ -48,7 +48,7 @@ Folders with children SHALL expose keyboard-operable toggles with accurate acces
 ### Requirement: Show contextual breadcrumbs
 
 Supporting pages SHALL show a breadcrumb trail for their folder path. A folder step SHALL link only when that folder has a README page.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="UC-READ-ARCHITECTURE" digest="sha256:43f7ea1726a9e26689b8741f153ad919563655653584b9cc13bca10885e8b985" -->
 
 #### Scenario: Link breadcrumb folders with README pages
@@ -64,7 +64,7 @@ Supporting pages SHALL show a breadcrumb trail for their folder path. A folder s
 ### Requirement: Preserve flat navigation compatibility
 
 Sections with only flat supporting files SHALL retain their existing visual hierarchy, stable routes, search results, section navigation, and self-contained generated HTML behavior.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 <!-- pdac:cite id="UC-PUBLISH-ARCHITECTURE-VIEW" digest="sha256:9ce6cd65b911aeec3601b986283f966a0232a1c59a3534f975fff4c3abddea9c" -->
 
 #### Scenario: Render a flat section as before

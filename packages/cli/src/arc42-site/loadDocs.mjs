@@ -7,6 +7,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join, basename, dirname, sep } from "node:path";
 import * as yaml from "js-yaml";
+import { isGeneratedCompanion } from "./bundle-format.mjs";
 
 const ALLOWED_KEYS = new Set(["title", "arc42-section", "description"]);
 const SECTION_FILE = /^(\d{2})-(.+)\.md$/;
@@ -319,6 +320,7 @@ async function collectSupportingDocuments(
 
     const file = `${directory}/${relativePath}`.split(sep).join("/");
     const raw = await readFile(join(sectionRoot, relativePath), "utf8");
+    if (isGeneratedCompanion(raw)) continue;
     let body = raw;
     if (/^---\r?\n[\s\S]*?\r?\n---\r?\n/.test(raw)) {
       try {

@@ -11,8 +11,8 @@ Let maintainers author one reviewable diagram source and publish readable static
 ### Requirement: Native source stays in canonical Markdown
 
 The site builder SHALL accept typed JSON in legacy `archify` fences and local native sidecars paired with Markdown SVG previews, require a meaningful title and supported diagram family, and report invalid source with its document and diagram location. It SHALL NOT silently switch engines or modify authored files.
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 #### Scenario: Reject an invalid declared source
 
@@ -27,8 +27,8 @@ The site builder SHALL accept typed JSON in legacy `archify` fences and local na
 ### Requirement: Preserve mixed and self-contained output
 
 Existing Mermaid fences and default single-file generation SHALL remain supported. Native diagrams SHALL have readable static representations in single-file output and when interactive scripting is unavailable.
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 #### Scenario: Build a mixed document
 
@@ -48,8 +48,8 @@ Existing Mermaid fences and default single-file generation SHALL remain supporte
 ### Requirement: Offer compact interactive publication
 
 An explicit folder-publication option SHALL provide interactive diagrams at available content width with bounded responsive height, ordinary document scrolling, and one unobtrusive dedicated-page link without duplicate explanatory wrappers.
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 
 #### Scenario: Explore an embedded diagram
 
@@ -69,7 +69,7 @@ An explicit folder-publication option SHALL provide interactive diagrams at avai
 ### Requirement: Isolate interactive diagram execution
 
 Diagram code SHALL be isolated from its parent, opener and shared storage in embedded and dedicated views. Unsafe input and forged messages SHALL have no unauthorized effects.
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 <!-- pdac:cite id="CON-NO-ARCSHAPE-DATA-COLLECTION" digest="sha256:fe1383af359f8647eb7481f264ac1d29ece9d285ad1ed8f67cf98f5de06a5dc5" -->
 
 #### Scenario: Reject hostile input and messages
@@ -90,7 +90,7 @@ Diagram code SHALL be isolated from its parent, opener and shared storage in emb
 ### Requirement: Publish without development-machine dependencies
 
 The installed npm package SHALL contain renderers, assets, authoring references and attribution for portable folder output.
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 #### Scenario: Generate from a clean packed installation
 
@@ -101,7 +101,7 @@ The installed npm package SHALL contain renderers, assets, authoring references 
 
 Native diagrams SHALL cover C4-style context, containers and components, sequence, and activity flows. Supported additional families and feature limitations SHALL be documented rather than inferred from Mermaid coverage.
 <!-- pdac:cite id="FR-C4-DIAGRAM-WORKFLOWS" digest="sha256:b7ab2591c05d0fbd32176878461e9138773da63aa2fe14a2932da341682495b9" -->
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 #### Scenario: Render the supported-family gallery
 
@@ -115,9 +115,9 @@ Native diagrams SHALL cover C4-style context, containers and components, sequenc
 
 ### Requirement: Assist reviewable authoring and migration
 
-Skills SHALL author standard Mermaid by default and provide evidence-grounded, validated and visually inspected diagram proposals for human review. Native-only diagrams SHALL use local sidecars and generated SVG previews; legacy native fences remain supported.
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
-<!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:67954319dd8f19a50a9a15b09e024c343bae2d018e37dade767957254c6d689b" -->
+Skills SHALL author canonical native JSON with generated SVG and fenced Mermaid Markdown companions by default, and provide evidence-grounded, validated and visually inspected proposals for human review. Explicit Mermaid choices and legacy native/Mermaid documents SHALL remain supported.
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
+<!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:e1297804e0fc64a188b066d06c7c6acddb0c897f7554f99f0454898c4f545c4e" -->
 
 #### Scenario: Respect maintainer intent
 
@@ -143,11 +143,11 @@ Migration SHALL require an explicit request and preserve readable documentation 
 ### Requirement: Publish native diagrams from canonical Mermaid
 
 ArcShape SHALL publish a native representation for faithfully supported Mermaid sources without changing authored Markdown. Unsupported diagrams SHALL remain complete Mermaid. Explicit Mermaid-only output SHALL remain available; invalid sources and renderer failures SHALL fail with location.
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
-<!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:67954319dd8f19a50a9a15b09e024c343bae2d018e37dade767957254c6d689b" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
+<!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:e1297804e0fc64a188b066d06c7c6acddb0c897f7554f99f0454898c4f545c4e" -->
 
 #### Scenario: Generate an interactive document
 
@@ -182,7 +182,7 @@ ArcShape SHALL publish a native representation for faithfully supported Mermaid 
 ### Requirement: Keep native-only Markdown readable
 
 Native-only diagrams SHALL support local JSON sidecars paired with SVG previews in Markdown. Explicit tooling SHALL generate previews and check freshness. Builds SHALL verify previews without rewriting sources. References SHALL remain inside the documentation root and reuse native input validation.
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
 
 #### Scenario: Read and publish a native-only diagram
 
@@ -198,3 +198,32 @@ Native-only diagrams SHALL support local JSON sidecars paired with SVG previews 
 
 - **WHEN** a reference is remote, traverses outside docs, escapes through symlinks or ambiguously associates sources
 - **THEN** processing fails before reading outside docs or overwriting authored files
+
+### Requirement: Maintain native diagram bundles
+
+Native authoring SHALL use one canonical JSON source with generated SVG and a supported Mermaid companion in standard fenced Markdown. Markdown SHALL show the SVG; folder publication SHALL resolve the native widget. Unsupported exports SHALL be reported, not fabricated.
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
+<!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:e1297804e0fc64a188b066d06c7c6acddb0c897f7554f99f0454898c4f545c4e" -->
+
+#### Scenario: Generate and publish a bundle
+
+- **WHEN** a maintainer explicitly generates a supported native bundle
+- **THEN** JSON, SVG and fenced Mermaid Markdown coexist in the owning diagrams directory, the document displays SVG, and interactive publication displays one native viewer
+
+#### Scenario: Detect stale or edited assets
+
+- **WHEN** source or companion content changes independently
+- **THEN** checks fail with actionable diagnostics and generation refuses to silently overwrite authored or modified output
+
+#### Scenario: Preserve navigation and compatibility
+
+- **WHEN** generated companion-only Markdown appears beside the diagram assets
+- **THEN** it does not create a duplicate reader page, ordinary supporting Markdown remains visible, and existing Mermaid/native documents remain supported
+
+#### Scenario: Migrate the architecture documentation
+
+- **WHEN** the approved explicit migration is applied to ArcShape architecture
+- **THEN** every existing architecture figure has a local diagrams bundle, including deployment and initialization, without losing actors, boundaries, ordering or branch conditions

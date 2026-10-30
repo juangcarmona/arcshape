@@ -5,7 +5,7 @@ description: Fictional examples used to inspect the supported diagram families.
 
 # Native diagram family gallery
 
-These examples describe the fictional Brisa reservation system, not ArcShape services. They demonstrate renderer coverage, not universal Mermaid compatibility. Canonical ArcShape diagrams remain in their owning sections. The SVGs below keep this Markdown readable; each paired JSON file is the only editable source. Regenerate previews with `arcshape site previews` after editing a source.
+These examples describe the fictional Brisa reservation system, not ArcShape services. They demonstrate renderer coverage, not universal Mermaid compatibility. Canonical ArcShape diagrams remain in their owning sections. The SVGs below keep this Markdown readable; each paired JSON file is the only editable source. Every diagram also has a standard `.md` companion containing its generated Mermaid semantic view. Regenerate bundles with `arcshape site diagrams` after editing JSON.
 
 ## architecture
 

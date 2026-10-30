@@ -10,7 +10,7 @@ description: Fundamental decisions and strategies that shape the architecture.
 
 ArcShape is distributed as the `@arcshape/cli` npm workspace package and runs locally in the adopting repository. Canonical documentation lives in `docs/`; the repository root is a private npm workspace that owns development tooling. The CLI and architecture reader are implemented in `packages/cli/src/`, and distributable templates and capabilities are in `packages/cli/assets/`.
 
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:69b3896c64d3974d75ede346a61c67b9527c2b205b5d14c81921a1e7db40ff4b" -->
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
 
 ## Top-level decomposition
 
@@ -28,10 +28,10 @@ ArcShape is distributed as the `@arcshape/cli` npm workspace package and runs lo
 
 The CLI uses exclusive file creation and compares existing content before deciding whether a file is up to date or conflicts. AI reasoning is reserved for the separate assistant workflow layer; deterministic CLI commands own setup and bookkeeping.
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->
 <!-- pdac:cite id="FR-AGENT-CAPABILITY-DISTRIBUTION" digest="sha256:df30499fca2ce723bbccc3a1a8d590a5fc69b2f9532472b01c3accba8327dc04" -->
 
 ## Diagram source strategy
 
-Mermaid is the default authored representation. The builder derives native diagrams in memory for supported flowcharts and simple sequences. Snapshots embed native SVG; folder publication embeds native widgets and provides dedicated pages. Unsupported constructs retain complete Mermaid. Native-only sources pair local JSON with a generated SVG preview. [ADR-0003](../09-architecture-decisions/ADR-0003-enhance-mermaid-with-native-diagrams.md) records the parser, layout and compatibility trade-offs.
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:89a85bdce2b2abebe4b214d005673812cbfe6951fbedce009c8b7e7ee5815ce8" -->
+Native bundles are the default authored representation: canonical JSON with generated SVG and fenced Mermaid Markdown companions. Markdown displays the SVG; snapshots embed it and folder publication resolves the native viewer. Existing Mermaid sources retain bounded native enhancement and whole-diagram fallback. [ADR-0003](../09-architecture-decisions/ADR-0003-enhance-mermaid-with-native-diagrams.md) records the parser, layout and compatibility trade-offs.
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->

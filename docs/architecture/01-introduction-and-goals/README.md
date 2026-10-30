@@ -33,7 +33,7 @@ ArcShape is a local toolkit for turning a repository into a readable, reviewable
 The CLI owns setup, validation, bookkeeping, and rendering. Skills guide investigation and authoring; they do not accept documentation changes on the maintainer's behalf.
 
 <!-- pdac:cite id="FR-REVERSE-ENGINEER-ARCHITECTURE" digest="sha256:03fea6b807b52d2c0a6b5a45578f39a2c17bd7a6bc9f62505c27ddebbdc2ee5e" -->
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:73f884ab8bce44e3950b5c42b17912546f69e2f2045f3df2106b0ce59d99cfee" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
 
 ## Stakeholders
 
@@ -43,4 +43,4 @@ The CLI owns setup, validation, bookkeeping, and rendering. Skills guide investi
 | Agent providers       | Discover and run selected ArcShape skills using repository context. |
 | Architecture reader   | Understand the system through a navigable, self-contained view.     |
 
-<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:03f8db70084a9f2ece5ae7ac432334aa62a0a23d6145c711d184683e2d744f3a" -->
+<!-- pdac:cite id="FR-ASSISTED-WORKFLOWS" digest="sha256:fb9d6549efa4555755042489cd9eda2439cf6afad7d0171663ef2b9edeecd33d" -->

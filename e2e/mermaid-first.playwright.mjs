@@ -125,9 +125,9 @@ test("publishes native diagrams from Mermaid and preserves the original source",
     .poll(() => runtime.evaluate(() => window.Archify.focus.active()))
     .toBe("API");
   const original = await context.request.get(
-    new URL("source.mmd", popup.url()).href,
+    new URL("source.md", popup.url()).href,
   );
-  expect((await original.text()).trimEnd()).toBe(flow);
+  expect(await original.text()).toBe("```mermaid\n" + flow + "\n```\n");
   await popup.screenshot({ path: info.outputPath("mermaid-dedicated.png") });
   await popup.close();
   await page.evaluate(
