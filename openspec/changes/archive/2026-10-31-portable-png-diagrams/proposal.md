@@ -34,4 +34,3 @@ Implements applied CHG-PORTABLE-PNG-DIAGRAMS. Impacts FR-INTERACTIVE-DIAGRAMS, F
 <!-- pdac:cite id="UC-CREATE-ARCHITECTURE-DIAGRAMS" digest="sha256:1ec5f68cf7a73bff2e6d29613b060430717f21a418e0abf353fc9ec349de4e02" -->
 
 Impact analysis checked C4, publication/read use cases, actors, terms and authority rules. They remain unchanged: no diagram semantics, source authority, connectors, hosting or actor responsibilities change. The product change resolves the prior SVG-default conflict; there is no remaining product-definition drift. No dependency addition, Azure connector or external account operation is proposed.
-

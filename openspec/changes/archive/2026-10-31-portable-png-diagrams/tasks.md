@@ -27,4 +27,3 @@
 - Open the PR and verify current-head remote CI/Assurance; preserve the maintainer's approval separately from forge/protected release permissions. This is delivery follow-up, not implementation progress.
 - Synchronize and archive the completed delivery slice before integration.
 - Integrate only after applicable checks pass; prepare and verify the Changesets version PR. Stop at npm publication or the protected environment gate as requested.
-

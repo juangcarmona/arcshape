@@ -31,4 +31,3 @@ Raster zoom is finite; retain SVG. Large canvases are capped; measure gallery pr
 ## Migration Plan
 
 Apply the product change already approved by the maintainer; update tooling/guidance; explicitly migrate the canonical architecture image references and generate the four companions. Regeneration handles stale but intact generated images; edited images require manual resolution. Rollback restores image references to SVG without discarding canonical JSON. Preserve all old formats.
-

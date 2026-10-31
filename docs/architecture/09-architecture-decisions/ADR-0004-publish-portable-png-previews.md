@@ -42,4 +42,3 @@ Record source, vector and image-content hashes inside a standard PNG text chunk.
 - [Issue #120](https://github.com/juangcarmona/arcshape/issues/120)
 - [Diagram bundles](../../diagrams.md)
 - [Raster provenance implementation](../../../packages/cli/src/arc42-site/native-png.mjs)
-

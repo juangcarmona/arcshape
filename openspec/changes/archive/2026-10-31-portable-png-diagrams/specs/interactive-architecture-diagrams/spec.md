@@ -104,4 +104,3 @@ Explicit generation SHALL create bounded, lossless light-background PNG previews
 
 - **WHEN** the selected PNG is missing, modified, stale or unsafe, or an existing SVG-only bundle is built
 - **THEN** invalid PNG input fails without overwriting assets and the intact legacy bundle remains usable
-
