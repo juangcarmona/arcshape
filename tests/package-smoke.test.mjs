@@ -305,7 +305,7 @@ describe("packed ArcShape package", () => {
         "\n```archify\n" +
         nativeSource +
         "\n```\n\n```mermaid\nflowchart LR\naccTitle: Packed consumer flow\nA[Start] --> B[Done]\n```\n\n" +
-        "![Native preview](./diagrams/native.svg)\n<!-- arcshape-diagram-source: ./diagrams/native.json -->\n";
+        "![Native preview](./diagrams/native.png)\n<!-- arcshape-diagram-source: ./diagrams/native.json -->\n";
       await writeFile(runtimePath, runtimeMarkdown);
       const previewDirectory = join(
         repository,
@@ -331,6 +331,11 @@ describe("packed ArcShape package", () => {
       expect(
         await readFile(join(previewDirectory, "native.md"), "utf8"),
       ).toMatch(/^```mermaid\n/);
+      expect(
+        (await readFile(join(previewDirectory, "native.png")))
+          .subarray(0, 8)
+          .toString("hex"),
+      ).toBe("89504e470d0a1a0a");
       for (const format of ["snapshot", "interactive"]) {
         const out = join(
           repository,

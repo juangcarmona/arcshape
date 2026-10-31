@@ -137,10 +137,10 @@ test("publishes the accessible deployment diagram from section 07 on a narrow vi
   const svg = diagram.getByRole("img", { name: diagramTitle });
   await expect(svg).toBeVisible();
   await expect(svg).toHaveAttribute("src", /^data:image\/svg\+xml;base64,/);
-  for (const extension of ["archify.json", "svg", "md"]) {
+  for (const extension of ["archify.json", "svg", "md", "png"]) {
     const relative = join("diagrams", `deployment.${extension}`);
-    expect(await readFile(join(dirname(targetSection), relative), "utf8")).toBe(
-      await readFile(join(dirname(sourceSection), relative), "utf8"),
+    expect(await readFile(join(dirname(targetSection), relative))).toEqual(
+      await readFile(join(dirname(sourceSection), relative)),
     );
   }
   await expect(

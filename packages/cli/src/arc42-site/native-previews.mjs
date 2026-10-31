@@ -16,6 +16,7 @@ import {
 import { loadDocs } from "./loadDocs.mjs";
 import { exportNativeMermaid } from "./native-mermaid.mjs";
 import { parseMermaid } from "./mermaid-native.mjs";
+import { bundlePng, pngProvenance } from "./native-png.mjs";
 import {
   contentHash,
   companionContent,
@@ -107,8 +108,14 @@ export async function nativeReferences(body, { docsDir, document }) {
       paragraph.tokens[0];
     if (!match || image?.type !== "image" || !image.text?.trim())
       throw new Error(
-        `${document}: native source comment must immediately follow one titled SVG image`,
+        `${document}: native source comment must immediately follow one titled PNG or SVG image`,
       );
+    const imageExtension = extname(image.href);
+    if (![".svg", ".png"].includes(imageExtension))
+      throw new Error(
+        `${document}: expected a local .svg or .png path: ${image.href}`,
+      );
+    const stem = image.href.slice(0, -4);
     const sourcePath = await localPath(
       root,
       document,
@@ -118,8 +125,15 @@ export async function nativeReferences(body, { docsDir, document }) {
     const previewPath = await localPath(
       root,
       document,
-      image.href,
+      stem + ".svg",
       ".svg",
+      true,
+    );
+    const pngPath = await localPath(
+      root,
+      document,
+      stem + ".png",
+      ".png",
       true,
     );
     const companionPath = await localPath(
@@ -143,6 +157,8 @@ export async function nativeReferences(body, { docsDir, document }) {
       source,
       sourcePath,
       previewPath,
+      pngPath,
+      pngSelected: imageExtension === ".png",
       companionPath,
       title: image.text,
       raw: tokens
@@ -185,6 +201,14 @@ async function existingFile(path) {
   }
 }
 
+async function existingPng(path) {
+  try {
+    return await readFile(path);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+}
+
 function unmodifiedSvg(existing) {
   if (!existing?.startsWith(bundleMarker)) return false;
   const line = existing.indexOf("\n");
@@ -217,6 +241,18 @@ export async function checkPreview(reference, diagram) {
         `${reference.companionPath}: missing, modified or stale Mermaid companion; run arcshape site diagrams --docs <docs-directory>`,
       );
   }
+  const png = await existingPng(reference.pngPath);
+  if (reference.pngSelected || png !== undefined) {
+    const metadata = pngProvenance(png);
+    if (
+      !metadata ||
+      metadata.source !== contentHash(reference.source) ||
+      metadata.svg !== contentHash(diagram.svg)
+    )
+      throw new Error(
+        `${reference.pngPath}: missing, modified or stale PNG preview; run arcshape site diagrams --docs <docs-directory>`,
+      );
+  }
 }
 
 export async function generatePreviews(
@@ -242,13 +278,22 @@ export async function generatePreviews(
       throw new Error(`duplicate native preview: ${reference.previewPath}`);
     previews.add(reference.previewPath);
   }
-  const diagrams = await renderNativeDiagrams(references.map((r) => r.source));
+  const diagrams = await renderNativeDiagrams(
+    references.map((r) => r.source),
+    {
+      raster: !check,
+    },
+  );
   const writes = [];
   for (let i = 0; i < references.length; i++) {
     const reference = references[i];
     const currentSvg = await existingFile(reference.previewPath);
     // Keep legacy SVG-only previews usable when a native feature cannot be exported.
-    if (!bundles && !currentSvg?.startsWith(bundleMarker)) {
+    if (
+      !bundles &&
+      !references[i].pngSelected &&
+      !currentSvg?.startsWith(bundleMarker)
+    ) {
       if (check) await checkPreview(reference, diagrams[i]);
       else {
         if (currentSvg !== undefined && !currentSvg.startsWith(marker))
@@ -272,6 +317,11 @@ export async function generatePreviews(
     }
     const svg = await existingFile(reference.previewPath);
     const md = await existingFile(reference.companionPath);
+    const png = await existingPng(reference.pngPath);
+    if (png !== undefined && !pngProvenance(png))
+      throw new Error(
+        `refusing to overwrite an authored or modified PNG: ${reference.pngPath}`,
+      );
     if (
       svg !== undefined &&
       !unmodifiedSvg(svg) &&
@@ -297,6 +347,11 @@ export async function generatePreviews(
       [reference.previewPath, bundleSvg(reference, diagrams[i])],
       [reference.companionPath, companionContent(mermaid, reference.source)],
     );
+    if (diagrams[i].png)
+      writes.push([
+        reference.pngPath,
+        bundlePng(diagrams[i].png, reference.source, diagrams[i].svg),
+      ]);
   }
   for (const [path, content] of writes) await writeFile(path, content);
   return references.length;

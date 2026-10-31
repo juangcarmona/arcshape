@@ -1,0 +1,111 @@
+{
+  "baseCommit": "a8310cd",
+  "state": "working tree inspected before implementation commit",
+  "images": [
+    {
+      "path": "docs/architecture/03-context-and-scope/diagrams/context.png",
+      "width": 2666,
+      "height": 856,
+      "bytes": 70857,
+      "sha256": "a181db613ac512274e0c5bdf1fba44a5ef6282c524ee11b9a5c68efae9951d7e"
+    },
+    {
+      "path": "docs/architecture/05-building-block-view/diagrams/containers.png",
+      "width": 2812,
+      "height": 1700,
+      "bytes": 135323,
+      "sha256": "960122a21ea4d4975246ccae7276e3dbf4d5e8ad8518d58014252e67fffd3d04"
+    },
+    {
+      "path": "docs/architecture/06-runtime-view/diagrams/initialization.png",
+      "width": 2700,
+      "height": 1336,
+      "bytes": 98903,
+      "sha256": "cae2f197354705dada3fbc5445f50cbf57fc1fad8a733b53aa9a846ab8ffe394"
+    },
+    {
+      "path": "docs/architecture/06-runtime-view/diagrams/reader-build.png",
+      "width": 2400,
+      "height": 1460,
+      "bytes": 86200,
+      "sha256": "9d3f08c67e69ea9a41899c84a425712edd676e0104fd6f8e6b772acc1fc9e37d"
+    },
+    {
+      "path": "docs/architecture/07-deployment-view/diagrams/deployment.png",
+      "width": 2380,
+      "height": 1876,
+      "bytes": 179542,
+      "sha256": "9bb17711268ed5260e2b0f76287d1cf7a074eb692185a4526041d88cbdde95d3"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/architecture.png",
+      "width": 1820,
+      "height": 880,
+      "bytes": 60200,
+      "sha256": "4c8a2a0f6d4494948b3afe4a1dff07c98e49308aa98113ca386ffd25e288e8ae"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/class.png",
+      "width": 1148,
+      "height": 772,
+      "bytes": 72743,
+      "sha256": "5a0a5189e490e0a480645db613db9a009e24f5a3de0f8fa3e0d179d19e317abc"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/dataflow.png",
+      "width": 1706,
+      "height": 1024,
+      "bytes": 75898,
+      "sha256": "3a9c965a0a5b0e65c6b6d03c7b1fde9a1725150310373eb3f9e246f7a9766575"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/erd.png",
+      "width": 1974,
+      "height": 508,
+      "bytes": 63436,
+      "sha256": "b93d1cb5cb38e4f19ca00256ee8c82d9f65af51ad78cfae11364894b2e9d8db1"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/lifecycle.png",
+      "width": 1986,
+      "height": 652,
+      "bytes": 65652,
+      "sha256": "c2537d08cc38e7ebd7cf15bcb4ed44d9dc5ca796155c9286b10a86ef9baa5fb1"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/sequence.png",
+      "width": 1840,
+      "height": 1258,
+      "bytes": 76142,
+      "sha256": "0b184e963e63dd0eceae10eabcd0b8a2361faca98cd51062d2c2848ee5564108"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/timeline.png",
+      "width": 2208,
+      "height": 854,
+      "bytes": 97443,
+      "sha256": "7bc1b9e89fdf099d1ed9fd6f0e7af618e8843d67f00168668785fc0ebd961cfd"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/tree.png",
+      "width": 2088,
+      "height": 686,
+      "bytes": 56307,
+      "sha256": "53e897d1679bbcde49f32d3a9a6be1c36ec6dc45f44c4b34c68e513b2a47f0c9"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/waterfall.png",
+      "width": 2136,
+      "height": 616,
+      "bytes": 81162,
+      "sha256": "fc9f5b1864d78293d55b23d0117cc268c8be03e50e62481e97c57153e8c68fb2"
+    },
+    {
+      "path": "docs/architecture/08-crosscutting-concepts/diagrams/workflow.png",
+      "width": 1604,
+      "height": 1056,
+      "bytes": 88815,
+      "sha256": "875d5ae0067fce3e7a19838f2449994c4828554c203cbeceaabfe1d87a2592b0"
+    }
+  ]
+}

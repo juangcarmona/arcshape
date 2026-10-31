@@ -6,7 +6,7 @@
 
 The generated architecture reader currently constrains prose to `78ch`, which leaves useful viewport space unused and reduces reading comfort. The engineering portal header also repeats a tagline already present in the brand treatment instead of making the public ArcShape site easy to reach.
 
-<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:8372d5e6f9b51e0e9d468289d65d352a7c930089dea72897a9bffe56f894e053" -->
+<!-- pdac:cite id="FR-READER-VIEW" digest="sha256:ff3d03ebe93668cb0392a672fe63b9925404fab9dc2fb7891931f1f5d2ea799d" -->
 <!-- pdac:cite id="QR-READER-COMPREHENSION" digest="sha256:dd41b1449b77f87c2d4061b9fd0740a5c42281988045835a304d532911064439" -->
 
 ## What Changes

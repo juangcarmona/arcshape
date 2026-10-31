@@ -4,14 +4,15 @@ The default is a native bundle in the owning section's `diagrams/` directory:
 
 ```text
 context.archify.json  # canonical editable source
-context.svg           # generated Markdown image
+context.svg           # generated vector image
+context.png           # portable Markdown image
 context.md            # generated fenced Mermaid alternative
 ```
 
-Markdown displays the SVG. The interactive ArcShape reader resolves the adjacent native-source comment and displays one compact native widget with full-page access. Self-contained HTML embeds the native static SVG. The JSON is the source of truth; edit it and regenerate its companions rather than maintaining three independent sources.
+Markdown displays the PNG. The interactive ArcShape reader resolves the adjacent native-source comment and displays one compact native widget with full-page access. Self-contained HTML embeds the native static SVG. The JSON is the source of truth; edit it and regenerate its companions rather than maintaining independent sources.
 
 ```markdown
-![System context](./diagrams/context.svg)
+![System context](./diagrams/context.png)
 <!-- arcshape-diagram-source: ./diagrams/context.archify.json -->
 ```
 
@@ -23,6 +24,16 @@ arcshape site build --out docs/architecture-site/index.html
 ```
 
 `site previews` remains a compatibility alias. Generation validates native input and Mermaid syntax, then writes SVG and standard Markdown companions with source/content hashes. Checks detect missing, modified or stale assets. Generation refuses authored or modified files; ordinary site builds only verify and never regenerate them. All references remain inside the real documentation root; symlink targets and ambiguous associations are rejected. Generated companion-only Markdown does not create duplicate reader pages. Ordinary authored supporting Markdown still does.
+
+## Portable PNG previews
+
+Generation rasterizes the sanitized SVG in a network-blocked browser with light theme and an opaque white background. PNG is lossless, normally at twice the logical dimensions, capped at 8192 pixels per axis and 16 million pixels total; files above 16 MiB are rejected. Large diagrams may therefore use a lower scale. Vector SVG remains available for unrestricted zoom. Compression and size depend on diagram content; do not assume a universal byte budget.
+
+PNG embeds standard text metadata recording source, vector and content hashes. Checks validate chunk integrity and provenance rather than comparing newly rasterized pixels: platform-specific fonts do not invalidate an otherwise intact PNG. Authored, edited or malformed PNG output is not overwritten. A site build checks the PNG when selected or present, and does not rasterize or rewrite it.
+
+### Upgrade existing diagrams
+
+Existing SVG-backed bundles remain valid without PNG. To migrate selected bundles, change only the intended Markdown image extension from `.svg` to `.png`, keeping the adjacent JSON source comment, then run `arcshape site diagrams` and `arcshape site diagrams --check`. Review both generated representations before committing. Package/skill updates and site builds never change these references automatically. PNG helps readers without SVG support; this is not a claim that every Azure DevOps surface has been tested.
 
 ## Mermaid alternatives
 

@@ -240,6 +240,14 @@ async function main() {
         if (origin?.reference) {
           try {
             generatedFiles.set(
+              `diagrams/${diagram.id}/diagram.png`,
+              await readFile(origin.reference.pngPath),
+            );
+          } catch (error) {
+            if (error.code !== "ENOENT") throw error;
+          }
+          try {
+            generatedFiles.set(
               `diagrams/${diagram.id}/source.md`,
               await readFile(origin.reference.companionPath, "utf8"),
             );

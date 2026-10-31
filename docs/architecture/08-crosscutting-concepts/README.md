@@ -20,13 +20,15 @@ Repository setup, validation, site generation, session state, and Obsidian sync 
 
 ## Diagram execution and publication
 
-Native diagrams use one canonical JSON source with generated SVG and fenced Mermaid Markdown companions. The document's image/source pair displays SVG in Markdown and resolves to the native viewer in interactive publication. Explicit generation validates Mermaid syntax and records source/content hashes; publication checks freshness without rewriting assets. Generated companions do not become duplicate reader pages. Existing Mermaid sources remain supported through the bounded parser/layout adapter. References are confined to the real documentation root; symlink targets and modified generated output are rejected. Native rendering still uses the pinned schema, network-blocked build browser, sanitized SVG and isolated runtime.
+Native diagrams use one canonical JSON source with generated SVG, PNG and fenced Mermaid Markdown companions. The document's image/source pair displays PNG in Markdown and resolves to the native viewer in interactive publication. Explicit generation validates Mermaid syntax and records source/content hashes; publication checks freshness without rewriting assets. Generated companions do not become duplicate reader pages. Existing Mermaid sources remain supported through the bounded parser/layout adapter. References are confined to the real documentation root; symlink targets and modified generated output are rejected. Native rendering still uses the pinned schema, network-blocked build browser, sanitized SVG and isolated runtime.
+
+Portable PNG export reuses the same network-blocked browser to rasterize sanitized light-theme SVG within bounded dimensions. PNG text metadata binds source, vector and image-content hashes; checks validate the committed image rather than reproducing pixels on each operating system. Legacy SVG-only bundles remain valid without migration.
 
 Interactive pages execute the viewer in `sandbox="allow-scripts"` iframes, without same-origin access. Dedicated pages keep the same boundary by assigning inert viewer data to a sandboxed `srcdoc` frame. Both wrappers validate message source windows and bounded message shapes; they accept no arbitrary URLs or DOM commands. CSP restricts scripts to generated hashes and blocks network connections. Static images remain available without JavaScript.
 
 Publication stages the entire directory before replacing intact ArcShape-owned output. Its file-hash manifest detects modified or unrelated files; output cannot overlap the authored documentation or traverse symlinks. Snapshot generation retains the existing single-file contract. See [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md) and the [fictional family gallery](diagram-gallery.md).
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:c3b23d66ee088a457d58ae8bd22645d99e0f0618ff30fa242bd7ddf700a1f7c7" -->
 
 ## Observability and operations
 
