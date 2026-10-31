@@ -1,5 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  cp,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { syncConfluencePages } from "../packages/cli/src/bin/confluence-pages.mjs";
@@ -89,8 +97,14 @@ describe("multi-page Confluence sync", () => {
 
     const preview = await syncConfluencePages({ ...options, dryRun: true });
     expect(preview.exitCode).toBe(0);
-    // Index, twelve sections, three ADRs and the diagram gallery.
-    expect(preview.outcomes).toHaveLength(17);
+    const adrCount = (
+      await readdir(join(root, "docs/architecture/09-architecture-decisions"), {
+        recursive: true,
+      })
+    ).filter((file) => /(?:^|[/\\])ADR-\d{4}[^/\\]*\.md$/.test(file)).length;
+    // Index, twelve sections, the real ADR collection and one gallery page.
+    const expectedPages = 1 + 12 + adrCount + 1;
+    expect(preview.outcomes).toHaveLength(expectedPages);
     expect(
       preview.outcomes.every((outcome) => outcome.action === "create"),
     ).toBe(true);
@@ -100,8 +114,8 @@ describe("multi-page Confluence sync", () => {
     expect(created.exitCode).toBe(0);
     expect(
       created.outcomes.filter((outcome) => outcome.action === "created"),
-    ).toHaveLength(17);
-    expect(pages.size).toBe(17);
+    ).toHaveLength(expectedPages);
+    expect(pages.size).toBe(expectedPages);
     const index = [...pages.values()].find(
       (page) => page.title === "ArcShape — Architecture Documentation",
     );
@@ -115,7 +129,7 @@ describe("multi-page Confluence sync", () => {
         "utf8",
       ),
     );
-    expect(Object.keys(manifest.pages)).toHaveLength(17);
+    expect(Object.keys(manifest.pages)).toHaveLength(expectedPages);
     const repeated = await syncConfluencePages({ ...options, dryRun: true });
     expect(repeated.exitCode).toBe(0);
     expect(

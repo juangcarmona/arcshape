@@ -1,15 +1,15 @@
 # Authoring diagram bundles
 
-For new diagrams, author one native Archify JSON source in the owning section's `diagrams/` directory. Reference its generated SVG in Markdown and associate the native JSON immediately below it:
+For new diagrams, author one native Archify JSON source in the owning section's `diagrams/` directory. Reference its generated PNG in Markdown and associate the native JSON immediately below it:
 
 ```markdown
-![System context](./diagrams/context.svg)
+![System context](./diagrams/context.png)
 <!-- arcshape-diagram-source: ./diagrams/context.archify.json -->
 ```
 
-Run `arcshape site diagrams` to generate the SVG and a standard `context.md` containing a fenced Mermaid alternative. Run `arcshape site diagrams --check` before publication. JSON is the editable source; SVG and Mermaid Markdown are derived and protected against silent overwrite. Site builds verify freshness and do not rewrite sources. Source paths stay within the documentation root. Existing `site previews` remains an alias.
+Run `arcshape site diagrams` to generate the SVG, PNG and a standard `context.md` containing a fenced Mermaid alternative. Run `arcshape site diagrams --check` before publication. JSON is the editable source; SVG, PNG and Mermaid Markdown are derived and protected against silent overwrite. Site builds verify freshness and do not rewrite sources. Source paths stay within the documentation root. Existing `site previews` remains an alias.
 
-Markdown shows the SVG. An interactive folder build replaces that image with the existing compact native viewer and full-page link; a single-file snapshot embeds static SVG. The Mermaid companion is a semantic view, not an identical rendering: sequences preserve ordered messages and notes; other supported families use labeled flowcharts preserving structural facts, properties, timing and annotations. Unsupported exports must be reported rather than fabricated. Inspect meaning as well as syntax.
+Markdown shows the PNG. An interactive folder build replaces that image with the existing compact native viewer and full-page link; a single-file snapshot embeds static SVG. The Mermaid companion is a semantic view, not an identical rendering: sequences preserve ordered messages and notes; other supported families use labeled flowcharts preserving structural facts, properties, timing and annotations. Unsupported exports must be reported rather than fabricated. Inspect meaning as well as syntax.
 
 ## Family selection
 

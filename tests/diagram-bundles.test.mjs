@@ -18,6 +18,8 @@ import {
 } from "../packages/cli/src/arc42-site/bundle-format.mjs";
 import { generatePreviews } from "../packages/cli/src/arc42-site/native-previews.mjs";
 import { loadDocs } from "../packages/cli/src/arc42-site/loadDocs.mjs";
+import { nativeReferences } from "../packages/cli/src/arc42-site/native-previews.mjs";
+import { pngProvenance } from "../packages/cli/src/arc42-site/native-png.mjs";
 
 it.each([
   "architecture",
@@ -69,7 +71,7 @@ it("preserves sequence notes and semantic graph attributes, cardinalities and ti
 });
 
 describe("coordinated bundles", () => {
-  let root, section, dir, source, json, svg, md;
+  let root, section, dir, source, json, svg, md, png;
   beforeEach(async () => {
     root = await mkdtemp(join(tmpdir(), "arcshape-bundle-"));
     await writeFile(join(root, "README.md"), "# Architecture\n");
@@ -94,6 +96,7 @@ describe("coordinated bundles", () => {
     );
     json = join(dir, "sequence.archify.json");
     svg = join(dir, "sequence.svg");
+    png = join(dir, "sequence.png");
     md = join(dir, "sequence.md");
     await writeFile(json, source);
     await writeFile(
@@ -120,6 +123,22 @@ describe("coordinated bundles", () => {
   it("generates and checks bundles without duplicate navigation", async () => {
     expect(await generatePreviews(root)).toBe(1);
     expect(await generatePreviews(root, { check: true })).toBe(1);
+    expect(pngProvenance(await readFile(png))).toBeDefined();
+    const readme = join(section, "README.md");
+    const body = (await readFile(readme, "utf8")).replace(
+      "sequence.svg",
+      "sequence.png",
+    );
+    await writeFile(readme, body);
+    expect(
+      (
+        await nativeReferences(body, {
+          docsDir: root,
+          document: "06-section/README.md",
+        })
+      )[0].pngSelected,
+    ).toBe(true);
+    expect(await generatePreviews(root, { check: true })).toBe(1);
     expect((await loadDocs(root)).sections[5].supporting).toHaveLength(0);
     await writeFile(
       join(dir, "explanation.md"),
@@ -128,8 +147,36 @@ describe("coordinated bundles", () => {
     expect((await loadDocs(root)).sections[5].supporting).toHaveLength(1);
   }, 60000);
 
+  it("keeps three-file SVG bundles usable and requires selected PNG integrity", async () => {
+    await generatePreviews(root);
+    const originalPng = await readFile(png);
+    await rm(png);
+    expect(await generatePreviews(root, { check: true })).toBe(1);
+    const readme = join(section, "README.md");
+    await writeFile(
+      readme,
+      (await readFile(readme, "utf8")).replace("sequence.svg", "sequence.png"),
+    );
+    await expect(generatePreviews(root, { check: true })).rejects.toThrow(
+      /missing, modified or stale PNG/,
+    );
+    await writeFile(png, Buffer.concat([originalPng, Buffer.from("edited")]));
+    await expect(generatePreviews(root)).rejects.toThrow(/modified PNG/);
+    await expect(generatePreviews(root, { check: true })).rejects.toThrow(
+      /stale PNG/,
+    );
+    await writeFile(png, originalPng);
+    expect(await generatePreviews(root, { check: true })).toBe(1);
+    if (process.platform !== "win32") {
+      await rm(png);
+      await symlink(root + "-outside.png", png);
+      await expect(generatePreviews(root)).rejects.toThrow(/symlinks/);
+    }
+  }, 60000);
+
   it("detects stale bundles and safely regenerates both companions", async () => {
     await generatePreviews(root);
+    const originalPng = await readFile(png);
     await writeFile(
       json,
       source.replace("Confirm a booking", "Updated booking"),
@@ -139,6 +186,13 @@ describe("coordinated bundles", () => {
     );
     await generatePreviews(root);
     expect(await readFile(md, "utf8")).toContain("Updated booking");
+    const updatedPng = await readFile(png);
+    expect(pngProvenance(updatedPng)).not.toEqual(pngProvenance(originalPng));
+    await writeFile(png, originalPng);
+    await expect(generatePreviews(root, { check: true })).rejects.toThrow(
+      /stale PNG/,
+    );
+    await writeFile(png, updatedPng);
   }, 60000);
 
   it("refuses modified outputs and dangling symlink targets", async () => {

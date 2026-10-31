@@ -26,13 +26,17 @@ ArcShape publishes two independent static surfaces. The public marketing site is
 
 ## Development
 
-Author diagrams as native JSON/SVG/Markdown bundles. `arcshape site diagrams` generates the SVG shown in Markdown and a standard fenced Mermaid `.md` alternative; `--check` verifies freshness. Interactive publication shows the native viewer. Existing Mermaid/native documents remain supported. See [diagram authoring and migration](docs/diagrams.md).
+Author diagrams as native JSON/SVG/PNG/Markdown bundles. `arcshape site diagrams` generates vector SVG, portable PNG for Markdown and a standard fenced Mermaid `.md` alternative; `--check` verifies freshness. Interactive publication shows the native viewer. Existing SVG-backed and Mermaid/native documents remain supported. See [diagram authoring and migration](docs/diagrams.md).
 
 Use Node.js 22 or newer and npm:
 
 ```sh
 npm ci
 npm test
+npm ci --prefix src/public-site
+npm ci --prefix src/engineering-portal
+SITE_BASE=/ npm --prefix src/public-site run verify
+SITE_BASE=/arcshape/ npm --prefix src/engineering-portal run build
 npm run test:e2e
 ```
 

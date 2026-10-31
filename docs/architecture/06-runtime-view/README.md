@@ -10,7 +10,7 @@ description: Runtime behavior and important interactions between building blocks
 
 ### Initialize a repository
 
-![Safe ArcShape initialization flow](./diagrams/initialization.svg)
+![Safe ArcShape initialization flow](./diagrams/initialization.png)
 <!-- arcshape-diagram-source: ./diagrams/initialization.archify.json -->
 
 The initialization activity view makes the per-file loop and its three mutually exclusive outcomes explicit. Initialization is preview-first and deliberately boring: it does not inspect source code, make architecture claims, contact an ArcShape service, or launch an agent. It installs the README, twelve arc42 sections, and optionally selected `arc-` skills. The CLI rechecks each destination before writing, creates absent files exclusively, and preserves edited or symlinked paths as conflicts. Agent lifecycle commands use the same planning and ownership-manifest approach.
@@ -31,15 +31,15 @@ The initialization activity view makes the per-file loop and its three mutually 
 
 Native fences add one build-time rendering step. The default snapshot embeds their static images; `--format interactive` publishes compact viewers and dedicated pages from the same source. Validation or rendering errors stop publication. An interactive directory is replaced only when its ownership inventory still matches every file. The canonical diagrams below use native bundles; existing Mermaid sources remain supported, with whole-diagram fallback for unsupported conversion semantics.
 
-![Build native architecture diagrams](./diagrams/reader-build.svg)
+![Build native architecture diagrams](./diagrams/reader-build.png)
 <!-- arcshape-diagram-source: ./diagrams/reader-build.archify.json -->
 
 The diagram shows the successful path. Malformed input, a rendering failure, or modified output leaves the prior publication in place. The runtime boundary is explained in [cross-cutting concepts](../08-crosscutting-concepts/README.md); the trade-off is recorded in [ADR-0002](../09-architecture-decisions/ADR-0002-isolate-native-diagram-viewers.md).
 
-<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:02d4c9bc5238c5d6bc5e162f0cda52dee6c00a5b0229f8b841f811a533b8f06c" -->
+<!-- pdac:cite id="FR-INTERACTIVE-DIAGRAMS" digest="sha256:c3b23d66ee088a457d58ae8bd22645d99e0f0618ff30fa242bd7ddf700a1f7c7" -->
 
-The builder resolves native bundle references, checks generated SVG and Mermaid Markdown against their canonical JSON, and creates the static or isolated interactive representation. Existing Mermaid fences retain their bounded compatibility conversion. Generated companion-only Markdown is excluded from duplicate navigation. Only after validation succeeds is the complete site published; authored files remain unchanged.
-<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:c49ed716a9b078b766666bf79afa2e999a366a9444732c659691b34baba853e1" -->
+The builder resolves native bundle references, checks generated SVG, available or selected PNG and Mermaid Markdown against their canonical JSON, and creates the static or isolated interactive representation. Existing Mermaid fences retain their bounded compatibility conversion. Generated companion-only Markdown is excluded from duplicate navigation. Only after validation succeeds is the complete site published; authored files remain unchanged.
+<!-- pdac:cite id="FR-CLI-COMMANDS" digest="sha256:8ef95cb49549967275a46362840b5e8b272696b14cabb7c80a321e5b7719ffff" -->
 
 ### Resume an evidence-analysis session
 

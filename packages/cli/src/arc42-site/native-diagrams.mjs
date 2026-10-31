@@ -11,6 +11,7 @@ import createDOMPurify from "dompurify";
 import { validateSchema } from "../../assets/archify/renderers/shared/validator.mjs";
 import { validateCrossCollectionContracts } from "../../assets/archify/renderers/shared/cli.mjs";
 import { getPuppeteerLaunchOptions } from "./browser-options.mjs";
+import { rasterDimensions, maxPngBytes } from "./native-png.mjs";
 
 const run = promisify(execFile);
 const vendor = fileURLToPath(new URL("../../assets/archify/", import.meta.url));
@@ -132,7 +133,10 @@ export function sanitizeNativeSvg(svg) {
   }
 }
 
-export async function renderNativeDiagrams(sources, { locations = [] } = {}) {
+export async function renderNativeDiagrams(
+  sources,
+  { locations = [], raster = false } = {},
+) {
   const diagrams = sources.map((source, i) =>
     parseNativeDiagram(source, {
       location: locations[i] ?? `archify diagram ${i + 1}`,
@@ -228,9 +232,31 @@ export async function renderNativeDiagrams(sources, { locations = [] } = {}) {
             );
           }),
         ]).finally(() => clearTimeout(exportTimer));
+        const svg = sanitizeNativeSvg(result.svg);
+        let png;
+        if (raster) {
+          const dimensions = rasterDimensions(result.width, result.height);
+          const document = new JSDOM(svg);
+          document.window.document
+            .querySelector("svg")
+            .setAttribute("data-theme", "light");
+          const lightSvg =
+            document.window.document.querySelector("svg").outerHTML;
+          document.window.close();
+          await page.setViewport({ ...dimensions, deviceScaleFactor: 1 });
+          await page.setContent(
+            `<style>html,body{margin:0;background:white}img{display:block;width:100vw;height:100vh}</style><img src="data:image/svg+xml;base64,${Buffer.from(lightSvg).toString("base64")}">`,
+            { waitUntil: "load", timeout: 15000 },
+          );
+          await page.evaluate(() => document.images[0].decode());
+          png = Buffer.from(await page.screenshot({ type: "png" }));
+          if (png.length > maxPngBytes)
+            throw new Error("generated PNG exceeds 16 MiB");
+        }
         results.push({
           ...result,
-          svg: sanitizeNativeSvg(result.svg),
+          svg,
+          png,
           html,
           title: data.meta.title,
           type: data.diagram_type,

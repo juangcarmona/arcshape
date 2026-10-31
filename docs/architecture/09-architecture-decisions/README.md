@@ -17,5 +17,6 @@ Keep this table sorted alphabetically by ADR title. Include every record, regard
 | [Enhance Mermaid sources with native diagrams (ADR-0003)](ADR-0003-enhance-mermaid-with-native-diagrams.md) | Proposed | 2026-10-30 |
 | [Isolate native diagram viewers and retain static snapshots (ADR-0002)](ADR-0002-isolate-native-diagram-viewers.md) | Proposed | 2026-10-27 |
 | [ADR-0001](ADR-0001-colocate-adrs-with-architecture-section-09.md) | Accepted | 2026-10-21 |
+| [Publish portable PNG previews alongside vector diagrams (ADR-0004)](ADR-0004-publish-portable-png-previews.md) | Accepted | 2026-10-31 |
 
 Do not create a parallel `docs/adr/` collection or duplicate ADR bodies in this section document.

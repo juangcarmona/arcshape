@@ -32,5 +32,5 @@ The source repository produces three independent kinds of output: the public pro
 
 The companion [Archify publication-boundaries diagram](../../../src/engineering-portal/public/diagrams/publication-boundaries.html) is a standalone static artifact generated from the reviewed candidate at `.archify/arcshape-publications/arcshape-publication-boundaries.json`.
 
-![ArcShape publication and adopter deployment boundaries](./diagrams/deployment.svg)
+![ArcShape publication and adopter deployment boundaries](./diagrams/deployment.png)
 <!-- arcshape-diagram-source: ./diagrams/deployment.archify.json -->
