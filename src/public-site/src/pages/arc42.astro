@@ -1,0 +1,37 @@
+---
+import PublicLayout from "../layouts/PublicLayout.astro";
+import { arc42Sections, architecture } from "../data/site.mjs";
+---
+<PublicLayout page="arc42" title="Understanding arc42 | ArcShape" description="Learn what arc42 is, what its twelve architecture documentation sections cover, and how ArcShape uses it. Follow links to the official guidance.">
+  <div class="wrap">
+    <section class="guide-intro" aria-labelledby="guide-heading">
+      <p class="eyebrow">The framework behind the documentation</p>
+      <h1 id="guide-heading">A guide to arc42.</h1>
+      <p class="lead">arc42 is a template for documenting and communicating software architecture. It gives a team a shared structure for explaining what a system does, how it works, and why it was built that way.</p>
+      <p>ArcShape uses that structure to organize Markdown documentation in your repository. Its AI-assisted workflows help investigate the system and maintain the documentation; its CLI validates the structure and builds the reader.</p>
+      <p>You can adapt the depth to your system and its readers. Start with the information people need, and develop the relevant sections as your understanding grows.</p>
+      <div class="inline-links"><a href="https://arc42.org/">Visit the official arc42 website <span aria-hidden="true">↗</span></a><a href={architecture}>Explore ArcShape’s architecture <span aria-hidden="true">↗</span></a></div>
+    </section>
+    <div class="guide-layout">
+      <nav class="section-nav" aria-label="arc42 sections">
+        <h2>The twelve sections</h2>
+        <ol>{arc42Sections.map((section) => <li><a href={`#section-${section.number}`}><span class="number">{String(section.number).padStart(2, "0")}</span>{section.title}</a></li>)}</ol>
+      </nav>
+      <div>
+        {arc42Sections.map((section) => <section class="guide-section" id={`section-${section.number}`} aria-labelledby={`heading-${section.number}`}>
+          <span class="number">{String(section.number).padStart(2, "0")}</span>
+          <h2 id={`heading-${section.number}`}>{section.title}</h2>
+          <p>{section.purpose}</p>
+          <p class="example"><strong>Example: a booking system</strong>{section.example}</p>
+          <a href={section.href}>Official guidance: {section.title} <span aria-hidden="true">↗</span></a>
+        </section>)}
+        <section class="further-reading" aria-labelledby="further-heading">
+          <h2 id="further-heading">Keep exploring.</h2>
+          <p>Read the official guidance for more detail, or explore complete examples to see how other teams document their systems.</p>
+          <div class="inline-links"><a href="https://docs.arc42.org/home/">Official documentation</a><a href="https://examples.arc42.org/">Example architectures</a><a href={architecture}>ArcShape’s architecture</a></div>
+          <p class="note">arc42 was created by Peter Hruschka and Gernot Starke. The official material is licensed under <a href="https://arc42.org/license">CC BY-SA 4.0</a>. These summaries and booking examples are written for this guide.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+</PublicLayout>

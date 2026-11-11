@@ -8,3 +8,6 @@ playwright-report/
 test-results/
 reports/mutation/
 .stryker-tmp/
+
+# Local Cloudflare static preview state
+src/public-site/.wrangler/

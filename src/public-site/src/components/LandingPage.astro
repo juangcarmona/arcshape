@@ -1,149 +1,71 @@
 ---
+import source from "../../../../docs/architecture/01-introduction-and-goals/README.md?raw";
 import PublicLayout from "../layouts/PublicLayout.astro";
-import BrandLockup from "./BrandLockup.astro";
-import { locales } from "../data/locales.mjs";
-const { locale } = Astro.props;
+import { architecture, repository, portal, tagline, steps } from "../data/site.mjs";
 const base = import.meta.env.BASE_URL;
-const repository = "https://github.com/juangcarmona/arcshape";
-const portal = "https://juangcarmona.github.io/arcshape/";
-const architecture = `${portal}architecture/`;
-const languageChoices = Object.values(locales).filter(({ code }) => code !== locale.code);
+const sourcePath = "docs/architecture/01-introduction-and-goals/README.md";
+const paragraph = source.match(/## Requirements overview\s+([^\n]+)/)?.[1];
+if (!paragraph) throw new Error("The architecture preview needs its canonical requirements overview.");
+const excerpt = paragraph.split(/(?<=\.)\s/)[0];
+const markdown = `# 1. Introduction and goals\n\n## Requirements overview\n\n${excerpt}`;
 ---
-
-<PublicLayout {locale}>
-  <a class="skip" href="#main">{locale.skip}</a>
-  <header class="topbar">
-    <a class="brand" href={`${base}#top`} aria-label={locale.brandHome}>
-      <BrandLockup id="site-header-brand" width={175} height={27} />
-    </a>
-    <span class="header-badge">AI driven engineering documentation</span>
-    <nav id="primary-navigation" aria-label={locale.mainNavigation}>
-      <a href="#workflow">{locale.nav.workflow}</a>
-      <a href="#artifacts">{locale.nav.artifacts}</a>
-      <a href={portal}>
-        {locale.engineering} <span aria-hidden="true">↗</span>
-      </a>
-      {languageChoices.map((choice) => (
-        <a class="language" href={`${base}${choice.path.slice(1)}`} hreflang={choice.code} aria-label={`View site in ${choice.code}`}>
-          {choice.code.toUpperCase()}
-        </a>
-      ))}
-    </nav>
-    <span class="header-spacer"></span>
-    <div class="appearance" role="group" aria-label={locale.langName === "Español" ? "Apariencia" : "Appearance"}>
-      <button type="button" data-appearance-choice="light" aria-label={locale.code === "es" ? "Tema claro" : "Light theme"} title={locale.code === "es" ? "Tema claro" : "Light theme"} aria-pressed="false">☼</button>
-      <button type="button" data-appearance-choice="dark" aria-label={locale.code === "es" ? "Tema oscuro" : "Dark theme"} title={locale.code === "es" ? "Tema oscuro" : "Dark theme"} aria-pressed="false">☾</button>
-      <button type="button" data-appearance-choice="auto" aria-label={locale.code === "es" ? "Tema del sistema" : "System theme"} title={locale.code === "es" ? "Tema del sistema" : "Theme follows system"} aria-pressed="true">▣</button>
+<PublicLayout>
+  <section class="wrap hero" id="top" aria-labelledby="hero-heading">
+    <div class="hero-copy">
+      <p class="eyebrow">{tagline}</p>
+      <h1 id="hero-heading">Document your software architecture.</h1>
+      <p class="lead">ArcShape helps you understand your system, document its structure and decisions, and maintain that knowledge in your repository. Publish a reader from Markdown your team can review in Git.</p>
+      <div class="actions">
+        <a class="button primary" href={architecture}>Explore the architecture <span aria-hidden="true">↗</span></a>
+        <a class="button" href={repository}>View on GitHub <span aria-hidden="true">↗</span></a>
+      </div>
+      <p class="note">Open source. Markdown in your repository.</p>
     </div>
-  </header>
-  <main id="main">
-    <section class="hero" id="top">
-      <div class="hero-copy">
-        <p class="eyebrow">{locale.eyebrow}</p>
-        <h1>{locale.headline[0]}<em>{locale.headline[1]}</em></h1>
-        <p class="lead">{locale.lead}</p>
-        <div class="actions">
-          <a class="button primary" href={repository}>
-            {locale.explore} <span aria-hidden="true">↗</span>
-          </a>
-          <a class="text-link" href={portal}>
-            {locale.browse} <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <p class="note">{locale.note}</p>
+    <div class="reader" aria-label="Excerpt from ArcShape’s architecture">
+      <div class="reader-bar"><strong>ArcShape</strong><span>Architecture reader</span></div>
+      <div class="reader-body">
+        <p class="section-number">01 / Introduction and goals</p>
+        <h2>Introduction and goals</h2>
+        <p>{excerpt}</p>
+        <ul>
+          <li>Repository investigation and evidence</li>
+          <li>Architecture decisions and diagrams</li>
+          <li>Documentation you can read and share</li>
+        </ul>
+        <a class="reader-link" href={`${architecture}#/section/01`}>Read introduction and goals <span aria-hidden="true">↗</span></a>
       </div>
-      <div class="hero-art" role="img" aria-label={locale.heroArt}>
-        <div class="orbit orbit-a"></div>
-        <div class="orbit orbit-b"></div>
-        <div class="core">
-          <span class="monogram" aria-hidden="true">AS</span>
-          <span>{locale.coreText[0]}<br />{locale.coreText[1]}</span>
-        </div>
-        {locale.stages.map((stage, index) => (
-          <div class:list={["node", `node-${["one", "two", "three"][index]}`]}>
-            <b>{`0${index + 1}`}</b><span>{stage}</span>
-          </div>
-        ))}
-        <div class="spark s1"></div>
-        <div class="spark s2"></div>
-      </div>
-    </section>
-    <section class="strip" aria-label={locale.principlesLabel}>
-      {locale.principles.map((principle, index) => (
-        <>
-          {index > 0 && <i aria-hidden="true"></i>}
-          <span>{principle}</span>
-        </>
-      ))}
-    </section>
-    <section class="section" id="workflow">
+    </div>
+  </section>
+  <section class="section" id="workflow" aria-labelledby="workflow-heading">
+    <div class="wrap">
       <div class="section-heading">
-        <p class="eyebrow">{locale.workflowEyebrow}</p>
-        <h2>{locale.workflowTitle}</h2>
-        <p>{locale.workflowIntro}</p>
+        <p class="eyebrow">How it works</p>
+        <h2 id="workflow-heading">From repository to architecture documentation.</h2>
+        <p>Use ArcShape’s agent skills to investigate and document your system. Its CLI handles setup, validation, and reader generation. You review the documentation changes.</p>
       </div>
-      <div class="steps">
-        {locale.steps.map((step, index) => (
-          <article>
-            <div class="step-number">{`0${index + 1}`}</div>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </article>
-        ))}
+      <ol class="steps">
+        {steps.map((step, index) => <li><span class="step-number">0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}
+      </ol>
+    </div>
+  </section>
+  <section class="section source-band" id="artifacts" aria-labelledby="source-heading">
+    <div class="wrap">
+      <div class="section-heading">
+        <p class="eyebrow">Source and reader</p>
+        <h2 id="source-heading">Markdown in Git. Architecture on the web.</h2>
+        <p>Review documentation alongside your code, then build a reader for the people who need to understand the system. The Markdown stays the source of truth.</p>
       </div>
-    </section>
-    <section class="artifacts" id="artifacts">
-      <div class="artifact-copy">
-        <p class="eyebrow">{locale.artifactsEyebrow}</p>
-        <h2>{locale.artifactsTitle}</h2>
-        <p>{locale.artifactsIntro}</p>
-        <a class="button light" href={architecture}>
-          {locale.architecture} <span aria-hidden="true">↗</span>
-        </a>
+      <div class="source-pair">
+        <article class="document"><h3>In the repository</h3><pre><code>{markdown}</code></pre></article>
+        <article class="document"><h3>In the reader</h3><h4 class="excerpt-heading">1. Introduction and goals</h4><h5 class="excerpt-subheading">Requirements overview</h5><p>{excerpt}</p></article>
       </div>
-      <div class="artifact-stack" aria-label={locale.artifactsTitle}>
-        <div class="artifact-card source">
-          <span class="card-label">{locale.canonicalSource}</span>
-          <div class="doc-lines">
-            <b></b><i></i><i></i><b></b><i></i><i></i>
-          </div>
-          <strong>{locale.sourceTitle}</strong>
-          <small>{locale.sourceText}</small>
-        </div>
-        <div class="connector" aria-hidden="true">↓</div>
-        <div class="artifact-card view">
-          <span class="card-label">{locale.generatedView}</span>
-          <div class="mini-browser">
-            <div class="dots"><i></i><i></i><i></i></div>
-            <div class="mini-layout">
-              <b></b><span></span><span></span><span></span><span></span>
-            </div>
-          </div>
-          <strong>{locale.readerTitle}</strong>
-          <small>{locale.readerText}</small>
-        </div>
-      </div>
-    </section>
-    <section class="closing">
-      <p class="eyebrow">{locale.closingEyebrow}</p>
-      <h2>{locale.closingTitle}</h2>
-      <p>{locale.closingIntro}</p>
-      <a class="button primary" href={repository}>
-        {locale.viewRepository} <span aria-hidden="true">↗</span>
-      </a>
-    </section>
-  </main>
-  <footer>
-    <a href={`${base}#top`} class="footer-brand" aria-label="ArcShape — AI driven engineering documentation">
-      <BrandLockup id="site-footer-brand" />
-    </a>
-    <span>{locale.footerText}</span>
-    <a href={portal}>{locale.engineering}</a>
-    <a href={repository}>GitHub</a>
-    {languageChoices.map((choice) => (
-      <a href={`${base}${choice.path.slice(1)}`} hreflang={choice.code}>
-        {choice.code.toUpperCase()}
-      </a>
-    ))}
-  </footer>
+      <div class="inline-links"><a href={`${repository}/blob/main/${sourcePath}`}>Read the Markdown source</a><a href={`${architecture}#/section/01`}>Read introduction and goals</a><a href={portal}>Visit the engineering portal</a></div>
+    </div>
+  </section>
+  <section class="section" aria-labelledby="framework-heading">
+    <div class="wrap framework">
+      <div><p class="eyebrow">A structure for your documentation</p><h2 id="framework-heading">Built on arc42.</h2><p>ArcShape uses arc42, a template for documenting software architecture. Its twelve sections help you explain a system’s goals, structure, behavior, and decisions.</p></div>
+      <a class="button" href={`${base}arc42/`}>Learn about arc42 <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
 </PublicLayout>

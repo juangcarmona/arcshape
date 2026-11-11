@@ -1,42 +1,87 @@
 ---
-const { locale } = Astro.props;
+import BrandLockup from "../components/BrandLockup.astro";
+import { repository, portal, tagline } from "../data/site.mjs";
+import "../styles/site.css";
+const { title = `ArcShape — ${tagline}`, description = "Create and maintain software architecture documentation. Review Markdown in your repository and publish an architecture reader.", page = "home" } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
-
 <!doctype html>
-<html lang={locale.code}>
+<html lang="en" data-lh-theme="system">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content={locale.description} />
-    <title>{locale.title}</title>
-    <link rel="stylesheet" href={`${base}styles.css`} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f8faff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0f17" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <script is:inline>
+      try {
+        const choice = localStorage.getItem("arcshape-appearance");
+        document.documentElement.dataset.lhTheme = ["light", "dark"].includes(choice) ? choice : "system";
+      } catch { /* System appearance also works when storage is unavailable. */ }
+    </script>
   </head>
   <body>
-    <slot />
-    <script is:inline>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="topbar">
+      <div class="wrap header-inner">
+        <a class="brand" href={base} aria-label="ArcShape home"><BrandLockup id="header-brand" /></a>
+        <details class="menu" open>
+          <summary aria-controls="site-navigation">Menu</summary>
+          <div class="navigation" id="site-navigation">
+            <nav aria-label="Main navigation">
+              <a href={`${base}#workflow`}>How it works</a>
+              <a href={`${base}#artifacts`}>Source and reader</a>
+              <a href={`${base}arc42/`} aria-current={page === "arc42" ? "page" : undefined}>About arc42</a>
+              <a href={portal}>Engineering portal</a>
+            </nav>
+            <div class="appearance">
+              <label for="appearance">Appearance</label>
+              <select id="appearance" disabled>
+                <option value="auto">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+          </div>
+        </details>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer>
+      <div class="wrap footer-inner">
+        <a href={base} class="footer-brand" aria-label="ArcShape home"><BrandLockup id="footer-brand" /></a>
+        <nav aria-label="Footer navigation">
+          <a href={`${base}arc42/`}>About arc42</a>
+          <a href={portal}>Engineering portal</a>
+          <a href={repository}>GitHub</a>
+        </nav>
+      </div>
+    </footer>
+    <script>
       const root = document.documentElement;
-      const key = "arcshape-appearance";
-      const media = window.matchMedia("(prefers-color-scheme: dark)");
-      const buttons = document.querySelectorAll("[data-appearance-choice]");
-      function syncAssets(choice) {
-        const dark = choice === "dark" || (choice === "auto" && media.matches);
-        document.querySelectorAll("[data-theme-light][data-theme-dark]").forEach((image) => {
-          image.src = dark ? image.dataset.themeDark : image.dataset.themeLight;
-        });
-      }
-      function setAppearance(choice) {
-        if (choice === "auto") root.removeAttribute("data-appearance");
-        else root.setAttribute("data-appearance", choice);
-        localStorage.setItem(key, choice);
-        syncAssets(choice);
-        buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.appearanceChoice === choice)));
-      }
-      const saved = localStorage.getItem(key) || "auto";
-      setAppearance(saved);
-      media.addEventListener("change", () => { if ((localStorage.getItem(key) || "auto") === "auto") syncAssets("auto"); });
-      buttons.forEach((button) => button.addEventListener("click", () => setAppearance(button.dataset.appearanceChoice)));
+      const appearance = document.querySelector<HTMLSelectElement>("#appearance")!;
+      appearance.disabled = false;
+      appearance.value = root.dataset.lhTheme === "system" ? "auto" : root.dataset.lhTheme!;
+      appearance.addEventListener("change", () => {
+        root.dataset.lhTheme = appearance.value === "auto" ? "system" : appearance.value;
+        try { localStorage.setItem("arcshape-appearance", appearance.value); } catch { /* The current page still changes appearance. */ }
+      });
+      const menu = document.querySelector<HTMLDetailsElement>(".menu")!;
+      const toggle = menu.querySelector("summary")!;
+      const narrow = window.matchMedia("(max-width: 900px)");
+      function syncMenu() { menu.open = !narrow.matches; }
+      syncMenu();
+      narrow.addEventListener("change", syncMenu);
+      menu.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && narrow.matches && menu.open) {
+          menu.open = false;
+          toggle.focus();
+        }
+      });
+      menu.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+        if (narrow.matches) { menu.open = false; toggle.focus(); }
+      }));
     </script>
   </body>
 </html>
