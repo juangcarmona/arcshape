@@ -54,7 +54,7 @@ describe("GitHub Pages engineering portal workflow", () => {
           run: expect.stringContaining("src/engineering-portal run build"),
         }),
         expect.objectContaining({
-          name: "Generate Product Snapshot",
+          name: "Generate Product Explorer",
           run: expect.stringContaining("prodshape graph --format html"),
         }),
         expect.objectContaining({
@@ -77,6 +77,9 @@ describe("GitHub Pages engineering portal workflow", () => {
     expect(
       steps.find(({ name }) => name === "Record source revision").run,
     ).toContain("git rev-parse HEAD");
+    expect(
+      steps.find(({ name }) => name === "Generate Product Explorer").run,
+    ).toContain("cp .product/generated/explorer.html _site/model/index.html");
     expect(
       steps.find(({ name }) => name === "Generate Architecture Snapshot").run,
     ).toContain("--format interactive --out _site/architecture");
