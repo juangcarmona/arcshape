@@ -1,0 +1,25 @@
+
+== src/public-site/dist/index.html  (317 words)  0 FAIL, 0 WARN
+  INFO copy-two-fragment    two-fragment headings "X. Y.": 1 of 1
+       - Markdown in Git. Architecture on the web.
+  INFO copy-triads          2 lists of three (about one in 159 words)
+       - Record the evidence, questions, and gaps
+       - structure, behavior, and decisions
+  INFO copy-rhythm          22 sentences, mean 11.2 words, spread 7.1, 14% of 4 words or fewer
+
+== src/public-site/dist/arc42/index.html  (661 words)  0 FAIL, 2 WARN
+  WARN copy-stat-strip      stat strip x1
+       - 10 / 11 / 12
+       fix: a strip only of figures the brief gives (a price, hours, a count); otherwise put each number in the sentence it proves, or leave it out
+  WARN copy-numbered        18 step numbers
+       fix: number only steps that happen in order
+  INFO copy-triads          2 lists of three (about one in 331 words)
+       - booking staff, the payment provider, and the
+       - Record consequential choices, their alternatives, and the
+  INFO copy-rhythm          35 sentences, mean 15.5 words, spread 4.5, 0% of 4 words or fewer
+
+== across files: the first headings side by side
+  index.html: Document your software architecture.
+  arc42/index.html: A guide to arc42.
+== heading phrases shared across files
+  "introduction and goals" in 2 files: index.html, arc42/index.html

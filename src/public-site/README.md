@@ -12,7 +12,13 @@ npm run build
 npm test
 ```
 
-Astro writes the deployable static site to `dist/`. `npm run verify` builds the site and checks both localized routes, their route-switch links, page metadata, accessibility hooks, and static output. English is `/`; Spanish is `/es/`. Add locales in `src/data/locales.mjs`; the shared landing template and validator enforce counterpart routes and complete copy.
+Astro writes the deployable static site to `dist/`. The English homepage is `/`; `/arc42/` explains the framework and its twelve sections with official guidance links. `npm run verify` checks both pages, metadata, Lighthouse styles, source excerpts, assets, and permanent redirects. The retired `/es` and `/es/` routes redirect to `/` through the generated Cloudflare `_redirects` file. Redirect destinations respect `SITE_BASE`.
+
+The public site imports the pinned `@juangcarmona/lighthouse-ui` semantic tokens through Astro’s CSS bundler. Product typography uses 16px body text, 18px introductory text, 14px supporting copy, and controls of at least 44px. Light, dark, and system appearance preserve the existing `arcshape-appearance` preference. The mobile menu uses native `details` so navigation works without JavaScript.
+
+Run `npm run preview -- --host 0.0.0.0 --port 4327` to inspect the built pages. Astro preview does not apply Cloudflare redirect rules; test those using `wrangler dev --local` or a Cloudflare preview.
+
+The documentation excerpt is imported from the canonical architecture source at build time. The arc42 guide uses original explanations and a hypothetical booking-system example; official section numbers and links are in `src/data/site.mjs`.
 
 The GitHub Pages workflow also builds and verifies the output at `/` and `/arcshape/`. The Cloudflare site uses `/`.
 

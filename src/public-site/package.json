@@ -5,9 +5,13 @@
   "scripts": {
     "build": "astro build",
     "test": "node scripts/verify-build.mjs",
-    "verify": "npm run build && npm test"
+    "verify": "npm run build && npm test",
+    "preview": "astro preview"
   },
   "devDependencies": {
     "astro": "7.4.1"
+  },
+  "dependencies": {
+    "@juangcarmona/lighthouse-ui": "0.2.1"
   }
 }
