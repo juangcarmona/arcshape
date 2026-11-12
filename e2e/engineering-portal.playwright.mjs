@@ -29,7 +29,7 @@ test.beforeAll(async () => {
     throw new Error(generated.stderr || generated.stdout);
   await mkdir(join(output, "model"), { recursive: true });
   await copyFile(
-    ".product/generated/snapshot.html",
+    ".product/generated/explorer.html",
     join(output, "model/index.html"),
   );
   const provenance = spawnSync(
@@ -144,6 +144,9 @@ test("portal links to revision-stamped model and architecture routes", async ({
     page.getByRole("link", { name: /Product model/ }),
   ).toHaveAttribute("href", "/arcshape/model/");
   await expect(
+    page.getByRole("link", { name: "Product Explorer", exact: true }),
+  ).toHaveAttribute("href", "/arcshape/model/");
+  await expect(
     page.getByRole("link", { name: /Architecture documentation/ }),
   ).toHaveAttribute("href", "/arcshape/architecture/");
   await expect(
@@ -158,7 +161,12 @@ test("portal links to revision-stamped model and architecture routes", async ({
     ),
   ).toBe(true);
 
-  await page.goto(`${origin}model/`);
+  await page.getByRole("link", { name: /Product model/ }).click();
+  await expect(page).toHaveURL(`${origin}model/#/artifacts`);
+  await expect(page).toHaveTitle("Product Explorer");
+  await expect(
+    page.getByRole("heading", { name: "Product Explorer", exact: true }),
+  ).toBeVisible();
   await expect(page.locator(".arcshape-source-provenance")).toContainText(
     revision,
   );

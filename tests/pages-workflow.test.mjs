@@ -78,6 +78,9 @@ describe("GitHub Pages engineering portal workflow", () => {
       steps.find(({ name }) => name === "Record source revision").run,
     ).toContain("git rev-parse HEAD");
     expect(
+      steps.find(({ name }) => name === "Generate Product Explorer").run,
+    ).toContain("cp .product/generated/explorer.html _site/model/index.html");
+    expect(
       steps.find(({ name }) => name === "Generate Architecture Snapshot").run,
     ).toContain("--format interactive --out _site/architecture");
     expect(steps.find(({ name }) => name === "Upload Pages artifact").if).toBe(
