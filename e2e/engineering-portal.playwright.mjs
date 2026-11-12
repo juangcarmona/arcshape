@@ -163,7 +163,7 @@ test("portal links to revision-stamped model and architecture routes", async ({
 
   await page.getByRole("link", { name: /Product model/ }).click();
   await expect(page).toHaveURL(`${origin}model/#/artifacts`);
-  await expect(page).toHaveTitle("Product Explorer");
+  await expect(page).toHaveTitle("Artifacts · Product Explorer");
   await expect(
     page.getByRole("heading", { name: "Product Explorer", exact: true }),
   ).toBeVisible();
