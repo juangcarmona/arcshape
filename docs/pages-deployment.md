@@ -11,7 +11,7 @@ ProductShape and ArcShape remain independent products and repositories. ArcShape
 
 Pull requests build the complete portal and validate the public-site source without deploying Pages. Pushes to `main` and completed Assurance runs build one clean Pages artifact; the production concurrency group serializes publication. The workflow has repository `contents: read` and `actions: read` permissions. Only its deployment job receives `pages: write` and `id-token: write`.
 
-The portal's landing page links to the Product Snapshot, Architecture Snapshot, Archify publication diagram, and `arcshape.dev`. The snapshots include their producing commit and links to the matching canonical source paths. The former root reader URL's `/#/section/...` bookmark is redirected to the same fragment under `/architecture/`.
+The portal's landing page links to the Product Explorer, Architecture Snapshot, Archify publication diagram, and `arcshape.dev`. The snapshots include their producing commit and links to the matching canonical source paths. The former root reader URL's `/#/section/...` bookmark is redirected to the same fragment under `/architecture/`.
 
 ## Static site build contract
 

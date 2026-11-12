@@ -115,11 +115,11 @@ jobs:
           echo "source_commit=$source_commit" >> "$GITHUB_OUTPUT"
           if test -n "$run_id"; then gh run download "$run_id" --repo "$GH_REPO" --name arcshape-public-e2e-summary --dir .e2e-latest || true; fi
         id: assurance
-      - name: Generate Product Snapshot
+      - name: Generate Product Explorer
         run: |
           npx --no-install prodshape graph --format html
           mkdir -p _site/model
-          cp .product/generated/snapshot.html _site/model/index.html
+          cp .product/generated/explorer.html _site/model/index.html
           node scripts/add-source-provenance.mjs _site/model/index.html "${{ steps.revision.outputs.sha }}" docs/product/model
       - name: Generate Architecture Snapshot
         run: |

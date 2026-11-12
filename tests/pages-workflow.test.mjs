@@ -54,7 +54,7 @@ describe("GitHub Pages engineering portal workflow", () => {
           run: expect.stringContaining("src/engineering-portal run build"),
         }),
         expect.objectContaining({
-          name: "Generate Product Snapshot",
+          name: "Generate Product Explorer",
           run: expect.stringContaining("prodshape graph --format html"),
         }),
         expect.objectContaining({
