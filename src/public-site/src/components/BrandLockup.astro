@@ -1,4 +1,5 @@
 ---
+import { tagline } from "../data/site.mjs";
 const { id, width = 175, height = 27 } = Astro.props;
 const source = `${import.meta.env.BASE_URL}assets/arcshape-lockup.webp`;
 ---
@@ -16,17 +17,17 @@ const source = `${import.meta.env.BASE_URL}assets/arcshape-lockup.webp`;
     <g clip-path={`url(#${id}-mark-crop)`}><image href={source} x="-12.7" y="-4" width="72.5" height="72.5" preserveAspectRatio="none" /></g>
     <g clip-path={`url(#${id}-word-crop)`}><image href={source} x="23.8" y="-231.3" width="326" height="326" preserveAspectRatio="none" /></g>
   </g>
-  <text class="brand-caption" x="56" y="48" font-size="9" font-weight="650" letter-spacing="1.1">AI DRIVEN ENGINEERING DOCUMENTATION</text>
+  <text class="brand-caption" x="56" y="48" font-size="9" font-weight="650" letter-spacing="1.1">{tagline.toUpperCase()}</text>
 </svg>
 
 <style>
   .brand-lockup { display: block; flex: none; }
   .brand-dark { display: none; filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
-  .brand-caption { fill: var(--muted); font-family: system-ui, sans-serif; }
-  :global(:root[data-appearance="dark"]) .brand-light { display: none; }
-  :global(:root[data-appearance="dark"]) .brand-dark { display: initial; }
+  .brand-caption { fill: var(--lh-text-muted); font-family: var(--lh-font-sans); }
+  :global(:root[data-lh-theme="dark"]) .brand-light { display: none; }
+  :global(:root[data-lh-theme="dark"]) .brand-dark { display: initial; }
   @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-appearance="light"])) .brand-light { display: none; }
-    :global(:root:not([data-appearance="light"])) .brand-dark { display: initial; }
+    :global(:root[data-lh-theme="system"]) .brand-light { display: none; }
+    :global(:root[data-lh-theme="system"]) .brand-dark { display: initial; }
   }
 </style>
