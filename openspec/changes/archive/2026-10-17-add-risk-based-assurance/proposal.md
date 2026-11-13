@@ -28,7 +28,7 @@ None. Existing onboarding, CLI, architecture-documentation, and reader behavior 
 - **Code and tests:** `bin/`, `tools/arc42-site/`, the existing Vitest suite, and a new `tests/e2e/` suite. Initial mutation candidates are file-safe onboarding and provider lifecycle code, validation/rendering paths, and the security policy helpers; the baseline determines the final bounded target set.
 - **CI:** Add a dedicated assurance workflow with finite per-job limits, a Linux/Node 22 browser run, scheduled mutation baseline, and a DAST scan of the same-run preview. Reports are retained as CI artifacts. The preview is served only on the ephemeral runner; no public or production URL, adopter repository, credential, or production secret is a scan target.
 - **Dependencies:** Evaluate pinned `@playwright/test`, StrykerJS with its Vitest runner, and the official OWASP ZAP Docker image. Use the passive ZAP baseline scan, not an active scan. Tool versions and runtime budgets are recorded when implementation measures the baseline.
-- **Operations and docs:** Update `docs/engineering-lifecycle.md`, `SECURITY.md`, and the relevant architecture deployment/quality sections with triggers, policy, owners, cost, artifact retention, and limitations. Do not add these checks to the required `main` ruleset until the maintainer accepts the proposed thresholds.
+- **Operations and docs:** Update `SECURITY.md`, and the relevant architecture deployment/quality sections with triggers, policy, owners, cost, artifact retention, and limitations. Do not add these checks to the required `main` ruleset until the maintainer accepts the proposed thresholds.
 
 ### Product-definition impact
 

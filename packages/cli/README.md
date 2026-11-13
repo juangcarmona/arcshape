@@ -81,7 +81,7 @@ The session tool inventories files without selecting by programming language and
 - The approved product definition belongs in `docs/product/model` and is managed with [ProductShape](https://github.com/juangcarmona/productshape).
 - Architecture documentation will live under `docs/architecture` and follow [arc42](https://arc42.org/).
 - [OpenSpec](https://github.com/Fission-AI/OpenSpec) is used for temporary delivery planning, not as a source of product or architecture truth.
-- Read the [engineering lifecycle](docs/engineering-lifecycle.md) for issue readiness, review, and merge expectations.
+- Read the [contribution guide](../../CONTRIBUTING.md) for development and review expectations.
 
 ## Development setup
 
@@ -100,7 +100,7 @@ npm run product:init
 npm run openspec:init
 ```
 
-The initial quality baseline is defined in the [engineering lifecycle](docs/engineering-lifecycle.md). `npm run build` compiles repository helper scripts; it is not the ArcShape CLI build.
+Run `npm run verify` for the repository quality checks. `npm run build` compiles repository helper scripts; it is not the ArcShape CLI build.
 
 ## Contributing
 
