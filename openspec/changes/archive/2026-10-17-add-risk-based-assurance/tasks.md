@@ -28,7 +28,7 @@
 ## 5. Integrate and review evidence
 
 - [x] 5.1 Run the assurance workflow locally or through a workflow dispatch and record E2E results, mutation baseline, DAST findings, runtime, flakiness observations, and tool versions; verify each issue #15 acceptance criterion maps to visible evidence.
-- [x] 5.2 Update `SECURITY.md`, `docs/engineering-lifecycle.md`, and relevant architecture quality/deployment docs with the final measured policy; verify links and exact check contexts, and confirm no new context was added to required branch protection.
+- [x] 5.2 Update `SECURITY.md`, and relevant architecture quality/deployment docs with the final measured policy; verify links and exact check contexts, and confirm no new context was added to required branch protection.
 - [x] 5.3 Run repository format, lint, typecheck, unit/build, product-model, citation, and OpenSpec validation commands; verify all pass before requesting review.
 
 The onboarding and reader journey scenarios exercise these accepted product behaviors:

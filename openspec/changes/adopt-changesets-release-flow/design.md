@@ -59,7 +59,7 @@ Add a small release-state helper that reads the package manifest and compares th
 - [Risk] npm Trusted Publishing still points at the old release-event assumptions. → Keep the `publish.yml` filename and document the required repository/environment/workflow values; verify the external configuration as runtime evidence rather than claiming it locally.
 - [Risk] npm publication succeeds but tag or GitHub Release creation fails. → Publish once, treat npm as immutable, make tag/release creation idempotent, and expose `publish-current-stable` recovery that skips an existing npm version and repairs repository evidence.
 - [Risk] A malformed or stale changeset produces an unintended bump. → Validate Changesets in CI, review the generated `Version Packages` PR, and keep the merge of that PR as the human release gate.
-- [Risk] Existing release scripts become misleading after the trigger change. → Remove or adapt event-specific helpers and update `docs/releasing.md`, `docs/engineering-lifecycle.md`, and workflow contract tests in the same change.
+- [Risk] Existing release scripts become misleading after the trigger change. → Remove or adapt event-specific helpers and update `docs/releasing.md`, and workflow contract tests in the same change.
 
 ## Migration Plan
 

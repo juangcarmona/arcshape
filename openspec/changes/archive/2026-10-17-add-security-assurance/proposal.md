@@ -30,7 +30,7 @@ None.
 - `.github/workflows/security.yml`: add SAST, package SBOM generation, and runtime license-policy validation to current PR, default-branch, and scheduled security scans.
 - `.github/workflows/publish.yml`: attach the release package SBOM to the corresponding GitHub Release.
 - `security/` and `scripts/`: versioned policy, narrowly scoped exceptions, and deterministic policy gate.
-- `SECURITY.md` and `docs/engineering-lifecycle.md`: explain the controls and current evidence.
+- `SECURITY.md` and the current CI workflows: explain the controls and current evidence.
 
 Product impact review: the complete Product Definition was read. The only applicable artifact is `CON-NO-ARCSHAPE-DATA-COLLECTION`, because repository content is analyzed by GitHub-hosted Actions; this change sends no repository data to an ArcShape-operated service. Its structural impact was checked: nine directly governed use cases and their seven transitive neighbors (two actors, one bounded context, one business rule, and three domain terms) are unaffected because no product behavior or data handling changes. No Product Change is needed.
 
